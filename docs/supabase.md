@@ -35,6 +35,13 @@ Apply only:
 `0007_security_hardening` ->
 `0008_canonical_fk_indexes` ->
 `0009_source_registry_integrity` ->
-`0010_legacy_fk_indexes`.
+`0010_legacy_fk_indexes` ->
+`0011_enable_http_extension` ->
+`0012_ingest_bootstrap_auth` ->
+`0013_fix_upsert_dedupe_constraints` ->
+`0014_backfill_ted_publication_dates` ->
+`0015_complete_bootstrap_cleanup`.
+
+The one-time bootstrap authorization is closed. Fresh environments do not recreate a usable bootstrap credential, and the deployed bootstrap Edge Function is disabled.
 
 The older alternate migration set was removed to prevent schema divergence.
