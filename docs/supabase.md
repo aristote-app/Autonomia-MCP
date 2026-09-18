@@ -45,3 +45,16 @@ Apply only:
 The one-time bootstrap authorization is closed. Fresh environments do not recreate a usable bootstrap credential, and the deployed bootstrap Edge Function is disabled.
 
 The older alternate migration set was removed to prevent schema divergence.
+
+
+## Initial real-data bootstrap
+
+Verified database state after the first bootstrap:
+- BOAMP: 77 raw source records / 61 linked opportunities
+- TED: 80 raw source records / 80 linked opportunities
+- DECP: 60 raw source records / 61 award rows
+- Total canonical opportunities: 141
+- Organizations: 184
+- Public awards: 61
+
+The temporary bootstrap Edge Function was disabled after ingestion and redeployed with JWT verification enabled.
