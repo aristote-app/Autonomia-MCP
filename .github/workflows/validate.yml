@@ -57,5 +57,7 @@ jobs:
         run: npm run smoke:marches-securises
       - name: Smoke test private AI signals
         run: npm run smoke:private-signals
+      - name: Smoke test opportunity intelligence
+        run: npm run smoke:intelligence
       - name: Smoke test MCP
         run: npm run smoke:mcp
