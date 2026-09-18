@@ -1,6 +1,6 @@
 {
   "name": "autonomia-market-intelligence",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -20,7 +20,8 @@
     "smoke:freework": "node scripts/smoke-freework.mjs",
     "smoke:lehibou": "node scripts/smoke-lehibou.mjs",
     "smoke:roles": "node scripts/smoke-roles.mjs",
-    "smoke:refresh": "node scripts/smoke-refresh.mjs"
+    "smoke:refresh": "node scripts/smoke-refresh.mjs",
+    "smoke:marches-securises": "node scripts/smoke-marches-securises.mjs"
   },
   "engines": {
     "node": ">=22"
