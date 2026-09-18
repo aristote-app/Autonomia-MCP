@@ -20,9 +20,12 @@
 ## Phase 3 — Freelance market
 - [x] FreelanceMention API adapter
 - [ ] FreelanceMention credentials + saved searches
-- [ ] LinkedIn authorized workflow
-- [ ] Indeed
-- [ ] Malt
+- [x] LinkedIn/Data Sales authorized import normalizer
+- [ ] LinkedIn/Data Sales live authorized connector
+- [x] Indeed authorized import normalizer
+- [ ] Indeed live permitted connector
+- [x] Malt authorized import normalizer
+- [ ] Malt live permitted connector
 - [x] Upwork official API adapter
 - [ ] Upwork OAuth credentials
 - [ ] Free-Work
@@ -61,6 +64,7 @@
 - [ ] buyer_history
 - [ ] public_awards
 - [ ] analyze_tender
+- [x] normalize_authorized_import
 - [x] score_autonomia_fit
 - [x] go_no_go_public_tender
 - [ ] match_autonomia
