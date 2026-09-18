@@ -1,0 +1,70 @@
+* { box-sizing: border-box; }
+:root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111; background: #f6f7f5; }
+body { margin: 0; }
+main { max-width: 1180px; margin: 0 auto; padding: 56px 28px 80px; }
+.hero { display: flex; justify-content: space-between; gap: 32px; align-items: flex-end; padding: 36px 0 48px; border-bottom: 1px solid #d9ddd7; }
+.eyebrow { margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .16em; }
+h1 { font-size: clamp(48px, 8vw, 92px); letter-spacing: -.06em; line-height: .92; margin: 0; }
+h2 { margin: 4px 0 0; font-size: 32px; letter-spacing: -.035em; }
+h3 { margin: 0 0 8px; }
+.lede { max-width: 720px; margin: 22px 0 0; font-size: 18px; color: #4f5750; line-height: 1.55; }
+.status { min-width: 180px; padding: 18px; border: 1px solid #111; display: grid; gap: 4px; }
+.status strong { font-size: 26px; }
+.status span, .sectionTitle p, .card p { color: #677068; }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin: 28px 0 64px; border: 1px solid #d9ddd7; }
+.metrics article { padding: 22px; display: grid; border-right: 1px solid #d9ddd7; }
+.metrics article:last-child { border-right: 0; }
+.metrics strong { font-size: 30px; }
+.metrics span { color: #687069; font-size: 13px; }
+.sectionTitle { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 18px; }
+.sectionTitle > p { max-width: 430px; margin: 0; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card { background: #fff; border: 1px solid #d9ddd7; padding: 22px; min-height: 320px; }
+.card ul { list-style: none; padding: 0; margin: 22px 0 0; }
+.card li { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border-top: 1px solid #e8ebe7; }
+.card small { white-space: nowrap; text-transform: uppercase; letter-spacing: .05em; }
+.card small.active { font-weight: 800; }
+.pipeline { margin-top: 64px; padding-top: 28px; border-top: 1px solid #d9ddd7; }
+.pipelineRow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.pipelineRow span { background: #111; color: #fff; padding: 11px 14px; font-size: 13px; }
+@media (max-width: 820px) {
+  .hero, .sectionTitle { display: block; }
+  .status { margin-top: 28px; }
+  .metrics, .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 540px) {
+  main { padding: 28px 18px 56px; }
+  .metrics, .grid { grid-template-columns: 1fr; }
+  .metrics article { border-right: 0; border-bottom: 1px solid #d9ddd7; }
+}
+
+.status.live { background: #111; color: #fff; }
+.intelligenceSection, .buyerSection { margin: 64px 0; }
+.opportunityList { display: grid; gap: 12px; }
+.opportunity { background: #fff; border: 1px solid #d9ddd7; padding: 22px; }
+.oppTop { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+.oppTop h3 { max-width: 820px; font-size: 21px; line-height: 1.25; }
+.buyer { margin: 0 0 7px; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #677068; }
+.score { min-width: 88px; text-align: right; display: grid; }
+.score strong { font-size: 31px; line-height: 1; }
+.score span { margin-top: 4px; font-size: 10px; letter-spacing: .08em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 10px; }
+.chips span { border: 1px solid #111; padding: 5px 8px; font-size: 11px; text-transform: uppercase; font-weight: 700; }
+.oppMeta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #677068; font-size: 12px; }
+.staffing { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid #e8ebe7; font-size: 13px; }
+.buyerGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.buyerCard { background: #fff; border: 1px solid #d9ddd7; padding: 20px; }
+.buyerCard h3 { min-height: 45px; font-size: 16px; line-height: 1.3; }
+.buyerCard dl { margin: 18px 0 0; }
+.buyerCard dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid #e8ebe7; }
+.buyerCard dt { color: #677068; font-size: 12px; }
+.buyerCard dd { margin: 0; font-weight: 700; font-size: 12px; text-align: right; }
+.emptyState { border: 1px dashed #aeb5ae; padding: 28px; color: #677068; }
+@media (max-width: 820px) {
+  .buyerGrid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 540px) {
+  .oppTop { display: block; }
+  .score { margin-top: 16px; text-align: left; }
+  .buyerGrid { grid-template-columns: 1fr; }
+}

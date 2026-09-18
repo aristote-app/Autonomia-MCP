@@ -1,0 +1,41 @@
+{
+  "name": "autonomia-market-intelligence",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "smoke:public": "node scripts/smoke-public-data.mjs",
+    "smoke:data": "node scripts/smoke-data-layer.mjs",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
+    "smoke:taxonomy": "node scripts/smoke-taxonomy.mjs",
+    "smoke:scoring": "node scripts/smoke-scoring.mjs",
+    "smoke:import": "node scripts/smoke-import.mjs",
+    "smoke:staffing": "node scripts/smoke-staffing.mjs",
+    "smoke:persistence": "node scripts/smoke-persistence.mjs",
+    "smoke:history": "node scripts/smoke-history.mjs",
+    "smoke:opco": "node scripts/smoke-opco.mjs",
+    "smoke:freework": "node scripts/smoke-freework.mjs",
+    "smoke:lehibou": "node scripts/smoke-lehibou.mjs",
+    "smoke:roles": "node scripts/smoke-roles.mjs",
+    "smoke:refresh": "node scripts/smoke-refresh.mjs",
+    "smoke:marches-securises": "node scripts/smoke-marches-securises.mjs",
+    "smoke:private-signals": "node scripts/smoke-private-signals.mjs",
+    "smoke:intelligence": "node scripts/smoke-intelligence.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
+    "@supabase/supabase-js": "2.116.0",
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.5",
+    "cheerio": "1.2.0"
+  }
+}

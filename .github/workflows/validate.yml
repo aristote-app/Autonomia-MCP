@@ -1,0 +1,63 @@
+name: validate
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: autonomia-validate
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: npm install --ignore-scripts
+      - name: Build
+        run: npm run build
+      - name: Smoke test BOAMP and TED
+        run: npm run smoke:public
+      - name: Smoke test DECP and dedupe
+        run: npm run smoke:data
+      - name: Smoke test AI taxonomy
+        run: npm run smoke:taxonomy
+      - name: Smoke test authorized imports
+        run: npm run smoke:import
+      - name: Smoke test staffing
+        run: npm run smoke:staffing
+      - name: Smoke test scoring
+        run: npm run smoke:scoring
+      - name: Smoke test dormant persistence
+        run: npm run smoke:persistence
+      - name: Smoke test DECP history
+        run: npm run smoke:history
+      - name: Smoke test OPCO registry
+        run: npm run smoke:opco
+      - name: Smoke test Free-Work collector
+        run: npm run smoke:freework
+      - name: Smoke test LeHibou market signal
+        run: npm run smoke:lehibou
+      - name: Smoke test AI role taxonomy
+        run: npm run smoke:roles
+      - name: Smoke test unified refresh contract
+        run: npm run smoke:refresh
+      - name: Smoke test Marchés-Sécurisés
+        run: npm run smoke:marches-securises
+      - name: Smoke test private AI signals
+        run: npm run smoke:private-signals
+      - name: Smoke test opportunity intelligence
+        run: npm run smoke:intelligence
+      - name: Smoke test MCP
+        run: npm run smoke:mcp
