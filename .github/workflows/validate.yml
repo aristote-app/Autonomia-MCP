@@ -49,5 +49,7 @@ jobs:
         run: npm run smoke:lehibou
       - name: Smoke test AI role taxonomy
         run: npm run smoke:roles
+      - name: Smoke test unified refresh contract
+        run: npm run smoke:refresh
       - name: Smoke test MCP
         run: npm run smoke:mcp
