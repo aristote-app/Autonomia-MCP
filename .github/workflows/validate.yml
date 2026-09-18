@@ -29,5 +29,7 @@ jobs:
         run: npm run smoke:public
       - name: Smoke test DECP and dedupe
         run: npm run smoke:data
+      - name: Smoke test AI taxonomy
+        run: npm run smoke:taxonomy
       - name: Smoke test MCP
         run: npm run smoke:mcp
