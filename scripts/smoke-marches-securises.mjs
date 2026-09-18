@@ -22,7 +22,7 @@ assert.ok(parsed[0].sourceId.includes("DEMO"));
 assert.equal(parsed[0].publishedAt?.slice(0,10), "2026-09-01");
 
 const live = await searchMarchesSecurises({
-  query: "intelligence artificielle",
+  query: "SICTIAM_06_A_20250825W2_1",
   page: 1,
   limit: 5
 });
