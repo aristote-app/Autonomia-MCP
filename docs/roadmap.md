@@ -34,7 +34,8 @@
 - [ ] LeHibou
 
 ## Phase 4 — Training market
-- [ ] OPCO collectors
+- [x] OPCO registry + BOAMP/TED buyer-filtered live search
+- [ ] Direct parsers for remaining useful OPCO pages where needed
 - [x] Mon Compte Formation open-data resource resolver
 - [ ] Mon Compte Formation historical import
 - [ ] Training-specific taxonomy
@@ -62,6 +63,8 @@
 - [x] search_freelance_missions adapter
 - [x] get_decp_status
 - [x] get_training_market_status
+- [x] list_opco_sources
+- [x] search_training_opportunities
 - [x] search_upwork_jobs adapter
 - [x] explain_data policy tool
 - [x] search_opportunities over persisted database
