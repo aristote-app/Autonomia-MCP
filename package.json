@@ -1,18 +1,21 @@
 {
   "name": "autonomia-market-intelligence",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "smoke:public": "node scripts/smoke-public-data.mjs",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.30.0",
+    "@modelcontextprotocol/client": "2.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
     "@supabase/supabase-js": "2.116.0",
     "next": "16.3.5",
     "react": "19.3.0",
