@@ -34,6 +34,7 @@ Apply only:
 `0006_private_signals` ->
 `0007_security_hardening` ->
 `0008_canonical_fk_indexes` ->
-`0009_source_registry_integrity`.
+`0009_source_registry_integrity` ->
+`0010_legacy_fk_indexes`.
 
 The older alternate migration set was removed to prevent schema divergence.
