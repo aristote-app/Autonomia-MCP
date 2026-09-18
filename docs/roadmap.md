@@ -42,7 +42,9 @@
 - [ ] LLM/embedding semantic classification
 - [x] Autonomia fit rules engine
 - [ ] Autonomia fit auto-enrichment from persisted evidence
-- [ ] Staffing score
+- [x] Staffing match engine
+- [x] Inverse staffing engine
+- [ ] Staffing over persisted consultant pool
 - [ ] Buyer / supplier history
 - [x] Go/No-Go rules engine
 - [ ] Go/No-Go DCE auto-extraction
@@ -67,4 +69,6 @@
 - [x] normalize_authorized_import
 - [x] score_autonomia_fit
 - [x] go_no_go_public_tender
+- [x] find_staffing
+- [x] find_opportunities_for_consultant
 - [ ] match_autonomia
