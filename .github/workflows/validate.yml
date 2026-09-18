@@ -39,5 +39,7 @@ jobs:
         run: npm run smoke:scoring
       - name: Smoke test dormant persistence
         run: npm run smoke:persistence
+      - name: Smoke test DECP history
+        run: npm run smoke:history
       - name: Smoke test MCP
         run: npm run smoke:mcp
