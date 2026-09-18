@@ -33,6 +33,8 @@ jobs:
         run: npm run smoke:taxonomy
       - name: Smoke test authorized imports
         run: npm run smoke:import
+      - name: Smoke test staffing
+        run: npm run smoke:staffing
       - name: Smoke test scoring
         run: npm run smoke:scoring
       - name: Smoke test MCP
