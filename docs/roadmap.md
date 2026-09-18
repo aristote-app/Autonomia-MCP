@@ -30,8 +30,15 @@
 - [ ] Malt live permitted connector
 - [x] Upwork official API adapter
 - [ ] Upwork OAuth credentials
-- [ ] Free-Work
-- [ ] LeHibou
+- [x] Free-Work robots-guarded live collector
+- [x] LeHibou access checked; automated access blocked by technical protection, no bypass
+
+## Phase 3b — Private AI demand
+- [x] Private signal taxonomy with fact/inference separation
+- [x] Authorized private-signal normalization
+- [x] Private-signal persistence/search prepared
+- [ ] Live public company-career/news collectors
+- [ ] Business Hunter shared signal integration
 
 ## Phase 4 — Training market
 - [x] OPCO registry + BOAMP/TED buyer-filtered live search
@@ -48,10 +55,10 @@
 - [x] Staffing match engine
 - [x] Inverse staffing engine
 - [ ] Staffing over persisted consultant pool
-- [ ] Buyer / supplier history
+- [x] Buyer / supplier history
 - [x] Go/No-Go rules engine
 - [ ] Go/No-Go DCE auto-extraction
-- [ ] Explainability / evidence links backed by persisted records
+- [x] Explainability / evidence links backed by persisted records
 
 ## Phase 6 — MCP
 - [x] MCP Streamable HTTP endpoint
@@ -78,3 +85,13 @@
 - [x] find_staffing
 - [x] find_opportunities_for_consultant
 - [ ] match_autonomia
+- [x] normalize_private_signals
+- [x] import_private_signals
+- [x] search_private_signals
+- [x] expiring_contracts
+- [x] find_public_market_partners
+- [x] compare_freelance_roles
+- [x] search_freework_missions
+- [x] get_lehibou_market_signal
+- [x] list_public_buyer_profiles
+- [x] search_marches_securises
