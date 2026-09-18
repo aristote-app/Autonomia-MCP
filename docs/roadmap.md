@@ -35,7 +35,8 @@
 - [ ] Training-specific taxonomy
 
 ## Phase 5 — Intelligence
-- [ ] Semantic classification
+- [x] Deterministic first-pass AI taxonomy
+- [ ] LLM/embedding semantic classification
 - [ ] Autonomia fit
 - [ ] Staffing score
 - [ ] Buyer / supplier history
@@ -46,6 +47,7 @@
 - [x] MCP Streamable HTTP endpoint
 - [x] list_sources
 - [x] search_public_tenders
+- [x] search_ai_public_market
 - [x] refresh_market
 - [x] market_stats
 - [x] search_freelance_missions adapter
