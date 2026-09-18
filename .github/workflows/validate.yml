@@ -31,5 +31,7 @@ jobs:
         run: npm run smoke:data
       - name: Smoke test AI taxonomy
         run: npm run smoke:taxonomy
+      - name: Smoke test scoring
+        run: npm run smoke:scoring
       - name: Smoke test MCP
         run: npm run smoke:mcp
