@@ -16,7 +16,12 @@
 - [x] TED live collector + Expert Search
 - [x] DECP latest-resource resolver
 - [x] DECP historical import pipeline prepared
-- [ ] Execute DECP historical import into Supabase
+- [x] First real BOAMP/TED/DECP snapshot persisted in Supabase
+- [x] DECP flattened open-data format supported
+- [x] TED date-with-offset format supported
+- [ ] Import complete DECP history / target corpus into Supabase
+- [ ] Expand BOAMP/TED persisted coverage beyond bootstrap sample
+- [ ] Enrich buyer/supplier legal names from official company data
 - [x] Canonical opportunity model
 - [x] Deterministic deduplication foundation
 - [ ] Cross-source semantic deduplication
