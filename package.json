@@ -13,7 +13,8 @@
     "smoke:taxonomy": "node scripts/smoke-taxonomy.mjs",
     "smoke:scoring": "node scripts/smoke-scoring.mjs",
     "smoke:import": "node scripts/smoke-import.mjs",
-    "smoke:staffing": "node scripts/smoke-staffing.mjs"
+    "smoke:staffing": "node scripts/smoke-staffing.mjs",
+    "smoke:persistence": "node scripts/smoke-persistence.mjs"
   },
   "engines": {
     "node": ">=22"
