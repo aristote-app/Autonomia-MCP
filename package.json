@@ -11,7 +11,8 @@
     "smoke:data": "node scripts/smoke-data-layer.mjs",
     "smoke:mcp": "node scripts/smoke-mcp.mjs",
     "smoke:taxonomy": "node scripts/smoke-taxonomy.mjs",
-    "smoke:scoring": "node scripts/smoke-scoring.mjs"
+    "smoke:scoring": "node scripts/smoke-scoring.mjs",
+    "smoke:import": "node scripts/smoke-import.mjs"
   },
   "engines": {
     "node": ">=22"
