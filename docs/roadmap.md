@@ -37,10 +37,12 @@
 ## Phase 5 — Intelligence
 - [x] Deterministic first-pass AI taxonomy
 - [ ] LLM/embedding semantic classification
-- [ ] Autonomia fit
+- [x] Autonomia fit rules engine
+- [ ] Autonomia fit auto-enrichment from persisted evidence
 - [ ] Staffing score
 - [ ] Buyer / supplier history
-- [ ] Go/No-Go factual inputs
+- [x] Go/No-Go rules engine
+- [ ] Go/No-Go DCE auto-extraction
 - [ ] Explainability / evidence links backed by persisted records
 
 ## Phase 6 — MCP
@@ -59,4 +61,6 @@
 - [ ] buyer_history
 - [ ] public_awards
 - [ ] analyze_tender
+- [x] score_autonomia_fit
+- [x] go_no_go_public_tender
 - [ ] match_autonomia
