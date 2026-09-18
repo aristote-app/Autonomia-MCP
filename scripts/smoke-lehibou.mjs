@@ -21,5 +21,11 @@ assert.equal(parsed.metrics.tjmMaxClaim, 1000);
 const live = await getLeHibouMarketSignal();
 assert.equal(live.source, "lehibou");
 assert.ok(live.sourceUrl.includes("lehibou.com"));
+assert.ok(
+  ["available", "blocked_by_technical_protection"].includes(live.automatedAccess)
+);
 
-console.log("LeHibou market signal OK", live.metrics);
+console.log("LeHibou access policy OK", {
+  automatedAccess: live.automatedAccess,
+  metricsAvailable: Boolean(live.metrics)
+});
