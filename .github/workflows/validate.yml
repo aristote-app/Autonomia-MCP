@@ -53,5 +53,7 @@ jobs:
         run: npm run smoke:roles
       - name: Smoke test unified refresh contract
         run: npm run smoke:refresh
+      - name: Smoke test Marchés-Sécurisés
+        run: npm run smoke:marches-securises
       - name: Smoke test MCP
         run: npm run smoke:mcp
