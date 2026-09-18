@@ -27,5 +27,7 @@ jobs:
         run: npm run build
       - name: Smoke test BOAMP and TED
         run: npm run smoke:public
+      - name: Smoke test DECP and dedupe
+        run: npm run smoke:data
       - name: Smoke test MCP
         run: npm run smoke:mcp
