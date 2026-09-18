@@ -1,6 +1,6 @@
 {
   "name": "autonomia-market-intelligence",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,7 +17,8 @@
     "smoke:persistence": "node scripts/smoke-persistence.mjs",
     "smoke:history": "node scripts/smoke-history.mjs",
     "smoke:opco": "node scripts/smoke-opco.mjs",
-    "smoke:freework": "node scripts/smoke-freework.mjs"
+    "smoke:freework": "node scripts/smoke-freework.mjs",
+    "smoke:lehibou": "node scripts/smoke-lehibou.mjs"
   },
   "engines": {
     "node": ">=22"
