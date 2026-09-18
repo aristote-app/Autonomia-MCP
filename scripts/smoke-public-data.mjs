@@ -5,7 +5,7 @@ async function main() {
   const boamp = await searchBoamp({ query: "intelligence artificielle", limit: 1 });
   console.log("BOAMP", { total: boamp.total, sample: boamp.items[0]?.title ?? null });
 
-  const ted = await searchTedExpert({ expertQuery: "OJ = ()", limit: 1, scope: "ALL" });
+  const ted = await searchTedExpert({ expertQuery: "ND = 291298-2024", limit: 1, scope: "ALL" });
   console.log("TED", {
     total: ted.total,
     sample: ted.items[0]?.title ?? null,
