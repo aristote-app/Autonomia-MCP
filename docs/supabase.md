@@ -58,3 +58,12 @@ Verified database state after the first bootstrap:
 - Public awards: 61
 
 The temporary bootstrap Edge Function was disabled after ingestion and redeployed with JWT verification enabled.
+
+
+## Intelligence V2
+
+Portable schema migrations continue with:
+- `0016_intelligence_auto_enrichment_support.sql`
+- `0017_intelligence_v2_views.sql`
+
+Production received a one-time backfill of existing opportunities into `market_classification_v2`, `autonomia_fit_v2` and `staffing_requirements_v2`. New opportunities are enriched automatically by `lib/db/persist.js`; the production backfill itself is intentionally not a seed migration.
