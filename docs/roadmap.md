@@ -23,13 +23,15 @@
 - [ ] LinkedIn authorized workflow
 - [ ] Indeed
 - [ ] Malt
-- [ ] Upwork
+- [x] Upwork official API adapter
+- [ ] Upwork OAuth credentials
 - [ ] Free-Work
 - [ ] LeHibou
 
 ## Phase 4 — Training market
 - [ ] OPCO collectors
-- [ ] Mon Compte Formation open data
+- [x] Mon Compte Formation open-data resource resolver
+- [ ] Mon Compte Formation historical import
 - [ ] Training-specific taxonomy
 
 ## Phase 5 — Intelligence
@@ -48,6 +50,8 @@
 - [x] market_stats
 - [x] search_freelance_missions adapter
 - [x] get_decp_status
+- [x] get_training_market_status
+- [x] search_upwork_jobs adapter
 - [x] explain_data policy tool
 - [ ] search_opportunities over persisted database
 - [ ] buyer_history
