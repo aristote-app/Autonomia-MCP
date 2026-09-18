@@ -4,10 +4,12 @@
 - [x] Repository and deployment scaffold
 - [x] Source registry
 - [x] Domain boundary: facts vs AI analysis
-- [ ] Dedicated Supabase project (blocked temporarily by Supabase free-project quota sync)
-- [x] Initial schema + RLS prepared
-- [ ] Apply schema + RLS to Autonomia Supabase
-- [x] Persistence layer prepared and conditionally wired
+- [x] Dedicated Supabase project
+- [x] Apply canonical schema + secure-by-default RLS
+- [x] Security hardening of pre-existing views/functions
+- [x] Persistence layer wired to canonical model
+- [x] Source registry aligned with collectors/dashboard
+- [ ] Configure server-side Supabase secret in production deployment
 
 ## Phase 2 — Public market data
 - [x] BOAMP live collector
@@ -15,7 +17,7 @@
 - [x] DECP latest-resource resolver
 - [x] DECP historical import pipeline prepared
 - [ ] Execute DECP historical import into Supabase
-- [x] Canonical opportunity model prepared
+- [x] Canonical opportunity model
 - [x] Deterministic deduplication foundation
 - [ ] Cross-source semantic deduplication
 
@@ -36,7 +38,7 @@
 ## Phase 3b — Private AI demand
 - [x] Private signal taxonomy with fact/inference separation
 - [x] Authorized private-signal normalization
-- [x] Private-signal persistence/search prepared
+- [x] Private-signal persistence/search
 - [ ] Live public company-career/news collectors
 - [ ] Business Hunter shared signal integration
 
