@@ -1,5 +1,20 @@
+import assert from "node:assert/strict";
 import { searchBoamp } from "../lib/collectors/boamp.js";
 import { searchTedExpert } from "../lib/collectors/ted.js";
+import { normalizeTed } from "../lib/collectors/normalize.js";
+
+const tedDateFixture = normalizeTed({
+  "publication-number": "1-2026",
+  "publication-date": "2026-04-01+02:00",
+  "notice-title": { fra: "Marché IA de test" },
+  "buyer-name": { fra: ["Acheteur test"] }
+});
+
+assert.equal(
+  tedDateFixture.publishedAt,
+  "2026-04-01T00:00:00Z",
+  "TED date-with-offset values must preserve the published calendar day"
+);
 
 async function main() {
   const boamp = await searchBoamp({ query: "intelligence artificielle", limit: 1 });
@@ -9,6 +24,7 @@ async function main() {
   console.log("TED", {
     total: ted.total,
     sample: ted.items[0]?.title ?? null,
+    publishedAt: ted.items[0]?.publishedAt ?? null,
     responseKeys: ted.meta.responseKeys
   });
 
