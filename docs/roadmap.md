@@ -13,7 +13,8 @@
 - [x] BOAMP live collector
 - [x] TED live collector + Expert Search
 - [x] DECP latest-resource resolver
-- [ ] DECP historical import into Supabase
+- [x] DECP historical import pipeline prepared
+- [ ] Execute DECP historical import into Supabase
 - [x] Canonical opportunity model prepared
 - [x] Deterministic deduplication foundation
 - [ ] Cross-source semantic deduplication
@@ -63,10 +64,10 @@
 - [x] get_training_market_status
 - [x] search_upwork_jobs adapter
 - [x] explain_data policy tool
-- [ ] search_opportunities over persisted database
+- [x] search_opportunities over persisted database
 - [x] Live refresh auto-persistence when DB configured
-- [ ] buyer_history
-- [ ] public_awards
+- [x] buyer_history
+- [x] public_awards
 - [ ] analyze_tender
 - [x] normalize_authorized_import
 - [x] score_autonomia_fit
