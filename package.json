@@ -1,6 +1,6 @@
 {
   "name": "autonomia-market-intelligence",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,8 @@
     "smoke:scoring": "node scripts/smoke-scoring.mjs",
     "smoke:import": "node scripts/smoke-import.mjs",
     "smoke:staffing": "node scripts/smoke-staffing.mjs",
-    "smoke:persistence": "node scripts/smoke-persistence.mjs"
+    "smoke:persistence": "node scripts/smoke-persistence.mjs",
+    "smoke:history": "node scripts/smoke-history.mjs"
   },
   "engines": {
     "node": ">=22"
