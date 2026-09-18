@@ -20,7 +20,7 @@ async function main() {
   const names = tools.tools.map((tool) => tool.name);
   console.log("MCP TOOLS", names);
 
-  for (const required of ["list_sources", "search_public_tenders", "refresh_market", "market_stats", "explain_data"]) {
+  for (const required of ["list_sources", "search_public_tenders", "refresh_market", "market_stats", "search_ranked_opportunities", "buyer_market_intelligence", "explain_data"]) {
     if (!names.includes(required)) throw new Error(`Missing MCP tool: ${required}`);
   }
 
