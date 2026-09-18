@@ -7,6 +7,7 @@
 - [ ] Dedicated Supabase project (blocked temporarily by Supabase free-project quota sync)
 - [x] Initial schema + RLS prepared
 - [ ] Apply schema + RLS to Autonomia Supabase
+- [x] Persistence layer prepared and conditionally wired
 
 ## Phase 2 — Public market data
 - [x] BOAMP live collector
@@ -63,6 +64,7 @@
 - [x] search_upwork_jobs adapter
 - [x] explain_data policy tool
 - [ ] search_opportunities over persisted database
+- [x] Live refresh auto-persistence when DB configured
 - [ ] buyer_history
 - [ ] public_awards
 - [ ] analyze_tender
