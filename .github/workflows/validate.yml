@@ -43,5 +43,7 @@ jobs:
         run: npm run smoke:history
       - name: Smoke test OPCO registry
         run: npm run smoke:opco
+      - name: Smoke test Free-Work collector
+        run: npm run smoke:freework
       - name: Smoke test MCP
         run: npm run smoke:mcp
