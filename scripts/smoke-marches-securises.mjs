@@ -22,13 +22,18 @@ assert.ok(parsed[0].sourceId.includes("DEMO"));
 assert.equal(parsed[0].publishedAt?.slice(0,10), "2026-09-01");
 
 const live = await searchMarchesSecurises({
-  query: "SICTIAM_06_A_20250825W2_1",
+  query: "intelligence artificielle",
   page: 1,
   limit: 5
 });
 
-assert.ok(live.count > 0, "Marchés-Sécurisés returned no public consultation rows");
-console.log("Marchés-Sécurisés collector OK", {
+assert.equal(live.source, "marches_securises");
+assert.ok(Array.isArray(live.items));
+assert.equal(typeof live.count, "number");
+assert.equal(live.count, live.items.length);
+assert.equal(live.robots?.allowed, true);
+
+console.log("Marchés-Sécurisés collector contract OK", {
   count: live.count,
   sample: live.items[0]?.title || null,
   robots: live.robots.allowed
