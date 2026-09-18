@@ -5,12 +5,11 @@ async function main() {
   const boamp = await searchBoamp({ query: "intelligence artificielle", limit: 1 });
   console.log("BOAMP", { total: boamp.total, sample: boamp.items[0]?.title ?? null });
 
-  const ted = await searchTed({ query: "artificial intelligence", limit: 1 });
+  const ted = await searchTed({ query: "data", limit: 1, scope: "ALL" });
   console.log("TED", { total: ted.total, sample: ted.items[0]?.title ?? null });
 
-  if (!Array.isArray(boamp.items) || !Array.isArray(ted.items)) {
-    throw new Error("Collector response shape invalid");
-  }
+  if (!boamp.items.length) throw new Error("BOAMP smoke test returned no notice");
+  if (!ted.items.length) throw new Error("TED smoke test returned no notice");
 }
 
 main().catch((error) => {
