@@ -22,7 +22,8 @@
     "smoke:roles": "node scripts/smoke-roles.mjs",
     "smoke:refresh": "node scripts/smoke-refresh.mjs",
     "smoke:marches-securises": "node scripts/smoke-marches-securises.mjs",
-    "smoke:private-signals": "node scripts/smoke-private-signals.mjs"
+    "smoke:private-signals": "node scripts/smoke-private-signals.mjs",
+    "smoke:intelligence": "node scripts/smoke-intelligence.mjs"
   },
   "engines": {
     "node": ">=22"
