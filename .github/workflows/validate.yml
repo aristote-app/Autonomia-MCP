@@ -25,3 +25,5 @@ jobs:
         run: npm install --ignore-scripts
       - name: Build
         run: npm run build
+      - name: Smoke test BOAMP and TED
+        run: node scripts/smoke-public-data.mjs
