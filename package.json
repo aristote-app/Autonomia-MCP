@@ -9,7 +9,8 @@
     "start": "next start",
     "smoke:public": "node scripts/smoke-public-data.mjs",
     "smoke:data": "node scripts/smoke-data-layer.mjs",
-    "smoke:mcp": "node scripts/smoke-mcp.mjs"
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
+    "smoke:taxonomy": "node scripts/smoke-taxonomy.mjs"
   },
   "engines": {
     "node": ">=22"
