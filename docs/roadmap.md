@@ -47,6 +47,24 @@
 - [ ] Live public company-career/news collectors
 - [ ] Business Hunter shared signal integration
 
+## Phase 3c — Inbound acquisition & lead orchestration
+- [x] Define shared inbound lead contract for website / LP / Meta
+- [ ] Create inbound lead API / webhook endpoint
+- [ ] Persist immutable inbound raw evidence
+- [ ] Person / company / lead deduplication
+- [ ] Lead -> canonical opportunity orchestration
+- [ ] Lead scoring: fit / intent / urgency / evidence completeness
+- [ ] Multi-user routing and ownership
+- [ ] Next-best-action engine
+- [ ] Website form connector
+- [ ] Landing-page connector
+- [ ] Meta Lead Ads official webhook / Graph API connector
+- [ ] Inbound email connector
+- [ ] Acquisition attribution history
+- [ ] Funnel analytics through revenue and margin
+- [ ] Ad-spend ingestion for CPL / CAC / ROAS-style business analytics
+- [ ] Feed won/lost outcomes back into prioritization
+
 ## Phase 4 — Training market
 - [x] OPCO registry + BOAMP/TED buyer-filtered live search
 - [ ] Direct parsers for remaining useful OPCO pages where needed
