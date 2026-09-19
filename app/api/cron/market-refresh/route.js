@@ -1,4 +1,4 @@
-import { runAutomatedMarketRefresh } from "../../../../../lib/market/automatedRefresh.js";
+import { runAutomatedMarketRefresh } from "../../../../lib/market/automatedRefresh.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
