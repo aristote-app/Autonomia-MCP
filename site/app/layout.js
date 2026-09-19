@@ -1,6 +1,6 @@
 import "./globals.css";
 import Header from "@/components/Header";
-import AttributionCapture from "@/components/AttributionCapture";
+import AttributionCapture from "@/components/AttributionCapture";\nimport ConsentAnalytics from "@/components/ConsentAnalytics";
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"),
