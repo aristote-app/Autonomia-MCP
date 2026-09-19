@@ -59,5 +59,7 @@ jobs:
         run: npm run smoke:private-signals
       - name: Smoke test opportunity intelligence
         run: npm run smoke:intelligence
+      - name: Smoke test today triage
+        run: npm run smoke:today
       - name: Smoke test MCP
         run: npm run smoke:mcp
