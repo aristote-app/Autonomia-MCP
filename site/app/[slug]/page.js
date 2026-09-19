@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import IntentPage from "@/components/IntentPage";
-import { getAllPages, getPage, getStaticSlugs } from "@/lib/pages";
+import { getPage, getStaticSlugs } from "@/lib/pages";
 
 export function generateStaticParams() {
   return getStaticSlugs();
@@ -21,7 +21,10 @@ export async function generateMetadata({ params }) {
       title: page.title,
       description: page.subtitle,
       url: `/${slug}`
-    }
+    },
+    robots: page.mode === "diagnostic"
+      ? { index: false, follow: true }
+      : { index: true, follow: true }
   };
 }
 
