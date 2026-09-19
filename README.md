@@ -7,11 +7,12 @@ Market intelligence platform and MCP for **Autonomia**.
 - Private AI service demand
 - Public AI tenders
 - AI training tenders and opportunities
+- Inbound leads from website, landing pages and paid acquisition
 - Buyer / supplier / award history
 - Autonomia fit, staffing and Go/No-Go analysis
 
 ## Architecture
-Sources -> collectors -> normalization -> deduplication -> enrichment -> Supabase -> MCP / dashboard / alerts.
+Sources + inbound leads -> collectors/webhooks -> normalization -> deduplication -> enrichment -> opportunity orchestration -> Supabase -> MCP / dashboard / alerts.
 
 ## Supabase
 Dedicated project:
@@ -41,3 +42,7 @@ This is an initial quality-controlled snapshot, not the complete historical corp
 
 ## Current status
 Foundation, persistence, initial real public-market data, private signals, staffing/scoring and MCP Streamable HTTP are implemented on the V1 branch. Production refresh through the deployed app still requires the server-side Supabase secret and internal token to be configured in its deployment environment.
+
+
+## Inbound acquisition
+Website forms, landing pages and future Meta Lead Ads feed one normalized lead contract into Autonomia. Autonomia owns attribution preservation, deduplication, enrichment, qualification, routing, opportunity creation, next-best-action and downstream revenue analytics. See `docs/inbound-acquisition.md`.
