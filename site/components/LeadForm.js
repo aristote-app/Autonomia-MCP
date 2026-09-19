@@ -12,6 +12,17 @@ function attribution() {
   if (typeof window === "undefined") return {};
   const url = new URL(window.location.href);
   const get = (key) => url.searchParams.get(key);
+  let firstTouch = null;
+  let history = [];
+
+  try {
+    firstTouch = JSON.parse(window.localStorage.getItem("autonomia_first_touch") || "null");
+    history = JSON.parse(window.localStorage.getItem("autonomia_attribution_history") || "[]");
+  } catch {
+    firstTouch = null;
+    history = [];
+  }
+
   return {
     landing_page_url: url.href,
     landing_page_topic: window.location.pathname,
@@ -26,7 +37,9 @@ function attribution() {
     ad_id: get("ad_id"),
     creative_id: get("creative_id"),
     gclid: get("gclid"),
-    fbclid: get("fbclid")
+    fbclid: get("fbclid"),
+    first_touch: firstTouch,
+    attribution_history: history
   };
 }
 
