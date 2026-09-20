@@ -13,11 +13,11 @@ function formatDate(value) {
 
 async function loadSignals(tags = []) {
   const endpoint = process.env.AUTONOMIA_CONTENT_SIGNALS_URL;
-  if (!endpoint || !tags.length) return null;
+  if (!endpoint) return null;
 
   try {
     const url = new URL(endpoint);
-    url.searchParams.set("tags", tags.join(","));
+    if (tags.length) url.searchParams.set("tags", tags.join(","));
     url.searchParams.set("days", "90");
 
     const response = await fetch(url, {
