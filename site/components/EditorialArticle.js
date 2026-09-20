@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LiveJobSignals from "@/components/LiveJobSignals";
 
 export default function EditorialArticle({ article }) {
   const isTraining = article.type === "training";
@@ -66,6 +67,8 @@ export default function EditorialArticle({ article }) {
               )}
             </section>
           ))}
+
+          <LiveJobSignals tags={article.jobSignalTags || []} />
 
           <section className="articleFaq">
             <p className="sectionIndex">FAQ</p>
