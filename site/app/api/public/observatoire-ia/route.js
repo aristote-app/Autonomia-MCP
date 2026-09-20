@@ -57,7 +57,6 @@ export async function GET() {
         "The dataset describes only the collected sample.",
         "Counts are not exhaustive labour-market statistics.",
         "Counts are not Google search volume.",
-        "The dataset is not an election, demand or revenue forecast.",
         "Full job descriptions are not redistributed by this endpoint."
       ]
     },
