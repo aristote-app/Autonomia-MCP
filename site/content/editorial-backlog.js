@@ -650,22 +650,6 @@ const trainingClusters = [
       "Former des référents métier à challenger les automatisations",
       "Construire un programme de montée en compétences IA sur plusieurs mois"
     ]
-  },
-  {
-    cluster: "Formateurs internes",
-    pillar: "Former les formateurs à l’IA",
-    topics: [
-      "Former un formateur interne à intégrer l’IA dans ses supports",
-      "Apprendre à créer des exercices pratiques avec l’IA",
-      "Former les formateurs à adapter un même contenu à plusieurs niveaux",
-      "Apprendre à générer des études de cas puis les valider",
-      "Former les formateurs à enseigner la vérification des réponses IA",
-      "Apprendre à construire une activité pédagogique autour d’un workflow no-code",
-      "Former les formateurs à expliquer l’AI Act sans jargon",
-      "Apprendre à créer une bibliothèque de scénarios métier",
-      "Former les formateurs à évaluer une compétence IA en situation",
-      "Construire un kit de formation IA réutilisable par plusieurs équipes"
-    ]
   }
 ];
 
