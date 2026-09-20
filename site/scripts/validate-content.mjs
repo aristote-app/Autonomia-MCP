@@ -97,9 +97,16 @@ for (const relativePath of requiredRuntimeFiles) {
 }
 
 const scanSource = readFileSync(resolve(siteRoot, "components/AutonomiaScan.js"), "utf8");
-for (const requiredField of ["execution", "roles", "capabilities", "academy"]) {
+for (const requiredField of ["execution", "roles", "capabilities", "academy", "orientation", "priority", "watchout", "next_steps"]) {
   if (!scanSource.toLowerCase().includes(requiredField)) {
     errors.push(`Autonomia Scan execution blueprint is missing expected field: ${requiredField}.`);
+  }
+}
+
+const intentSource = readFileSync(resolve(siteRoot, "components/IntentPage.js"), "utf8");
+for (const requiredPattern of ["captureLead", "requestedService={page.slug}", "scanSecondaryLink"]) {
+  if (!intentSource.includes(requiredPattern)) {
+    errors.push(`IntentPage is missing paid-funnel integration marker: ${requiredPattern}.`);
   }
 }
 
