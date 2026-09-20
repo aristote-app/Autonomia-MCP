@@ -10,6 +10,13 @@ Support line:
 Category:
 **AI Execution Partner** — orchestration of external AI expertise and internal AI capability.
 
+## Signature funnel
+
+- `/scan-ia` = Autonomia Scan, reusable across homepage, LinkedIn, QR codes, outbound content and selected paid campaigns.
+- 3 answers → first Execution Plan → enriched contact form.
+- Scan context forwarded to Autonomia: plan, objective, stage, gap, completion timestamp.
+- Do not force high-intent Google traffic through the Scan when the query already expresses a precise service need.
+
 ## Google Ads: high-intent LPs
 
 ### Experts
@@ -130,4 +137,4 @@ Lead payload contains current landing context plus:
 
 No fake logos, testimonials, customer names, case studies, certification claims, metrics, speed promises or performance claims.
 
-The UI has reserved proof slots, but production content must be sourced and authorized.
+Public pages use execution-method proof by default. Qualiopi or external proof assets render only when their exact wording/source has been verified and configured.
