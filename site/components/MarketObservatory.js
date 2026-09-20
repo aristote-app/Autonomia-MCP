@@ -70,7 +70,15 @@ export default async function MarketObservatory() {
       url: base
     },
     isAccessibleForFree: true,
+    license: "https://creativecommons.org/licenses/by/4.0/",
     ...(modified ? { dateModified: modified } : {}),
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: "application/json",
+        contentUrl: `${base}/api/public/observatoire-ia`
+      }
+    ],
     variableMeasured: [
       "Rôles IA observés",
       "Outils IA observés",
