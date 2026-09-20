@@ -33,9 +33,16 @@ Le payload envoyé au backend contient notamment :
 - consentement marketing ;
 - contexte Autonomia Scan :
   - plan ;
+  - diagnostic / funnel d’origine lorsqu’il existe ;
   - objectif ;
   - stade ;
   - blocage ;
+  - mission suggérée ;
+  - compétences à mobiliser ;
+  - profils à évaluer ;
+  - besoins de formation ;
+  - prochaines étapes ;
+  - questions de qualification commerciale suivantes ;
   - date de complétion.
 
 ## À brancher mardi
@@ -225,3 +232,113 @@ Le site peut être ouvert lorsque :
 - aucun élément de preuve n'est inventé ;
 - mobile et desktop ont été vérifiés ;
 - production n'affiche aucune erreur runtime.
+
+
+## Carte opérationnelle « GO VERCEL »
+
+Quand la consigne « go Vercel » est donnée mardi, exécuter dans cet ordre sans reconstruire le site :
+
+### A. Vérification GitHub
+- branche source : `feat/autonomia-public-site-v1` tant qu’elle n’est pas mergée ;
+- vérifier le dernier état de la PR #5 ;
+- vérifier le workflow `Autonomia Public Site CI` ;
+- ne pas déclarer le build valide sans run vert observé.
+
+### B. Configuration projet Vercel
+- Repository : `aristote-app/Autonomia-MCP`
+- Root Directory : `site`
+- Framework Preset : Next.js
+- Node.js : 22.x
+- Install Command : `npm install --no-audit --no-fund`
+- Build Command : `npm run build`
+
+### C. Variables indispensables avant test lead
+```
+NEXT_PUBLIC_SITE_URL=<url finale ou url de preview utilisée pour le test>
+AUTONOMIA_INBOUND_URL=<endpoint inbound réel>
+AUTONOMIA_INBOUND_TOKEN=<secret serveur>
+```
+
+Variables à ajouter uniquement lorsque les comptes de mesure sont validés :
+```
+NEXT_PUBLIC_GA4_ID=
+NEXT_PUBLIC_GOOGLE_ADS_ID=
+NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL=
+NEXT_PUBLIC_META_PIXEL_ID=
+```
+
+Signal marché, si endpoint disponible :
+```
+AUTONOMIA_CONTENT_SIGNALS_URL=
+```
+
+### D. Smoke test minimal avant domaine
+1. ouvrir la home ;
+2. lancer le Scan depuis la home ;
+3. tester les 3 réponses ;
+4. vérifier mission + compétences + profils + compétences internes + prochaines étapes ;
+5. cliquer « Transformer ce plan en action » ;
+6. vérifier que le formulaire reprend le Scan ;
+7. envoyer un lead test ;
+8. relire le lead côté Autonomia-MCP et vérifier `scan_context`.
+
+### E. Test funnel Meta spécialisé
+Utiliser par exemple :
+```
+/diagnostic-copilot?utm_source=meta&utm_medium=paid-social&utm_campaign=smoke-meta&campaign_id=1&adset_id=2&ad_id=3&creative_id=4&fbclid=test
+```
+
+Vérifier :
+- aucune demande de coordonnées avant le résultat du Scan ;
+- le lien vers le Scan contient `focus=diagnostic-copilot` ;
+- le Scan affiche « Adoption Copilot » comme angle d’entrée ;
+- `source_diagnostic=diagnostic-copilot` est conservé dans le lead ;
+- first touch et historique d’attribution restent présents.
+
+### F. Test Google Ads spécialisé
+Utiliser par exemple :
+```
+/consultant-rag?utm_source=google&utm_medium=cpc&utm_campaign=smoke-google&utm_term=consultant-rag&gclid=test
+```
+
+Vérifier :
+- contenu spécifique RAG ;
+- formulaire Experts ;
+- `requested_service=consultant-rag` ;
+- UTM + gclid présents dans le lead.
+
+### G. Vérification tracking après consentement
+Avec consentement accepté :
+- `form_start` ;
+- `form_step` ;
+- `autonomia_scan_answer` ;
+- `autonomia_scan_cta` ;
+- `generate_lead` dans GA4 ;
+- conversion Google Ads uniquement si ID + label sont configurés ;
+- événement Meta `Lead` uniquement si Pixel configuré.
+
+Avec consentement refusé :
+- aucun script GA4 / Google Ads / Meta ne doit être chargé.
+
+### H. NO-GO immédiat si
+- build CI non vert ou non vérifié ;
+- formulaire renvoie 503/502 ;
+- lead non persisté côté Autonomia ;
+- secret exposé côté client ;
+- canonical incorrect ;
+- diagnostic Meta indexable ;
+- tracker non essentiel chargé avant consentement ;
+- mentions légales / privacy absentes au moment d’ouvrir réellement les campagnes ;
+- mention Qualiopi non vérifiée ;
+- preuve ou chiffre non vérifié visible.
+
+### I. GO
+Le domaine et les campagnes peuvent être ouverts uniquement après :
+1. build vérifié ;
+2. lead réel de bout en bout ;
+3. attribution vérifiée ;
+4. Scan context vérifié ;
+5. mobile + desktop vérifiés ;
+6. privacy / légal finalisés ;
+7. trackers vérifiés avec consentement ;
+8. aucune erreur runtime observée.
