@@ -61,6 +61,10 @@ for (const article of articles) {
     errors.push(`${article.slug}: keyword strategy and demand evidence are required.`);
   }
 
+  if (!article.jobSignalTags || article.jobSignalTags.length < 2) {
+    errors.push(`${article.slug}: at least two job-market signal tags are required.`);
+  }
+
   if (!article.sections || article.sections.length < 6) {
     errors.push(`${article.slug}: at least six substantial sections are required.`);
   }
