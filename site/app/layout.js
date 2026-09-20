@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
-import AttributionCapture from "@/components/AttributionCapture";\nimport ConsentAnalytics from "@/components/ConsentAnalytics";
+import AttributionCapture from "@/components/AttributionCapture";
+import ConsentAnalytics from "@/components/ConsentAnalytics";
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"),
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body>
         <AttributionCapture />
+        <ConsentAnalytics />
         <Header />
         {children}
       </body>
