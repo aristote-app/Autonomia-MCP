@@ -2532,3 +2532,53 @@ button {
     padding: 96px 48px;
   }
 }
+
+
+.qualiopiProof {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.qualiopiProof > div {
+  display: grid;
+  gap: 6px;
+}
+
+.qualiopiProof span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+.qualiopiProof strong {
+  max-width: 860px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.qualiopiProof a {
+  align-self: flex-start;
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+@media (min-width: 900px) {
+  .qualiopiProof {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+  }
+
+  .qualiopiProof.compact {
+    margin: 0 48px 48px;
+    border: 1px solid var(--line);
+  }
+}
