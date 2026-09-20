@@ -2394,3 +2394,54 @@ button {
 .contactSection .scanContextSummary {
   border-color: rgba(243,241,233,.16);
 }
+
+
+.audienceRail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.audienceRail > * {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.audienceRail > *:last-child {
+  border-bottom: 0;
+}
+
+.audienceRail span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+.audienceRail strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (min-width: 900px) {
+  .audienceRail {
+    grid-template-columns: 180px repeat(5, 1fr);
+    padding: 0 48px;
+  }
+
+  .audienceRail > * {
+    min-height: 58px;
+    padding: 0 18px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .audienceRail > *:last-child {
+    border-right: 0;
+  }
+}
