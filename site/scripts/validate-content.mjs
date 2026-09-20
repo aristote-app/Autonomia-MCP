@@ -1,3 +1,7 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+import { getAllPages } from "../lib/pages.js";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -10,6 +14,68 @@ import {
 
 const articles = [...publishedExecutionArticles, ...publishedTrainingArticles];
 const errors = [];
+
+const requiredLandingSlugs = [
+  "consultant-ia",
+  "freelance-ia",
+  "expert-ia",
+  "consultant-genai",
+  "consultant-rag",
+  "consultant-agent-ia",
+  "ai-project-manager",
+  "formation-ia-entreprise",
+  "formation-chatgpt-entreprise",
+  "formation-copilot",
+  "formation-ia-generative",
+  "formation-ai-act",
+  "formation-agents-ia",
+  "formation-prompt-engineering",
+  "diagnostic-maturite-ia",
+  "diagnostic-competences-ia",
+  "diagnostic-projet-ia",
+  "audit-besoins-formation-ia",
+  "quel-profil-ia",
+  "diagnostic-copilot",
+  "quiz-ia-entreprise"
+];
+
+const allPages = getAllPages();
+const pageSlugs = allPages.map((page) => page.slug);
+
+if (new Set(pageSlugs).size !== pageSlugs.length) {
+  errors.push("Landing-page registry contains duplicate slugs.");
+}
+
+for (const slug of requiredLandingSlugs) {
+  if (!pageSlugs.includes(slug)) {
+    errors.push(`Required acquisition landing page missing: ${slug}.`);
+  }
+}
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const siteRoot = resolve(scriptDir, "..");
+const publicCopyFiles = [
+  "app/page.js",
+  "components/IntentPage.js",
+  "components/Header.js"
+];
+
+const forbiddenPublicCopy = [
+  "à reprendre exactement avant publication",
+  "avant publication",
+  "preuve prévue",
+  "placeholder"
+];
+
+for (const relativePath of publicCopyFiles) {
+  const source = readFileSync(resolve(siteRoot, relativePath), "utf8").toLowerCase();
+  for (const forbidden of forbiddenPublicCopy) {
+    if (source.includes(forbidden)) {
+      errors.push(`${relativePath}: public-facing launch placeholder remains: "${forbidden}".`);
+    }
+  }
+}
+
 
 function wordCount(article) {
   const text = [
@@ -81,5 +147,5 @@ if (errors.length) {
 }
 
 console.log(
-  `Content validation passed: ${editorialCounts.execution} execution topics, ${editorialCounts.training} training topics, ${articles.length} published long-form articles.`
+  `Content validation passed: ${editorialCounts.execution} execution topics, ${editorialCounts.training} training topics, ${articles.length} published long-form articles, ${allPages.length} acquisition pages.`
 );
