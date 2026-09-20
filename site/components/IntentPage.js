@@ -59,6 +59,7 @@ export default function IntentPage({ page }) {
             captureLead
             source={`diagnostic_${page.slug}`}
             leadFormId={`diagnostic-${page.slug}`}
+            requestedService={page.slug}
           />
         </section>
       )}
