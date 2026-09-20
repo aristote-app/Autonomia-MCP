@@ -8,10 +8,10 @@ Objectif : brancher le site public sans reconstruire l'acquisition ni modifier l
 - Application Next.js autonome dans `site/`.
 - Home "Autonomia — La force d'exécution IA".
 - Univers Experts et Academy.
-- Autonomia Scan : 3 questions → premier Execution Plan.
+- Autonomia Scan v2 : 3 questions → lecture du besoin, priorité, profils / compétences à examiner, pistes de montée en compétences, prochaines étapes et point de vigilance.
 - Passage Scan → formulaire sans ressaisie du besoin.
-- LP Google Ads par intention.
-- Funnels / diagnostics Meta.
+- LP Google Ads par intention, avec formulaire principal et Autonomia Scan en conversion secondaire lorsque le besoin est encore flou.
+- Funnels / diagnostics Meta en logique value-first : l'orientation est affichée avant la demande de coordonnées.
 - UTM, gclid, fbclid, IDs Meta et first-touch capturés.
 - Formulaires progressifs.
 - SEO / GEO, sitemap, robots, FAQ schema.
@@ -32,11 +32,14 @@ Le payload envoyé au backend contient notamment :
 - first-touch et historique d'attribution ;
 - consentement marketing ;
 - contexte Autonomia Scan :
+  - version et source du Scan ;
   - plan ;
-  - objectif ;
-  - stade ;
-  - blocage ;
-  - profils probables ;
+  - objectif / stade / blocage + libellés ;
+  - lecture du besoin ;
+  - priorité ;
+  - point de vigilance ;
+  - prochaines étapes ;
+  - profils à examiner ;
   - compétences à mobiliser ;
   - pistes de montée en compétences ;
   - date de complétion.
@@ -167,6 +170,12 @@ Google Ads :
 Meta :
 - tester au moins un diagnostic avec :
   `?utm_source=meta&utm_medium=paid-social&utm_campaign=test&campaign_id=1&adset_id=2&ad_id=3&creative_id=4&fbclid=test`
+- vérifier que le résultat du Scan apparaît avant le formulaire de coordonnées ;
+- vérifier que `requested_service` conserve le slug du funnel diagnostic ;
+- vérifier que `scan_context.source` identifie le funnel d'origine.
+
+Google Ads :
+- vérifier aussi le lien secondaire vers `/scan-ia` lorsque le visiteur ne sait pas encore exactement quoi demander.
 
 Vérifier :
 - first-touch ;
@@ -201,7 +210,20 @@ Vérifier :
 À relier ensuite au pipeline Autonomia :
 lead → qualified lead → meeting → proposal → won → revenue → margin.
 
-### 10. Ordre de lancement
+### 10. Validation code avant intégration
+
+Depuis la racine du repository :
+
+```bash
+cd site
+npm install --ignore-scripts
+npm run content:validate
+npm run build
+```
+
+Le workflow GitHub `validate-public-site` doit être vert sur la PR d'intégration.
+
+### 11. Ordre de lancement
 
 1. CI site verte.
 2. Merge code validé.
