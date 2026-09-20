@@ -36,10 +36,18 @@ export default function EditorialArticle({ article }) {
         <div className="articleHeroMeta">
           <span>{isTraining ? "SCÉNARIO DE FORMATION" : "SCÉNARIO IA"}</span>
           <span>{article.readingTime}</span>
+          <span>Publié le {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long", year: "numeric" }).format(new Date(article.publishedAt))}</span>
+          {article.modifiedAt && article.modifiedAt !== article.publishedAt && (
+            <span>Mis à jour le {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long", year: "numeric" }).format(new Date(article.modifiedAt))}</span>
+          )}
         </div>
         <p className="eyebrow">{article.cluster}</p>
         <h1>{article.title}</h1>
         <p className="articleDek">{article.dek}</p>
+        <div className="articleTrustLine">
+          <span>Publié sous la responsabilité éditoriale d’Autonomia.</span>
+          <Link href="/methodologie/politique-editoriale">Méthode de vérification →</Link>
+        </div>
         <div className="articleEditorialMeta">
           <span>Publié par <Link href="/a-propos">Autonomia</Link></span>
           {article.publishedAt && <span>Publié le {new Date(article.publishedAt).toLocaleDateString("fr-FR")}</span>}
