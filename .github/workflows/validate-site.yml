@@ -28,6 +28,8 @@ jobs:
         run: npm run content:validate
       - name: Organic Engine report
         run: npm run organic:report
+      - name: SEO static audit
+        run: npm run seo:audit
       - name: Build public site
         run: npm run build
         env:
