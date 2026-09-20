@@ -581,24 +581,24 @@ button {
   gap: 22px;
 }
 
-.proofPlaceholders {
+.proofGrid {
   display: grid;
   margin-top: 34px;
   border-top: 1px solid var(--line);
 }
 
-.proofPlaceholders div {
+.proofGrid div {
   padding: 18px 0;
   border-bottom: 1px solid var(--line);
 }
 
-.proofPlaceholders span {
+.proofGrid span {
   font-size: 11px;
   letter-spacing: .12em;
   font-weight: 800;
 }
 
-.proofPlaceholders p {
+.proofGrid p {
   margin: 7px 0 0;
   color: #666a65;
   font-size: 13px;
@@ -1218,16 +1218,16 @@ button {
     padding-left: 24px;
   }
 
-  .proofPlaceholders {
+  .proofGrid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .proofPlaceholders div:nth-child(odd) {
+  .proofGrid div:nth-child(odd) {
     padding-right: 24px;
     border-right: 1px solid var(--line);
   }
 
-  .proofPlaceholders div:nth-child(even) {
+  .proofGrid div:nth-child(even) {
     padding-left: 24px;
   }
 
