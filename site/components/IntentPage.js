@@ -79,18 +79,18 @@ export default function IntentPage({ page }) {
       </section>
 
       <section className="proofArchitecture">
-        <p className="sectionIndex">04 — PREUVES</p>
+        <p className="sectionIndex">04 — STANDARD</p>
         <div>
-          <h2>La crédibilité doit être vérifiable.</h2>
+          <h2>Le besoin doit rester lisible et vérifiable.</h2>
           <p>
-            Autonomia n’affiche pas de références, chiffres, logos, résultats, certifications ou témoignages
-            sans source et autorisation. Cette zone est conçue pour accueillir uniquement des preuves réelles.
+            Autonomia part du travail à accomplir, explicite les compétences ou apprentissages nécessaires
+            et conserve le contexte transmis. Les preuves externes sont ajoutées uniquement lorsqu’elles sont vérifiées.
           </p>
-          <div className="proofSlots" aria-label="Preuves prévues">
-            <span>Entité Qualiopi vérifiée</span>
-            <span>Références autorisées</span>
-            <span>Cas clients sourcés</span>
-            <span>Expertises vérifiées</span>
+          <div className="proofSlots" aria-label="Standard Autonomia">
+            <span>Besoin structuré</span>
+            <span>Compétences explicites</span>
+            <span>Contexte conservé</span>
+            <span>Preuves vérifiées</span>
           </div>
         </div>
       </section>
