@@ -13,6 +13,7 @@ export default async function Image({ params }) {
 
   const title = article?.title || pillar?.title || "Autonomia Academy";
   const kicker = article ? article.cluster : pillar ? `PILIER · ${pillar.cluster}` : "FORMATION IA";
+  const host = new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr").host;
 
   return new ImageResponse(
     (
@@ -39,7 +40,7 @@ export default async function Image({ params }) {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, opacity: .65 }}>
           <span>Comprendre. Pratiquer. Transférer.</span>
-          <span>studio-autonomia.com</span>
+          <span>{host}</span>
         </div>
       </div>
     ),
