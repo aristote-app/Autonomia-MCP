@@ -3583,3 +3583,33 @@ button {
     padding: 60px max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+.articleEntities {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 32px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.articleEntities > span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.articleEntities > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.articleEntities a {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 800;
+}
