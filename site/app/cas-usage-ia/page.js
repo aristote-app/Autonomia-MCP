@@ -39,6 +39,9 @@ export default function UseCaseHub() {
       </section>
 
       <LiveJobSignals tags={["automation", "agents", "rag", "n8n", "workflow_orchestration", "process_integration", "knowledge_management"]} />
+      <div className="hubObservatoryLink">
+        <Link href="/observatoire-ia">Explorer l’Observatoire Autonomia de la demande IA →</Link>
+      </div>
 
       <section className="clusterGrid">
         {clusters.map((cluster) => {
