@@ -1,10 +1,20 @@
 import Link from "next/link";
 import LiveJobSignals from "@/components/LiveJobSignals";
 import { getEditorialGraph } from "@/lib/editorialGraph";
+import { getRelatedGlossaryTermsForText } from "@/content/ai-glossary";
 
 export default function EditorialArticle({ article }) {
   const isTraining = article.type === "training";
   const graph = getEditorialGraph(article);
+  const glossaryTerms = getRelatedGlossaryTermsForText(
+    [
+      article.title,
+      article.dek,
+      article.summary,
+      article.cluster,
+      ...(article.sections || []).map((section) => section.heading)
+    ].join(" ")
+  );
   const manualRelated = article.related || [];
   const automaticRelated = [
     ...(graph.pillar ? [graph.pillar] : []),
@@ -81,6 +91,19 @@ export default function EditorialArticle({ article }) {
             <strong>En bref</strong>
             <p>{article.summary}</p>
           </div>
+
+          {glossaryTerms.length > 0 && (
+            <nav className="articleEntities" aria-label="Concepts IA liés à ce guide">
+              <span>CONCEPTS LIÉS</span>
+              <div>
+                {glossaryTerms.map((item) => (
+                  <Link key={item.slug} href={`/glossaire-ia#${item.slug}`}>
+                    {item.term}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          )}
 
           {article.sections.map((section) => (
             <section key={section.id} id={section.id}>
