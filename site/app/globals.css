@@ -2658,3 +2658,117 @@ button {
     border-right: 0;
   }
 }
+
+
+/* Autonomia Scan v2 — enriched diagnostic */
+.scanBack {
+  margin-top: 18px;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: rgba(243,241,233,.58);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.scanBack:hover {
+  color: var(--signal);
+}
+
+.scanInterpretation {
+  display: grid;
+  gap: 1px;
+  margin-top: 26px;
+  border: 1px solid var(--line-dark);
+  background: var(--line-dark);
+}
+
+.scanInterpretation > div,
+.scanBlueprint > div {
+  display: grid;
+  gap: 7px;
+  padding: 16px;
+  background: rgba(10,11,11,.94);
+}
+
+.scanInterpretation > div.signal {
+  background: rgba(201,255,85,.08);
+}
+
+.scanInterpretation span,
+.scanBlueprint span,
+.scanPlanLabel,
+.scanWatchout span {
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.scanInterpretation strong,
+.scanBlueprint strong {
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.scanBlueprint {
+  display: grid;
+  gap: 1px;
+  margin-top: 1px;
+  border: 1px solid var(--line-dark);
+  border-top: 0;
+  background: var(--line-dark);
+}
+
+.scanResultSide {
+  align-self: start;
+}
+
+.scanPlanLabel {
+  margin-bottom: 10px;
+}
+
+.scanWatchout {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(201,255,85,.35);
+  background: rgba(201,255,85,.06);
+}
+
+.scanWatchout p {
+  margin: 8px 0 0;
+  color: rgba(243,241,233,.7);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.scanDisclaimer {
+  margin: 0;
+  color: rgba(243,241,233,.42);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .scanInterpretation {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .scanBlueprint {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .scanResultSide {
+    padding-top: 28px;
+  }
+
+  .scanDisclaimer {
+    grid-column: 1 / -1;
+    max-width: 880px;
+  }
+}
