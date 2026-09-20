@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "content:validate": "node scripts/validate-content.mjs"
+    "content:validate": "node scripts/validate-content.mjs",
+    "organic:report": "node scripts/organic-report.mjs"
   },
   "engines": {
     "node": "22.x"
