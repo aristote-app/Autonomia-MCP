@@ -1,0 +1,109 @@
+name: pagespeed-production
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: "Production site URL, e.g. https://autonomia.fr"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  pagespeed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Audit representative pages
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+          PAGESPEED_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
+        run: |
+          node <<'NODE'
+          const base = process.env.SITE_URL.replace(/\/$/, "");
+          const key = process.env.PAGESPEED_API_KEY;
+          if (!key) throw new Error("Missing PAGESPEED_API_KEY secret.");
+
+          const pages = [
+            "/",
+            "/experts",
+            "/academy",
+            "/cas-usage-ia/support-client",
+            "/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes",
+            "/observatoire-ia"
+          ];
+
+          const strategies = ["mobile", "desktop"];
+          const results = [];
+
+          async function run(url, strategy) {
+            const endpoint = new URL("https://www.googleapis.com/pagespeedonline/v5/runPagespeed");
+            endpoint.searchParams.set("url", url);
+            endpoint.searchParams.set("strategy", strategy);
+            endpoint.searchParams.append("category", "performance");
+            endpoint.searchParams.append("category", "seo");
+            endpoint.searchParams.set("key", key);
+
+            const response = await fetch(endpoint);
+            if (!response.ok) {
+              throw new Error(`PageSpeed failed for ${url} (${strategy}): ${response.status}`);
+            }
+
+            return await response.json();
+          }
+
+          let failed = false;
+
+          for (const path of pages) {
+            for (const strategy of strategies) {
+              const url = `${base}${path}`;
+              const data = await run(url, strategy);
+              const categories = data.lighthouseResult?.categories || {};
+              const audits = data.lighthouseResult?.audits || {};
+
+              const performance = Math.round((categories.performance?.score || 0) * 100);
+              const seo = Math.round((categories.seo?.score || 0) * 100);
+              const lcp = audits["largest-contentful-paint"]?.numericValue || null;
+              const cls = audits["cumulative-layout-shift"]?.numericValue || null;
+              const tbt = audits["total-blocking-time"]?.numericValue || null;
+
+              const result = {
+                path,
+                strategy,
+                performance,
+                seo,
+                lcp_ms: lcp ? Math.round(lcp) : null,
+                cls: cls === null ? null : Number(cls.toFixed(3)),
+                tbt_ms: tbt ? Math.round(tbt) : null
+              };
+              results.push(result);
+
+              // Lab guardrails: deliberately looser than field "good" thresholds to avoid noisy failures.
+              if (
+                performance < 70 ||
+                seo < 90 ||
+                (lcp !== null && lcp > 4000) ||
+                (cls !== null && cls > 0.25) ||
+                (tbt !== null && tbt > 700)
+              ) {
+                failed = true;
+              }
+            }
+          }
+
+          console.log(JSON.stringify({
+            results,
+            field_targets: {
+              LCP_p75_ms: "<=2500",
+              INP_p75_ms: "<=200",
+              CLS_p75: "<=0.1"
+            },
+            note:
+              "Workflow failure thresholds are lab regression guardrails. Core Web Vitals decisions should use field data at the 75th percentile."
+          }, null, 2));
+
+          if (failed) {
+            throw new Error("One or more PageSpeed lab guardrails failed.");
+          }
+          NODE
