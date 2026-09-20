@@ -40,6 +40,19 @@ const pages = {
       "Un besoin IA se résume rarement à un intitulé de poste. Nous partons du problème à résoudre, du niveau de séniorité, de l’environnement technique et du rôle attendu dans l’équipe.",
     outcomes: ["Besoin clarifié", "Compétences identifiées", "Profils sélectionnés"],
     capabilities: ["GenAI / LLM", "RAG", "Agents IA", "AI Product", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance IA"],
+    useCasesTitle: "Vous avez un objectif. Nous cherchons la capacité qui manque.",
+    useCases: [
+      "Un pilote IA fonctionne, mais personne n’a la disponibilité ou l’expertise pour le passer en production.",
+      "Vous savez ce que vous voulez automatiser, mais pas s’il faut un profil n8n, agentique, backend ou produit.",
+      "Le projet implique plusieurs équipes et vous avez besoin d’un rôle capable d’orchestrer métier, data, sécurité et delivery.",
+      "Votre équipe possède une partie des compétences, mais il lui manque une expertise précise pour franchir une étape."
+    ],
+    routesTitle: "Trois réponses possibles selon le problème.",
+    routes: [
+      { kicker: "BUILD", title: "Construire", text: "Un profil technique ou produit renforce l’équipe pour concevoir, intégrer ou industrialiser." },
+      { kicker: "LEAD", title: "Piloter", text: "Un rôle projet ou produit structure les décisions, dépendances et critères de réussite." },
+      { kicker: "TRANSFER", title: "Transférer", text: "L’expert intervient avec un objectif explicite de transmission vers l’équipe interne." }
+    ],
     faq: [
       ["Autonomia est-il une marketplace ?", "Non. Le positionnement repose sur la compréhension du besoin, la sélection et le staffing, pas sur l’accès à un catalogue de profils."],
       ["Quels types de missions ?", "Renfort d’équipe, expertise ciblée, pilotage de projet, conception ou déploiement de solutions IA selon le besoin exprimé."],
@@ -57,6 +70,19 @@ const pages = {
       "Une formation utile relie les outils aux tâches, aux risques, aux règles internes et aux décisions que les collaborateurs doivent réellement prendre.",
     outcomes: ["Usages cadrés", "Compétences transférées", "Adoption structurée"],
     capabilities: ["IA générative", "ChatGPT", "Microsoft Copilot", "Prompt", "Agents IA", "Automatisation", "AI Act", "Conduite du changement"],
+    useCasesTitle: "Former n’a de sens que si quelque chose doit changer dans le travail.",
+    useCases: [
+      "Des collaborateurs utilisent déjà ChatGPT ou Copilot, mais les pratiques sont hétérogènes et difficiles à sécuriser.",
+      "Vous voulez déployer des usages IA par métier plutôt qu’une sensibilisation identique pour tout le monde.",
+      "Les managers doivent savoir cadrer l’usage, contrôler la qualité et accompagner leurs équipes.",
+      "L’entreprise doit relier adoption, gouvernance, AI Act et cas d’usage concrets."
+    ],
+    routesTitle: "Une architecture de formation peut combiner trois niveaux.",
+    routes: [
+      { kicker: "COMMON", title: "Socle commun", text: "Comprendre les capacités, limites, risques et règles d’usage de l’IA." },
+      { kicker: "ROLE", title: "Par métier", text: "Travailler sur les tâches, documents et décisions propres à chaque population." },
+      { kicker: "ADVANCED", title: "Pratiques avancées", text: "Automatisation, agents, méthodes de prompting, gouvernance ou pilotage selon les rôles." }
+    ],
     faq: [
       ["Les formations sont-elles sur mesure ?", "Le site est conçu pour proposer des formats entreprise adaptables aux métiers, aux niveaux et aux cas d’usage."],
       ["Qualiopi est-il inclus ?", "La mention Qualiopi ne sera publiée qu’après validation de l’entité certifiée, du périmètre et des mentions légales exactes."],
@@ -75,6 +101,12 @@ const pages = {
       "Une entreprise qui veut cadrer une feuille de route IA n’a pas besoin du même profil qu’une équipe qui doit industrialiser un RAG ou automatiser un processus métier.",
     outcomes: ["Cadrage du besoin", "Profil-type défini", "Sélection ciblée"],
     capabilities: ["Conseil IA", "GenAI", "RAG", "Agents", "Automatisation", "Gouvernance", "Pilotage"],
+    useCases: [
+      "Vous avez un projet IA mais le rôle exact à mobiliser n’est pas encore clair.",
+      "Vous devez arbitrer entre automatisation, RAG, agent IA ou autre approche.",
+      "Un projet est cadré mais il manque une expertise pour sécuriser ou accélérer l’exécution.",
+      "Vous cherchez un profil capable de relier enjeux métier, architecture et delivery."
+    ],
     ads: {
       intent: "Recherche active d’un consultant IA pour une mission B2B",
       keywordGroups: ["consultant ia", "consultant intelligence artificielle", "consultant ai entreprise"],
@@ -101,6 +133,12 @@ const pages = {
       "Autonomia structure le besoin de mission, identifie les compétences critiques et concentre la sélection sur les profils capables de s’intégrer au contexte de l’entreprise.",
     outcomes: ["Mission cadrée", "Expertise ciblée", "Staffing organisé"],
     capabilities: ["LLM", "RAG", "Agents", "Data Science", "ML Engineering", "MLOps", "AI Product", "Automatisation"],
+    useCases: [
+      "Renforcer temporairement une équipe sur une compétence IA absente.",
+      "Accélérer un chantier déjà cadré sans recruter immédiatement.",
+      "Faire intervenir une expertise spécialisée sur un jalon critique.",
+      "Constituer un binôme produit + technique pour une phase de conception ou d’industrialisation."
+    ],
     ads: {
       intent: "Entreprise recherchant un freelance IA",
       keywordGroups: ["freelance ia", "freelance intelligence artificielle", "freelance ai"],
@@ -257,6 +295,17 @@ const pages = {
       "L’enjeu est de relier les capacités de l’IA au travail réel : ce que les équipes font aujourd’hui, ce qu’elles peuvent améliorer et ce qu’elles doivent encadrer.",
     outcomes: ["Publics segmentés", "Compétences ciblées", "Parcours construit"],
     capabilities: ["Direction", "Managers", "RH", "Marketing", "Commercial", "Administratif", "Métiers", "Technique"],
+    useCases: [
+      "Construire un programme IA pour plusieurs populations avec des besoins différents.",
+      "Passer d’une sensibilisation générale à des usages métier réellement applicables.",
+      "Former les managers à encadrer l’usage de l’IA dans leurs équipes.",
+      "Déployer une culture commune tout en gardant des parcours spécialisés par fonction."
+    ],
+    routes: [
+      { kicker: "DIAGNOSE", title: "Diagnostiquer", text: "Identifier les publics, tâches, outils, risques et niveaux avant de construire le programme." },
+      { kicker: "DESIGN", title: "Construire", text: "Assembler socle commun, cas métier et séquences avancées selon les populations." },
+      { kicker: "ADOPT", title: "Ancrer", text: "Prévoir les pratiques réutilisables et le cadre qui permettront de prolonger l’usage après la formation." }
+    ],
     ads: {
       intent: "Entreprise cherchant une formation IA B2B",
       keywordGroups: ["formation ia entreprise", "formation intelligence artificielle entreprise", "formation ia salariés"],
@@ -309,6 +358,17 @@ const pages = {
       "Les collaborateurs doivent savoir quelles tâches déléguer, comment donner du contexte, comment vérifier les résultats et comment intégrer Copilot dans leurs routines.",
     outcomes: ["Usages prioritaires définis", "Populations ciblées", "Adoption structurée"],
     capabilities: ["Word", "Excel", "PowerPoint", "Outlook", "Teams", "Prompt", "Gouvernance"],
+    useCases: [
+      "Les licences sont disponibles mais l’usage reste occasionnel ou superficiel.",
+      "Vous préparez un déploiement et voulez former d’abord les populations où les usages sont les plus clairs.",
+      "Les collaborateurs connaissent l’outil mais ne savent pas construire des méthodes de travail réutilisables.",
+      "Vous devez intégrer confidentialité, vérification et règles d’usage au programme d’adoption."
+    ],
+    routes: [
+      { kicker: "BEFORE", title: "Avant déploiement", text: "Cibler les populations, usages et prérequis qui justifient l’accompagnement." },
+      { kicker: "LAUNCH", title: "Au lancement", text: "Former sur les tâches réelles et créer des méthodes simples à réutiliser." },
+      { kicker: "AFTER", title: "Après pilote", text: "Identifier les freins d’adoption et approfondir les usages réellement utiles." }
+    ],
     ads: {
       intent: "Entreprise ayant ou prévoyant Microsoft Copilot",
       keywordGroups: ["formation copilot entreprise", "formation microsoft copilot", "formation copilot 365"],
