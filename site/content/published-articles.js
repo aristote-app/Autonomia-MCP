@@ -3,6 +3,7 @@ import { marketDemandExecutionArticlesWave2, marketDemandTrainingArticlesWave2 }
 import { marketDemandExecutionArticlesWave3, marketDemandTrainingArticlesWave3 } from "./article-packs/market-demand-wave-3.js";
 import { marketDemandExecutionArticlesWave4, marketDemandTrainingArticlesWave4 } from "./article-packs/market-demand-wave-4.js";
 import { marketDemandExecutionArticlesWave5, marketDemandTrainingArticlesWave5 } from "./article-packs/market-demand-wave-5.js";
+import { marketDemandExecutionArticlesWave6, marketDemandTrainingArticlesWave6 } from "./article-packs/market-demand-wave-6.js";
 
 const baseExecutionArticles = [
   {
@@ -326,7 +327,8 @@ export const publishedExecutionArticles = [
   ...marketDemandExecutionArticlesWave2,
   ...marketDemandExecutionArticlesWave3,
   ...marketDemandExecutionArticlesWave4,
-  ...marketDemandExecutionArticlesWave5
+  ...marketDemandExecutionArticlesWave5,
+  ...marketDemandExecutionArticlesWave6
 ];
 
 export const publishedTrainingArticles = [
@@ -335,7 +337,8 @@ export const publishedTrainingArticles = [
   ...marketDemandTrainingArticlesWave2,
   ...marketDemandTrainingArticlesWave3,
   ...marketDemandTrainingArticlesWave4,
-  ...marketDemandTrainingArticlesWave5
+  ...marketDemandTrainingArticlesWave5,
+  ...marketDemandTrainingArticlesWave6
 ];
 
 export function getPublishedExecutionArticle(slug) {
