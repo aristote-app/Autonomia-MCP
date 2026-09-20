@@ -11,8 +11,40 @@ import {
   summarizeUnifiedTodayQueue
 } from "../lib/intelligence/today.js";
 import { searchJobSignals } from "../lib/db/jobSignals.js";
+import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
+import {
+  claimWorkItem,
+  assignWorkItem,
+  updateWorkItem
+} from "./actions/work-items.js";
 
 export const dynamic = "force-dynamic";
+
+const WORKFLOW_STAGES = [
+  ["new", "Nouveau"],
+  ["review", "À analyser"],
+  ["go", "GO"],
+  ["no_go", "NO-GO"],
+  ["in_progress", "En cours"],
+  ["proposal", "Proposition"],
+  ["submitted", "Déposé / envoyé"],
+  ["won", "Gagné"],
+  ["lost", "Perdu"],
+  ["archived", "Archivé"]
+];
+
+const WORKFLOW_PRIORITIES = [
+  ["low", "Basse"],
+  ["normal", "Normale"],
+  ["high", "Haute"],
+  ["urgent", "Urgente"]
+];
+
+function dueInputValue(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 16);
+}
 
 function formatNumber(value) {
   return new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(Number(value) || 0);
@@ -64,11 +96,14 @@ async function loadLiveData() {
       limit: 24
     });
 
+    const workflow = await getTeamWorkflowContext(today);
+
     return {
       summary,
       today,
       todaySummary: summarizeUnifiedTodayQueue(today),
-      buyers: buyers.items
+      buyers: buyers.items,
+      workflow
     };
   } catch (error) {
     console.error("Autonomia dashboard data error", error);
@@ -145,7 +180,19 @@ export default async function Home() {
             </div>
 
             <div className="opportunityList">
-              {live.today.length ? live.today.map((item) => (
+              {live.today.length ? live.today.map((item) => {
+                const workKey = queueKey(item.queue_kind, item.entity_id);
+                const workItem = live.workflow?.workItems?.[workKey] || null;
+                const owner = workItem?.owner_user_id
+                  ? live.workflow?.members?.find((member) => member.user_id === workItem.owner_user_id)
+                  : null;
+                const canEditWorkItem =
+                  live.workflow?.canWrite &&
+                  (!workItem?.owner_user_id ||
+                    workItem.owner_user_id === live.workflow.currentUserId ||
+                    live.workflow.canAssign);
+
+                return (
                 <article className="opportunity" key={item.queue_id}>
                   <div className="oppTop">
                     <div>
@@ -194,6 +241,102 @@ export default async function Home() {
                     </p>
                   )}
 
+                  {live.workflow?.enabled && (
+                    <div className="teamWorkflow">
+                      <div className="teamWorkflowSummary">
+                        <span>
+                          <strong>Responsable</strong>
+                          {owner?.display_name || (workItem?.owner_user_id ? "Utilisateur affecté" : "Non affecté")}
+                        </span>
+                        <span>
+                          <strong>Étape</strong>
+                          {WORKFLOW_STAGES.find(([value]) => value === (workItem?.stage || "new"))?.[1] || "Nouveau"}
+                        </span>
+                        <span>
+                          <strong>Priorité équipe</strong>
+                          {WORKFLOW_PRIORITIES.find(([value]) => value === (workItem?.priority || "normal"))?.[1] || "Normale"}
+                        </span>
+
+                        {!workItem?.owner_user_id && live.workflow.canWrite && (
+                          <form action={claimWorkItem}>
+                            <input type="hidden" name="item_type" value={item.queue_kind} />
+                            <input type="hidden" name="item_id" value={item.entity_id} />
+                            <button type="submit">Prendre en charge</button>
+                          </form>
+                        )}
+                      </div>
+
+                      {(live.workflow.canAssign || canEditWorkItem) && (
+                        <details className="workflowDetails">
+                          <summary>Suivi équipe</summary>
+
+                          {live.workflow.canAssign && (
+                            <form action={assignWorkItem} className="workflowForm compact">
+                              <input type="hidden" name="item_type" value={item.queue_kind} />
+                              <input type="hidden" name="item_id" value={item.entity_id} />
+                              <label>
+                                <span>Affecter à</span>
+                                <select name="owner_user_id" defaultValue={workItem?.owner_user_id || ""}>
+                                  <option value="">Non affecté</option>
+                                  {live.workflow.members.map((member) => (
+                                    <option key={member.user_id} value={member.user_id}>
+                                      {member.display_name || member.user_id.slice(0, 8)}
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
+                              <button type="submit">Affecter</button>
+                            </form>
+                          )}
+
+                          {canEditWorkItem && (
+                            <form action={updateWorkItem} className="workflowForm">
+                              <input type="hidden" name="item_type" value={item.queue_kind} />
+                              <input type="hidden" name="item_id" value={item.entity_id} />
+
+                              <label>
+                                <span>Étape</span>
+                                <select name="stage" defaultValue={workItem?.stage || "review"}>
+                                  {WORKFLOW_STAGES.map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                  ))}
+                                </select>
+                              </label>
+
+                              <label>
+                                <span>Priorité</span>
+                                <select name="priority" defaultValue={workItem?.priority || "normal"}>
+                                  {WORKFLOW_PRIORITIES.map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                  ))}
+                                </select>
+                              </label>
+
+                              <label className="workflowWide">
+                                <span>Prochaine action</span>
+                                <input
+                                  name="next_action"
+                                  defaultValue={workItem?.next_action || item.next_action || ""}
+                                />
+                              </label>
+
+                              <label>
+                                <span>Échéance interne</span>
+                                <input
+                                  name="due_at"
+                                  type="datetime-local"
+                                  defaultValue={dueInputValue(workItem?.due_at)}
+                                />
+                              </label>
+
+                              <button type="submit">Enregistrer le suivi</button>
+                            </form>
+                          )}
+                        </details>
+                      )}
+                    </div>
+                  )}
+
                   <div className="oppActions">
                     {item.internal_href && (
                       <Link href={item.internal_href}>Voir le besoin</Link>
@@ -205,7 +348,8 @@ export default async function Home() {
                     )}
                   </div>
                 </article>
-              )) : (
+                );
+              }) : (
                 <div className="emptyState">
                   Aucun besoin n'est encore remonté dans la file unifiée.
                 </div>
