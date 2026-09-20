@@ -77,6 +77,32 @@ for (const relativePath of publicCopyFiles) {
 }
 
 
+
+const requiredRuntimeFiles = [
+  "components/AutonomiaScan.js",
+  "components/LeadForm.js",
+  "components/HomeLeadSwitch.js",
+  "app/api/leads/route.js",
+  "app/scan-ia/page.js",
+  "docs/tuesday-integration-runbook.md",
+  "docs/paid-acquisition-map.md"
+];
+
+for (const relativePath of requiredRuntimeFiles) {
+  try {
+    readFileSync(resolve(siteRoot, relativePath), "utf8");
+  } catch {
+    errors.push(`Required public-site runtime file missing: ${relativePath}.`);
+  }
+}
+
+const scanSource = readFileSync(resolve(siteRoot, "components/AutonomiaScan.js"), "utf8");
+for (const requiredField of ["recommended", "execution", "roles", "capabilities", "academy"]) {
+  if (!scanSource.toLowerCase().includes(requiredField)) {
+    errors.push(`Autonomia Scan execution blueprint is missing expected field: ${requiredField}.`);
+  }
+}
+
 function wordCount(article) {
   const text = [
     article.title,
