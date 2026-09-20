@@ -59,7 +59,7 @@ Meta ne part pas d’une recherche explicite. Le premier produit vendu est donc 
 
 ### Autonomia Scan
 
-Le Scan de la home et `/scan-ia` sert de funnel transversal.
+Le Scan de la home et `/scan-ia` sert de funnel transversal. Les LP Google le proposent aussi comme conversion secondaire lorsque le visiteur ne sait pas encore précisément quoi demander.
 
 Entrée :
 - objectif ;
@@ -68,12 +68,17 @@ Entrée :
 
 Sortie :
 - orientation Experts / Academy / hybride ;
-- profils probables ;
+- lecture du besoin ;
+- priorité immédiate ;
+- profils à examiner ;
 - compétences à mobiliser ;
 - pistes de montée en compétences ;
-- séquence d’exécution.
+- prochaines étapes ;
+- point de vigilance.
 
 Le contexte complet est ensuite repris dans le formulaire sans ressaisie.
+
+Sur les pages diagnostic Meta, cette valeur est livrée avant la collecte des coordonnées. Le formulaire de contact n'apparaît qu'après le premier plan d'exécution.
 
 ## Matrice créative
 
