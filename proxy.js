@@ -15,7 +15,7 @@ export async function proxy(request) {
   }
 
   const pathname = request.nextUrl.pathname;
-  if (pathname.startsWith("/login") || pathname.startsWith("/api/")) {
+  if (pathname.startsWith("/login") || pathname.startsWith("/auth/") || pathname.startsWith("/api/")) {
     return NextResponse.next({ request });
   }
 
