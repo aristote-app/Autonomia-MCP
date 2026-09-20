@@ -123,12 +123,15 @@ const requiredRuntimeFiles = [
   "app/api/organic/wave-plan/route.js",
   "app/api/organic/brief/route.js",
   "app/api/organic/backlog/route.js",
+  "app/feed.xml/route.js",
+  "content/article-packs/market-demand-wave-3.js",
   "docs/tuesday-integration-runbook.md",
   "docs/paid-acquisition-map.md",
   "docs/organic-engine-v1.md",
   "app/a-propos/page.js",
   "app/methodologie/politique-editoriale/page.js",
-  "scripts/seo-audit.mjs"
+  "scripts/seo-audit.mjs",
+  "scripts/test-organic-decision-engine.mjs"
 ];
 
 for (const relativePath of requiredRuntimeFiles) {
