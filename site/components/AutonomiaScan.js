@@ -39,28 +39,50 @@ const QUESTIONS = [
   }
 ];
 
-const PLANS = {
-  experts: {
-    eyebrow: "AUTONOMIA EXPERTS",
-    title: "Votre prochain levier est une capacité d’exécution externe.",
-    description:
-      "Le besoin pointe vers une expertise à ajouter rapidement au projet : cadrage du rôle, compétences critiques, niveau de séniorité puis sélection de profils.",
-    actions: ["Reformuler le besoin", "Définir le rôle", "Sélectionner les expertises", "Staffer"]
+const OBJECTIVE_BLUEPRINTS = {
+  automate: {
+    mission: "Passer d’un processus manuel à un workflow automatisé, contrôlable et maintenable.",
+    skills: ["Cartographie de processus", "Automatisation", "Intégration API", "Agents / orchestration"],
+    profiles: ["Automation Engineer", "AI Project Manager", "Agentic AI Engineer"],
+    academy: ["Automatisation métier", "Supervision des workflows", "Bonnes pratiques IA"]
   },
-  academy: {
-    eyebrow: "AUTONOMIA ACADEMY",
-    title: "Votre prochain levier est une capacité interne.",
-    description:
-      "Le besoin pointe vers l’adoption, la montée en compétences ou la gouvernance. Le parcours doit partir des tâches et décisions réelles des équipes.",
-    actions: ["Segmenter les publics", "Identifier les usages", "Construire le parcours", "Mesurer l’adoption"]
+  build: {
+    mission: "Transformer un besoin métier en produit ou fonctionnalité IA exploitable.",
+    skills: ["Product discovery", "GenAI / LLM", "Architecture", "Évaluation"],
+    profiles: ["AI Product Manager", "GenAI Engineer", "LLM Engineer"],
+    academy: ["Acculturation produit IA", "Prompting métier", "Adoption"]
   },
-  hybrid: {
-    eyebrow: "AUTONOMIA / EXECUTION PLAN",
-    title: "Votre besoin combine delivery immédiat et transfert de compétences.",
-    description:
-      "Le meilleur chemin combine une expertise externe pour faire avancer le projet et un dispositif interne pour rendre l’organisation progressivement autonome.",
-    actions: ["Cadrer le besoin", "Activer l’expertise", "Transférer les méthodes", "Industrialiser"]
+  agents: {
+    mission: "Concevoir des agents capables d’agir dans un cadre défini, avec contrôles et escalades.",
+    skills: ["Agentic AI", "Tool calling", "Orchestration", "Évaluation / guardrails"],
+    profiles: ["Agentic AI Engineer", "AI Agent Engineer", "LLM Engineer"],
+    academy: ["Agents IA pour métiers", "Supervision humaine", "Risques et gouvernance"]
+  },
+  copilot: {
+    mission: "Faire de Copilot / ChatGPT un usage métier réel plutôt qu’une licence sous-utilisée.",
+    skills: ["Cas d’usage", "Adoption", "Gouvernance", "Conduite du changement"],
+    profiles: ["AI Adoption Lead", "AI Project Manager", "AI Governance Consultant"],
+    academy: ["Microsoft Copilot", "ChatGPT entreprise", "Prompt engineering"]
+  },
+  skills: {
+    mission: "Créer une montée en compétences directement reliée aux tâches des équipes.",
+    skills: ["Cartographie des usages", "Ingénierie pédagogique", "Adoption", "Mesure"],
+    profiles: ["AI Learning Lead", "AI Adoption Consultant", "AI Governance Consultant"],
+    academy: ["IA générative", "IA métiers", "Managers + IA"]
+  },
+  governance: {
+    mission: "Mettre en place le cadre qui permet d’utiliser et déployer l’IA avec des règles explicites.",
+    skills: ["AI Governance", "AI Act", "Risk mapping", "Politiques d’usage"],
+    profiles: ["AI Governance Consultant", "Responsible AI Expert", "AI Project Manager"],
+    academy: ["AI Act", "Responsible AI", "Gouvernance pour managers"]
   }
+};
+
+const STAGE_PRIORITIES = {
+  idea: ["Clarifier le résultat business attendu", "Qualifier faisabilité, données et risques", "Définir un premier périmètre testable"],
+  scoped: ["Valider l’architecture et les rôles", "Sécuriser les dépendances critiques", "Organiser le delivery"],
+  pilot: ["Mesurer ce qui fonctionne réellement", "Corriger les points de friction", "Préparer le passage à l’échelle"],
+  scale: ["Industrialiser le delivery", "Renforcer gouvernance et monitoring", "Transférer les compétences aux équipes"]
 };
 
 function choosePlan(answers) {
@@ -81,6 +103,30 @@ function choosePlan(answers) {
   return "hybrid";
 }
 
+function buildDiagnosis(answers) {
+  const blueprint = OBJECTIVE_BLUEPRINTS[answers.objective] || OBJECTIVE_BLUEPRINTS.build;
+  const stagePriorities = STAGE_PRIORITIES[answers.stage] || STAGE_PRIORITIES.idea;
+  const plan = choosePlan(answers);
+
+  const gapAction = {
+    expertise: "Identifier l’expertise rare qui manque avant de chercher un intitulé de poste.",
+    delivery: "Ajouter de la capacité d’exécution sans recréer une équipe complète.",
+    adoption: "Traiter l’usage réel, les routines et le management du changement.",
+    skills: "Former les bons publics sur les tâches qu’ils doivent réellement réaliser.",
+    governance: "Poser les règles, responsabilités et contrôles avant l’extension des usages.",
+    unknown: "Qualifier le blocage avant d’engager budget, recrutement ou formation."
+  }[answers.gap];
+
+  return {
+    plan,
+    mission: blueprint.mission,
+    skills: blueprint.skills,
+    profiles: blueprint.profiles,
+    academy: blueprint.academy,
+    priorities: [...stagePriorities, gapAction].filter(Boolean).slice(0, 4)
+  };
+}
+
 function track(event, detail = {}) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
@@ -92,29 +138,43 @@ export default function AutonomiaScan() {
   const [answers, setAnswers] = useState({});
   const done = step >= QUESTIONS.length;
 
-  const planKey = useMemo(() => choosePlan(answers), [answers]);
-  const plan = PLANS[planKey];
+  const diagnosis = useMemo(() => buildDiagnosis(answers), [answers]);
 
   function choose(id, value) {
     const next = { ...answers, [id]: value };
     setAnswers(next);
     track("autonomia_scan_answer", { scan_step: id, scan_value: value });
-    setTimeout(() => setStep((current) => Math.min(current + 1, QUESTIONS.length)), 110);
+    setTimeout(() => setStep((currentStep) => Math.min(currentStep + 1, QUESTIONS.length)), 110);
+  }
+
+  function buildPayload() {
+    return {
+      plan: diagnosis.plan,
+      answers,
+      mission: diagnosis.mission,
+      skills_needed: diagnosis.skills,
+      suggested_profiles: diagnosis.profiles,
+      training_needs: diagnosis.academy,
+      priorities: diagnosis.priorities,
+      orientation_disclaimer: "Première orientation basée uniquement sur les réponses fournies au Scan.",
+      created_at: new Date().toISOString()
+    };
   }
 
   function handoffToLead() {
-    const payload = {
-      plan: planKey,
-      answers,
-      created_at: new Date().toISOString()
-    };
+    const payload = buildPayload();
 
     try {
       window.sessionStorage.setItem("autonomia_scan_context", JSON.stringify(payload));
     } catch {}
 
     window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
-    track("autonomia_scan_cta", { scan_plan: planKey, ...answers });
+    track("autonomia_scan_cta", {
+      scan_plan: diagnosis.plan,
+      scan_objective: answers.objective,
+      scan_stage: answers.stage,
+      scan_gap: answers.gap
+    });
   }
 
   function restart() {
@@ -130,7 +190,7 @@ export default function AutonomiaScan() {
           <span className="scanLiveDot" />
           <strong>AUTONOMIA SCAN</strong>
         </div>
-        <span>{done ? "EXECUTION PLAN" : `0${step + 1} / 03`}</span>
+        <span>{done ? "AI EXECUTION PLAN" : `0${step + 1} / 03`}</span>
       </div>
 
       {!done ? (
@@ -139,11 +199,7 @@ export default function AutonomiaScan() {
           <h3>{QUESTIONS[step].label}</h3>
           <div className="scanChoices">
             {QUESTIONS[step].options.map(([value, label], index) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => choose(QUESTIONS[step].id, value)}
-              >
+              <button key={value} type="button" onClick={() => choose(QUESTIONS[step].id, value)}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <strong>{label}</strong>
                 <b>→</b>
@@ -154,27 +210,44 @@ export default function AutonomiaScan() {
       ) : (
         <div className="scanResult">
           <div className="scanResultIntro">
-            <p>{plan.eyebrow}</p>
-            <h3>{plan.title}</h3>
+            <p>AUTONOMIA / PREMIÈRE ORIENTATION</p>
+            <h3>{diagnosis.mission}</h3>
             <div className="scanSignal">PLAN GÉNÉRÉ À PARTIR DE VOS 3 RÉPONSES</div>
-            <p className="scanResultText">{plan.description}</p>
+            <p className="scanResultText">
+              Ce résultat n’est pas une analyse scientifique : c’est une première orientation structurée
+              pour identifier les capacités à mobiliser avant un cadrage plus détaillé.
+            </p>
           </div>
 
-          <ol className="scanPlan">
-            {plan.actions.map((action, index) => (
-              <li key={action}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{action}</strong>
-              </li>
-            ))}
-          </ol>
+          <div className="scanDiagnosisGrid">
+            <article>
+              <span>COMPÉTENCES À MOBILISER</span>
+              <ul>{diagnosis.skills.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+            <article>
+              <span>PROFILS À ÉVALUER</span>
+              <ul>{diagnosis.profiles.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+            <article>
+              <span>COMPÉTENCES INTERNES</span>
+              <ul>{diagnosis.academy.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+          </div>
+
+          <div className="scanPriorityBlock">
+            <span>PROCHAINES ÉTAPES</span>
+            <ol className="scanPlan">
+              {diagnosis.priorities.map((action, index) => (
+                <li key={action}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{action}</strong>
+                </li>
+              ))}
+            </ol>
+          </div>
 
           <div className="scanResultActions">
-            <a
-              className="scanPrimary"
-              href="#contact"
-              onClick={handoffToLead}
-            >
+            <a className="scanPrimary" href="#contact" onClick={handoffToLead}>
               Transformer ce plan en action
             </a>
             <button type="button" onClick={restart}>Recommencer</button>
