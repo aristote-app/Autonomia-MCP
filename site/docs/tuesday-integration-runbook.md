@@ -42,6 +42,8 @@ Le payload envoyé au backend contient notamment :
   - profils à examiner ;
   - compétences à mobiliser ;
   - pistes de montée en compétences ;
+  - route commerciale suggérée ;
+  - questions à qualifier au prochain échange ;
   - date de complétion.
 
 ## À brancher mardi
@@ -59,8 +61,11 @@ Root Directory :
 Framework :
 Next.js
 
+Branche d’intégration actuelle :
+`feat/autonomia-public-site-v2` — PR #10.
+
 Production branch :
-branche choisie après validation / merge du site.
+`main` après validation et merge de la PR #10.
 
 Ne pas déployer le cockpit interne comme site public.
 
@@ -205,7 +210,18 @@ Vérifier :
 - form_step ;
 - generate_lead ;
 - autonomia_scan_answer ;
-- autonomia_scan_cta.
+- autonomia_scan_back ;
+- autonomia_scan_cta ;
+- autonomia_scan_restart.
+
+Après consentement explicite :
+- les événements sont transmis à GA4 si configuré ;
+- `generate_lead` envoie la conversion Google Ads si ID + label sont configurés ;
+- `generate_lead` envoie l’événement Meta `Lead` si le Pixel est configuré.
+
+Sans consentement :
+- les scripts GA4 / Google Ads / Meta ne doivent pas être chargés ;
+- aucun événement analytics / ad ne doit être envoyé à ces plateformes.
 
 À relier ensuite au pipeline Autonomia :
 lead → qualified lead → meeting → proposal → won → revenue → margin.
@@ -221,7 +237,7 @@ npm run content:validate
 npm run build
 ```
 
-Le workflow GitHub `validate-public-site` doit être vert sur la PR d'intégration.
+Le workflow GitHub `validate-public-site` (`.github/workflows/validate-site.yml`) doit être vert sur la PR #10.
 
 ### 11. Ordre de lancement
 
@@ -252,3 +268,110 @@ Le site peut être ouvert lorsque :
 - aucun élément de preuve n'est inventé ;
 - mobile et desktop ont été vérifiés ;
 - production n'affiche aucune erreur runtime.
+
+
+## Carte opérationnelle « GO VERCEL »
+
+Quand la consigne « go Vercel » est donnée mardi, ne pas reconstruire l’acquisition. Exécuter cette séquence.
+
+### A. GitHub
+1. ouvrir la PR #10 ;
+2. confirmer que le head est `feat/autonomia-public-site-v2` ;
+3. vérifier que `validate-public-site` est vert ;
+4. vérifier qu’aucun conflit n’est signalé ;
+5. merger uniquement après validation du build.
+
+### B. Vercel
+- Repository : `aristote-app/Autonomia-MCP`
+- Root Directory : `site`
+- Framework : Next.js
+- Node.js : 22.x
+- Install Command : `npm install --ignore-scripts --no-audit --no-fund`
+- Build Command : `npm run build`
+- Production Branch : `main`
+
+### C. Variables minimales
+```
+NEXT_PUBLIC_SITE_URL=<url publique finale>
+AUTONOMIA_INBOUND_URL=https://<autonomia-mcp-host>/api/inbound/leads
+AUTONOMIA_INBOUND_TOKEN=<secret serveur>
+```
+
+### D. Variables de mesure — seulement lorsque validées
+```
+NEXT_PUBLIC_GA4_ID=
+NEXT_PUBLIC_GOOGLE_ADS_ID=
+NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL=
+NEXT_PUBLIC_META_PIXEL_ID=
+```
+
+### E. Qualiopi — uniquement si vérifié
+```
+QUALIOPI_PUBLIC_LABEL=
+QUALIOPI_CERTIFICATE_URL=
+```
+Laisser vide si l’entité, le périmètre ou la formulation ne sont pas confirmés.
+
+### F. Smoke test Meta
+Exemple :
+```
+/diagnostic-copilot?utm_source=meta&utm_medium=paid-social&utm_campaign=smoke-meta&campaign_id=1&adset_id=2&ad_id=3&creative_id=4&fbclid=test
+```
+
+Contrôler :
+- Scan affiché avant toute demande de coordonnées ;
+- résultat complet visible ;
+- formulaire seulement après « Continuer avec ce plan » ;
+- `requested_service=diagnostic-copilot` ;
+- `scan_context.source=diagnostic_diagnostic-copilot` ;
+- version, réponses, priorité, point de vigilance, profils, compétences et commercial_handoff présents ;
+- attribution Meta conservée.
+
+### G. Smoke test Google Ads
+Exemple :
+```
+/consultant-rag?utm_source=google&utm_medium=cpc&utm_campaign=smoke-google&utm_term=consultant-rag&gclid=test
+```
+
+Contrôler :
+- contenu RAG spécifique ;
+- bloc problème → compétences → profil / mission ;
+- formulaire Experts ;
+- `requested_service=consultant-rag` ;
+- UTM + gclid présents ;
+- lien secondaire Autonomia Scan présent.
+
+### H. Test conversion
+Avec consentement accepté :
+- GA4 reçoit les événements si ID configuré ;
+- Google Ads reçoit la conversion lead si ID + label configurés ;
+- Meta reçoit `Lead` si Pixel configuré.
+
+Avec consentement refusé :
+- aucun script non essentiel chargé ;
+- aucune conversion externe envoyée.
+
+### I. NO-GO
+Ne pas ouvrir le domaine / campagnes si un seul de ces points échoue :
+- CI non verte ou non vérifiée ;
+- formulaire 502 / 503 ;
+- lead non persisté côté Autonomia-MCP ;
+- attribution perdue ;
+- secret client-side ;
+- canonical incorrect ;
+- diagnostics Meta indexables ;
+- trackers chargés avant consentement ;
+- mentions légales / privacy absentes ;
+- Qualiopi non vérifiée mais affichée ;
+- erreur runtime mobile ou desktop.
+
+### J. GO
+Le site est prêt à ouvrir lorsque :
+1. PR #10 mergée avec CI verte ;
+2. preview Vercel testée ;
+3. lead réel reçu de bout en bout ;
+4. contexte Scan + attribution vérifiés ;
+5. mobile et desktop vérifiés ;
+6. juridique / privacy présents ;
+7. tracking testé avec consentement ;
+8. aucune erreur runtime observée.
