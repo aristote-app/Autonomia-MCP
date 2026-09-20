@@ -167,3 +167,19 @@ The first training story:
 - teach a non-developer team to build and debug the Gmail → AI → Drive workflow.
 
 These two pages establish the depth standard for the remaining library.
+
+
+## Demand-led publication waves
+
+The 400-topic backlog is not a publication queue. Topics are promoted in waves only when the page can provide distinct value and there is useful demand evidence.
+
+Evidence is kept separate by type:
+- search intent / SERP observation;
+- Search Console or Google Ads evidence when available;
+- employment demand from current job postings;
+- customer language and inbound needs;
+- direct commercial fit with Autonomia Experts or Academy.
+
+Employment demand never substitutes for search volume. It can reveal emerging tools, roles, architectures and business problems, then suggest queries that must be validated separately.
+
+Current market-demand research and promotion decisions are recorded in `editorial-priority-wave-1.md` and `live-demand-loop.md`.
