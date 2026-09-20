@@ -3,6 +3,8 @@ import Header from "@/components/Header";
 import AttributionCapture from "@/components/AttributionCapture";
 import ConsentAnalytics from "@/components/ConsentAnalytics";
 
+const isPreview = process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production";
+
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"),
   title: {
@@ -12,6 +14,9 @@ export const metadata = {
   description:
     "Autonomia apporte aux entreprises les experts IA et les compétences nécessaires pour construire, déployer et adopter l’intelligence artificielle.",
   applicationName: "Autonomia",
+  robots: isPreview
+    ? { index: false, follow: false, nocache: true }
+    : { index: true, follow: true },
   openGraph: {
     type: "website",
     locale: "fr_FR",
