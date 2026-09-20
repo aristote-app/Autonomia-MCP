@@ -3193,3 +3193,39 @@ button {
   margin: 8px 0;
   line-height: 1.45;
 }
+
+
+.articleBreadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+}
+
+.articleBreadcrumb span {
+  opacity: .4;
+}
+
+.articleEditorialMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 16px;
+  font-size: 10px;
+  opacity: .68;
+}
+
+.articleEditorialMeta a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (min-width: 1180px) {
+  .articleBreadcrumb {
+    padding-left: max(34px, calc((100vw - var(--max)) / 2));
+    padding-right: max(34px, calc((100vw - var(--max)) / 2));
+  }
+}
