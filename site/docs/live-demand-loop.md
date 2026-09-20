@@ -162,3 +162,7 @@ The job refresh is attached to Autonomia's existing protected market cron.
 Current repository schedule is daily. The pipeline is designed so this cadence can be increased later if the hosting plan and source limits allow it.
 
 Editorial pages cache the aggregate signal for six hours and can refresh independently from the evergreen text.
+
+## 10. Deployment note
+
+France Travail credentials are read at deployment time by Vercel. After adding or rotating `FRANCE_TRAVAIL_CLIENT_ID` or `FRANCE_TRAVAIL_CLIENT_SECRET`, create a fresh deployment before testing the collector.
