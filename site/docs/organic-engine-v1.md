@@ -337,3 +337,22 @@ Il vérifie :
 - pages méthodologiques ;
 - piliers ;
 - guides Wave 3.
+
+
+## Observatoire Autonomia
+
+URL :
+`/observatoire-ia`
+
+Objectif :
+- publier un actif original et citable ;
+- montrer les rôles, outils, compétences et cas d’usage observés dans l’échantillon emploi ;
+- séparer explicitement demande emploi, demande Search et performance business.
+
+Le composant n’affiche aucun chiffre lorsque `AUTONOMIA_CONTENT_SIGNALS_URL` n’est pas configuré ou ne répond pas.
+
+Lorsque les données sont disponibles, la page publie un schema `Dataset` et rappelle que :
+- l’échantillon n’est pas exhaustif ;
+- les comptes ne représentent pas le volume total du marché ;
+- ils ne représentent pas le volume de recherche Google ;
+- ils ne constituent pas une prévision.
