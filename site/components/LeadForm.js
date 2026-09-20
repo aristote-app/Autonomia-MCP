@@ -153,6 +153,12 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
             objective: scanContext.answers?.objective || null,
             stage: scanContext.answers?.stage || null,
             gap: scanContext.answers?.gap || null,
+            mission: scanContext.mission || null,
+            skills_needed: scanContext.skills_needed || [],
+            suggested_profiles: scanContext.suggested_profiles || [],
+            training_needs: scanContext.training_needs || [],
+            priorities: scanContext.priorities || [],
+            orientation_disclaimer: scanContext.orientation_disclaimer || null,
             completed_at: scanContext.created_at || null
           }
         : null,
