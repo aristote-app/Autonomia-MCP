@@ -9,7 +9,7 @@
     "content:validate": "node scripts/validate-content.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "dependencies": {
     "next": "16.3.5",
