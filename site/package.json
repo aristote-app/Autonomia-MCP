@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "content:validate": "node scripts/validate-content.mjs",
-    "organic:report": "node scripts/organic-report.mjs"
+    "organic:report": "node scripts/organic-report.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs"
   },
   "engines": {
     "node": "22.x"
