@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HomeLeadSwitch from "@/components/HomeLeadSwitch";
 import AutonomiaScan from "@/components/AutonomiaScan";
+import QualiopiProof from "@/components/QualiopiProof";
 
 const expertRoles = [
   "AI Project Manager",
@@ -303,6 +304,8 @@ export default function Home() {
           <div><span>PREUVES</span><p>Références, certifications et résultats ne sont publiés que lorsqu’ils sont vérifiés.</p></div>
         </div>
       </section>
+
+      <QualiopiProof />
 
       <section className="faqSection homeFaq" id="faq">
         <p className="sectionIndex">08 — QUESTIONS</p>
