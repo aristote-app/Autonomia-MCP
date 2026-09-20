@@ -165,6 +165,20 @@ for (const requiredPattern of ["autonomia_cookie_consent", "NEXT_PUBLIC_GOOGLE_A
   }
 }
 
+const llmsSource = readFileSync(resolve(siteRoot, "app/llms.txt/route.js"), "utf8");
+for (const requiredPattern of ["Observatory JSON dataset", "Sitemap", "Google Search does not require llms.txt"]) {
+  if (!llmsSource.includes(requiredPattern)) {
+    errors.push(`llms.txt route is missing machine-navigation marker: ${requiredPattern}.`);
+  }
+}
+
+const observatoryRouteSource = readFileSync(resolve(siteRoot, "app/api/public/observatoire-ia/route.js"), "utf8");
+for (const requiredPattern of ["observed_offers", "roles", "tools", "skills", "use_cases", "limitations"]) {
+  if (!observatoryRouteSource.includes(requiredPattern)) {
+    errors.push(`Public Observatory dataset is missing field marker: ${requiredPattern}.`);
+  }
+}
+
 const robotsSource = readFileSync(resolve(siteRoot, "app/robots.js"), "utf8");
 for (const crawler of ["OAI-SearchBot", "OAI-AdsBot"]) {
   if (!robotsSource.includes(crawler)) {
