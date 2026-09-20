@@ -13,8 +13,9 @@ export default function Header() {
           <Link href="/experts">Experts</Link>
           <Link href="/academy">Academy</Link>
           <Link href="/#scan">Scan</Link>
+          <Link href="/cas-usage-ia">Cas d’usage</Link>
+          <Link href="/observatoire-ia">Observatoire</Link>
           <Link href="/#methode">Méthode</Link>
-          <Link href="/#faq">FAQ</Link>
         </nav>
 
         <Link className="headerCta" href="/#scan">
