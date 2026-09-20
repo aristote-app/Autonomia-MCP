@@ -3424,3 +3424,70 @@ button {
     padding: 82px max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+.latestGuidesSection {
+  padding: 48px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.latestGuidesGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.latestGuideCard {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+}
+
+.latestGuideCard small {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+
+.latestGuideCard h3 {
+  margin: 0;
+  font-size: clamp(22px, 3.5vw, 32px);
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+
+.latestGuideCard p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.latestGuideCard span {
+  margin-top: auto;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+@media (min-width: 760px) {
+  .latestGuidesSection {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .latestGuidesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .latestGuidesSection {
+    padding: 82px max(34px, calc((100vw - var(--max)) / 2));
+  }
+}
