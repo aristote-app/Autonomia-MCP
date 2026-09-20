@@ -150,6 +150,8 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       scan_context: scanContext
         ? {
             plan: scanContext.plan,
+            source_diagnostic: scanContext.source_diagnostic || null,
+            source_diagnostic_label: scanContext.source_diagnostic_label || null,
             objective: scanContext.answers?.objective || null,
             stage: scanContext.answers?.stage || null,
             gap: scanContext.answers?.gap || null,
@@ -158,6 +160,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
             suggested_profiles: scanContext.suggested_profiles || [],
             training_needs: scanContext.training_needs || [],
             priorities: scanContext.priorities || [],
+            commercial_handoff: scanContext.commercial_handoff || null,
             orientation_disclaimer: scanContext.orientation_disclaimer || null,
             completed_at: scanContext.created_at || null
           }
