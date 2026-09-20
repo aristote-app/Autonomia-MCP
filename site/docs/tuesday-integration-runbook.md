@@ -460,3 +460,13 @@ Après production :
 - vérifier les guides Wave 3 :
   - `/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes`
   - `/formation-ia/cas-usage/apprendre-a-concevoir-un-agent-avec-validation-humaine`.
+
+
+### Observatoire Autonomia
+Après branchement de `AUTONOMIA_CONTENT_SIGNALS_URL` :
+- ouvrir `/observatoire-ia` ;
+- vérifier que le nombre d’offres observées est cohérent avec l’endpoint ;
+- vérifier rôles / outils / compétences / cas d’usage ;
+- vérifier période et disclaimer ;
+- vérifier que le schema Dataset n’apparaît que lorsque les données sont réellement chargées ;
+- vérifier que l’Observatoire est présent dans le sitemap.
