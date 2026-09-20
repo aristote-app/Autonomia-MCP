@@ -32,19 +32,32 @@ export default function IntentPage({ page }) {
         </div>
 
         <div className="heroFormCard">
-          <p className="formKicker">{isExpert ? "Votre besoin" : isAcademy ? "Votre plan de formation" : "Votre diagnostic"}</p>
-          <LeadForm
-            mode={page.mode}
-            formId={`lp-${page.slug}`}
-            requestedService={page.slug}
-          />
-          <p className="heroFormNote">
-            {isExpert
-              ? "Quelques informations suffisent pour commencer à qualifier la mission."
-              : isAcademy
-                ? "Le premier échange sert à préciser les publics, usages et objectifs."
-                : "Première orientation basée sur les informations que vous fournissez."}
-          </p>
+          {isDiagnostic ? (
+            <div className="diagnosticValueCard">
+              <p className="formKicker">VOTRE PREMIÈRE ORIENTATION</p>
+              <span className="diagnosticValueIndex">03 QUESTIONS</span>
+              <h2>Obtenez d’abord un plan. Décidez ensuite si vous voulez nous parler.</h2>
+              <p>
+                Le Scan vous rend une première orientation : capacité à ajouter, compétences à mobiliser,
+                profils à évaluer et prochaines étapes. Vos coordonnées ne sont demandées qu’après le résultat.
+              </p>
+              <Link href="/scan-ia" className="primaryButton">Lancer Autonomia Scan</Link>
+            </div>
+          ) : (
+            <>
+              <p className="formKicker">{isExpert ? "Votre besoin" : "Votre plan de formation"}</p>
+              <LeadForm
+                mode={page.mode}
+                formId={`lp-${page.slug}`}
+                requestedService={page.slug}
+              />
+              <p className="heroFormNote">
+                {isExpert
+                  ? "Quelques informations suffisent pour commencer à qualifier la mission."
+                  : "Le premier échange sert à préciser les publics, usages et objectifs."}
+              </p>
+            </>
+          )}
         </div>
       </section>
 
@@ -164,7 +177,7 @@ export default function IntentPage({ page }) {
         <p className="eyebrow">AUTONOMIA</p>
         <h2>{isExpert ? "Votre projet a besoin d’une compétence précise." : isAcademy ? "Vos équipes ont besoin d’une trajectoire claire." : "Votre prochain choix IA peut être clarifié."}</h2>
         <div className="closingActions">
-          <Link href="#top" className="primaryButton">{page.cta}</Link>
+          <Link href={isDiagnostic ? "/scan-ia" : "#top"} className="primaryButton">{page.cta}</Link>
           {!isDiagnostic && <Link href="/scan-ia" className="secondaryButton">Lancer le Scan</Link>}
         </div>
       </section>
