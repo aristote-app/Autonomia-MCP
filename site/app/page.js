@@ -293,14 +293,14 @@ export default function Home() {
 
       <section className="proofSection">
         <div>
-          <p className="sectionIndex">07 — PREUVES</p>
-          <h2>Une architecture prête pour les preuves réelles.</h2>
+          <p className="sectionIndex">07 — STANDARD D’EXÉCUTION</p>
+          <h2>Une méthode conçue pour rester vérifiable.</h2>
         </div>
         <div className="proofPlaceholders">
-          <div><span>QUALIOPI</span><p>Entité et périmètre à reprendre exactement avant publication.</p></div>
-          <div><span>EXPERTS</span><p>Volume et expertises à afficher uniquement sur données vérifiées.</p></div>
-          <div><span>RÉFÉRENCES</span><p>Logos et cas clients seulement avec autorisation.</p></div>
-          <div><span>RÉSULTATS</span><p>Chiffres et impacts uniquement quand ils sont sourcés.</p></div>
+          <div><span>BESOIN</span><p>Le point de départ est reformulé avant de choisir une solution ou un profil.</p></div>
+          <div><span>COMPÉTENCES</span><p>Les rôles sont décrits par les compétences et le niveau d’autonomie réellement nécessaires.</p></div>
+          <div><span>CONTEXTE</span><p>Le diagnostic et l’attribution du lead restent attachés au besoin transmis.</p></div>
+          <div><span>PREUVES</span><p>Références, certifications et résultats ne sont publiés que lorsqu’ils sont vérifiés.</p></div>
         </div>
       </section>
 
