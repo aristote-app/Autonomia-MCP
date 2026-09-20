@@ -18,12 +18,16 @@ const STOPWORDS = new Set([
   "automatiser","apprendre","entreprise"
 ]);
 
+function normalize(value = "") {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
 function tokens(value = "") {
   return new Set(
-    value
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
+    normalize(value)
       .replace(/[^a-z0-9]+/g, " ")
       .split(/\s+/)
       .filter((word) => word.length > 2 && !STOPWORDS.has(word))
@@ -97,9 +101,17 @@ for (const [keyword, slugs] of publishedKeywords) {
 }
 
 for (const pillar of [...executionPillars, ...trainingPillars]) {
-  const pillarTokens = tokens(pillar.title);
-  if (pillarTokens.size < 2) {
-    warnings.push(`${pillar.slug}: pillar title may be too generic.`);
+  const titleWords = normalize(pillar.title)
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 1);
+
+  const clusterTokens = tokens(pillar.cluster);
+  const titleTokens = tokens(pillar.title);
+  const domainOverlap = [...clusterTokens].some((token) => titleTokens.has(token));
+
+  if (titleWords.length < 3 || (!domainOverlap && clusterTokens.size > 0)) {
+    warnings.push(`${pillar.slug}: pillar title may be too generic or disconnected from its cluster.`);
   }
 }
 
