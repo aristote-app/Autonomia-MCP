@@ -2605,3 +2605,56 @@ button {
     padding: 86px 0;
   }
 }
+
+
+.scanBlueprint {
+  display: grid;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.scanBlueprint > div {
+  display: grid;
+  gap: 6px;
+  padding: 13px 0;
+  border-top: 1px solid var(--line-dark);
+}
+
+.scanBlueprint span {
+  color: rgba(243,241,233,.48);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.scanBlueprint strong {
+  max-width: 760px;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+@media (min-width: 900px) {
+  .scanBlueprint {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .scanBlueprint > div {
+    min-height: 128px;
+    padding: 16px 18px 16px 0;
+    border-top: 0;
+    border-right: 1px solid var(--line-dark);
+  }
+
+  .scanBlueprint > div + div {
+    padding-left: 18px;
+  }
+
+  .scanBlueprint > div:last-child {
+    border-right: 0;
+  }
+}
