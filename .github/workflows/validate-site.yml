@@ -30,6 +30,8 @@ jobs:
         run: npm run organic:report
       - name: SEO static audit
         run: npm run seo:audit
+      - name: Organic decision engine tests
+        run: npm run seo:engine-test
       - name: Build public site
         run: npm run build
         env:
