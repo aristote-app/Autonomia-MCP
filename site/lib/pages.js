@@ -165,6 +165,12 @@ const pages = {
       "Il bloque plus souvent sur une compétence absente : architecture, data, évaluation, produit, orchestration, adoption ou gouvernance.",
     outcomes: ["Compétence manquante identifiée", "Rôle défini", "Profils ciblés"],
     capabilities: ["GenAI Engineer", "LLM Engineer", "RAG Engineer", "AI Agent Engineer", "Data Scientist", "ML Engineer", "AI Product Manager", "AI Governance"],
+    useCases: [
+      "Identifier la compétence qui manque réellement à une équipe IA déjà constituée.",
+      "Choisir entre un rôle produit, projet, data, LLM, RAG, agentique ou gouvernance.",
+      "Renforcer un projet sur une phase précise sans chercher un profil généraliste.",
+      "Clarifier le niveau d’autonomie et de séniorité nécessaire avant de lancer la recherche."
+    ],
     ads: {
       intent: "Recherche d’un expert IA spécialisé",
       keywordGroups: ["expert ia", "expert intelligence artificielle", "expert ai entreprise"],
@@ -191,6 +197,12 @@ const pages = {
       "Le besoin peut porter sur la conception, l’intégration, l’évaluation des sorties, la maîtrise des coûts, les garde-fous ou l’industrialisation.",
     outcomes: ["Architecture clarifiée", "Risques identifiés", "Compétence de delivery ciblée"],
     capabilities: ["LLM", "Evaluation", "Guardrails", "Prompt systems", "RAG", "Agents", "LLMOps"],
+    useCases: [
+      "Un prototype GenAI doit être transformé en fonctionnalité exploitable par des utilisateurs.",
+      "Les réponses du système doivent être évaluées, tracées et mieux contrôlées.",
+      "Vous devez arbitrer modèle, RAG, prompt system, agent ou combinaison de plusieurs approches.",
+      "Le projet doit être intégré à votre SI avec des contraintes de sécurité, coût et observabilité."
+    ],
     ads: {
       intent: "Projet GenAI en cadrage ou déploiement",
       keywordGroups: ["consultant genai", "consultant generative ai", "expert genai"],
@@ -217,6 +229,12 @@ const pages = {
       "La qualité dépend de la chaîne complète : sources, préparation documentaire, stratégie de récupération, contexte envoyé au modèle, évaluation et observabilité.",
     outcomes: ["Chaîne RAG cadrée", "Points de qualité identifiés", "Expertise ciblée"],
     capabilities: ["Ingestion", "Embeddings", "Vector search", "Hybrid search", "Reranking", "Evaluation", "Observabilité"],
+    useCases: [
+      "Votre assistant répond bien sur certains documents mais échoue sur des questions simples.",
+      "Vous devez construire une chaîne d’ingestion et de recherche sur un corpus métier.",
+      "Le retrieval doit être évalué indépendamment de la qualité de génération du modèle.",
+      "Vous devez améliorer citations, fraîcheur documentaire, reranking ou comportement sans réponse."
+    ],
     ads: {
       intent: "Entreprise construisant ou corrigeant un système RAG",
       keywordGroups: ["consultant rag", "expert rag", "rag engineer freelance"],
@@ -243,6 +261,12 @@ const pages = {
       "Il faut définir ce qu’il peut faire, avec quels outils, sous quelles permissions, avec quels contrôles et comment mesurer ses erreurs.",
     outcomes: ["Workflow cartographié", "Niveau d’autonomie défini", "Expertise agentique ciblée"],
     capabilities: ["Tool use", "Orchestration", "Human-in-the-loop", "Memory", "Permissions", "Evaluation", "Observabilité"],
+    useCases: [
+      "Un workflow comporte plusieurs décisions ou outils et l’automatisation classique atteint ses limites.",
+      "Vous voulez déléguer des actions à un agent tout en gardant des validations humaines.",
+      "Le système doit gérer permissions, mémoire, erreurs et reprises de manière explicite.",
+      "Vous devez déterminer si un agent est réellement justifié avant de complexifier l’architecture."
+    ],
     ads: {
       intent: "Projet d’agents IA ou automatisation agentique",
       keywordGroups: ["consultant agent ia", "expert agent ia", "ai agent engineer freelance"],
@@ -269,6 +293,12 @@ const pages = {
       "Données, modèles, évaluation, risques, adoption et métiers doivent avancer ensemble. Le rôle de pilotage devient une compétence centrale.",
     outcomes: ["Gouvernance projet posée", "Dépendances organisées", "Delivery piloté"],
     capabilities: ["Roadmap", "Use cases", "Delivery", "Evaluation", "Risk", "Stakeholders", "Adoption"],
+    useCases: [
+      "Plusieurs équipes participent au projet mais personne ne porte l’orchestration globale.",
+      "Les cas d’usage sont identifiés mais la roadmap, les critères de réussite ou les dépendances restent flous.",
+      "Le projet doit coordonner métier, data, sécurité, juridique et engineering.",
+      "Un pilote doit être transformé en trajectoire de déploiement avec responsabilités et arbitrages clairs."
+    ],
     ads: {
       intent: "Recherche d’un chef de projet IA / AI Project Manager",
       keywordGroups: ["ai project manager freelance", "chef de projet ia freelance", "consultant chef de projet ia"],
@@ -332,6 +362,12 @@ const pages = {
       "La vraie compétence consiste à choisir les bonnes tâches, structurer le contexte, contrôler la qualité, réutiliser les méthodes et respecter les règles internes.",
     outcomes: ["Cas d’usage identifiés", "Méthodes réutilisables", "Usage mieux encadré"],
     capabilities: ["Prompt", "Recherche", "Synthèse", "Rédaction", "Analyse", "Méthodes", "Contrôle qualité"],
+    useCases: [
+      "Les équipes utilisent ChatGPT individuellement mais sans méthode commune.",
+      "Vous voulez transformer des prompts ponctuels en workflows réutilisables.",
+      "Les collaborateurs doivent apprendre à vérifier, corriger et sourcer les réponses.",
+      "Vous devez relier les usages à des règles internes de confidentialité et de contrôle."
+    ],
     ads: {
       intent: "Formation ChatGPT pour salariés / entreprise",
       keywordGroups: ["formation chatgpt entreprise", "formation chatgpt salariés", "formation chatgpt professionnel"],
@@ -395,6 +431,12 @@ const pages = {
       "Une formation utile doit aller au-delà de l’effet démonstration : fonctionnement, limites, qualité des entrées, contrôle des sorties, sécurité et intégration métier.",
     outcomes: ["Compréhension commune", "Cas d’usage cadrés", "Pratiques transférables"],
     capabilities: ["LLM", "Multimodal", "Prompt", "Evaluation", "Risques", "Usages métier"],
+    useCases: [
+      "Créer un socle commun de compréhension avant de déployer des outils IA générative.",
+      "Former différents métiers à identifier des usages utiles plutôt que multiplier les tests.",
+      "Apprendre à contrôler qualité, limites et risques des contenus générés.",
+      "Préparer des parcours plus spécialisés en prompting, automatisation ou agents."
+    ],
     ads: {
       intent: "Formation IA générative entreprise",
       keywordGroups: ["formation ia générative entreprise", "formation generative ai entreprise", "formation intelligence artificielle générative"],
@@ -421,6 +463,12 @@ const pages = {
       "Les collaborateurs qui choisissent, configurent ou utilisent des systèmes IA doivent comprendre les règles internes, les niveaux de risque et les bons circuits de validation.",
     outcomes: ["Populations à sensibiliser", "Risques mieux compris", "Règles rendues actionnables"],
     capabilities: ["AI literacy", "Risk", "Governance", "Usage policy", "Human oversight", "Traceability"],
+    useCases: [
+      "Sensibiliser les équipes qui choisissent, déploient ou utilisent des systèmes IA.",
+      "Relier les notions de risque à vos usages et responsabilités internes.",
+      "Faire comprendre les circuits de validation et de supervision humaine.",
+      "Construire une culture commune entre métiers, IT, achats, RH et fonctions de contrôle."
+    ],
     ads: {
       intent: "Formation / sensibilisation AI Act entreprise",
       keywordGroups: ["formation ai act entreprise", "formation règlement ia", "sensibilisation ai act"],
@@ -447,6 +495,12 @@ const pages = {
       "Il faut comprendre les outils, les boucles de décision, les permissions, les validations humaines et les mécanismes de contrôle avant de déléguer des tâches.",
     outcomes: ["Cas d’usage qualifiés", "Niveau d’autonomie compris", "Risques mieux cadrés"],
     capabilities: ["Agents", "Tools", "Workflow", "Human oversight", "Evaluation", "Automation"],
+    useCases: [
+      "Comprendre la différence entre chatbot, automatisation et agent IA.",
+      "Identifier les processus où l’autonomie agentique peut réellement être utile.",
+      "Former les équipes aux permissions, outils, validations et risques d’un agent.",
+      "Donner aux décideurs une grille pour éviter les architectures agentiques inutiles."
+    ],
     ads: {
       intent: "Formation agents IA entreprise",
       keywordGroups: ["formation agents ia", "formation agentic ai", "formation ai agents entreprise"],
@@ -473,6 +527,12 @@ const pages = {
       "La compétence vient de la structuration du problème, de la qualité du contexte, des critères d’évaluation et de la capacité à itérer de façon reproductible.",
     outcomes: ["Prompts structurés", "Méthodes réutilisables", "Qualité mieux contrôlée"],
     capabilities: ["Context", "Constraints", "Few-shot", "Evaluation", "Templates", "Workflows"],
+    useCases: [
+      "Passer de prompts improvisés à des consignes structurées et réutilisables.",
+      "Créer des templates de travail adaptés à plusieurs métiers.",
+      "Apprendre à fournir contexte, contraintes, exemples et critères de qualité.",
+      "Intégrer l’évaluation et la vérification dans la méthode de prompting."
+    ],
     ads: {
       intent: "Formation prompt engineering professionnelle",
       keywordGroups: ["formation prompt engineering entreprise", "formation prompt chatgpt entreprise", "formation prompts professionnels"],
