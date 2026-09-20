@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const QUESTIONS = [
   {
@@ -38,6 +38,37 @@ const QUESTIONS = [
     ]
   }
 ];
+
+const FOCUS_CONTEXTS = {
+  "diagnostic-maturite-ia": {
+    label: "Maturité IA",
+    action: "Vérifier si le frein vient du choix des usages, du delivery, des compétences ou du cadre de gouvernance."
+  },
+  "diagnostic-competences-ia": {
+    label: "Compétences IA",
+    action: "Distinguer ce qui doit être staffé ponctuellement de ce qui doit devenir une capacité interne."
+  },
+  "diagnostic-projet-ia": {
+    label: "Projet IA",
+    action: "Confronter le besoin à la valeur attendue, aux données, aux risques et à la capacité de delivery."
+  },
+  "audit-besoins-formation-ia": {
+    label: "Besoins de formation",
+    action: "Segmenter les publics et les usages avant de construire un programme commun."
+  },
+  "quel-profil-ia": {
+    label: "Profil IA",
+    action: "Définir le travail à accomplir et le niveau d’autonomie avant de figer un intitulé de rôle."
+  },
+  "diagnostic-copilot": {
+    label: "Adoption Copilot",
+    action: "Identifier les populations et tâches où Copilot doit produire un changement de pratique observable."
+  },
+  "quiz-ia-entreprise": {
+    label: "Exécution IA",
+    action: "Identifier le goulot d’étranglement principal avant de lancer une nouvelle initiative."
+  }
+};
 
 const OBJECTIVE_BLUEPRINTS = {
   automate: {
@@ -85,6 +116,24 @@ const STAGE_PRIORITIES = {
   scale: ["Industrialiser le delivery", "Renforcer gouvernance et monitoring", "Transférer les compétences aux équipes"]
 };
 
+const CONVERSATION_QUESTIONS = {
+  experts: [
+    "Quel livrable ou résultat doit être obtenu par l’expert ?",
+    "Dans quel environnement technique et organisationnel devra-t-il intervenir ?",
+    "Quel niveau d’autonomie et de séniorité est réellement nécessaire ?"
+  ],
+  academy: [
+    "Quelles populations doivent changer leur façon de travailler ?",
+    "Quels usages doivent être maîtrisés en priorité ?",
+    "Quels outils, règles internes et contraintes doivent être intégrés au parcours ?"
+  ],
+  hybrid: [
+    "Quelle partie du besoin doit avancer immédiatement avec une expertise externe ?",
+    "Quelles compétences doivent rester durablement dans l’organisation ?",
+    "Quels risques, dépendances ou règles doivent être cadrés avant le déploiement ?"
+  ]
+};
+
 function choosePlan(answers) {
   const { objective, gap } = answers;
 
@@ -103,10 +152,11 @@ function choosePlan(answers) {
   return "hybrid";
 }
 
-function buildDiagnosis(answers) {
+function buildDiagnosis(answers, focus) {
   const blueprint = OBJECTIVE_BLUEPRINTS[answers.objective] || OBJECTIVE_BLUEPRINTS.build;
   const stagePriorities = STAGE_PRIORITIES[answers.stage] || STAGE_PRIORITIES.idea;
   const plan = choosePlan(answers);
+  const focusContext = FOCUS_CONTEXTS[focus] || null;
 
   const gapAction = {
     expertise: "Identifier l’expertise rare qui manque avant de chercher un intitulé de poste.",
@@ -117,13 +167,19 @@ function buildDiagnosis(answers) {
     unknown: "Qualifier le blocage avant d’engager budget, recrutement ou formation."
   }[answers.gap];
 
+  const priorities = focusContext
+    ? [...stagePriorities.slice(0, 2), gapAction, focusContext.action].filter(Boolean)
+    : [...stagePriorities, gapAction].filter(Boolean).slice(0, 4);
+
   return {
     plan,
     mission: blueprint.mission,
     skills: blueprint.skills,
     profiles: blueprint.profiles,
     academy: blueprint.academy,
-    priorities: [...stagePriorities, gapAction].filter(Boolean).slice(0, 4)
+    priorities,
+    focusLabel: focusContext?.label || null,
+    conversationQuestions: CONVERSATION_QUESTIONS[plan]
   };
 }
 
@@ -136,26 +192,43 @@ function track(event, detail = {}) {
 export default function AutonomiaScan() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [focus, setFocus] = useState(null);
   const done = step >= QUESTIONS.length;
 
-  const diagnosis = useMemo(() => buildDiagnosis(answers), [answers]);
+  useEffect(() => {
+    const params = new URL(window.location.href).searchParams;
+    const requestedFocus = params.get("focus");
+    setFocus(FOCUS_CONTEXTS[requestedFocus] ? requestedFocus : null);
+  }, []);
+
+  const diagnosis = useMemo(() => buildDiagnosis(answers, focus), [answers, focus]);
 
   function choose(id, value) {
     const next = { ...answers, [id]: value };
     setAnswers(next);
-    track("autonomia_scan_answer", { scan_step: id, scan_value: value });
+    track("autonomia_scan_answer", {
+      scan_step: id,
+      scan_value: value,
+      scan_focus: focus
+    });
     setTimeout(() => setStep((currentStep) => Math.min(currentStep + 1, QUESTIONS.length)), 110);
   }
 
   function buildPayload() {
     return {
       plan: diagnosis.plan,
+      source_diagnostic: focus,
+      source_diagnostic_label: diagnosis.focusLabel,
       answers,
       mission: diagnosis.mission,
       skills_needed: diagnosis.skills,
       suggested_profiles: diagnosis.profiles,
       training_needs: diagnosis.academy,
       priorities: diagnosis.priorities,
+      commercial_handoff: {
+        route: diagnosis.plan,
+        questions_to_qualify_next: diagnosis.conversationQuestions
+      },
       orientation_disclaimer: "Première orientation basée uniquement sur les réponses fournies au Scan.",
       created_at: new Date().toISOString()
     };
@@ -173,14 +246,15 @@ export default function AutonomiaScan() {
       scan_plan: diagnosis.plan,
       scan_objective: answers.objective,
       scan_stage: answers.stage,
-      scan_gap: answers.gap
+      scan_gap: answers.gap,
+      scan_focus: focus
     });
   }
 
   function restart() {
     setAnswers({});
     setStep(0);
-    track("autonomia_scan_restart");
+    track("autonomia_scan_restart", { scan_focus: focus });
   }
 
   return (
@@ -196,6 +270,9 @@ export default function AutonomiaScan() {
       {!done ? (
         <div className="scanQuestion">
           <p>DIAGNOSTIC D’EXÉCUTION IA</p>
+          {diagnosis.focusLabel && (
+            <div className="scanFocus">ANGLE D’ENTRÉE · {diagnosis.focusLabel}</div>
+          )}
           <h3>{QUESTIONS[step].label}</h3>
           <div className="scanChoices">
             {QUESTIONS[step].options.map(([value, label], index) => (
@@ -211,6 +288,9 @@ export default function AutonomiaScan() {
         <div className="scanResult">
           <div className="scanResultIntro">
             <p>AUTONOMIA / PREMIÈRE ORIENTATION</p>
+            {diagnosis.focusLabel && (
+              <div className="scanFocus">CONTEXTE CONSERVÉ · {diagnosis.focusLabel}</div>
+            )}
             <h3>{diagnosis.mission}</h3>
             <div className="scanSignal">PLAN GÉNÉRÉ À PARTIR DE VOS 3 RÉPONSES</div>
             <p className="scanResultText">
