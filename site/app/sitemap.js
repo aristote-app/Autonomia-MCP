@@ -3,6 +3,10 @@ import {
   publishedExecutionArticles,
   publishedTrainingArticles
 } from "@/content/published-articles";
+import {
+  executionPillars,
+  trainingPillars
+} from "@/content/editorial-backlog";
 
 export default function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
@@ -21,6 +25,18 @@ export default function sitemap() {
       changeFrequency: "monthly"
     }));
 
+  const executionPillarPages = executionPillars.map((pillar) => ({
+    url: `${base}/cas-usage-ia/${pillar.slug}`,
+    priority: 0.84,
+    changeFrequency: "weekly"
+  }));
+
+  const trainingPillarPages = trainingPillars.map((pillar) => ({
+    url: `${base}/formation-ia/cas-usage/${pillar.slug}`,
+    priority: 0.84,
+    changeFrequency: "weekly"
+  }));
+
   const executionArticles = publishedExecutionArticles.map((article) => ({
     url: `${base}/cas-usage-ia/${article.slug}`,
     priority: 0.78,
@@ -33,5 +49,12 @@ export default function sitemap() {
     changeFrequency: "monthly"
   }));
 
-  return [...staticPages, ...pages, ...executionArticles, ...trainingArticles];
+  return [
+    ...staticPages,
+    ...pages,
+    ...executionPillarPages,
+    ...trainingPillarPages,
+    ...executionArticles,
+    ...trainingArticles
+  ];
 }
