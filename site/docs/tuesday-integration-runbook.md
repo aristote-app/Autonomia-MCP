@@ -441,3 +441,22 @@ Le moteur organique est considéré branché lorsque :
 - OAI-SearchBot peut crawler ;
 - manifest organique accessible avec token ;
 - insights peuvent être forwardés vers Autonomia-MCP.
+
+
+### Vérification moteurs / RSS
+Variables optionnelles à ajouter lorsque les propriétés sont créées :
+```
+GOOGLE_SITE_VERIFICATION=
+BING_SITE_VERIFICATION=
+```
+
+Après production :
+- vérifier que les balises de vérification sont présentes ;
+- ajouter la propriété dans Google Search Console ;
+- ajouter la propriété dans Bing Webmaster Tools ;
+- soumettre `/sitemap.xml` ;
+- vérifier `/feed.xml` ;
+- lancer le workflow GitHub `seo-production-smoke` avec l’URL de production ;
+- vérifier les guides Wave 3 :
+  - `/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes`
+  - `/formation-ia/cas-usage/apprendre-a-concevoir-un-agent-avec-validation-humaine`.
