@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HomeLeadSwitch from "@/components/HomeLeadSwitch";
+import AutonomiaScan from "@/components/AutonomiaScan";
 
 const expertRoles = [
   "AI Project Manager",
@@ -62,8 +63,8 @@ export default function Home() {
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/expert-ia">Trouver un expert IA</Link>
-            <Link className="secondaryButton" href="/formation-ia-entreprise">Former mes équipes</Link>
+            <Link className="primaryButton" href="/#scan">Lancer Autonomia Scan</Link>
+            <Link className="secondaryButton" href="/experts">Explorer nos expertises</Link>
           </div>
         </div>
 
@@ -81,6 +82,21 @@ export default function Home() {
           </div>
           <div className="gridPulse" aria-hidden="true"><i /><i /><i /><i /><i /></div>
         </div>
+      </section>
+
+
+      <section className="scanSection" id="scan">
+        <div className="scanSectionIntro">
+          <p className="sectionIndex">00 — AUTONOMIA SCAN</p>
+          <div>
+            <h2>Ne commencez pas par chercher un profil. Commencez par identifier ce qui bloque l’exécution.</h2>
+            <p>
+              Trois questions. Un premier plan d’exécution. Experts, Academy ou combinaison des deux :
+              Autonomia transforme un objectif IA en prochaine action structurée.
+            </p>
+          </div>
+        </div>
+        <AutonomiaScan />
       </section>
 
       <section className="marketProblem">
