@@ -109,6 +109,8 @@ const requiredRuntimeFiles = [
   "lib/editorialGraph.js",
   "lib/organicUrls.js",
   "lib/organicDecisionEngine.js",
+  "lib/organicWavePlanner.js",
+  "lib/editorialBrief.js",
   "app/api/leads/route.js",
   "app/scan-ia/page.js",
   "app/methodologie/execution-matrix/page.js",
@@ -118,9 +120,14 @@ const requiredRuntimeFiles = [
   "app/api/organic/insights/route.js",
   "app/api/organic/media-manifest/route.js",
   "app/api/organic/recommendations/route.js",
+  "app/api/organic/wave-plan/route.js",
+  "app/api/organic/brief/route.js",
+  "app/api/organic/backlog/route.js",
   "docs/tuesday-integration-runbook.md",
   "docs/paid-acquisition-map.md",
   "docs/organic-engine-v1.md",
+  "app/a-propos/page.js",
+  "app/methodologie/politique-editoriale/page.js",
   "scripts/seo-audit.mjs"
 ];
 
