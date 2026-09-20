@@ -15,7 +15,9 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/cas-usage-ia`, kind: "execution-hub", priority: 0.9, changeFrequency: "weekly" },
     { url: `${base}/formation-ia/cas-usage`, kind: "training-hub", priority: 0.9, changeFrequency: "weekly" },
     { url: `${base}/methodologie/execution-matrix`, kind: "methodology", priority: 0.88, changeFrequency: "monthly" },
-    { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly" }
+    { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly" },
+    { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly" },
+    { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly" }
   ];
 
   const commercialPages = getAllPages()
