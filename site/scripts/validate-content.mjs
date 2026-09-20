@@ -117,7 +117,8 @@ const requiredRuntimeFiles = [
   "app/api/organic/insights/route.js",
   "app/api/organic/media-manifest/route.js",
   "docs/tuesday-integration-runbook.md",
-  "docs/paid-acquisition-map.md"
+  "docs/paid-acquisition-map.md",
+  "docs/organic-engine-v1.md"
 ];
 
 for (const relativePath of requiredRuntimeFiles) {
