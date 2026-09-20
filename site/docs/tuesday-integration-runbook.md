@@ -375,3 +375,69 @@ Le site est prêt à ouvrir lorsque :
 6. juridique / privacy présents ;
 7. tracking testé avec consentement ;
 8. aucune erreur runtime observée.
+
+
+## Organic Engine V1 — branchement mardi
+
+### Variables
+```
+INDEXNOW_KEY=
+AUTONOMIA_INDEXING_TOKEN=
+AUTONOMIA_ORGANIC_TOKEN=
+AUTONOMIA_ORGANIC_INSIGHTS_URL=
+AUTONOMIA_ORGANIC_INSIGHTS_TOKEN=
+```
+
+### Après domaine / canonical
+1. ouvrir `/sitemap.xml` et vérifier les 40 piliers + guides publiés ;
+2. ouvrir `/robots.txt` et vérifier `OAI-SearchBot` + `OAI-AdsBot` ;
+3. tester `/indexnow/<INDEXNOW_KEY>` ;
+4. envoyer UNE URL réellement créée/modifiée vers `POST /api/indexnow` ;
+5. vérifier réception dans Bing Webmaster Tools ;
+6. ajouter le sitemap à Google Search Console ;
+7. vérifier qu’aucun diagnostic Meta n’est indexable ;
+8. tester le crawl d’une page publique sans challenge CDN/WAF.
+
+### Monitoring SEO / GEO
+Le site expose :
+- `GET /api/organic/manifest` : inventaire organique ;
+- `POST /api/organic/insights` : Search Console / Google GenAI / Bing / ChatGPT ;
+- `GET /api/organic/media-manifest` : briefs visuels/vidéos pour guides publiés.
+
+Tous sont protégés par les tokens organiques.
+
+### Politique 400 pages
+- 400 intentions restent dans le backlog ;
+- 40 piliers sont des surfaces sémantiques indexables ;
+- un guide use case n’est indexable que lorsqu’il est réellement publié et passe le gate CI ;
+- ne jamais générer 394 thin pages pour atteindre artificiellement un volume d’URL.
+
+### Search Console
+Après validation de propriété :
+- soumettre sitemap ;
+- vérifier Pages / Indexation ;
+- vérifier requêtes et impressions ;
+- exploiter le rapport IA générative disponible sur la propriété ;
+- envoyer les métriques normalisées vers Autonomia-MCP.
+
+### Bing / IndexNow
+- connecter Bing Webmaster Tools ;
+- vérifier IndexNow ;
+- exploiter AI Performance si disponible ;
+- renvoyer les métriques au format organique normalisé.
+
+### ChatGPT
+- vérifier que OAI-SearchBot obtient 200 sur home, pilier et guide ;
+- vérifier CDN / WAF / bot protection ;
+- suivre les observations de citations sans inventer une métrique non disponible.
+
+### GO Organic
+Le moteur organique est considéré branché lorsque :
+- 40 piliers présents au sitemap ;
+- guides publiés présents au sitemap ;
+- backlog non publié absent du sitemap ;
+- IndexNow accepte une URL modifiée ;
+- Search Console reçoit le sitemap ;
+- OAI-SearchBot peut crawler ;
+- manifest organique accessible avec token ;
+- insights peuvent être forwardés vers Autonomia-MCP.
