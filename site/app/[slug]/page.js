@@ -46,8 +46,45 @@ export default async function LandingPage({ params }) {
     }))
   };
 
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: page.title,
+        description: page.subtitle,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"}/${page.slug}`,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "Autonomia",
+          url: process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"
+        }
+      },
+      {
+        "@type": "Service",
+        name: page.title,
+        description: page.subtitle,
+        serviceType:
+          page.mode === "experts"
+            ? "Expertise et staffing IA"
+            : page.mode === "academy"
+              ? "Formation IA en entreprise"
+              : "Diagnostic d’exécution IA",
+        provider: {
+          "@type": "Organization",
+          name: "Autonomia",
+          url: process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"
+        }
+      }
+    ]
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
