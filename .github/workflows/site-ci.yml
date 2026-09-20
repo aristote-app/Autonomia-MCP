@@ -1,0 +1,39 @@
+name: Autonomia Public Site CI
+
+on:
+  pull_request:
+    paths:
+      - "site/**"
+      - ".github/workflows/site-ci.yml"
+  push:
+    branches:
+      - "feat/autonomia-public-site-v1"
+    paths:
+      - "site/**"
+      - ".github/workflows/site-ci.yml"
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate editorial content
+        run: npm run content:validate
+
+      - name: Build site
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
