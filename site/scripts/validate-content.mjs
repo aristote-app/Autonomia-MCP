@@ -9,7 +9,9 @@ import {
 import {
   editorialCounts,
   executionBacklog,
-  trainingBacklog
+  trainingBacklog,
+  executionPillars,
+  trainingPillars
 } from "../content/editorial-backlog.js";
 
 const articles = [...publishedExecutionArticles, ...publishedTrainingArticles];
@@ -100,9 +102,20 @@ const requiredRuntimeFiles = [
   "components/AutonomiaScan.js",
   "components/LeadForm.js",
   "components/HomeLeadSwitch.js",
+  "components/EditorialPillar.js",
+  "components/MethodologyFramework.js",
+  "content/pillar-insights.js",
   "lib/clientTracking.js",
+  "lib/editorialGraph.js",
+  "lib/organicUrls.js",
   "app/api/leads/route.js",
   "app/scan-ia/page.js",
+  "app/methodologie/execution-matrix/page.js",
+  "app/methodologie/learning-transfer/page.js",
+  "app/api/indexnow/route.js",
+  "app/api/organic/manifest/route.js",
+  "app/api/organic/insights/route.js",
+  "app/api/organic/media-manifest/route.js",
   "docs/tuesday-integration-runbook.md",
   "docs/paid-acquisition-map.md"
 ];
@@ -133,6 +146,20 @@ const trackingSource = readFileSync(resolve(siteRoot, "lib/clientTracking.js"), 
 for (const requiredPattern of ["autonomia_cookie_consent", "NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL", "fbq"]) {
   if (!trackingSource.includes(requiredPattern)) {
     errors.push(`Consent-aware tracking bridge is missing marker: ${requiredPattern}.`);
+  }
+}
+
+const robotsSource = readFileSync(resolve(siteRoot, "app/robots.js"), "utf8");
+for (const crawler of ["OAI-SearchBot", "OAI-AdsBot"]) {
+  if (!robotsSource.includes(crawler)) {
+    errors.push(`robots.js must explicitly allow OpenAI crawler: ${crawler}.`);
+  }
+}
+
+const organicUrlsSource = readFileSync(resolve(siteRoot, "lib/organicUrls.js"), "utf8");
+for (const requiredPath of ["/methodologie/execution-matrix", "/methodologie/learning-transfer"]) {
+  if (!organicUrlsSource.includes(requiredPath)) {
+    errors.push(`Organic URL manifest is missing methodology path: ${requiredPath}.`);
   }
 }
 
@@ -171,6 +198,46 @@ if (editorialCounts.execution !== 200) {
 
 if (editorialCounts.training !== 200) {
   errors.push(`Training backlog must contain 200 topics, found ${editorialCounts.training}.`);
+}
+
+if (executionPillars.length !== 20) {
+  errors.push(`Execution pillar registry must contain 20 pillars, found ${executionPillars.length}.`);
+}
+
+if (trainingPillars.length !== 20) {
+  errors.push(`Training pillar registry must contain 20 pillars, found ${trainingPillars.length}.`);
+}
+
+for (const pillar of [...executionPillars, ...trainingPillars]) {
+  if (pillar.topics.length !== 10) {
+    errors.push(`${pillar.slug}: pillar must contain exactly 10 scenarios, found ${pillar.topics.length}.`);
+  }
+}
+
+const executionPillarSlugs = executionPillars.map((pillar) => pillar.slug);
+const trainingPillarSlugs = trainingPillars.map((pillar) => pillar.slug);
+
+if (new Set(executionPillarSlugs).size !== executionPillarSlugs.length) {
+  errors.push("Execution pillar registry contains duplicate slugs.");
+}
+
+if (new Set(trainingPillarSlugs).size !== trainingPillarSlugs.length) {
+  errors.push("Training pillar registry contains duplicate slugs.");
+}
+
+const executionArticleSlugs = publishedExecutionArticles.map((article) => article.slug);
+const trainingArticleSlugs = publishedTrainingArticles.map((article) => article.slug);
+
+for (const slug of executionPillarSlugs) {
+  if (executionArticleSlugs.includes(slug)) {
+    errors.push(`Execution pillar slug collides with published article slug: ${slug}.`);
+  }
+}
+
+for (const slug of trainingPillarSlugs) {
+  if (trainingArticleSlugs.includes(slug)) {
+    errors.push(`Training pillar slug collides with published article slug: ${slug}.`);
+  }
 }
 
 const backlogSlugs = [...executionBacklog, ...trainingBacklog].map((item) => item.slug);
