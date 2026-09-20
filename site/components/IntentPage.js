@@ -8,7 +8,7 @@ export default function IntentPage({ page }) {
 
   return (
     <main className={`intentPage theme-${page.theme || "dark"}`}>
-      <section className="intentHero">
+      <section className="intentHero" id="top">
         <div className="intentHeroCopy">
           <p className="eyebrow">{page.universe}</p>
           <h1>{page.title}</h1>
@@ -49,9 +49,37 @@ export default function IntentPage({ page }) {
         </div>
       </section>
 
+      {page.translations?.length > 0 && (
+        <section className="translationSection">
+          <p className="sectionIndex">03 — DU BESOIN À L’ACTIVATION</p>
+          <div>
+            <h2>{page.translationTitle}</h2>
+            <div className="translationGrid">
+              {page.translations.map((item, index) => (
+                <article key={item.need}>
+                  <span>0{index + 1}</span>
+                  <div>
+                    <small>PROBLÈME</small>
+                    <strong>{item.need}</strong>
+                  </div>
+                  <div>
+                    <small>COMPÉTENCES</small>
+                    <p>{item.skills}</p>
+                  </div>
+                  <div>
+                    <small>{isExpert ? "PROFIL / MISSION" : "PARCOURS"}</small>
+                    <p>{item.activation}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="methodSplit">
         <div>
-          <p className="sectionIndex">03 — NOTRE LOGIQUE</p>
+          <p className="sectionIndex">04 — NOTRE LOGIQUE</p>
           <h2>{page.proofTitle}</h2>
           <p>{page.proofText}</p>
         </div>
@@ -80,7 +108,7 @@ export default function IntentPage({ page }) {
       </section>
 
       <section className="proofArchitecture">
-        <p className="sectionIndex">04 — STANDARD</p>
+        <p className="sectionIndex">05 — STANDARD</p>
         <div>
           <h2>Le besoin doit rester lisible et vérifiable.</h2>
           <p>
@@ -99,7 +127,7 @@ export default function IntentPage({ page }) {
       {isAcademy && <QualiopiProof compact />}
 
       <section className="faqSection" id="faq">
-        <p className="sectionIndex">05 — QUESTIONS</p>
+        <p className="sectionIndex">06 — QUESTIONS</p>
         <div>
           <h2>Questions fréquentes</h2>
           <div className="faqList">
