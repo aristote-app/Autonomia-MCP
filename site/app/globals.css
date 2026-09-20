@@ -2582,3 +2582,26 @@ button {
     border: 1px solid var(--line);
   }
 }
+
+
+.homeMarketSignals {
+  padding: 0 18px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.homeMarketSignals .liveJobSignals {
+  margin: 0;
+  padding: 56px 0;
+  border-bottom: 0;
+}
+
+@media (min-width: 900px) {
+  .homeMarketSignals {
+    padding: 0 48px;
+  }
+
+  .homeMarketSignals .liveJobSignals {
+    padding: 86px 0;
+  }
+}
