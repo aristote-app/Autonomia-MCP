@@ -29,7 +29,11 @@ export async function generateMetadata({ params }) {
         title: article.title,
         description: article.dek,
         type: "article",
-        url: `/formation-ia/cas-usage/${slug}`
+        url: `/formation-ia/cas-usage/${slug}`,
+        publishedTime: article.publishedAt,
+        modifiedTime: article.modifiedAt || article.publishedAt,
+        authors: ["Autonomia Academy"],
+        tags: [article.cluster, article.search?.primaryKeyword].filter(Boolean)
       }
     };
   }
@@ -93,7 +97,9 @@ export default async function TrainingArticlePage({ params }) {
           keywords: [
             article.search?.primaryKeyword,
             ...(article.search?.secondaryQueries || [])
-          ].filter(Boolean)
+          ].filter(Boolean),
+          inLanguage: "fr-FR",
+          citation: (article.sources || []).map((source) => source.url)
         },
         {
           "@type": "BreadcrumbList",
