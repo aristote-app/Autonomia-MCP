@@ -3167,3 +3167,29 @@ button {
     padding: 82px max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+.pillarDecisionBox {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid var(--line);
+}
+
+.pillarDecisionBox > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.pillarDecisionBox ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.pillarDecisionBox li {
+  margin: 8px 0;
+  line-height: 1.45;
+}
