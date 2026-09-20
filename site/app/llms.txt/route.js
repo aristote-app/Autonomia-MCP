@@ -22,6 +22,7 @@ export async function GET() {
     `- AI Execution Matrix: ${base}/methodologie/execution-matrix`,
     `- Learning Transfer Matrix: ${base}/methodologie/learning-transfer`,
     `- AI Demand Observatory: ${base}/observatoire-ia`,
+    `- AI glossary: ${base}/glossaire-ia`,
     `- Observatory JSON dataset: ${base}/api/public/observatoire-ia`,
     "",
     "## Commercial",
