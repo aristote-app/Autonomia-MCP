@@ -32,12 +32,24 @@ export default function RootLayout({ children }) {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
   const organizationSchema = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": `${base}#organization`,
-    name: "Autonomia",
-    url: base,
-    description:
-      "AI Execution Partner : expertise IA externe, formation IA en entreprise, diagnostic d’exécution et contenus pratiques autour du déploiement de l’IA."
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${base}#organization`,
+        name: "Autonomia",
+        url: base,
+        description:
+          "AI Execution Partner : expertise IA externe, formation IA en entreprise, diagnostic d’exécution et contenus pratiques autour du déploiement de l’IA."
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${base}#website`,
+        name: "Autonomia",
+        url: base,
+        publisher: { "@id": `${base}#organization` },
+        inLanguage: "fr-FR"
+      }
+    ]
   };
 
   return (
