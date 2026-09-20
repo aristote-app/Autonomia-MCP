@@ -54,3 +54,23 @@ No ranking score is asserted here. These are the next subjects to research befor
 ## Windsor rule
 
 Windsor / Search Console / Google Ads data, when available to the active ChatGPT session, is used to confirm or reprioritize queries. Employment demand and SERP observation remain separate evidence types. A hiring term is not treated as search volume.
+
+## Published in wave 2
+
+### Sales call → CRM
+
+Primary query: `résumer appel commercial CRM IA`
+
+Evidence:
+- Salesforce documents generative call summaries and next steps;
+- Microsoft Sales documents post-meeting tasks, CRM notes and summary emails;
+- strong commercial fit with AI automation / CRM integration.
+
+### n8n enterprise training
+
+Primary query: `formation n8n entreprise`
+
+Evidence:
+- several current French SERPs target enterprise n8n training;
+- official n8n documentation covers workflows, APIs, AI agents, human fallback and permissions;
+- job-market signals include automation, orchestration and low-code / agentic capabilities.
