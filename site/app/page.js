@@ -214,8 +214,8 @@ export default function Home() {
           <div>
             <h2>Former pour que l’IA devienne une capacité de l’entreprise.</h2>
             <p>
-              Les parcours sont conçus autour des publics, des usages et des règles de l’organisation,
-              avec les mentions Qualiopi publiées uniquement après vérification de l’entité certifiée.
+              Les parcours sont conçus autour des publics, des usages, des outils
+              et des règles propres à l’organisation.
             </p>
           </div>
         </div>
@@ -312,8 +312,8 @@ export default function Home() {
               <p>Le positionnement est plus large : compréhension du besoin, identification des compétences, sélection et staffing pour des missions IA.</p>
             </details>
             <details>
-              <summary>Autonomia est-il un organisme de formation ?</summary>
-              <p>Academy porte l’offre de montée en compétences. Les informations Qualiopi seront publiées uniquement avec les mentions exactes de l’entité certifiée.</p>
+              <summary>À quoi sert Autonomia Academy ?</summary>
+              <p>Academy structure la montée en compétences IA autour des publics, des usages métier et du niveau de maturité de l’organisation.</p>
             </details>
             <details>
               <summary>Peut-on combiner expert externe et formation interne ?</summary>
@@ -347,8 +347,8 @@ export default function Home() {
         <div>
           <span>Experts</span>
           <span>Academy</span>
-          <span>Mentions légales — avant publication</span>
-          <span>Confidentialité — avant publication</span>
+          <span>Mentions légales</span>
+          <span>Confidentialité</span>
         </div>
       </footer>
     </main>
