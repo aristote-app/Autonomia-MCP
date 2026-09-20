@@ -74,3 +74,38 @@ Evidence:
 - several current French SERPs target enterprise n8n training;
 - official n8n documentation covers workflows, APIs, AI agents, human fallback and permissions;
 - job-market signals include automation, orchestration and low-code / agentic capabilities.
+
+
+## Published in wave 3
+
+### Assistant support IA + base de connaissances
+
+Primary query: `assistant support IA base de connaissances`
+
+Evidence:
+- current French search results cover AI-assisted customer support and knowledge-base usage;
+- Microsoft documents enterprise knowledge sources, source authentication, grounded answers and customer-service handoff in Copilot Studio;
+- Intercom documents knowledge-source management, escalation rules and human handoff for AI support agents;
+- direct commercial fit with Autonomia Experts through support automation, RAG / knowledge architecture and agentic delivery.
+
+Published guide:
+`/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes`
+
+### Formation agent IA + validation humaine
+
+Primary query: `formation agent IA validation humaine`
+
+Evidence:
+- current French SERPs show multiple enterprise training offers around agents IA, no-code orchestration, permissions and human supervision;
+- Microsoft explicitly recommends human oversight for critical autonomous-agent actions and documents human-review / approval patterns;
+- n8n documents human-review steps for selected AI tool calls;
+- direct commercial fit with Autonomia Academy and Experts.
+
+Published guide:
+`/formation-ia/cas-usage/apprendre-a-concevoir-un-agent-avec-validation-humaine`
+
+Wave 3 publication rule:
+- SERP presence is used as demand evidence, not as invented monthly volume;
+- official product documentation supports factual capability claims;
+- competitor pages are not used as copy sources;
+- both guides remain subject to the same 2,000-word, source, FAQ and CI gates as earlier waves.
