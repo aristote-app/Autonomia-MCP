@@ -235,19 +235,17 @@ export default function Home() {
         <div className="sectionHeading">
           <p className="sectionIndex">05 — BIBLIOTHÈQUE</p>
           <div>
-            <h2>400 façons concrètes de passer de “l’IA pourrait…” à “voilà comment”.</h2>
+            <h2>Des cas d’usage qui expliquent comment passer de l’idée à l’exécution.</h2>
             <p>
-              200 scénarios montrent ce que l’entreprise peut automatiser ou augmenter avec l’IA.
-              200 scénarios montrent ce que les équipes peuvent apprendre à faire elles-mêmes.
-              Chaque page publiée doit expliquer le workflow, les choix techniques, les limites,
-              les contrôles et les compétences nécessaires.
+              La bibliothèque Autonomia documente des scénarios d’exécution et de montée en compétences :
+              workflow, choix techniques, limites, contrôles et compétences nécessaires.
             </p>
           </div>
         </div>
 
         <div className="libraryDoors">
           <Link href="/cas-usage-ia" className="libraryDoor">
-            <span>200</span>
+            <span>IA</span>
             <div>
               <p>AUTONOMIA / SCÉNARIOS IA</p>
               <h3>Ce que l’IA peut réellement faire dans votre entreprise.</h3>
@@ -255,7 +253,7 @@ export default function Home() {
             <b>↗</b>
           </Link>
           <Link href="/formation-ia/cas-usage" className="libraryDoor signal">
-            <span>200</span>
+            <span>ACA</span>
             <div>
               <p>AUTONOMIA ACADEMY / SCÉNARIOS</p>
               <h3>Ce que vos équipes peuvent apprendre à faire avec l’IA.</h3>
@@ -285,22 +283,22 @@ export default function Home() {
           </article>
           <article>
             <span>04</span>
-            <h3>Un même cerveau commercial.</h3>
-            <p>Les leads, l’attribution et le parcours commercial sont conçus pour remonter dans Autonomia-MCP.</p>
+            <h3>Une prochaine action claire.</h3>
+            <p>Le Scan transforme un objectif flou en première orientation exploitable avant le cadrage détaillé.</p>
           </article>
         </div>
       </section>
 
       <section className="proofSection">
         <div>
-          <p className="sectionIndex">07 — PREUVES</p>
-          <h2>Une architecture prête pour les preuves réelles.</h2>
+          <p className="sectionIndex">07 — CE QUE VOUS POUVEZ ÉVALUER</p>
+          <h2>Avant de nous croire, regardez la précision de la méthode.</h2>
         </div>
         <div className="proofPlaceholders">
-          <div><span>QUALIOPI</span><p>Entité et périmètre à reprendre exactement avant publication.</p></div>
-          <div><span>EXPERTS</span><p>Volume et expertises à afficher uniquement sur données vérifiées.</p></div>
-          <div><span>RÉFÉRENCES</span><p>Logos et cas clients seulement avec autorisation.</p></div>
-          <div><span>RÉSULTATS</span><p>Chiffres et impacts uniquement quand ils sont sourcés.</p></div>
+          <div><span>DIAGNOSTIC</span><p>Le besoin est traduit en capacités, compétences et prochaines étapes.</p></div>
+          <div><span>EXPERTISES</span><p>Les rôles sont reliés à des missions et à des compétences concrètes.</p></div>
+          <div><span>CAS D’USAGE</span><p>Les contenus expliquent les workflows, arbitrages, limites et contrôles.</p></div>
+          <div><span>TRANSPARENCE</span><p>Les références, certifications et résultats ne sont publiés qu’après vérification.</p></div>
         </div>
       </section>
 
