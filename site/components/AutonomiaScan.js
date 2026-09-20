@@ -39,6 +39,13 @@ const QUESTIONS = [
   }
 ];
 
+const LABELS = Object.fromEntries(
+  QUESTIONS.map((question) => [
+    question.id,
+    Object.fromEntries(question.options)
+  ])
+);
+
 const EXECUTION_MAP = {
   automate: {
     roles: ["Automation / AI Agent Engineer", "AI Project Manager"],
@@ -47,22 +54,22 @@ const EXECUTION_MAP = {
   },
   build: {
     roles: ["AI Product Manager", "GenAI / LLM Engineer", "AI Project Manager"],
-    capabilities: ["Product discovery", "LLM", "Evaluation", "API / intégration"],
+    capabilities: ["Product discovery", "LLM", "Évaluation", "API / intégration"],
     academy: ["IA pour Product / métiers", "Méthodes de cadrage IA"]
   },
   agents: {
     roles: ["AI Agent Engineer", "LLM Engineer", "AI Project Manager"],
-    capabilities: ["Agentic workflows", "Tool use", "RAG", "Evaluation", "Observability"],
+    capabilities: ["Agentic workflows", "Tool use", "RAG", "Évaluation", "Observability"],
     academy: ["Agents IA", "Supervision humaine", "Risques et permissions"]
   },
   copilot: {
     roles: ["AI Adoption Lead", "AI Project Manager"],
-    capabilities: ["Use cases", "Microsoft 365", "Change", "Governance"],
+    capabilities: ["Cas d’usage", "Microsoft 365", "Change", "Governance"],
     academy: ["Microsoft Copilot", "Prompt engineering", "Adoption par métier"]
   },
   skills: {
     roles: ["AI Learning Lead", "Formateur IA métier"],
-    capabilities: ["Skills mapping", "Use cases", "Learning design", "Adoption"],
+    capabilities: ["Skills mapping", "Cas d’usage", "Learning design", "Adoption"],
     academy: ["IA générative", "Managers", "Métiers", "Parcours sur mesure"]
   },
   governance: {
@@ -72,35 +79,68 @@ const EXECUTION_MAP = {
   }
 };
 
-const PLANS = {
+const PLAN_COPY = {
   experts: {
     eyebrow: "AUTONOMIA EXPERTS",
-    title: "Votre prochain levier est une capacité d’exécution externe.",
+    title: "Le premier levier à examiner est une capacité d’exécution externe.",
     description:
-      "Le besoin pointe vers une expertise à ajouter rapidement au projet : cadrage du rôle, compétences critiques, niveau de séniorité puis sélection de profils.",
-    actions: ["Reformuler le besoin", "Définir le rôle", "Sélectionner les expertises", "Staffer"]
+      "Vos réponses orientent vers une compétence à mobiliser sur le projet avant d’élargir le dispositif."
   },
   academy: {
     eyebrow: "AUTONOMIA ACADEMY",
-    title: "Votre prochain levier est une capacité interne.",
+    title: "Le premier levier à examiner est la capacité interne des équipes.",
     description:
-      "Le besoin pointe vers l’adoption, la montée en compétences ou la gouvernance. Le parcours doit partir des tâches et décisions réelles des équipes.",
-    actions: ["Segmenter les publics", "Identifier les usages", "Construire le parcours", "Mesurer l’adoption"]
+      "Vos réponses orientent vers l’adoption, la montée en compétences ou la diffusion de pratiques réutilisables."
   },
   hybrid: {
     eyebrow: "AUTONOMIA / EXECUTION PLAN",
-    title: "Votre besoin combine delivery immédiat et transfert de compétences.",
+    title: "Votre besoin semble combiner exécution immédiate et capacité interne.",
     description:
-      "Le meilleur chemin combine une expertise externe pour faire avancer le projet et un dispositif interne pour rendre l’organisation progressivement autonome.",
-    actions: ["Cadrer le besoin", "Activer l’expertise", "Transférer les méthodes", "Industrialiser"]
+      "Vos réponses indiquent qu’un seul levier risque d’être insuffisant : expertise ciblée et montée en compétences doivent être cadrées ensemble."
   }
 };
 
+const STAGE_GUIDANCE = {
+  idea: {
+    priority: "Transformer l’objectif en cas d’usage priorisé avant de choisir la solution.",
+    next: ["Définir le résultat attendu", "Choisir un cas d’usage", "Lister données, outils et contraintes", "Valider le rôle réellement nécessaire"],
+    watchout: "Risque principal à ce stade : choisir un outil ou un profil avant d’avoir défini le travail à accomplir."
+  },
+  scoped: {
+    priority: "Valider que le cadrage se traduit bien en compétences, responsabilités et critères de réussite.",
+    next: ["Relire le périmètre", "Identifier les compétences critiques", "Fixer les responsabilités", "Préparer le démarrage"],
+    watchout: "Risque principal à ce stade : un projet cadré fonctionnellement mais sans propriétaire clair de l’exécution."
+  },
+  pilot: {
+    priority: "Identifier ce qui empêche le pilote de devenir un système fiable et réutilisable.",
+    next: ["Mesurer les écarts du pilote", "Prioriser les blocages", "Renforcer les compétences manquantes", "Préparer le passage à l’échelle"],
+    watchout: "Risque principal à ce stade : prolonger le pilote sans traiter l’intégration, l’évaluation, la gouvernance ou l’adoption."
+  },
+  scale: {
+    priority: "Sécuriser l’industrialisation, l’adoption et la capacité à maintenir le dispositif.",
+    next: ["Clarifier ownership et run", "Renforcer l’industrialisation", "Former les utilisateurs clés", "Mettre en place gouvernance et suivi"],
+    watchout: "Risque principal à ce stade : augmenter le volume avant d’avoir stabilisé les responsabilités, les contrôles et l’adoption."
+  }
+};
+
+const GAP_GUIDANCE = {
+  expertise: "Le frein déclaré est une compétence spécialisée absente du dispositif actuel.",
+  delivery: "Le frein déclaré est moins l’idée que la capacité disponible pour la livrer.",
+  adoption: "Le frein déclaré se situe après la technologie : les usages ne se diffusent pas suffisamment.",
+  skills: "Le frein déclaré est la capacité des équipes à reproduire les usages de façon autonome.",
+  governance: "Le frein déclaré concerne les règles, les risques ou les responsabilités autour des usages IA.",
+  unknown: "Le blocage reste à qualifier ; le prochain échange doit d’abord isoler le vrai point de friction."
+};
+
+function unique(values) {
+  return [...new Set(values.filter(Boolean))];
+}
+
 function choosePlan(answers) {
-  const { objective, gap } = answers;
+  const { objective, gap, stage } = answers;
 
   if (objective === "skills" || objective === "copilot" || gap === "adoption" || gap === "skills") {
-    return "academy";
+    return stage === "scale" && gap === "delivery" ? "hybrid" : "academy";
   }
 
   if (objective === "governance" || gap === "governance") {
@@ -108,10 +148,64 @@ function choosePlan(answers) {
   }
 
   if (gap === "expertise" || gap === "delivery" || ["build", "agents", "automate"].includes(objective)) {
-    return "experts";
+    return stage === "scale" && gap === "adoption" ? "hybrid" : "experts";
   }
 
   return "hybrid";
+}
+
+function buildExecution(answers) {
+  const base = EXECUTION_MAP[answers.objective] || EXECUTION_MAP.build;
+  const roles = [...base.roles];
+  const capabilities = [...base.capabilities];
+  const academy = [...base.academy];
+
+  if (answers.stage === "idea" && !roles.includes("AI Product Manager")) {
+    roles.unshift("AI Product / Project Manager");
+  }
+
+  if (answers.stage === "scale" && ["build", "agents"].includes(answers.objective)) {
+    roles.push("MLOps / LLMOps");
+    capabilities.push("Observability", "Run / industrialisation");
+  }
+
+  if (answers.gap === "governance") {
+    roles.push("AI Governance Consultant");
+    capabilities.push("Risk mapping", "Human oversight");
+    academy.push("Gouvernance IA");
+  }
+
+  if (answers.gap === "adoption" || answers.gap === "skills") {
+    roles.push("AI Adoption / Learning Lead");
+    capabilities.push("Change management", "Skills mapping");
+  }
+
+  return {
+    roles: unique(roles).slice(0, 4),
+    capabilities: unique(capabilities).slice(0, 6),
+    academy: unique(academy).slice(0, 4)
+  };
+}
+
+function buildRecommendation(answers) {
+  const plan = choosePlan(answers);
+  const stage = STAGE_GUIDANCE[answers.stage] || STAGE_GUIDANCE.idea;
+  const execution = buildExecution(answers);
+  const objectiveLabel = LABELS.objective[answers.objective] || "Objectif IA à préciser";
+  const stageLabel = LABELS.stage[answers.stage] || "Stade à préciser";
+  const gapLabel = LABELS.gap[answers.gap] || "Blocage à préciser";
+
+  return {
+    plan,
+    execution,
+    objectiveLabel,
+    stageLabel,
+    gapLabel,
+    diagnosis: `${objectiveLabel}. Vous êtes au stade « ${stageLabel} ». ${GAP_GUIDANCE[answers.gap] || GAP_GUIDANCE.unknown}`,
+    priority: stage.priority,
+    watchout: stage.watchout,
+    nextSteps: stage.next
+  };
 }
 
 function track(event, detail = {}) {
@@ -125,9 +219,8 @@ export default function AutonomiaScan() {
   const [answers, setAnswers] = useState({});
   const done = step >= QUESTIONS.length;
 
-  const planKey = useMemo(() => choosePlan(answers), [answers]);
-  const plan = PLANS[planKey];
-  const execution = EXECUTION_MAP[answers.objective] || EXECUTION_MAP.build;
+  const recommendation = useMemo(() => buildRecommendation(answers), [answers]);
+  const plan = PLAN_COPY[recommendation.plan];
 
   function choose(id, value) {
     const next = { ...answers, [id]: value };
@@ -136,24 +229,50 @@ export default function AutonomiaScan() {
     setTimeout(() => setStep((current) => Math.min(current + 1, QUESTIONS.length)), 110);
   }
 
-  function handoffToLead() {
-    const payload = {
-      plan: planKey,
+  function back() {
+    setStep((current) => Math.max(0, current - 1));
+    track("autonomia_scan_back");
+  }
+
+  function buildPayload() {
+    return {
+      source: "autonomia_scan",
+      scan_version: "2.0",
+      plan: recommendation.plan,
       answers,
+      answer_labels: {
+        objective: recommendation.objectiveLabel,
+        stage: recommendation.stageLabel,
+        gap: recommendation.gapLabel
+      },
+      orientation: {
+        diagnosis: recommendation.diagnosis,
+        priority: recommendation.priority,
+        watchout: recommendation.watchout,
+        next_steps: recommendation.nextSteps
+      },
       execution: {
-        roles: execution.roles,
-        capabilities: execution.capabilities,
-        academy: execution.academy
+        roles: recommendation.execution.roles,
+        capabilities: recommendation.execution.capabilities,
+        academy: recommendation.execution.academy
       },
       created_at: new Date().toISOString()
     };
+  }
+
+  function handoffToLead() {
+    const payload = buildPayload();
 
     try {
       window.sessionStorage.setItem("autonomia_scan_context", JSON.stringify(payload));
     } catch {}
 
     window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
-    track("autonomia_scan_cta", { scan_plan: planKey, ...answers });
+    track("autonomia_scan_cta", {
+      scan_plan: recommendation.plan,
+      scan_version: payload.scan_version,
+      ...answers
+    });
   }
 
   function restart() {
@@ -169,7 +288,7 @@ export default function AutonomiaScan() {
           <span className="scanLiveDot" />
           <strong>AUTONOMIA SCAN</strong>
         </div>
-        <span>{done ? "EXECUTION PLAN" : `0${step + 1} / 03`}</span>
+        <span>{done ? "PREMIER EXECUTION PLAN" : `0${step + 1} / 03`}</span>
       </div>
 
       {!done ? (
@@ -189,39 +308,62 @@ export default function AutonomiaScan() {
               </button>
             ))}
           </div>
+          {step > 0 && (
+            <button className="scanBack" type="button" onClick={back}>
+              ← Modifier la réponse précédente
+            </button>
+          )}
         </div>
       ) : (
         <div className="scanResult">
           <div className="scanResultIntro">
             <p>{plan.eyebrow}</p>
             <h3>{plan.title}</h3>
-            <div className="scanSignal">PLAN GÉNÉRÉ À PARTIR DE VOS 3 RÉPONSES</div>
+            <div className="scanSignal">ORIENTATION CONSTRUITE À PARTIR DE VOS 3 RÉPONSES</div>
             <p className="scanResultText">{plan.description}</p>
+
+            <div className="scanInterpretation">
+              <div>
+                <span>LECTURE DU BESOIN</span>
+                <strong>{recommendation.diagnosis}</strong>
+              </div>
+              <div className="signal">
+                <span>PRIORITÉ IMMÉDIATE</span>
+                <strong>{recommendation.priority}</strong>
+              </div>
+            </div>
 
             <div className="scanBlueprint">
               <div>
-                <span>PROFILS PROBABLES</span>
-                <strong>{execution.roles.join(" · ")}</strong>
+                <span>PROFILS À EXAMINER</span>
+                <strong>{recommendation.execution.roles.join(" · ")}</strong>
               </div>
               <div>
                 <span>COMPÉTENCES À MOBILISER</span>
-                <strong>{execution.capabilities.join(" · ")}</strong>
+                <strong>{recommendation.execution.capabilities.join(" · ")}</strong>
               </div>
               <div>
-                <span>MONTÉE EN COMPÉTENCES</span>
-                <strong>{execution.academy.join(" · ")}</strong>
+                <span>COMPÉTENCES INTERNES À RENFORCER</span>
+                <strong>{recommendation.execution.academy.join(" · ")}</strong>
               </div>
             </div>
           </div>
 
-          <ol className="scanPlan">
-            {plan.actions.map((action, index) => (
-              <li key={action}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{action}</strong>
-              </li>
-            ))}
-          </ol>
+          <div className="scanResultSide">
+            <div className="scanPlanLabel">PROCHAINES ÉTAPES</div>
+            <ol className="scanPlan">
+              {recommendation.nextSteps.map((action, index) => (
+                <li key={action}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{action}</strong>
+                </li>
+              ))}
+            </ol>
+            <div className="scanWatchout">
+              <span>POINT DE VIGILANCE</span>
+              <p>{recommendation.watchout}</p>
+            </div>
+          </div>
 
           <div className="scanResultActions">
             <a
@@ -229,10 +371,14 @@ export default function AutonomiaScan() {
               href="#contact"
               onClick={handoffToLead}
             >
-              Transformer ce plan en action
+              Transmettre ce plan à Autonomia
             </a>
             <button type="button" onClick={restart}>Recommencer</button>
           </div>
+
+          <p className="scanDisclaimer">
+            Première orientation fondée uniquement sur vos réponses au Scan. Le cadrage final doit confirmer le contexte, les contraintes et les compétences réellement nécessaires.
+          </p>
         </div>
       )}
 
