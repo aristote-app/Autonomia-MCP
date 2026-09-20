@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
+import QualiopiProof from "@/components/QualiopiProof";
 
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
@@ -94,6 +95,8 @@ export default function IntentPage({ page }) {
           </div>
         </div>
       </section>
+
+      {isAcademy && <QualiopiProof compact />}
 
       <section className="faqSection" id="faq">
         <p className="sectionIndex">05 — QUESTIONS</p>
