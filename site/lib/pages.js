@@ -15,7 +15,7 @@ const academyDefaults = {
   cta: "Construire mon plan de formation",
   proofTitle: "Former pour rendre les équipes capables d’agir.",
   proofText:
-    "Le contenu, les cas d’usage et le niveau sont adaptés au public visé. Les mentions Qualiopi seront publiées uniquement avec l’entité certifiée et les informations légales vérifiées."
+    "Le contenu, les cas d’usage et le niveau sont adaptés au public visé, puis reliés à des pratiques que les équipes doivent pouvoir réutiliser dans leur travail."
 };
 
 const diagnosticDefaults = {
@@ -40,6 +40,24 @@ const pages = {
       "Un besoin IA se résume rarement à un intitulé de poste. Nous partons du problème à résoudre, du niveau de séniorité, de l’environnement technique et du rôle attendu dans l’équipe.",
     outcomes: ["Besoin clarifié", "Compétences identifiées", "Profils sélectionnés"],
     capabilities: ["GenAI / LLM", "RAG", "Agents IA", "AI Product", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance IA"],
+    translationTitle: "Un problème concret devient une combinaison de compétences — puis une mission.",
+    translations: [
+      {
+        need: "Notre pilote RAG répond mal sur les documents internes.",
+        skills: "Retrieval · évaluation · observabilité · intégration",
+        activation: "RAG / LLM Engineer — rôle à confirmer après cadrage"
+      },
+      {
+        need: "Nous voulons automatiser un processus avec des agents IA.",
+        skills: "Orchestration · tools · permissions · human-in-the-loop",
+        activation: "AI Agent / Automation Engineer"
+      },
+      {
+        need: "Le projet IA implique métier, data, sécurité et juridique mais n’avance pas.",
+        skills: "Roadmap · arbitrage · dépendances · critères de réussite",
+        activation: "AI Project Manager"
+      }
+    ],
     faq: [
       ["Autonomia est-il une marketplace ?", "Non. Le positionnement repose sur la compréhension du besoin, la sélection et le staffing, pas sur l’accès à un catalogue de profils."],
       ["Quels types de missions ?", "Renfort d’équipe, expertise ciblée, pilotage de projet, conception ou déploiement de solutions IA selon le besoin exprimé."],
@@ -57,9 +75,27 @@ const pages = {
       "Une formation utile relie les outils aux tâches, aux risques, aux règles internes et aux décisions que les collaborateurs doivent réellement prendre.",
     outcomes: ["Usages cadrés", "Compétences transférées", "Adoption structurée"],
     capabilities: ["IA générative", "ChatGPT", "Microsoft Copilot", "Prompt", "Agents IA", "Automatisation", "AI Act", "Conduite du changement"],
+    translationTitle: "Un besoin d’adoption devient un parcours ciblé — pas un catalogue de cours.",
+    translations: [
+      {
+        need: "Copilot est déployé mais les usages restent faibles.",
+        skills: "Cas d’usage · méthodes · vérification · routines métier",
+        activation: "Parcours Copilot segmenté par population"
+      },
+      {
+        need: "Les managers utilisent l’IA sans cadre commun.",
+        skills: "AI literacy · gouvernance · décisions · règles d’usage",
+        activation: "Parcours managers + gouvernance opérationnelle"
+      },
+      {
+        need: "Les équipes veulent automatiser des tâches récurrentes.",
+        skills: "Process mapping · no-code · agents · supervision",
+        activation: "Parcours automatisation avec ateliers métier"
+      }
+    ],
     faq: [
-      ["Les formations sont-elles sur mesure ?", "Le site est conçu pour proposer des formats entreprise adaptables aux métiers, aux niveaux et aux cas d’usage."],
-      ["Qualiopi est-il inclus ?", "La mention Qualiopi ne sera publiée qu’après validation de l’entité certifiée, du périmètre et des mentions légales exactes."],
+      ["Les formations sont-elles sur mesure ?", "Les parcours peuvent être adaptés aux métiers, aux niveaux, aux outils et aux cas d’usage réellement retenus par l’entreprise."],
+      ["Peut-on partir de nos propres tâches ?", "Oui. Le cadrage peut partir des situations de travail afin de relier chaque apprentissage à un usage concret."],
       ["Peut-on former plusieurs populations ?", "Oui. Une même trajectoire peut être structurée par rôle : direction, managers, métiers, fonctions support ou équipes techniques."]
     ]
   },
