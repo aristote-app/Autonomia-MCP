@@ -1,8 +1,20 @@
 import Link from "next/link";
 import LiveJobSignals from "@/components/LiveJobSignals";
+import { getEditorialGraph } from "@/lib/editorialGraph";
 
 export default function EditorialArticle({ article }) {
   const isTraining = article.type === "training";
+  const graph = getEditorialGraph(article);
+  const manualRelated = article.related || [];
+  const automaticRelated = [
+    ...(graph.pillar ? [graph.pillar] : []),
+    ...graph.related,
+    ...(graph.mirror ? [graph.mirror] : []),
+    ...graph.adjacentPillars
+  ];
+  const related = [...manualRelated, ...automaticRelated]
+    .filter((item, index, items) => items.findIndex((candidate) => candidate.href === item.href) === index)
+    .slice(0, 6);
 
   return (
     <main className="editorialArticle">
@@ -96,12 +108,12 @@ export default function EditorialArticle({ article }) {
             </ul>
           </section>
 
-          {article.related?.length > 0 && (
+          {related.length > 0 && (
             <section className="articleRelated">
-              <p className="sectionIndex">À LIRE ENSUITE</p>
-              <h2>Continuer par un scénario proche</h2>
+              <p className="sectionIndex">GRAPHE SÉMANTIQUE</p>
+              <h2>Continuer par le pilier, un scénario proche ou son pendant Experts / Academy.</h2>
               <div className="articleRelatedGrid">
-                {article.related.map((item) => (
+                {related.map((item) => (
                   <Link key={item.href} href={item.href} className="articleRelatedCard">
                     <small>{item.kicker}</small>
                     <strong>{item.label}</strong>
