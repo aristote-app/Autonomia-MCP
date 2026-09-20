@@ -109,3 +109,39 @@ Wave 3 publication rule:
 - official product documentation supports factual capability claims;
 - competitor pages are not used as copy sources;
 - both guides remain subject to the same 2,000-word, source, FAQ and CI gates as earlier waves.
+
+
+## Published in wave 4
+
+### Automatiser le traitement des factures avec l’IA
+
+Primary query: `automatiser traitement factures IA`
+
+Evidence:
+- current French SERPs contain recent explainers and service pages dedicated to automated invoice processing / invoice data extraction;
+- Microsoft Document Intelligence v4.0 exposes a GA prebuilt invoice model for structured field and line-item extraction;
+- Microsoft AI Builder documents invoice extraction inside Power Automate and a reference architecture for vendor-invoice automation;
+- Google Cloud exposes a public GA Invoice Parser;
+- direct commercial fit with Autonomia Experts for document processing, workflow automation, ERP integration and human-review architecture.
+
+Published guide:
+`/cas-usage-ia/extraire-automatiquement-les-donnees-cles-des-factures-recues-par-e-mail`
+
+### AI Act / maîtrise de l’IA adaptée aux usages
+
+Primary query: `formation AI Act entreprise`
+
+Evidence:
+- current French SERPs contain enterprise AI Act training pages;
+- the consolidated AI Act and Commission resources confirm Article 4 AI-literacy measures apply and must account for knowledge, experience, education/training and context of use;
+- Commission Q&A reflects the July 2026 amendment: the obligation remains to take measures supporting AI literacy, without imposing one universal individual level;
+- the Commission’s living repository provides examples but explicitly does not create automatic presumption of compliance;
+- direct fit with Autonomia Academy for role-based AI literacy, governance and adoption.
+
+Published guide:
+`/formation-ia/cas-usage/creer-une-sensibilisation-ai-act-adaptee-aux-cas-d-usage-de-l-entreprise`
+
+Wave 4 safeguards:
+- regulatory claims use EU / Commission sources, not competitor training copy;
+- the guide explicitly states that training alone is not an automatic compliance guarantee;
+- the page is educational and does not replace organisation-specific legal advice.
