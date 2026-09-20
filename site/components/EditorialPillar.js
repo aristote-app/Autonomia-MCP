@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LiveJobSignals from "@/components/LiveJobSignals";
+import { getPillarInsight } from "@/content/pillar-insights";
 
 function signalTags(cluster) {
   const value = cluster.toLowerCase();
@@ -20,6 +21,7 @@ function signalTags(cluster) {
 
 export default function EditorialPillar({ pillar, family, publishedArticles }) {
   const training = family === "training";
+  const insight = getPillarInsight(family, pillar.cluster);
   const publishedBySlug = new Map(publishedArticles.map((article) => [article.slug, article]));
   const basePath = training ? "/formation-ia/cas-usage" : "/cas-usage-ia";
 
@@ -39,11 +41,13 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
         <p className="sectionIndex">RÉPONSE DIRECTE</p>
         <div>
           <h2>{training ? "Que faut-il réellement apprendre dans ce domaine ?" : "Que peut réellement automatiser ou augmenter l’IA ici ?"}</h2>
-          <p>
-            {training
-              ? "Le bon parcours relie une compétence observable à une tâche précise : préparer, analyser, vérifier, automatiser, superviser ou décider. Les dix scénarios ci-dessous servent de carte pour choisir les usages à travailler en priorité."
-              : "Le bon point de départ est le processus existant : déclencheur, données, décisions, actions, exceptions et responsabilités. Les dix scénarios ci-dessous montrent les différentes formes que peut prendre cette transformation."}
-          </p>
+          <p>{insight.summary}</p>
+          <div className="pillarDecisionBox">
+            <span>3 DÉCISIONS À PRENDRE</span>
+            <ol>
+              {insight.decisions.map((decision) => <li key={decision}>{decision}</li>)}
+            </ol>
+          </div>
         </div>
       </section>
 
