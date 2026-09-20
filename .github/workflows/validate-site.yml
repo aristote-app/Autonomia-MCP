@@ -23,8 +23,10 @@ jobs:
         with:
           node-version: 22
       - name: Install public site
-        run: npm install --ignore-scripts
+        run: npm install --ignore-scripts --no-audit --no-fund
       - name: Validate editorial content
         run: npm run content:validate
       - name: Build public site
         run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
