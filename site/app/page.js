@@ -2,6 +2,7 @@ import Link from "next/link";
 import HomeLeadSwitch from "@/components/HomeLeadSwitch";
 import AutonomiaScan from "@/components/AutonomiaScan";
 import QualiopiProof from "@/components/QualiopiProof";
+import LiveJobSignals from "@/components/LiveJobSignals";
 
 const expertRoles = [
   "AI Project Manager",
@@ -230,6 +231,10 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      <section className="homeMarketSignals">
+        <LiveJobSignals />
       </section>
 
       <section className="librarySection">
