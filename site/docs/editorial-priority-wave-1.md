@@ -168,3 +168,27 @@ Evidence:
 - Microsoft’s 2026 rollout guidance recommends phased deployment, user training, adoption resources and usage measurement;
 - Microsoft exposes manager-relevant adoption / Copilot dashboard capabilities;
 - direct commercial fit with Autonomia Academy and clear separation from the existing Outlook-focused Copilot guide.
+
+
+## Published in wave 6
+
+### Meeting → decisions → actions
+
+Primary query: `automatiser compte rendu réunion IA`
+
+Evidence:
+- Google Meet currently exposes AI-assisted note-taking and Gemini-in-Meet capabilities around summaries and discussion context;
+- Microsoft Teams documents Copilot controls and meeting/transcription scenarios;
+- Zoom exposes current AI meeting summaries, transcripts and action-oriented workflows;
+- direct commercial fit with Autonomia Experts because the implementation problem is not note-taking alone: it combines meeting data, structured extraction, human validation and project-system integration;
+- editorial separation from the existing “sales call → CRM” guide: this page targets internal/project meeting continuity and action tracking across meeting platforms, not sales-specific CRM follow-up.
+
+### RAG corpus preparation / knowledge management
+
+Primary query: `formation RAG entreprise documents`
+
+Evidence:
+- Microsoft documents document chunking, RAG evaluation and document-level access control as distinct technical concerns;
+- Elastic documents RAG and configurable chunking for semantic retrieval;
+- direct commercial fit with Autonomia Academy because source preparation, metadata, rights and evaluation are repeatable capabilities that non-developer knowledge / operations teams can learn;
+- editorial separation from the existing execution RAG guide: the execution guide explains the system to build; this training guide teaches teams how to prepare and govern the corpus before implementation.
