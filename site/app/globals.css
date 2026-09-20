@@ -1877,3 +1877,130 @@ button {
     gap: 70px;
   }
 }
+
+
+/* Live employment demand on editorial pages */
+.liveJobSignals {
+  padding: 30px 0 48px;
+  margin-bottom: 52px;
+  border-bottom: 1px solid var(--line);
+}
+
+.liveSignalHeader {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.liveSignalHeader h2 {
+  margin: 10px 0 0;
+}
+
+.liveSignalMetric {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.liveSignalMetric strong {
+  font-size: clamp(42px, 8vw, 72px);
+  line-height: .8;
+  letter-spacing: -.06em;
+}
+
+.liveSignalMetric span {
+  max-width: 220px;
+  padding-bottom: 2px;
+  color: #666a64;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.jobSignalGrid {
+  display: grid;
+  gap: 28px;
+}
+
+.jobSignalColumn > small,
+.recentJobs > small {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #747873;
+}
+
+.jobSignalColumn > div {
+  border-top: 1px solid var(--line);
+}
+
+.jobSignalColumn span {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.jobSignalColumn strong {
+  font-size: 13px;
+}
+
+.jobSignalColumn em {
+  font-size: 11px;
+  font-style: normal;
+  color: #747873;
+}
+
+.recentJobs {
+  margin-top: 34px;
+  padding: 20px;
+  background: var(--paper-2);
+}
+
+.recentJobs > div {
+  display: grid;
+  gap: 3px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.recentJobs strong {
+  font-size: 13px;
+}
+
+.recentJobs span {
+  color: #666a64;
+  font-size: 11px;
+}
+
+.jobSignalNote {
+  max-width: 780px;
+  margin: 18px 0 0 !important;
+  color: #777b75 !important;
+  font-size: 10px !important;
+  line-height: 1.45 !important;
+}
+
+@media (min-width: 760px) {
+  .liveSignalHeader {
+    grid-template-columns: 1fr minmax(230px, .45fr);
+    align-items: end;
+  }
+
+  .jobSignalGrid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .jobSignalGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
