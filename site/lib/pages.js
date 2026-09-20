@@ -15,7 +15,7 @@ const academyDefaults = {
   cta: "Construire mon plan de formation",
   proofTitle: "Former pour rendre les équipes capables d’agir.",
   proofText:
-    "Le contenu, les cas d’usage et le niveau sont adaptés au public visé. Les mentions Qualiopi seront publiées uniquement avec l’entité certifiée et les informations légales vérifiées."
+    "Le contenu, les cas d’usage et le niveau sont adaptés aux publics, aux outils, aux règles internes et aux objectifs opérationnels de l’organisation."
 };
 
 const diagnosticDefaults = {
@@ -85,7 +85,7 @@ const pages = {
     ],
     faq: [
       ["Les formations sont-elles sur mesure ?", "Le site est conçu pour proposer des formats entreprise adaptables aux métiers, aux niveaux et aux cas d’usage."],
-      ["Qualiopi est-il inclus ?", "La mention Qualiopi ne sera publiée qu’après validation de l’entité certifiée, du périmètre et des mentions légales exactes."],
+      ["Comment sont définies les modalités de formation ?", "Les modalités sont précisées selon les publics, les objectifs, le format retenu et le dispositif administratif applicable."],
       ["Peut-on former plusieurs populations ?", "Oui. Une même trajectoire peut être structurée par rôle : direction, managers, métiers, fonctions support ou équipes techniques."]
     ]
   },
