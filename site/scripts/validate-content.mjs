@@ -57,6 +57,10 @@ for (const article of articles) {
     errors.push(`${article.slug}: at least one verification source is required.`);
   }
 
+  if (!article.search?.primaryKeyword || !article.search?.demandEvidence?.length) {
+    errors.push(`${article.slug}: keyword strategy and demand evidence are required.`);
+  }
+
   if (!article.sections || article.sections.length < 6) {
     errors.push(`${article.slug}: at least six substantial sections are required.`);
   }
