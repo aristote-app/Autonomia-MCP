@@ -223,3 +223,33 @@ h3 { margin: 0 0 8px; }
 }
 
 .adminNav { margin-top: 10px; color: inherit; font-size: 11px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+
+
+.teamWorkflow { margin-top: 16px; border-top: 1px solid #e8ebe7; padding-top: 14px; }
+.teamWorkflowSummary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 10px; align-items: end; }
+.teamWorkflowSummary > span { display: grid; gap: 3px; font-size: 12px; color: #404740; }
+.teamWorkflowSummary > span strong { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: #677068; }
+.teamWorkflowSummary form { margin: 0; }
+.teamWorkflowSummary button,
+.workflowForm button {
+  min-height: 36px; border: 1px solid #111; background: #111; color: #fff; padding: 8px 11px; font-size: 11px; font-weight: 800; cursor: pointer;
+}
+.workflowDetails { margin-top: 12px; background: #f7f8f5; border: 1px solid #dfe3dd; padding: 12px; }
+.workflowDetails summary { cursor: pointer; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+.workflowForm { display: grid; grid-template-columns: 1fr 1fr 2fr 1fr auto; gap: 10px; align-items: end; margin-top: 14px; }
+.workflowForm.compact { grid-template-columns: minmax(180px, 1fr) auto; max-width: 430px; padding-bottom: 14px; border-bottom: 1px solid #dfe3dd; }
+.workflowForm label { display: grid; gap: 5px; }
+.workflowForm label span { font-size: 9px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: #677068; }
+.workflowForm input,
+.workflowForm select { width: 100%; min-height: 36px; border: 1px solid #cfd4ce; background: #fff; padding: 7px 9px; font: inherit; font-size: 12px; }
+.workflowWide { min-width: 0; }
+
+@media (max-width: 900px) {
+  .teamWorkflowSummary { grid-template-columns: 1fr 1fr; }
+  .workflowForm { grid-template-columns: 1fr 1fr; }
+  .workflowForm .workflowWide { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .teamWorkflowSummary, .workflowForm, .workflowForm.compact { grid-template-columns: 1fr; }
+  .workflowForm .workflowWide { grid-column: auto; }
+}
