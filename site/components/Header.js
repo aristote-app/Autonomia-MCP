@@ -12,18 +12,19 @@ export default function Header() {
         <nav className="desktopNav" aria-label="Navigation principale">
           <Link href="/experts">Experts</Link>
           <Link href="/academy">Academy</Link>
+          <Link href="/#scan">Scan</Link>
           <Link href="/#methode">Méthode</Link>
           <Link href="/#faq">FAQ</Link>
         </nav>
 
-        <Link className="headerCta" href="/#contact">
-          Parler d’un besoin
+        <Link className="headerCta" href="/#scan">
+          Lancer le Scan
         </Link>
       </header>
 
       <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/expert-ia">Trouver un expert</Link>
-        <Link href="/formation-ia-entreprise">Former mes équipes</Link>
+        <Link href="/#scan">Lancer le Scan</Link>
+        <Link href="/#contact">Parler à Autonomia</Link>
       </nav>
     </>
   );
