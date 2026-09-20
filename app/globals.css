@@ -141,3 +141,83 @@ h3 { margin: 0 0 8px; }
   .jobSignalGrid { grid-template-columns: 1fr; }
   .sourceCard { display: grid; }
 }
+
+
+.loginShell { min-height: 100vh; display: grid; place-items: center; padding: 28px; }
+.loginCard { width: min(460px, 100%); background: #fff; border: 1px solid #d9ddd7; padding: 32px; }
+.loginCard h1 { font-size: 48px; }
+.loginForm, .adminForm { display: grid; gap: 14px; margin-top: 24px; }
+.loginForm label, .adminForm label { display: grid; gap: 7px; }
+.loginForm label span, .adminForm label span { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #677068; }
+.loginForm input, .adminForm input, .adminForm select, .memberRoleForm select {
+  width: 100%; min-height: 44px; border: 1px solid #cfd4ce; background: #fff; padding: 10px 12px; font: inherit;
+}
+.loginForm button, .adminForm button, .memberRoleForm button, .secondaryButton, .adminHeaderActions button {
+  min-height: 42px; border: 1px solid #111; background: #111; color: #fff; padding: 9px 13px; font-weight: 800; cursor: pointer;
+}
+.loginNotice, .loginError, .adminFlash { margin-top: 20px; padding: 12px 14px; border: 1px solid #d9ddd7; background: #f1f3ef; font-size: 13px; }
+.loginError, .adminFlash.error { border-color: #111; }
+.adminFlash.success { background: #fff; }
+
+.adminState { max-width: 720px; background: #fff; border: 1px solid #d9ddd7; padding: 28px; margin-top: 28px; }
+.adminState h1 { font-size: clamp(40px, 6vw, 72px); }
+.adminSetupCode { display: grid; gap: 8px; margin-top: 22px; }
+.adminSetupCode code { display: block; background: #111; color: #fff; padding: 11px 13px; }
+
+.adminHeader { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; padding: 30px 0 42px; border-bottom: 1px solid #d9ddd7; }
+.adminHeader h1 { font-size: clamp(48px, 7vw, 82px); }
+.adminHeaderActions { display: flex; align-items: center; gap: 10px; }
+.adminHeaderActions a { border: 1px solid #111; padding: 10px 13px; color: #111; text-decoration: none; font-size: 12px; font-weight: 800; }
+.adminHeaderActions form { margin: 0; }
+
+.adminMetrics { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #d9ddd7; margin: 28px 0 56px; background: #fff; }
+.adminMetrics article { display: grid; gap: 3px; padding: 20px; border-right: 1px solid #d9ddd7; }
+.adminMetrics article:last-child { border-right: 0; }
+.adminMetrics strong { font-size: 28px; }
+.adminMetrics span { color: #677068; font-size: 12px; }
+
+.adminSection { margin: 56px 0; }
+.adminSplit { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, .7fr); gap: 16px; align-items: start; }
+.memberList { display: grid; gap: 10px; }
+.memberCard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .8fr) auto; gap: 14px; align-items: center; background: #fff; border: 1px solid #d9ddd7; padding: 16px; }
+.memberIdentity { display: grid; gap: 3px; }
+.memberIdentity span { color: #677068; font-size: 12px; }
+.memberIdentity small { font-size: 9px; letter-spacing: .08em; font-weight: 800; }
+.memberRoleForm { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.secondaryButton { background: #fff; color: #111; }
+.invitePanel { position: sticky; top: 20px; background: #fff; border: 1px solid #d9ddd7; padding: 20px; }
+
+.stageGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.stageGrid article { background: #fff; border: 1px solid #d9ddd7; padding: 16px; display: grid; gap: 3px; }
+.stageGrid strong { font-size: 25px; }
+.stageGrid span { color: #677068; font-size: 11px; }
+
+.adminTable { background: #fff; border: 1px solid #d9ddd7; }
+.adminTableRow { display: grid; grid-template-columns: 1fr .7fr 1fr 1fr; gap: 12px; padding: 12px 14px; border-top: 1px solid #e8ebe7; font-size: 12px; }
+.adminTableRow.header { border-top: 0; background: #f1f3ef; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; font-size: 10px; }
+
+.activityList { display: grid; gap: 8px; }
+.activityList article { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 14px; background: #fff; border: 1px solid #d9ddd7; padding: 13px 15px; font-size: 12px; }
+.activityList span { color: #677068; }
+.activityList time { color: #677068; white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .adminMetrics { grid-template-columns: 1fr 1fr; }
+  .adminMetrics article:nth-child(2) { border-right: 0; }
+  .adminMetrics article:nth-child(-n+2) { border-bottom: 1px solid #d9ddd7; }
+  .adminSplit { grid-template-columns: 1fr; }
+  .invitePanel { position: static; }
+  .memberCard { grid-template-columns: 1fr; }
+  .stageGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .adminHeader { display: block; }
+  .adminHeaderActions { margin-top: 20px; flex-wrap: wrap; }
+  .adminMetrics { grid-template-columns: 1fr; }
+  .adminMetrics article { border-right: 0; border-bottom: 1px solid #d9ddd7; }
+  .adminMetrics article:last-child { border-bottom: 0; }
+  .stageGrid { grid-template-columns: 1fr; }
+  .adminTableRow { grid-template-columns: 1fr 1fr; }
+  .adminTableRow span:nth-child(n+3) { display: none; }
+  .activityList article { grid-template-columns: 1fr; }
+}
