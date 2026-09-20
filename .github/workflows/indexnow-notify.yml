@@ -1,0 +1,61 @@
+name: notify-indexnow
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Comma or newline separated public URLs that were added or modified"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      urls:
+        required: true
+        type: string
+    secrets:
+      AUTONOMIA_SITE_URL:
+        required: true
+      AUTONOMIA_INDEXING_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit changed URLs to Autonomia IndexNow bridge
+        env:
+          SITE_URL: ${{ secrets.AUTONOMIA_SITE_URL }}
+          INDEXING_TOKEN: ${{ secrets.AUTONOMIA_INDEXING_TOKEN }}
+          URLS: ${{ inputs.urls }}
+        run: |
+          node <<'NODE'
+          const site = process.env.SITE_URL?.replace(/\/$/, "");
+          const token = process.env.INDEXING_TOKEN;
+          const urls = (process.env.URLS || "")
+            .split(/[\n,]+/)
+            .map((value) => value.trim())
+            .filter(Boolean);
+
+          if (!site || !token || urls.length === 0) {
+            throw new Error("SITE_URL, INDEXING_TOKEN and at least one changed URL are required.");
+          }
+
+          const response = await fetch(`${site}/api/indexnow`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ urls })
+          });
+
+          const body = await response.text();
+          if (!response.ok) {
+            throw new Error(`IndexNow bridge failed (${response.status}): ${body}`);
+          }
+
+          console.log(body);
+          NODE
