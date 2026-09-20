@@ -49,8 +49,44 @@ function track(event, detail = {}) {
   window.dataLayer.push({ event, ...detail });
 }
 
-export default function LeadForm({ mode = "experts", formId = "site-main", requestedService }) {
-  const [step, setStep] = useState(1);
+const SCAN_LABELS = {
+  objective: {
+    automate: "Automatiser un processus",
+    build: "Construire un produit ou une fonctionnalité IA",
+    agents: "Déployer des agents IA",
+    copilot: "Déployer Copilot / ChatGPT",
+    skills: "Faire monter les équipes en compétences",
+    governance: "Cadrer gouvernance / AI Act"
+  },
+  stage: {
+    idea: "Idée / besoin à clarifier",
+    scoped: "Projet déjà cadré",
+    pilot: "Pilote en cours",
+    scale: "Déploiement / industrialisation"
+  },
+  gap: {
+    expertise: "Il manque une expertise rare",
+    delivery: "Il manque de capacité pour livrer",
+    adoption: "Les équipes n’adoptent pas assez",
+    skills: "Les compétences internes sont insuffisantes",
+    governance: "Les règles / risques ne sont pas assez cadrés",
+    unknown: "Blocage encore à qualifier"
+  }
+};
+
+function scanMessage(scanContext) {
+  if (!scanContext?.answers) return null;
+  const { objective, stage, gap } = scanContext.answers;
+  return [
+    "Autonomia Scan",
+    SCAN_LABELS.objective[objective],
+    SCAN_LABELS.stage[stage],
+    SCAN_LABELS.gap[gap]
+  ].filter(Boolean).join(" · ");
+}
+
+export default function LeadForm({ mode = "experts", formId = "site-main", requestedService, scanContext = null }) {
+  const [step, setStep] = useState(scanContext ? 3 : 1);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [data, setData] = useState({
@@ -107,10 +143,19 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       phone: data.phone || null,
       company_name: data.company,
       requested_service: requestedService || mode,
-      message: data.need,
+      message: scanMessage(scanContext) || data.need,
       desired_timeline: mode === "experts" ? data.qualifier : null,
       company_size: mode === "academy" ? data.qualifier : null,
       form_id: formId,
+      scan_context: scanContext
+        ? {
+            plan: scanContext.plan,
+            objective: scanContext.answers?.objective || null,
+            stage: scanContext.answers?.stage || null,
+            gap: scanContext.answers?.gap || null,
+            completed_at: scanContext.created_at || null
+          }
+        : null,
       ...attribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
@@ -148,6 +193,12 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
 
   return (
     <form className="leadForm" onSubmit={submit}>
+      {scanContext && (
+        <div className="scanContextSummary">
+          <span>PLAN D’EXÉCUTION REPRIS</span>
+          <strong>{scanMessage(scanContext)}</strong>
+        </div>
+      )}
       <div className="formTopline">
         <span>0{step}</span>
         <div className="progressTrack"><i style={{ width: `${(step / 3) * 100}%` }} /></div>
