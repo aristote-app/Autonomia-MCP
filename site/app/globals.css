@@ -2976,3 +2976,194 @@ button {
     margin-bottom: 46px;
   }
 }
+
+
+/* Organic Engine — pillars and original methodology */
+.pillarPage,
+.methodologyPage {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.pillarScenarioGrid,
+.pillarMethod,
+.pillarBridge,
+.methodologyFramework {
+  padding: 48px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pillarScenarioGrid,
+.pillarMethod,
+.pillarBridge {
+  display: grid;
+  gap: 28px;
+}
+
+.pillarScenarioGrid h2,
+.pillarMethod h2,
+.pillarBridge h2,
+.methodologyIntro h2 {
+  margin: 0;
+  max-width: 980px;
+  font-size: clamp(30px, 6vw, 60px);
+  line-height: .98;
+  letter-spacing: -.05em;
+  font-weight: 600;
+}
+
+.pillarTopicList {
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.pillarTopic {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pillarTopic.published {
+  grid-template-columns: 42px 1fr auto;
+}
+
+.pillarTopic span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.pillarTopic strong {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.pillarTopic b {
+  color: var(--signal-dark, #4d6b00);
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.pillarMethod ol {
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.pillarMethod li {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pillarMethod li > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.pillarMethod li strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.pillarMethod li p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.methodologyFramework {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.methodologyFramework .sectionIndex {
+  color: var(--signal);
+}
+
+.methodologyGrid {
+  display: grid;
+  margin-top: 28px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.methodologyGrid article {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.methodologyGrid article > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--signal);
+  font-size: 10px;
+}
+
+.methodologyGrid small {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(243,241,233,.56);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.methodologyGrid h3 {
+  margin: 0 0 10px;
+  font-size: clamp(23px, 4vw, 34px);
+  line-height: 1.02;
+  letter-spacing: -.04em;
+}
+
+.methodologyGrid p {
+  margin: 0;
+  color: rgba(243,241,233,.7);
+  line-height: 1.5;
+}
+
+.methodologyActions {
+  margin-top: 26px;
+}
+
+@media (min-width: 760px) {
+  .pillarScenarioGrid,
+  .pillarMethod,
+  .pillarBridge {
+    grid-template-columns: minmax(150px,.35fr) 1.65fr;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .methodologyFramework {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .methodologyGrid {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+
+  .methodologyGrid article {
+    padding: 22px;
+    border-right: 1px solid var(--line-dark);
+  }
+
+  .methodologyGrid article:last-child {
+    border-right: 0;
+  }
+}
+
+@media (min-width: 1180px) {
+  .pillarScenarioGrid,
+  .pillarMethod,
+  .pillarBridge,
+  .methodologyFramework {
+    padding: 82px max(34px, calc((100vw - var(--max)) / 2));
+  }
+}
