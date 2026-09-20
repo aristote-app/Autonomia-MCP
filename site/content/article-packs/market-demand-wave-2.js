@@ -219,6 +219,10 @@ export const marketDemandTrainingArticlesWave2 = [
       {
         label: "n8n Docs — partager les workflows, rôles et permissions",
         url: "https://docs.n8n.io/workflows/sharing/"
+      },
+      {
+        label: "Make Help Center — erreurs et avertissements dans les scénarios",
+        url: "https://help.make.com/Introduction-to-errors-and-warnings"
       }
     ],
     related: [
