@@ -39,8 +39,8 @@ export default function HomeLeadSwitch() {
       {scanContext && (
         <div className="scanHandoff">
           <span>AUTONOMIA SCAN</span>
-          <strong>Votre diagnostic est déjà repris dans la demande.</strong>
-          <small>Vous n’avez pas à ressaisir votre besoin.</small>
+          <strong>Votre premier plan d’exécution est déjà repris dans la demande.</strong>
+          <small>{scanContext.orientation?.priority || "Vous n’avez pas à ressaisir votre besoin."}</small>
         </div>
       )}
 
