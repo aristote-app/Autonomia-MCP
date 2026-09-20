@@ -8,6 +8,7 @@ export default function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
   const staticPages = [
     { url: base, priority: 1, changeFrequency: "weekly" },
+    { url: `${base}/scan-ia`, priority: 0.95, changeFrequency: "monthly" },
     { url: `${base}/cas-usage-ia`, priority: 0.9, changeFrequency: "weekly" },
     { url: `${base}/formation-ia/cas-usage`, priority: 0.9, changeFrequency: "weekly" }
   ];
