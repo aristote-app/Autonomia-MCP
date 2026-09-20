@@ -5,6 +5,10 @@ import {
   getBuyerMarketIntelligence,
   getIntelligenceDashboardSummary
 } from "../lib/db/intelligence.js";
+import {
+  buildTodayQueue,
+  summarizeTodayQueue
+} from "../lib/intelligence/today.js";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +44,7 @@ async function loadLiveData() {
         actionability: "open",
         aiRelatedOnly: true,
         minFitScore: 0,
-        limit: 8
+        limit: 30
       }),
       getBuyerMarketIntelligence({
         minAiAwardRows: 1,
@@ -48,9 +52,12 @@ async function loadLiveData() {
       })
     ]);
 
+    const today = buildTodayQueue(opportunities.items, { limit: 12 });
+
     return {
       summary,
-      opportunities: opportunities.items,
+      today,
+      todaySummary: summarizeTodayQueue(today),
       buyers: buyers.items
     };
   } catch (error) {
@@ -87,8 +94,7 @@ export default async function Home() {
           <p className="eyebrow">AUTONOMIA</p>
           <h1>Market Intelligence</h1>
           <p className="lede">
-            Missions freelance IA, prestations privées, marchés publics et formation IA,
-            avec preuves source, historique et intelligence explicable.
+            Radar IA autonome : opportunités, preuves, échéances, staffing et prochaines actions.
           </p>
         </div>
         <div className={`status ${live ? "live" : ""}`}>
@@ -108,23 +114,34 @@ export default async function Home() {
 
       {live && (
         <>
-          <section className="intelligenceSection">
+          <section className="todaySection">
             <div className="sectionTitle">
               <div>
-                <p className="eyebrow">À TRAITER</p>
-                <h2>Opportunités IA ouvertes</h2>
+                <p className="eyebrow">À TRAITER AUJOURD'HUI</p>
+                <h2>Ce qui mérite une décision humaine</h2>
               </div>
               <p>
-                Score = adéquation Autonomia calculée sur les preuves disponibles.
-                Ce n’est pas une probabilité de gagner.
+                La priorité de tri combine urgence, fit, couverture des preuves et staffing.
+                Elle sert à organiser le travail, pas à prédire un gain.
               </p>
             </div>
 
+            <div className="todaySummary">
+              <article><strong>{live.todaySummary.urgent}</strong><span>urgents</span></article>
+              <article><strong>{live.todaySummary.thisWeek}</strong><span>cette semaine</span></article>
+              <article><strong>{live.todaySummary.prepare}</strong><span>à préparer</span></article>
+              <article><strong>{live.todaySummary.analyze}</strong><span>à analyser</span></article>
+            </div>
+
             <div className="opportunityList">
-              {live.opportunities.length ? live.opportunities.map((item) => (
+              {live.today.length ? live.today.map((item) => (
                 <article className="opportunity" key={item.id}>
                   <div className="oppTop">
                     <div>
+                      <div className="attentionLine">
+                        <span className="attentionBucket">{item.attention_bucket}</span>
+                        <span>Priorité {item.triage_score}/100</span>
+                      </div>
                       <p className="buyer">{item.buyer_name || "Acheteur non identifié"}</p>
                       <h3>{item.title}</h3>
                     </div>
@@ -141,10 +158,15 @@ export default async function Home() {
                   <div className="oppMeta">
                     <span>{formatDate(item.deadline_at)}</span>
                     <span>{item.days_to_deadline == null ? "Délai inconnu" : `${item.days_to_deadline} j restants`}</span>
-                    <span>Couverture score : {item.fit_coverage_percent ?? 0}%</span>
+                    <span>Couverture : {item.fit_coverage_percent ?? 0}%</span>
                     {(item.budget_max || item.budget_min) && (
                       <span>{formatMoney(item.budget_max || item.budget_min)}</span>
                     )}
+                  </div>
+
+                  <div className="nextAction">
+                    <span>PROCHAINE ACTION</span>
+                    <strong>{item.next_action}</strong>
                   </div>
 
                   {Array.isArray(item.inferred_staffing_roles) && item.inferred_staffing_roles.length > 0 && (
@@ -154,7 +176,7 @@ export default async function Home() {
                   )}
                 </article>
               )) : (
-                <div className="emptyState">Aucune opportunité IA avec date future dans le lot actuellement chargé.</div>
+                <div className="emptyState">Aucune opportunité IA ouverte dans le lot actuellement chargé.</div>
               )}
             </div>
           </section>
@@ -215,7 +237,7 @@ export default async function Home() {
         <p className="eyebrow">PIPELINE</p>
         <h2>Une donnée vérifiable avant toute analyse</h2>
         <div className="pipelineRow">
-          {["Collecte", "Raw evidence", "Normalisation", "Déduplication", "Classification V2", "Fit", "MCP"].map((step) => (
+          {["Collecte", "Raw evidence", "Normalisation", "Déduplication", "Classification V2", "Fit", "Priorisation", "MCP"].map((step) => (
             <span key={step}>{step}</span>
           ))}
         </div>
