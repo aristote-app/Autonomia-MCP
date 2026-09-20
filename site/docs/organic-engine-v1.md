@@ -356,3 +356,65 @@ Lorsque les données sont disponibles, la page publie un schema `Dataset` et rap
 - les comptes ne représentent pas le volume total du marché ;
 - ils ne représentent pas le volume de recherche Google ;
 - ils ne constituent pas une prévision.
+
+## SEO/GEO hardening — September 2026
+
+### `lastmod` over fake freshness
+
+Google ignores sitemap `priority` and `changefreq`. The site sitemap therefore exposes URL + meaningful `lastModified` only.
+
+Published guides use their explicit `modifiedAt` / `publishedAt` values.
+
+Do not update these dates unless the page received a meaningful content, structured-data or internal-link change.
+
+### RSS
+
+`/feed.xml` exposes recently published long-form guides and is declared in site metadata.
+
+### `llms.txt`
+
+`/llms.txt` provides a machine-readable map of:
+- core entity / methodology pages;
+- Experts / Academy / Scan;
+- 40 pillars;
+- published guides;
+- sitemap / RSS;
+- public Observatory JSON.
+
+It is maintained as an optional navigation aid. Google has clarified that llms.txt is not required and does not improve or hurt Google Search visibility by itself.
+
+### Observatory JSON dataset
+
+`GET /api/public/observatoire-ia` returns privacy-safe aggregate data only:
+- sample size;
+- observation window;
+- roles;
+- tools;
+- skills;
+- use cases;
+- explicit limitations.
+
+No full job description is redistributed.
+
+The `Dataset` structured data on `/observatoire-ia` points to this JSON distribution.
+
+### Article trust layer
+
+Published guides expose:
+- publication date;
+- modification date when different;
+- editorial responsibility;
+- link to the editorial verification policy;
+- Article structured data with datePublished/dateModified;
+- source URLs through schema citation;
+- Open Graph published/modified time.
+
+### Post-deploy IndexNow
+
+`scripts/changed-organic-urls.mjs` maps repository changes to the organic URLs materially affected.
+
+`.github/workflows/indexnow-notify.yml` can:
+- accept explicit changed URLs; or
+- compute them from before/after Git SHAs.
+
+Run it only after the corresponding deployment is live.
