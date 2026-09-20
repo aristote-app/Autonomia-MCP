@@ -60,8 +60,8 @@ export default function Home() {
             <span>Elle manque d’exécution.</span>
           </h1>
           <p className="heroText">
-            Autonomia apporte aux entreprises les experts pour construire
-            et les compétences pour déployer.
+            Autonomia transforme un objectif IA en plan d’exécution : les compétences externes pour construire,
+            les compétences internes pour adopter et déployer.
           </p>
 
           <div className="heroActions">
@@ -103,8 +103,8 @@ export default function Home() {
           <div>
             <h2>Ne commencez pas par chercher un profil. Commencez par identifier ce qui bloque l’exécution.</h2>
             <p>
-              Trois questions. Un premier plan d’exécution. Experts, Academy ou combinaison des deux :
-              Autonomia transforme un objectif IA en prochaine action structurée.
+              Trois réponses suffisent pour produire une première orientation : lecture du blocage,
+              profils et compétences à examiner, montée en compétences éventuelle et prochaines étapes.
             </p>
           </div>
         </div>
