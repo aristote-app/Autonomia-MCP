@@ -306,3 +306,34 @@ Organic Engine V1 est correctement branché lorsque :
 - OAI-SearchBot peut crawler une page ;
 - les insights organiques remontent dans Autonomia-MCP ;
 - une URL organique peut être reliée jusqu’au lead puis au revenu.
+
+
+## Vérification d’identité moteur et flux récent
+
+Variables :
+```
+GOOGLE_SITE_VERIFICATION=
+BING_SITE_VERIFICATION=
+```
+
+Le layout publie les balises de propriété uniquement lorsque les valeurs sont configurées.
+
+Flux récent :
+`/feed.xml`
+
+Le RSS contient uniquement les guides long-form réellement publiés et complète le sitemap pour la découverte des contenus récents.
+
+Workflow de production :
+`.github/workflows/seo-production-smoke.yml`
+
+Il vérifie :
+- robots ;
+- OAI-SearchBot ;
+- sitemap ;
+- volume minimal d’URL ;
+- absence des diagnostics Meta du sitemap ;
+- canonical des surfaces critiques ;
+- RSS ;
+- pages méthodologiques ;
+- piliers ;
+- guides Wave 3.
