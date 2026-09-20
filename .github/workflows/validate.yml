@@ -61,5 +61,7 @@ jobs:
         run: npm run smoke:intelligence
       - name: Smoke test today triage
         run: npm run smoke:today
+      - name: Smoke test LinkedIn Indeed discovery
+        run: npm run smoke:job-discovery
       - name: Smoke test MCP
         run: npm run smoke:mcp
