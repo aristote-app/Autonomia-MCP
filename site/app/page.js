@@ -3,6 +3,10 @@ import HomeLeadSwitch from "@/components/HomeLeadSwitch";
 import AutonomiaScan from "@/components/AutonomiaScan";
 import QualiopiProof from "@/components/QualiopiProof";
 import LiveJobSignals from "@/components/LiveJobSignals";
+import {
+  publishedExecutionArticles,
+  publishedTrainingArticles
+} from "@/content/published-articles";
 
 const expertRoles = [
   "AI Project Manager",
@@ -34,6 +38,14 @@ const trainingTopics = [
 ];
 
 export default function Home() {
+  const latestGuides = [
+    ...publishedExecutionArticles.map((article) => ({ ...article, family: "execution" })),
+    ...publishedTrainingArticles.map((article) => ({ ...article, family: "training" }))
+  ]
+    .sort((a, b) => String(b.modifiedAt || b.publishedAt).localeCompare(String(a.modifiedAt || a.publishedAt)))
+    .slice(-4)
+    .reverse();
+
   return (
     <main>
 
@@ -287,8 +299,38 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="latestGuidesSection">
+        <div className="sectionHeading">
+          <p className="sectionIndex">07 — GUIDES PUBLIÉS</p>
+          <div>
+            <h2>Des guides longs, sourcés et reliés aux besoins réels.</h2>
+            <p>
+              Le backlog contient 400 intentions, mais seuls les guides qui passent les contrôles éditoriaux
+              deviennent des pages longues indexables.
+            </p>
+          </div>
+        </div>
+
+        <div className="latestGuidesGrid">
+          {latestGuides.map((article) => (
+            <Link
+              key={article.slug}
+              href={article.family === "training"
+                ? `/formation-ia/cas-usage/${article.slug}`
+                : `/cas-usage-ia/${article.slug}`}
+              className="latestGuideCard"
+            >
+              <small>{article.family === "training" ? "ACADEMY" : "EXECUTION"} · {article.cluster}</small>
+              <h3>{article.title}</h3>
+              <p>{article.summary}</p>
+              <span>Lire le guide →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="whySection">
-        <p className="sectionIndex">07 — POURQUOI AUTONOMIA</p>
+        <p className="sectionIndex">08 — POURQUOI AUTONOMIA</p>
         <div className="whyGrid">
           <article>
             <span>01</span>
@@ -315,7 +357,7 @@ export default function Home() {
 
       <section className="proofSection">
         <div>
-          <p className="sectionIndex">08 — STANDARD D’EXÉCUTION</p>
+          <p className="sectionIndex">09 — STANDARD D’EXÉCUTION</p>
           <h2>Une méthode conçue pour rester vérifiable.</h2>
         </div>
         <div className="proofGrid">
@@ -329,7 +371,7 @@ export default function Home() {
       <QualiopiProof />
 
       <section className="faqSection homeFaq" id="faq">
-        <p className="sectionIndex">09 — QUESTIONS</p>
+        <p className="sectionIndex">10 — QUESTIONS</p>
         <div>
           <h2>Ce qu’Autonomia est — et n’est pas.</h2>
           <div className="faqList">
