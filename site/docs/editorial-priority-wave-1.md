@@ -145,3 +145,26 @@ Wave 4 safeguards:
 - regulatory claims use EU / Commission sources, not competitor training copy;
 - the guide explicitly states that training alone is not an automatic compliance guarantee;
 - the page is educational and does not replace organisation-specific legal advice.
+
+
+## Published in wave 5
+
+### Lead qualification / CRM
+
+Primary query: `qualification leads IA CRM`
+
+Evidence:
+- current Salesforce documentation exposes AI-assisted lead scoring tied to historical conversion patterns and influential fields;
+- current HubSpot documentation exposes fit, engagement and combined lead scoring, plus AI-powered insights for high-impact events;
+- direct commercial fit with Autonomia Experts because the topic combines CRM integration, automation, data quality and human-in-the-loop routing;
+- editorial separation from the existing “sales call → CRM” guide: this page targets inbound qualification before or at first commercial handling, not post-meeting automation.
+
+### Copilot in Teams for managers
+
+Primary query: `formation Copilot Teams managers`
+
+Evidence:
+- Microsoft Learn currently publishes specific modules on AI-assisted Teams meetings, including preparation, structured meetings, recap and follow-up;
+- Microsoft’s 2026 rollout guidance recommends phased deployment, user training, adoption resources and usage measurement;
+- Microsoft exposes manager-relevant adoption / Copilot dashboard capabilities;
+- direct commercial fit with Autonomia Academy and clear separation from the existing Outlook-focused Copilot guide.
