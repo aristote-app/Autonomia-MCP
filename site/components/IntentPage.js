@@ -174,7 +174,7 @@ export default function IntentPage({ page }) {
       <section className="closingCta">
         <p className="eyebrow">AUTONOMIA</p>
         <h2>{isExpert ? "Votre projet a besoin d’une compétence précise." : isAcademy ? "Vos équipes ont besoin d’une trajectoire claire." : "Votre prochain choix IA peut être clarifié."}</h2>
-        <Link href="#top" className="primaryButton">{page.cta}</Link>
+        <Link href={page.mode === "diagnostic" ? "#diagnostic" : "#top"} className="primaryButton">{page.cta}</Link>
       </section>
     </main>
   );
