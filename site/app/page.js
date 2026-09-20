@@ -34,21 +34,8 @@ const trainingTopics = [
 ];
 
 export default function Home() {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Autonomia",
-    description:
-      "Partenaire d’exécution IA pour les entreprises : experts IA et formation professionnelle IA.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"
-  };
-
   return (
     <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
 
       <section className="homeHero" id="top">
         <div className="heroCopy">
@@ -237,9 +224,40 @@ export default function Home() {
         <LiveJobSignals />
       </section>
 
+      <section className="intelligenceSection">
+        <div className="sectionHeading">
+          <p className="sectionIndex">05 — INTELLIGENCE AUTONOMIA</p>
+          <div>
+            <h2>Des méthodes et des données originales — pas seulement des articles.</h2>
+            <p>
+              Autonomia publie ses propres cadres d’exécution, sa méthode de transfert de compétences
+              et un observatoire de la demande IA pour rendre les décisions plus concrètes et plus vérifiables.
+            </p>
+          </div>
+        </div>
+
+        <div className="intelligenceGrid">
+          <Link href="/observatoire-ia" className="intelligenceCard">
+            <small>OBSERVATOIRE</small>
+            <h3>Les rôles, outils et compétences IA observés dans les besoins des entreprises.</h3>
+            <span>Explorer les signaux →</span>
+          </Link>
+          <Link href="/methodologie/execution-matrix" className="intelligenceCard">
+            <small>MÉTHODE / EXECUTION</small>
+            <h3>Processus → interprétation → action → contrôle.</h3>
+            <span>Voir la matrice →</span>
+          </Link>
+          <Link href="/methodologie/learning-transfer" className="intelligenceCard">
+            <small>MÉTHODE / ACADEMY</small>
+            <h3>Tâche → méthode → garde-fous → transfert.</h3>
+            <span>Voir la matrice →</span>
+          </Link>
+        </div>
+      </section>
+
       <section className="librarySection">
         <div className="sectionHeading">
-          <p className="sectionIndex">05 — BIBLIOTHÈQUE</p>
+          <p className="sectionIndex">06 — BIBLIOTHÈQUE</p>
           <div>
             <h2>Des cas d’usage qui expliquent comment passer de l’idée à l’exécution.</h2>
             <p>
@@ -270,7 +288,7 @@ export default function Home() {
       </section>
 
       <section className="whySection">
-        <p className="sectionIndex">06 — POURQUOI AUTONOMIA</p>
+        <p className="sectionIndex">07 — POURQUOI AUTONOMIA</p>
         <div className="whyGrid">
           <article>
             <span>01</span>
@@ -297,7 +315,7 @@ export default function Home() {
 
       <section className="proofSection">
         <div>
-          <p className="sectionIndex">07 — STANDARD D’EXÉCUTION</p>
+          <p className="sectionIndex">08 — STANDARD D’EXÉCUTION</p>
           <h2>Une méthode conçue pour rester vérifiable.</h2>
         </div>
         <div className="proofGrid">
@@ -311,7 +329,7 @@ export default function Home() {
       <QualiopiProof />
 
       <section className="faqSection homeFaq" id="faq">
-        <p className="sectionIndex">08 — QUESTIONS</p>
+        <p className="sectionIndex">09 — QUESTIONS</p>
         <div>
           <h2>Ce qu’Autonomia est — et n’est pas.</h2>
           <div className="faqList">
@@ -352,12 +370,15 @@ export default function Home() {
           <span>AUTONOMIA</span>
         </div>
         <p>La force d’exécution IA.</p>
-        <div>
-          <span>Experts</span>
-          <span>Academy</span>
-          <span>Mentions légales</span>
-          <span>Confidentialité</span>
-        </div>
+        <nav aria-label="Liens de pied de page">
+          <Link href="/experts">Experts</Link>
+          <Link href="/academy">Academy</Link>
+          <Link href="/cas-usage-ia">Cas d’usage</Link>
+          <Link href="/formation-ia/cas-usage">Formations</Link>
+          <Link href="/observatoire-ia">Observatoire</Link>
+          <Link href="/a-propos">À propos</Link>
+          <Link href="/methodologie/politique-editoriale">Politique éditoriale</Link>
+        </nav>
       </footer>
     </main>
   );
