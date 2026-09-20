@@ -2819,3 +2819,17 @@ button {
     padding: 28px;
   }
 }
+
+
+.scanFocus {
+  width: fit-content;
+  margin: 0 0 14px;
+  padding: 6px 8px;
+  border: 1px solid rgba(201,255,85,.45);
+  color: var(--signal);
+  background: rgba(201,255,85,.05);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
