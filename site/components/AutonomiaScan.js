@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import LeadForm from "@/components/LeadForm";
 
 const QUESTIONS = [
   {
@@ -214,9 +215,14 @@ function track(event, detail = {}) {
   window.dataLayer.push({ event, ...detail });
 }
 
-export default function AutonomiaScan() {
+export default function AutonomiaScan({
+  captureLead = false,
+  source = "autonomia_scan",
+  leadFormId = "scan-inline"
+} = {}) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [leadContext, setLeadContext] = useState(null);
   const done = step >= QUESTIONS.length;
 
   const recommendation = useMemo(() => buildRecommendation(answers), [answers]);
@@ -236,7 +242,7 @@ export default function AutonomiaScan() {
 
   function buildPayload() {
     return {
-      source: "autonomia_scan",
+      source,
       scan_version: "2.0",
       plan: recommendation.plan,
       answers,
@@ -267,16 +273,23 @@ export default function AutonomiaScan() {
       window.sessionStorage.setItem("autonomia_scan_context", JSON.stringify(payload));
     } catch {}
 
-    window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
+    if (captureLead) {
+      setLeadContext(payload);
+    } else {
+      window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
+    }
+
     track("autonomia_scan_cta", {
       scan_plan: recommendation.plan,
       scan_version: payload.scan_version,
+      scan_capture_mode: captureLead ? "inline" : "handoff",
       ...answers
     });
   }
 
   function restart() {
     setAnswers({});
+    setLeadContext(null);
     setStep(0);
     track("autonomia_scan_restart");
   }
@@ -366,19 +379,44 @@ export default function AutonomiaScan() {
           </div>
 
           <div className="scanResultActions">
-            <a
-              className="scanPrimary"
-              href="#contact"
-              onClick={handoffToLead}
-            >
-              Transmettre ce plan à Autonomia
-            </a>
+            {captureLead ? (
+              <button
+                type="button"
+                className="scanPrimary"
+                onClick={handoffToLead}
+              >
+                Continuer avec ce plan
+              </button>
+            ) : (
+              <a
+                className="scanPrimary"
+                href="#contact"
+                onClick={handoffToLead}
+              >
+                Transmettre ce plan à Autonomia
+              </a>
+            )}
             <button type="button" onClick={restart}>Recommencer</button>
           </div>
 
           <p className="scanDisclaimer">
             Première orientation fondée uniquement sur vos réponses au Scan. Le cadrage final doit confirmer le contexte, les contraintes et les compétences réellement nécessaires.
           </p>
+
+          {captureLead && leadContext && (
+            <div className="scanInlineLead" id="scan-contact">
+              <div className="scanInlineLeadCopy">
+                <span>VOTRE PLAN EST PRÉREMPLI</span>
+                <strong>Ajoutez uniquement vos coordonnées pour transmettre cette orientation.</strong>
+              </div>
+              <LeadForm
+                mode="diagnostic"
+                formId={leadFormId}
+                requestedService={`scan_${recommendation.plan}`}
+                scanContext={leadContext}
+              />
+            </div>
+          )}
         </div>
       )}
 
