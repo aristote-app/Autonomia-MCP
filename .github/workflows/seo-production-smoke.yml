@@ -41,6 +41,11 @@ jobs:
             throw new Error("robots.txt does not declare sitemap.xml.");
           }
 
+          const feed = await text("/feed.xml");
+          if (!feed.includes("<rss") || !feed.includes("<item>")) {
+            throw new Error("feed.xml is missing RSS items.");
+          }
+
           const sitemap = await text("/sitemap.xml");
           const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
 
