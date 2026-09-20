@@ -38,6 +38,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "4.6.5",
-    "cheerio": "1.2.0"
+    "cheerio": "1.2.0",
+    "@supabase/ssr": "0.12.7"
   }
 }
