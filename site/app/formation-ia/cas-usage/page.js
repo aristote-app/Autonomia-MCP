@@ -38,6 +38,9 @@ export default function TrainingUseCaseHub() {
       </section>
 
       <LiveJobSignals tags={["automation", "agents", "rag", "copilot", "n8n", "governance", "change_adoption"]} />
+      <div className="hubObservatoryLink">
+        <Link href="/observatoire-ia">Explorer l’Observatoire Autonomia de la demande IA →</Link>
+      </div>
 
       <section className="clusterGrid">
         {clusters.map((cluster) => {
