@@ -130,6 +130,8 @@ const requiredRuntimeFiles = [
   "docs/organic-engine-v1.md",
   "app/a-propos/page.js",
   "app/methodologie/politique-editoriale/page.js",
+  "app/observatoire-ia/page.js",
+  "components/MarketObservatory.js",
   "scripts/seo-audit.mjs",
   "scripts/test-organic-decision-engine.mjs"
 ];
