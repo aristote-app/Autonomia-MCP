@@ -1,4 +1,4 @@
-import { runAutomatedMarketRefresh } from "../../../../lib/market/automatedRefresh.js";
+import { runAutomatedMarketRefresh, runAutomatedJobSignalRefresh } from "../../../../lib/market/automatedRefresh.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,9 +39,20 @@ export async function GET(request) {
     }
   }
 
+  let jobSignals = null;
+  try {
+    jobSignals = await runAutomatedJobSignalRefresh();
+  } catch (error) {
+    jobSignals = {
+      available: true,
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
+
   return Response.json({
     ok: runs.some((run) => run.ok),
     completedAt: new Date().toISOString(),
-    runs
+    runs,
+    jobSignals
   });
 }
