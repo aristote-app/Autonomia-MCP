@@ -108,6 +108,7 @@ const requiredRuntimeFiles = [
   "lib/clientTracking.js",
   "lib/editorialGraph.js",
   "lib/organicUrls.js",
+  "lib/organicDecisionEngine.js",
   "app/api/leads/route.js",
   "app/scan-ia/page.js",
   "app/methodologie/execution-matrix/page.js",
@@ -116,9 +117,11 @@ const requiredRuntimeFiles = [
   "app/api/organic/manifest/route.js",
   "app/api/organic/insights/route.js",
   "app/api/organic/media-manifest/route.js",
+  "app/api/organic/recommendations/route.js",
   "docs/tuesday-integration-runbook.md",
   "docs/paid-acquisition-map.md",
-  "docs/organic-engine-v1.md"
+  "docs/organic-engine-v1.md",
+  "scripts/seo-audit.mjs"
 ];
 
 for (const relativePath of requiredRuntimeFiles) {
