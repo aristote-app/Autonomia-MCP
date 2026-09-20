@@ -41,6 +41,7 @@ const requiredLandingSlugs = [
 
 const allPages = getAllPages();
 const pageSlugs = allPages.map((page) => page.slug);
+const googleAdsSlugs = requiredLandingSlugs.slice(0, 14);
 
 if (new Set(pageSlugs).size !== pageSlugs.length) {
   errors.push("Landing-page registry contains duplicate slugs.");
@@ -49,6 +50,23 @@ if (new Set(pageSlugs).size !== pageSlugs.length) {
 for (const slug of requiredLandingSlugs) {
   if (!pageSlugs.includes(slug)) {
     errors.push(`Required acquisition landing page missing: ${slug}.`);
+  }
+}
+
+for (const slug of googleAdsSlugs) {
+  const page = allPages.find((item) => item.slug === slug);
+  if (!page) continue;
+
+  if (!page.translations || page.translations.length < 3) {
+    errors.push(`${slug}: Google Ads LP must contain at least three problem-to-activation translations.`);
+    continue;
+  }
+
+  for (const item of page.translations) {
+    if (!item.need || !item.skills || !item.activation) {
+      errors.push(`${slug}: each translation requires need, skills and activation.`);
+      break;
+    }
   }
 }
 
@@ -82,6 +100,7 @@ const requiredRuntimeFiles = [
   "components/AutonomiaScan.js",
   "components/LeadForm.js",
   "components/HomeLeadSwitch.js",
+  "lib/clientTracking.js",
   "app/api/leads/route.js",
   "app/scan-ia/page.js",
   "docs/tuesday-integration-runbook.md",
@@ -97,9 +116,23 @@ for (const relativePath of requiredRuntimeFiles) {
 }
 
 const scanSource = readFileSync(resolve(siteRoot, "components/AutonomiaScan.js"), "utf8");
-for (const requiredField of ["execution", "roles", "capabilities", "academy", "orientation", "priority", "watchout", "next_steps"]) {
+for (const requiredField of ["execution", "roles", "capabilities", "academy", "orientation", "priority", "watchout", "next_steps", "commercial_handoff"]) {
   if (!scanSource.toLowerCase().includes(requiredField)) {
     errors.push(`Autonomia Scan execution blueprint is missing expected field: ${requiredField}.`);
+  }
+}
+
+const leadSource = readFileSync(resolve(siteRoot, "components/LeadForm.js"), "utf8");
+for (const requiredPattern of ["trackLeadConversion", "commercial_handoff"]) {
+  if (!leadSource.includes(requiredPattern)) {
+    errors.push(`LeadForm is missing conversion / qualification marker: ${requiredPattern}.`);
+  }
+}
+
+const trackingSource = readFileSync(resolve(siteRoot, "lib/clientTracking.js"), "utf8");
+for (const requiredPattern of ["autonomia_cookie_consent", "NEXT_PUBLIC_GOOGLE_ADS_LEAD_LABEL", "fbq"]) {
+  if (!trackingSource.includes(requiredPattern)) {
+    errors.push(`Consent-aware tracking bridge is missing marker: ${requiredPattern}.`);
   }
 }
 
