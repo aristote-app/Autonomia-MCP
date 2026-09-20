@@ -221,3 +221,5 @@ h3 { margin: 0 0 8px; }
   .adminTableRow span:nth-child(n+3) { display: none; }
   .activityList article { grid-template-columns: 1fr; }
 }
+
+.adminNav { margin-top: 10px; color: inherit; font-size: 11px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
