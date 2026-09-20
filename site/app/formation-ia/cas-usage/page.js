@@ -45,7 +45,7 @@ export default function TrainingUseCaseHub() {
           return (
             <article key={cluster}>
               <p className="sectionIndex">{cluster}</p>
-              <h2>{items[0]?.pillar}</h2>
+              <h2><Link href={`/formation-ia/cas-usage/${items[0]?.clusterSlug}`}>{items[0]?.pillar}</Link></h2>
               <ul>
                 {items.map((item) => (
                   <li key={item.slug}>
