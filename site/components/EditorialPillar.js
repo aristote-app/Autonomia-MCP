@@ -99,6 +99,9 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
             <Link className="primaryButton" href={training ? "/formation-ia-entreprise" : "/expert-ia"}>
               {training ? "Construire le parcours" : "Cadrer le besoin"}
             </Link>
+            <Link className="secondaryButton" href={training ? "/methodologie/learning-transfer" : "/methodologie/execution-matrix"}>
+              Voir la matrice Autonomia
+            </Link>
             <Link className="secondaryButton" href={training ? "/formation-ia/cas-usage" : "/cas-usage-ia"}>
               Voir tous les piliers
             </Link>
