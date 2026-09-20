@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import AttributionCapture from "@/components/AttributionCapture";
 import ConsentAnalytics from "@/components/ConsentAnalytics";
+import WebVitalsReporter from "@/components/WebVitalsReporter";
 
 const isPreview = process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production";
 
@@ -79,6 +80,7 @@ export default function RootLayout({ children }) {
         />
         <AttributionCapture />
         <ConsentAnalytics />
+        <WebVitalsReporter />
         <Header />
         {children}
       </body>
