@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
 import QualiopiProof from "@/components/QualiopiProof";
+import AutonomiaScan from "@/components/AutonomiaScan";
 
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
@@ -25,14 +26,42 @@ export default function IntentPage({ page }) {
         </div>
 
         <div className="heroFormCard">
-          <p className="formKicker">{isExpert ? "Votre besoin" : isAcademy ? "Votre plan de formation" : "Votre diagnostic"}</p>
-          <LeadForm
-            mode={page.mode}
-            formId={`lp-${page.slug}`}
-            requestedService={page.slug}
-          />
+          {page.mode === "diagnostic" ? (
+            <div className="diagnosticTeaser">
+              <p className="formKicker">AUTONOMIA SCAN</p>
+              <strong>3 réponses → une première orientation d’exécution.</strong>
+              <p>Vous voyez le résultat avant de décider si vous souhaitez le transmettre.</p>
+              <Link href="#diagnostic" className="formNext">Commencer le diagnostic</Link>
+            </div>
+          ) : (
+            <>
+              <p className="formKicker">{isExpert ? "Votre besoin" : "Votre plan de formation"}</p>
+              <LeadForm
+                mode={page.mode}
+                formId={`lp-${page.slug}`}
+                requestedService={page.slug}
+              />
+              <Link href="/scan-ia" className="scanSecondaryLink">
+                Je ne sais pas encore exactement quoi demander → lancer Autonomia Scan
+              </Link>
+            </>
+          )}
         </div>
       </section>
+
+      {page.mode === "diagnostic" && (
+        <section className="intentDiagnostic" id="diagnostic">
+          <div className="intentDiagnosticIntro">
+            <p className="sectionIndex">00 — DIAGNOSTIC</p>
+            <h2>Obtenez d’abord une orientation. Décidez ensuite si vous voulez aller plus loin.</h2>
+          </div>
+          <AutonomiaScan
+            captureLead
+            source={`diagnostic_${page.slug}`}
+            leadFormId={`diagnostic-${page.slug}`}
+          />
+        </section>
+      )}
 
       <section className="intentContext">
         <p className="sectionIndex">01 — LE PROBLÈME</p>
