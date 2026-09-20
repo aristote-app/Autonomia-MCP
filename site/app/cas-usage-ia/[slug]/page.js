@@ -29,7 +29,11 @@ export async function generateMetadata({ params }) {
         title: article.title,
         description: article.dek,
         type: "article",
-        url: `/cas-usage-ia/${slug}`
+        url: `/cas-usage-ia/${slug}`,
+        publishedTime: article.publishedAt,
+        modifiedTime: article.modifiedAt || article.publishedAt,
+        authors: ["Autonomia"],
+        tags: [article.cluster, article.search?.primaryKeyword].filter(Boolean)
       }
     };
   }
@@ -93,7 +97,9 @@ export default async function ExecutionArticlePage({ params }) {
           keywords: [
             article.search?.primaryKeyword,
             ...(article.search?.secondaryQueries || [])
-          ].filter(Boolean)
+          ].filter(Boolean),
+          inLanguage: "fr-FR",
+          citation: (article.sources || []).map((source) => source.url)
         },
         {
           "@type": "BreadcrumbList",
