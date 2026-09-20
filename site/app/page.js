@@ -39,12 +39,9 @@ const trainingTopics = [
 
 export default function Home() {
   const latestGuides = [
-    ...publishedExecutionArticles.map((article) => ({ ...article, family: "execution" })),
-    ...publishedTrainingArticles.map((article) => ({ ...article, family: "training" }))
-  ]
-    .sort((a, b) => String(b.modifiedAt || b.publishedAt).localeCompare(String(a.modifiedAt || a.publishedAt)))
-    .slice(-4)
-    .reverse();
+    ...publishedExecutionArticles.slice(-2).reverse().map((article) => ({ ...article, family: "execution" })),
+    ...publishedTrainingArticles.slice(-2).reverse().map((article) => ({ ...article, family: "training" }))
+  ];
 
   return (
     <main>
