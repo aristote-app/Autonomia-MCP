@@ -24,4 +24,7 @@ jobs:
           node-version: 22
       - name: Install public site
         run: npm install --ignore-scripts
-      - name: Validate editorial content\n        run: npm run content:validate\n      - name: Build public site\n        run: npm run build
+      - name: Validate editorial content
+        run: npm run content:validate
+      - name: Build public site
+        run: npm run build
