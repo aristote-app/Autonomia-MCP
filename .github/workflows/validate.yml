@@ -63,5 +63,7 @@ jobs:
         run: npm run smoke:today
       - name: Smoke test LinkedIn Indeed discovery
         run: npm run smoke:job-discovery
+      - name: Smoke test inbound contract
+        run: npm run smoke:inbound
       - name: Smoke test MCP
         run: npm run smoke:mcp
