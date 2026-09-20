@@ -105,6 +105,7 @@ const requiredRuntimeFiles = [
   "components/EditorialPillar.js",
   "components/MethodologyFramework.js",
   "content/pillar-insights.js",
+  "content/editorial-separations.js",
   "content/ai-glossary.js",
   "lib/clientTracking.js",
   "lib/editorialGraph.js",
