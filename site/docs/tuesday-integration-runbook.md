@@ -36,6 +36,9 @@ Le payload envoyé au backend contient notamment :
   - objectif ;
   - stade ;
   - blocage ;
+  - profils probables ;
+  - compétences à mobiliser ;
+  - pistes de montée en compétences ;
   - date de complétion.
 
 ## À brancher mardi
@@ -64,7 +67,7 @@ Config :
 `NEXT_PUBLIC_SITE_URL=<domaine public final>`
 
 Secrets :
-`AUTONOMIA_INBOUND_URL=<endpoint serveur Autonomia-MCP>`
+`AUTONOMIA_INBOUND_URL=https://<autonomia-mcp-host>/api/inbound/leads`
 `AUTONOMIA_INBOUND_TOKEN=<secret généré et stocké uniquement dans Vercel + backend>`
 
 Optionnel au lancement si analytics validés :
@@ -78,7 +81,9 @@ Signal marché :
 
 ### 3. Backend inbound
 
-Créer / valider un endpoint serveur Autonomia-MCP qui :
+Endpoint préparé côté Autonomia-MCP : `/api/inbound/leads`.
+
+Mardi, appliquer la migration inbound puis valider que cet endpoint :
 1. exige `Authorization: Bearer <AUTONOMIA_INBOUND_TOKEN>` ;
 2. valide le contrat lead ;
 3. conserve la preuve brute reçue ;
