@@ -1,11 +1,11 @@
 import {
   executionBacklog,
   trainingBacklog
-} from "@/content/editorial-backlog";
+} from "../content/editorial-backlog.js";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
-} from "@/content/published-articles";
+} from "../content/published-articles.js";
 
 const STOPWORDS = new Set([
   "avec","dans","pour","sans","une","des","les","aux","sur","par","du","de","la","le","et",
