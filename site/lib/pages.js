@@ -583,16 +583,16 @@ const pages = {
   "quiz-ia-entreprise": {
     ...diagnosticDefaults,
     slug: "quiz-ia-entreprise",
-    title: "7 questions pour voir si votre IA avance… ou si elle s’accumule en pilotes.",
+    title: "3 questions pour voir où votre exécution IA se bloque.",
     subtitle:
-      "Un quiz court pour détecter le goulot d’étranglement : priorité, compétence, delivery, gouvernance ou adoption.",
+      "Un diagnostic court pour orienter le goulot d’étranglement déclaré : priorité, compétence, delivery, gouvernance ou adoption.",
     contextTitle: "Avoir beaucoup d’initiatives n’est pas la même chose qu’avoir une capacité d’exécution.",
     contextText:
       "L’objectif du quiz est de transformer un intérêt diffus pour l’IA en prochain problème concret à résoudre.",
     outcomes: ["Friction principale", "Type de besoin", "Action suivante"],
     capabilities: ["Strategy", "Execution", "Skills", "Governance", "Adoption"],
     faq: [
-      ["Le quiz fournit-il un benchmark sectoriel ?", "Pas sans données de référence vérifiées. La V1 reste centrée sur votre situation déclarée."],
+      ["Le diagnostic fournit-il un benchmark sectoriel ?", "Non. Cette première orientation reste centrée sur votre situation déclarée et ne prétend pas constituer un benchmark."],
       ["Est-il gratuit ?", "Le site pourra proposer ce diagnostic comme point d’entrée sans inventer de promesse de résultat."],
       ["Les réponses sont-elles utilisées commercialement ?", "Elles ne doivent l’être que selon les informations et consentements réellement recueillis dans le formulaire."]
     ]
