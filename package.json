@@ -24,7 +24,8 @@
     "smoke:marches-securises": "node scripts/smoke-marches-securises.mjs",
     "smoke:private-signals": "node scripts/smoke-private-signals.mjs",
     "smoke:intelligence": "node scripts/smoke-intelligence.mjs",
-    "smoke:today": "node scripts/smoke-today.mjs"
+    "smoke:today": "node scripts/smoke-today.mjs",
+    "smoke:job-discovery": "node scripts/smoke-job-discovery.mjs"
   },
   "engines": {
     "node": ">=22"
