@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LiveJobSignals from "@/components/LiveJobSignals";
 import { trainingBacklog } from "@/content/editorial-backlog";
 import { publishedTrainingArticles } from "@/content/published-articles";
 
@@ -35,6 +36,8 @@ export default function TrainingUseCaseHub() {
           </p>
         </div>
       </section>
+
+      <LiveJobSignals tags={["automation", "agents", "rag", "copilot", "n8n", "governance", "change_adoption"]} />
 
       <section className="clusterGrid">
         {clusters.map((cluster) => {
