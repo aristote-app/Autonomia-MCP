@@ -39,6 +39,7 @@ create table if not exists public.content_job_signals (
   tools text[] not null default '{}',
   use_cases text[] not null default '{}',
   signal_keys text[] not null default '{}',
+  keyword_seeds text[] not null default '{}',
   description_hash text,
   raw_payload jsonb not null default '{}'::jsonb,
   first_seen_at timestamptz not null default now(),
@@ -54,6 +55,9 @@ create index if not exists content_job_signals_signal_keys_gin
 
 create index if not exists content_job_signals_tools_gin
   on public.content_job_signals using gin(tools);
+
+create index if not exists content_job_signals_keyword_seeds_gin
+  on public.content_job_signals using gin(keyword_seeds);
 
 create index if not exists content_job_signals_skills_gin
   on public.content_job_signals using gin(skills);
