@@ -2,11 +2,23 @@ export default function robots() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
 
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/"]
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/"]
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: "/",
+        disallow: ["/api/"]
+      },
+      {
+        userAgent: "OAI-AdsBot",
+        allow: "/",
+        disallow: ["/api/"]
+      }
+    ],
     sitemap: `${base}/sitemap.xml`
   };
 }
