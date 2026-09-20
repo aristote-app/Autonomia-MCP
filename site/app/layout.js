@@ -29,9 +29,24 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${base}#organization`,
+    name: "Autonomia",
+    url: base,
+    description:
+      "AI Execution Partner : expertise IA externe, formation IA en entreprise, diagnostic d’exécution et contenus pratiques autour du déploiement de l’IA."
+  };
+
   return (
     <html lang="fr">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <AttributionCapture />
         <ConsentAnalytics />
         <Header />
