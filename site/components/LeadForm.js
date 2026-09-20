@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 
 const OPTIONS = {
   experts: ["GenAI / LLM", "RAG", "Agents IA", "AI Project Manager", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance / AI Act", "Je ne sais pas encore"],
@@ -41,12 +42,6 @@ function attribution() {
     first_touch: firstTouch,
     attribution_history: history
   };
-}
-
-function track(event, detail = {}) {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event, ...detail });
 }
 
 const SCAN_LABELS = {
@@ -117,7 +112,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
   function next() {
     if (step === 1 && !data.need) return;
     if (step === 2 && !data.qualifier) return;
-    track("form_step", { form_id: formId, step: step + 1, mode });
+    trackEvent("form_step", { form_id: formId, step: step + 1, mode });
     setStep((value) => Math.min(3, value + 1));
   }
 
@@ -181,7 +176,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
 
       if (!response.ok) throw new Error("submission_failed");
       setStatus("sent");
-      track("generate_lead", { form_id: formId, mode, requested_service: requestedService || mode });
+      trackLeadConversion({ form_id: formId, mode, requested_service: requestedService || mode });
     } catch {
       setStatus("error");
       setError("Le formulaire n’a pas pu être envoyé. Merci de réessayer.");
@@ -223,7 +218,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
                 key={option}
                 type="button"
                 className={data.need === option ? "choice active" : "choice"}
-                onClick={() => { set("need", option); track("form_start", { form_id: formId, mode }); }}
+                onClick={() => { set("need", option); trackEvent("form_start", { form_id: formId, mode }); }}
               >
                 {option}
               </button>
