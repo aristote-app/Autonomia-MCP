@@ -297,7 +297,7 @@ export default function Home() {
           <p className="sectionIndex">07 — STANDARD D’EXÉCUTION</p>
           <h2>Une méthode conçue pour rester vérifiable.</h2>
         </div>
-        <div className="proofPlaceholders">
+        <div className="proofGrid">
           <div><span>BESOIN</span><p>Le point de départ est reformulé avant de choisir une solution ou un profil.</p></div>
           <div><span>COMPÉTENCES</span><p>Les rôles sont décrits par les compétences et le niveau d’autonomie réellement nécessaires.</p></div>
           <div><span>CONTEXTE</span><p>Le diagnostic et l’attribution du lead restent attachés au besoin transmis.</p></div>
@@ -352,8 +352,8 @@ export default function Home() {
         <div>
           <span>Experts</span>
           <span>Academy</span>
-          <span>Mentions légales — avant publication</span>
-          <span>Confidentialité — avant publication</span>
+          <span>Mentions légales</span>
+          <span>Confidentialité</span>
         </div>
       </footer>
     </main>
