@@ -1,4 +1,5 @@
 import { runAutomatedMarketRefresh } from "../../../../lib/market/automatedRefresh.js";
+import { refreshEditorialJobSignals } from "../../../../lib/content/jobRefresh.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,9 +40,20 @@ export async function GET(request) {
     }
   }
 
+  let editorialJobSignals;
+  try {
+    editorialJobSignals = await refreshEditorialJobSignals();
+  } catch (error) {
+    editorialJobSignals = {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
+
   return Response.json({
-    ok: runs.some((run) => run.ok),
+    ok: runs.some((run) => run.ok) || editorialJobSignals?.ok,
     completedAt: new Date().toISOString(),
-    runs
+    runs,
+    editorialJobSignals
   });
 }
