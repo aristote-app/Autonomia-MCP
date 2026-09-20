@@ -35,28 +35,32 @@ export function getIndexableUrlRecords(base) {
     url: `${base}/cas-usage-ia/${pillar.slug}`,
     kind: "execution-pillar",
     priority: 0.84,
-    changeFrequency: "weekly"
+    changeFrequency: "weekly",
+    lastModified: ORGANIC_RELEASE_DATE
   }));
 
   const trainingPillarPages = trainingPillars.map((pillar) => ({
     url: `${base}/formation-ia/cas-usage/${pillar.slug}`,
     kind: "training-pillar",
     priority: 0.84,
-    changeFrequency: "weekly"
+    changeFrequency: "weekly",
+    lastModified: ORGANIC_RELEASE_DATE
   }));
 
   const executionArticles = publishedExecutionArticles.map((article) => ({
     url: `${base}/cas-usage-ia/${article.slug}`,
     kind: "execution-article",
     priority: 0.78,
-    changeFrequency: "monthly"
+    changeFrequency: "monthly",
+    lastModified: article.modifiedAt || article.publishedAt
   }));
 
   const trainingArticles = publishedTrainingArticles.map((article) => ({
     url: `${base}/formation-ia/cas-usage/${article.slug}`,
     kind: "training-article",
     priority: 0.78,
-    changeFrequency: "monthly"
+    changeFrequency: "monthly",
+    lastModified: article.modifiedAt || article.publishedAt
   }));
 
   return [
