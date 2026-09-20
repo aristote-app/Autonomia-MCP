@@ -24,9 +24,17 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
   const insight = getPillarInsight(family, pillar.cluster);
   const publishedBySlug = new Map(publishedArticles.map((article) => [article.slug, article]));
   const basePath = training ? "/formation-ia/cas-usage" : "/cas-usage-ia";
+  const publishedCount = pillar.topics.filter((topic) => publishedBySlug.has(topic.slug)).length;
 
   return (
     <main className={training ? "contentHub trainingHub pillarPage" : "contentHub pillarPage"}>
+      <nav className="articleBreadcrumb" aria-label="Fil d’Ariane">
+        <Link href="/">Autonomia</Link>
+        <span>→</span>
+        <Link href={basePath}>{training ? "Formation IA" : "Cas d’usage IA"}</Link>
+        <span>→</span>
+        <span>{pillar.title}</span>
+      </nav>
       <section className="contentHubHero">
         <p className="eyebrow">{training ? "AUTONOMIA ACADEMY — PILIER" : "AUTONOMIA — PILIER D’EXÉCUTION"}</p>
         <h1>{pillar.title}</h1>
@@ -35,6 +43,12 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
             ? `Ce pilier regroupe 10 situations de travail autour de « ${pillar.cluster} ». L’objectif n’est pas d’apprendre un outil pour lui-même, mais de rendre les équipes capables de reproduire des méthodes utiles, vérifiables et adaptées à leur contexte.`
             : `Ce pilier regroupe 10 scénarios autour de « ${pillar.cluster} ». Chaque scénario part d’un travail réel et montre comment combiner règles, automatisation, IA et contrôle humain sans transformer le sujet en démonstration abstraite.`}
         </p>
+        <div className="articleEditorialMeta">
+          <span>Publié par <Link href="/a-propos">Autonomia</Link></span>
+          <span>Mis à jour le 20/09/2026</span>
+          <span>{publishedCount}/10 guides détaillés publiés</span>
+          <Link href="/methodologie/politique-editoriale">Méthode éditoriale</Link>
+        </div>
       </section>
 
       <section className="contentHubIntro">
