@@ -57,14 +57,54 @@ export default async function ExecutionArticlePage({ params }) {
   const article = getPublishedExecutionArticle(slug);
 
   if (article) {
+    const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
+    const pageUrl = `${base}/cas-usage-ia/${slug}`;
+    const pillar = getExecutionPillar(
+      executionPillars.find((item) => item.cluster === article.cluster)?.slug
+    );
+    const pillarUrl = pillar ? `${base}/cas-usage-ia/${pillar.slug}` : `${base}/cas-usage-ia`;
+
     const schema = {
       "@context": "https://schema.org",
-      "@type": "Article",
-      headline: article.title,
-      description: article.dek,
-      author: { "@type": "Organization", name: "Autonomia" },
-      publisher: { "@type": "Organization", name: "Autonomia" },
-      mainEntityOfPage: `/cas-usage-ia/${slug}`
+      "@graph": [
+        {
+          "@type": "Article",
+          headline: article.title,
+          description: article.dek,
+          datePublished: article.publishedAt,
+          dateModified: article.modifiedAt || article.publishedAt,
+          image: [`${pageUrl}/opengraph-image`],
+          author: {
+            "@type": "Organization",
+            name: "Autonomia",
+            url: `${base}/a-propos`
+          },
+          publisher: {
+            "@type": "Organization",
+            "@id": `${base}#organization`,
+            name: "Autonomia",
+            url: base
+          },
+          mainEntityOfPage: pageUrl,
+          about: {
+            "@type": "Thing",
+            name: article.cluster
+          },
+          keywords: [
+            article.search?.primaryKeyword,
+            ...(article.search?.secondaryQueries || [])
+          ].filter(Boolean)
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Autonomia", item: base },
+            { "@type": "ListItem", position: 2, name: "Cas d’usage IA", item: `${base}/cas-usage-ia` },
+            { "@type": "ListItem", position: 3, name: article.cluster, item: pillarUrl },
+            { "@type": "ListItem", position: 4, name: article.title, item: pageUrl }
+          ]
+        }
+      ]
     };
 
     return (
