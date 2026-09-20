@@ -7,6 +7,18 @@ export const publishedExecutionArticles = [
     dek: "Imaginez une boîte mail qui ne se contente plus de recevoir : elle comprend le message, identifie le dossier concerné, range les pièces jointes, crée une synthèse et prépare la prochaine action — avec validation humaine là où elle est utile.",
     summary: "Un workflow Gmail + Google Drive + IA peut être construit sans développement lourd : un nouvel e-mail déclenche le scénario, les pièces jointes sont enregistrées, un modèle d’IA extrait les informations utiles, une règle décide du dossier cible, puis une action est créée ou un brouillon de réponse est préparé. Le point important n’est pas l’effet « magique » : c’est la conception des règles, des permissions, des cas d’erreur et des validations humaines.",
     readingTime: "18–22 min",
+    search: {
+      primaryKeyword: "automatiser Gmail Google Drive IA",
+      secondaryQueries: [
+        "automatiser Gmail avec IA",
+        "automatiser Google Drive avec IA",
+        "classer pièces jointes Gmail Google Drive",
+        "workflow Gmail Google Drive",
+        "automatisation Google Workspace IA"
+      ],
+      demandEvidence: ["serp_observed"],
+      observedAt: "2026-09-20"
+    },
     quickFacts: [
       ["NIVEAU", "No-code / low-code"],
       ["OUTILS POSSIBLES", "Gmail · Drive · n8n / Make / Zapier · LLM"],
@@ -16,12 +28,16 @@ export const publishedExecutionArticles = [
     sourceNote: "La faisabilité de base Gmail → Google Drive sans code est vérifiable aujourd’hui : des plateformes d’automatisation exposent des déclencheurs Gmail et des actions Google Drive, notamment pour enregistrer des pièces jointes, créer des fichiers et enchaîner des étapes d’IA. L’architecture détaillée ci-dessous est un scénario Autonomia : elle doit être adaptée aux droits, aux données, aux règles internes et à l’outil choisi.",
     sources: [
       {
-        label: "Zapier — intégration Gmail + Google Drive et exemples de workflows",
-        url: "https://zapier.com/apps/gmail/integrations/google-drive"
+        label: "Google Workspace Studio — automatiser des flux Workspace avec l’IA",
+        url: "https://support.google.com/workspace-studio/answer/16666382?hl=fr"
       },
       {
-        label: "France Num — exemple d’offre IA / no-code intégrant Google Workspace, Make et n8n",
-        url: "https://www.francenum.gouv.fr/activateurs/summit-flow"
+        label: "Google for Developers — automatiser et enrichir Gmail",
+        url: "https://developers.google.com/workspace/gmail?hl=fr"
+      },
+      {
+        label: "Zapier — intégration Gmail + Google Drive et exemples de workflows",
+        url: "https://zapier.com/apps/gmail/integrations/google-drive"
       }
     ],
     faq: [
@@ -149,6 +165,18 @@ export const publishedTrainingArticles = [
     dek: "Le meilleur moyen de comprendre l’automatisation IA n’est pas de regarder une démonstration. C’est de construire un workflow réel : recevoir un e-mail, comprendre ce qu’il contient, ranger le document au bon endroit et garder la main sur les exceptions.",
     summary: "Ce scénario de formation transforme un cas d’usage concret — automatiser le traitement d’e-mails et de documents — en parcours pédagogique. Les participants apprennent les notions de déclencheur, action, condition, données structurées, étape IA, validation humaine, gestion d’erreur et permissions. L’objectif n’est pas de « former à un outil » mais de rendre l’équipe capable de comprendre, construire, tester et maintenir un premier workflow utile.",
     readingTime: "17–21 min",
+    search: {
+      primaryKeyword: "formation automatisation IA no-code",
+      secondaryQueries: [
+        "formation n8n entreprise",
+        "formation Make IA",
+        "formation no-code IA entreprise",
+        "formation automatisation workflow IA",
+        "formation agents IA no-code"
+      ],
+      demandEvidence: ["serp_observed"],
+      observedAt: "2026-09-20"
+    },
     quickFacts: [
       ["PUBLIC", "Métiers · opérations · fonctions support · chefs de projet"],
       ["NIVEAU", "Débutant à intermédiaire"],
