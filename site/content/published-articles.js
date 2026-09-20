@@ -10,6 +10,8 @@ const baseExecutionArticles = [
     dek: "Imaginez une boîte mail qui ne se contente plus de recevoir : elle comprend le message, identifie le dossier concerné, range les pièces jointes, crée une synthèse et prépare la prochaine action — avec validation humaine là où elle est utile.",
     summary: "Un workflow Gmail + Google Drive + IA peut être construit sans développement lourd : un nouvel e-mail déclenche le scénario, les pièces jointes sont enregistrées, un modèle d’IA extrait les informations utiles, une règle décide du dossier cible, puis une action est créée ou un brouillon de réponse est préparé. Le point important n’est pas l’effet « magique » : c’est la conception des règles, des permissions, des cas d’erreur et des validations humaines.",
     readingTime: "18–22 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["automation", "workflow_orchestration", "n8n", "power_platform", "api_integration", "messaging_collaboration", "files_documents", "process_integration"],
     search: {
       primaryKeyword: "automatiser Gmail Google Drive IA",
@@ -169,6 +171,8 @@ const baseTrainingArticles = [
     dek: "Le meilleur moyen de comprendre l’automatisation IA n’est pas de regarder une démonstration. C’est de construire un workflow réel : recevoir un e-mail, comprendre ce qu’il contient, ranger le document au bon endroit et garder la main sur les exceptions.",
     summary: "Ce scénario de formation transforme un cas d’usage concret — automatiser le traitement d’e-mails et de documents — en parcours pédagogique. Les participants apprennent les notions de déclencheur, action, condition, données structurées, étape IA, validation humaine, gestion d’erreur et permissions. L’objectif n’est pas de « former à un outil » mais de rendre l’équipe capable de comprendre, construire, tester et maintenir un premier workflow utile.",
     readingTime: "17–21 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["automation", "workflow_orchestration", "n8n", "power_platform", "api_integration", "human_in_loop", "change_adoption"],
     search: {
       primaryKeyword: "formation automatisation IA no-code",
