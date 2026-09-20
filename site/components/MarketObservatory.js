@@ -70,7 +70,6 @@ export default async function MarketObservatory() {
       url: base
     },
     isAccessibleForFree: true,
-    license: "https://creativecommons.org/licenses/by/4.0/",
     ...(modified ? { dateModified: modified } : {}),
     distribution: [
       {
