@@ -8,16 +8,18 @@ import {
   publishedTrainingArticles
 } from "@/content/published-articles";
 
+const ORGANIC_RELEASE_DATE = "2026-09-20";
+
 export function getIndexableUrlRecords(base) {
   const staticPages = [
-    { url: base, kind: "home", priority: 1, changeFrequency: "weekly" },
-    { url: `${base}/scan-ia`, kind: "scan", priority: 0.95, changeFrequency: "monthly" },
-    { url: `${base}/cas-usage-ia`, kind: "execution-hub", priority: 0.9, changeFrequency: "weekly" },
-    { url: `${base}/formation-ia/cas-usage`, kind: "training-hub", priority: 0.9, changeFrequency: "weekly" },
-    { url: `${base}/methodologie/execution-matrix`, kind: "methodology", priority: 0.88, changeFrequency: "monthly" },
-    { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly" },
-    { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly" },
-    { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly" }
+    { url: base, kind: "home", priority: 1, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/scan-ia`, kind: "scan", priority: 0.95, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/cas-usage-ia`, kind: "execution-hub", priority: 0.9, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/formation-ia/cas-usage`, kind: "training-hub", priority: 0.9, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/methodologie/execution-matrix`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
 
   const commercialPages = getAllPages()
