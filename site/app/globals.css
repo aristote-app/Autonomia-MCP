@@ -2346,3 +2346,51 @@ button {
     min-width: 240px;
   }
 }
+
+
+.scanHandoff {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid rgba(201,255,85,.55);
+  border-bottom: 0;
+  background: rgba(201,255,85,.08);
+}
+
+.scanHandoff span,
+.scanContextSummary span {
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.scanHandoff strong {
+  color: var(--paper);
+  font-size: 14px;
+}
+
+.scanHandoff small {
+  color: rgba(243,241,233,.58);
+  font-size: 11px;
+}
+
+.scanContextSummary {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border-bottom: 1px solid var(--line);
+  background: #121414;
+  color: var(--paper);
+}
+
+.scanContextSummary strong {
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.contactSection .scanContextSummary {
+  border-color: rgba(243,241,233,.16);
+}
