@@ -4,16 +4,17 @@ import LeadForm from "@/components/LeadForm";
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
   const isAcademy = page.mode === "academy";
+  const isDiagnostic = page.mode === "diagnostic";
 
   return (
     <main className={`intentPage theme-${page.theme || "dark"}`}>
-      <section className="intentHero">
+      <section className="intentHero" id="top">
         <div className="intentHeroCopy">
           <p className="eyebrow">{page.universe}</p>
           <h1>{page.title}</h1>
           <p className="heroText">{page.subtitle}</p>
 
-          <div className="heroSignals" aria-label="Méthode Autonomia">
+          <div className="heroSignals" aria-label="Résultat attendu">
             {(page.outcomes || []).map((item, index) => (
               <div key={item}>
                 <span>0{index + 1}</span>
@@ -21,6 +22,13 @@ export default function IntentPage({ page }) {
               </div>
             ))}
           </div>
+
+          {!isDiagnostic && (
+            <Link className="intentScanLink" href="/scan-ia">
+              <span>Vous ne savez pas encore quoi demander ?</span>
+              <strong>Lancer Autonomia Scan →</strong>
+            </Link>
+          )}
         </div>
 
         <div className="heroFormCard">
@@ -30,6 +38,13 @@ export default function IntentPage({ page }) {
             formId={`lp-${page.slug}`}
             requestedService={page.slug}
           />
+          <p className="heroFormNote">
+            {isExpert
+              ? "Quelques informations suffisent pour commencer à qualifier la mission."
+              : isAcademy
+                ? "Le premier échange sert à préciser les publics, usages et objectifs."
+                : "Première orientation basée sur les informations que vous fournissez."}
+          </p>
         </div>
       </section>
 
@@ -48,9 +63,44 @@ export default function IntentPage({ page }) {
         </div>
       </section>
 
+      {page.useCases?.length > 0 && (
+        <section className="intentDecisionSection">
+          <p className="sectionIndex">03 — CAS TYPIQUES</p>
+          <div>
+            <h2>{page.useCasesTitle || "À quels moments ce besoin apparaît-il ?"}</h2>
+            <div className="intentDecisionGrid">
+              {page.useCases.map((item, index) => (
+                <article key={item}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <p>{item}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {page.routes?.length > 0 && (
+        <section className="intentRoutes">
+          <p className="sectionIndex">04 — ORIENTATION</p>
+          <div>
+            <h2>{page.routesTitle || "Le besoin détermine la réponse."}</h2>
+            <div className="intentRouteGrid">
+              {page.routes.map((route) => (
+                <article key={route.title}>
+                  <small>{route.kicker}</small>
+                  <h3>{route.title}</h3>
+                  <p>{route.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="methodSplit">
         <div>
-          <p className="sectionIndex">03 — NOTRE LOGIQUE</p>
+          <p className="sectionIndex">05 — NOTRE LOGIQUE</p>
           <h2>{page.proofTitle}</h2>
           <p>{page.proofText}</p>
         </div>
@@ -60,7 +110,7 @@ export default function IntentPage({ page }) {
             <>
               <li><span>01</span><div><strong>Comprendre</strong><p>Objectif, contexte, contraintes, environnement et niveau d’autonomie attendu.</p></div></li>
               <li><span>02</span><div><strong>Traduire</strong><p>Transformer le besoin en compétences, rôle, séniorité et critères de sélection.</p></div></li>
-              <li><span>03</span><div><strong>Staffer</strong><p>Présenter les profils qui répondent au besoin défini, pas une liste générique.</p></div></li>
+              <li><span>03</span><div><strong>Staffer</strong><p>Concentrer la sélection sur les profils cohérents avec la mission définie.</p></div></li>
             </>
           ) : isAcademy ? (
             <>
@@ -79,24 +129,24 @@ export default function IntentPage({ page }) {
       </section>
 
       <section className="proofArchitecture">
-        <p className="sectionIndex">04 — PREUVES</p>
+        <p className="sectionIndex">06 — À ÉVALUER</p>
         <div>
-          <h2>La crédibilité doit être vérifiable.</h2>
+          <h2>Jugez Autonomia sur la précision de la réponse.</h2>
           <p>
-            Autonomia n’affiche pas de références, chiffres, logos, résultats, certifications ou témoignages
-            sans source et autorisation. Cette zone est conçue pour accueillir uniquement des preuves réelles.
+            Le site n’utilise pas de logos, résultats, volumes ou certifications non vérifiés comme argument.
+            La première preuve est la capacité à traduire votre situation en compétences, options et prochaine action compréhensible.
           </p>
-          <div className="proofSlots" aria-label="Preuves prévues">
-            <span>Entité Qualiopi vérifiée</span>
-            <span>Références autorisées</span>
-            <span>Cas clients sourcés</span>
-            <span>Expertises vérifiées</span>
+          <div className="proofSlots" aria-label="Éléments à évaluer">
+            <span>Compréhension du besoin</span>
+            <span>Précision des compétences proposées</span>
+            <span>Clarté du chemin d’exécution</span>
+            <span>Transparence sur ce qui reste à qualifier</span>
           </div>
         </div>
       </section>
 
       <section className="faqSection" id="faq">
-        <p className="sectionIndex">05 — QUESTIONS</p>
+        <p className="sectionIndex">07 — QUESTIONS</p>
         <div>
           <h2>Questions fréquentes</h2>
           <div className="faqList">
@@ -113,7 +163,10 @@ export default function IntentPage({ page }) {
       <section className="closingCta">
         <p className="eyebrow">AUTONOMIA</p>
         <h2>{isExpert ? "Votre projet a besoin d’une compétence précise." : isAcademy ? "Vos équipes ont besoin d’une trajectoire claire." : "Votre prochain choix IA peut être clarifié."}</h2>
-        <Link href="#top" className="primaryButton">{page.cta}</Link>
+        <div className="closingActions">
+          <Link href="#top" className="primaryButton">{page.cta}</Link>
+          {!isDiagnostic && <Link href="/scan-ia" className="secondaryButton">Lancer le Scan</Link>}
+        </div>
       </section>
     </main>
   );
