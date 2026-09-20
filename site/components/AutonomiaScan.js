@@ -102,6 +102,21 @@ export default function AutonomiaScan() {
     setTimeout(() => setStep((current) => Math.min(current + 1, QUESTIONS.length)), 110);
   }
 
+  function handoffToLead() {
+    const payload = {
+      plan: planKey,
+      answers,
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      window.sessionStorage.setItem("autonomia_scan_context", JSON.stringify(payload));
+    } catch {}
+
+    window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
+    track("autonomia_scan_cta", { scan_plan: planKey, ...answers });
+  }
+
   function restart() {
     setAnswers({});
     setStep(0);
@@ -158,7 +173,7 @@ export default function AutonomiaScan() {
             <a
               className="scanPrimary"
               href="#contact"
-              onClick={() => track("autonomia_scan_cta", { scan_plan: planKey })}
+              onClick={handoffToLead}
             >
               Transformer ce plan en action
             </a>
