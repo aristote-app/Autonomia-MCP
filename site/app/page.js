@@ -85,6 +85,16 @@ export default function Home() {
       </section>
 
 
+
+      <section className="audienceRail" aria-label="Publics Autonomia">
+        <span>CONÇU POUR</span>
+        <strong>Direction</strong>
+        <strong>DSI / CTO</strong>
+        <strong>Data / IA</strong>
+        <strong>RH / L&D</strong>
+        <strong>Directions métier</strong>
+      </section>
+
       <section className="scanSection" id="scan">
         <div className="scanSectionIntro">
           <p className="sectionIndex">00 — AUTONOMIA SCAN</p>
