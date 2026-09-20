@@ -65,6 +65,7 @@ jobs:
             "/methodologie/politique-editoriale",
             "/methodologie/execution-matrix",
             "/methodologie/learning-transfer",
+            "/observatoire-ia",
             "/cas-usage-ia/support-client",
             "/formation-ia/cas-usage/agents-ia",
             "/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes",
