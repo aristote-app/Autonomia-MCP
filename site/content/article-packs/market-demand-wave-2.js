@@ -7,6 +7,8 @@ export const marketDemandExecutionArticlesWave2 = [
     dek: "Un rendez-vous commercial ne devrait pas finir par vingt minutes de saisie : transcription, décisions, objections, prochaines étapes, date de relance et champs CRM peuvent être préparés automatiquement — avec validation du commercial avant d’écrire dans le système de référence.",
     summary: "Le scénario relie une source de réunion ou d’appel à une chaîne de traitement : transcription, extraction structurée, synthèse, détection des actions, proposition de mise à jour CRM et brouillon d’e-mail de suivi. Des outils commerciaux actuels proposent déjà des résumés génératifs, des actions post-réunion et l’enregistrement de notes dans le CRM. Une architecture indépendante peut reproduire ce pattern avec Teams/Zoom/Meet, un orchestrateur, un LLM et l’API du CRM. La clé est de distinguer ce qui peut être proposé automatiquement de ce qui doit être validé avant écriture.",
     readingTime: "19–23 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["sales_automation", "automation", "workflow_orchestration", "api_integration", "genai", "human_in_loop", "observability", "process_integration"],
     search: {
       primaryKeyword: "résumer appel commercial CRM IA",
@@ -179,6 +181,8 @@ export const marketDemandTrainingArticlesWave2 = [
     dek: "La compétence n’est pas de savoir déplacer des blocs dans n8n. C’est de prendre un processus réel, comprendre les données qui circulent, connecter les bons outils, gérer les erreurs, ajouter l’IA uniquement là où elle aide et laisser une automatisation que l’équipe sait reprendre.",
     summary: "Les SERP françaises montrent une offre active de formations n8n orientées entreprise, automatisation et agents IA. n8n documente lui-même les workflows, les données, les API, les agents, les outils et les mécanismes de fallback humain. Un parcours Autonomia doit donc aller au-delà d’une démonstration : cartographie du processus, déclencheurs, nodes, JSON, authentification, API, conditions, erreurs, étape LLM, validation humaine, journalisation et runbook de maintenance.",
     readingTime: "20–24 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["n8n", "automation", "workflow_orchestration", "api_integration", "agents", "human_in_loop", "observability", "change_adoption"],
     search: {
       primaryKeyword: "formation n8n entreprise",
