@@ -25,6 +25,8 @@ assert.ok(result.skills.includes("api_integration"));
 assert.ok(result.skills.includes("observability"));
 assert.ok(result.skills.includes("guardrails"));
 assert.ok(result.skills.includes("human_in_loop"));
+assert.ok(result.keywordSeeds.includes("automatisation n8n entreprise"));
+assert.ok(result.keywordSeeds.includes("Power Automate IA entreprise"));
 assert.equal(labelsFor(["n8n"])[0].label, "n8n");
 
 console.log("job signal taxonomy smoke test passed");
