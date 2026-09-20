@@ -22,7 +22,8 @@ async function login(formData) {
     redirect(`/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
   }
 
-  redirect(nextPath.startsWith("/") ? nextPath : "/");
+  const safeNext = nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
+  redirect(safeNext);
 }
 
 export default async function LoginPage({ searchParams }) {
