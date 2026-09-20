@@ -418,3 +418,36 @@ Published guides expose:
 - compute them from before/after Git SHAs.
 
 Run it only after the corresponding deployment is live.
+
+
+## Editorial Opportunity Engine
+
+Endpoint protégé :
+
+`POST /api/organic/editorial-opportunities`
+
+Token :
+
+`AUTONOMIA_ORGANIC_TOKEN`
+
+Le moteur classe les sujets restant dans le backlog à partir des signaux réellement fournis. Il n’invente aucun volume.
+
+Signaux acceptés notamment :
+- impressions / clics Search ;
+- conversions paid search ;
+- mentions inbound ;
+- mentions dans les offres d’emploi ;
+- citations IA observées ;
+- revenu associé lorsque le pipeline commercial permet de le relier.
+
+Le moteur :
+1. rapproche chaque signal d’un sujet / cluster ;
+2. valorise davantage les signaux business que la simple fréquence ;
+3. donne un bonus aux clusters encore peu couverts ;
+4. compare le sujet aux guides déjà publiés ;
+5. pénalise les proximités fortes pour éviter la cannibalisation ;
+6. renvoie une action `promote`, `research_priority`, `research` ou `review_overlap`.
+
+Règle absolue :
+une recommandation `promote` n’est jamais une publication automatique.
+Le sujet doit encore passer recherche, rédaction, sources et gates CI.
