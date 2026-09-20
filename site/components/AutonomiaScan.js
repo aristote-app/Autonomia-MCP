@@ -39,6 +39,39 @@ const QUESTIONS = [
   }
 ];
 
+const EXECUTION_MAP = {
+  automate: {
+    roles: ["Automation / AI Agent Engineer", "AI Project Manager"],
+    capabilities: ["Process mapping", "n8n / Make / Power Automate", "Agents IA", "Human-in-the-loop"],
+    academy: ["Automatisation métier", "Supervision des agents", "Gouvernance des usages"]
+  },
+  build: {
+    roles: ["AI Product Manager", "GenAI / LLM Engineer", "AI Project Manager"],
+    capabilities: ["Product discovery", "LLM", "Evaluation", "API / intégration"],
+    academy: ["IA pour Product / métiers", "Méthodes de cadrage IA"]
+  },
+  agents: {
+    roles: ["AI Agent Engineer", "LLM Engineer", "AI Project Manager"],
+    capabilities: ["Agentic workflows", "Tool use", "RAG", "Evaluation", "Observability"],
+    academy: ["Agents IA", "Supervision humaine", "Risques et permissions"]
+  },
+  copilot: {
+    roles: ["AI Adoption Lead", "AI Project Manager"],
+    capabilities: ["Use cases", "Microsoft 365", "Change", "Governance"],
+    academy: ["Microsoft Copilot", "Prompt engineering", "Adoption par métier"]
+  },
+  skills: {
+    roles: ["AI Learning Lead", "Formateur IA métier"],
+    capabilities: ["Skills mapping", "Use cases", "Learning design", "Adoption"],
+    academy: ["IA générative", "Managers", "Métiers", "Parcours sur mesure"]
+  },
+  governance: {
+    roles: ["AI Governance Consultant", "AI Project Manager"],
+    capabilities: ["AI Act", "Responsible AI", "Risk mapping", "Human oversight"],
+    academy: ["AI Act", "Gouvernance IA", "Sensibilisation des équipes"]
+  }
+};
+
 const PLANS = {
   experts: {
     eyebrow: "AUTONOMIA EXPERTS",
@@ -94,6 +127,7 @@ export default function AutonomiaScan() {
 
   const planKey = useMemo(() => choosePlan(answers), [answers]);
   const plan = PLANS[planKey];
+  const execution = EXECUTION_MAP[answers.objective] || EXECUTION_MAP.build;
 
   function choose(id, value) {
     const next = { ...answers, [id]: value };
@@ -106,6 +140,11 @@ export default function AutonomiaScan() {
     const payload = {
       plan: planKey,
       answers,
+      execution: {
+        roles: execution.roles,
+        capabilities: execution.capabilities,
+        academy: execution.academy
+      },
       created_at: new Date().toISOString()
     };
 
@@ -158,6 +197,21 @@ export default function AutonomiaScan() {
             <h3>{plan.title}</h3>
             <div className="scanSignal">PLAN GÉNÉRÉ À PARTIR DE VOS 3 RÉPONSES</div>
             <p className="scanResultText">{plan.description}</p>
+
+            <div className="scanBlueprint">
+              <div>
+                <span>PROFILS PROBABLES</span>
+                <strong>{execution.roles.join(" · ")}</strong>
+              </div>
+              <div>
+                <span>COMPÉTENCES À MOBILISER</span>
+                <strong>{execution.capabilities.join(" · ")}</strong>
+              </div>
+              <div>
+                <span>MONTÉE EN COMPÉTENCES</span>
+                <strong>{execution.academy.join(" · ")}</strong>
+              </div>
+            </div>
           </div>
 
           <ol className="scanPlan">
