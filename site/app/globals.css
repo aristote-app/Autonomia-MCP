@@ -2771,3 +2771,51 @@ button {
     padding: 88px max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+/* Diagnostic funnels — value before lead capture */
+.diagnosticValueCard {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid currentColor;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+}
+
+.diagnosticValueIndex {
+  width: fit-content;
+  padding: 6px 8px;
+  border: 1px solid currentColor;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.diagnosticValueCard h2 {
+  margin: 0;
+  max-width: 620px;
+  font-size: clamp(28px, 6vw, 48px);
+  line-height: 1;
+  letter-spacing: -.045em;
+  font-weight: 600;
+}
+
+.diagnosticValueCard > p:not(.formKicker) {
+  margin: 0;
+  max-width: 620px;
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: .76;
+}
+
+.diagnosticValueCard .primaryButton {
+  width: 100%;
+  margin-top: 4px;
+}
+
+@media (min-width: 760px) {
+  .diagnosticValueCard {
+    padding: 28px;
+  }
+}
