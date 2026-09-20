@@ -658,6 +658,7 @@ function flatten(clusters, type) {
     group.topics.map((title) => ({
       type,
       cluster: group.cluster,
+      clusterSlug: slugify(group.cluster),
       pillar: group.pillar,
       title,
       slug: slugify(title),
@@ -667,8 +668,32 @@ function flatten(clusters, type) {
   );
 }
 
+function buildPillars(clusters, type) {
+  return clusters.map((group) => ({
+    type,
+    cluster: group.cluster,
+    slug: slugify(group.cluster),
+    title: group.pillar,
+    topics: group.topics.map((title) => ({
+      title,
+      slug: slugify(title)
+    }))
+  }));
+}
+
 export const executionBacklog = flatten(executionClusters, "execution-use-case");
 export const trainingBacklog = flatten(trainingClusters, "training-use-case");
+
+export const executionPillars = buildPillars(executionClusters, "execution-pillar");
+export const trainingPillars = buildPillars(trainingClusters, "training-pillar");
+
+export function getExecutionPillar(slug) {
+  return executionPillars.find((pillar) => pillar.slug === slug) || null;
+}
+
+export function getTrainingPillar(slug) {
+  return trainingPillars.find((pillar) => pillar.slug === slug) || null;
+}
 
 export const editorialInventory = [...executionBacklog, ...trainingBacklog];
 
