@@ -3491,3 +3491,21 @@ button {
     padding: 82px max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+.articleTrustLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: .72;
+}
+
+.articleTrustLine a {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
