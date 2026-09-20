@@ -92,14 +92,24 @@ create table if not exists public.activity_log (
 
 create index if not exists workspace_members_user_idx
   on public.workspace_members(user_id, active);
+create index if not exists workspace_members_invited_by_idx
+  on public.workspace_members(invited_by) where invited_by is not null;
+create index if not exists workspaces_created_by_idx
+  on public.workspaces(created_by) where created_by is not null;
 create index if not exists work_items_workspace_stage_idx
   on public.work_items(workspace_id, stage, updated_at desc);
 create index if not exists work_items_owner_idx
   on public.work_items(owner_user_id, stage, due_at);
+create index if not exists work_items_updated_by_idx
+  on public.work_items(updated_by) where updated_by is not null;
 create index if not exists activity_log_workspace_created_idx
   on public.activity_log(workspace_id, created_at desc);
+create index if not exists activity_log_actor_idx
+  on public.activity_log(actor_user_id) where actor_user_id is not null;
 create index if not exists work_item_comments_item_created_idx
   on public.work_item_comments(work_item_id, created_at);
+create index if not exists work_item_comments_author_idx
+  on public.work_item_comments(author_user_id) where author_user_id is not null;
 
 alter table public.user_profiles enable row level security;
 alter table public.workspaces enable row level security;
