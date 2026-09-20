@@ -33,24 +33,62 @@ export default async function LandingPage({ params }) {
   const page = getPage(slug);
   if (!page) notFound();
 
-  const faqSchema = {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
+  const pageUrl = `${base}/${slug}`;
+  const organizationId = `${base}/#organization`;
+
+  const structuredData = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: (page.faq || []).map(([question, answer]) => ({
-      "@type": "Question",
-      name: question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: answer
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: "Autonomia",
+        url: base
+      },
+      page.mode === "diagnostic"
+        ? {
+            "@type": "WebPage",
+            "@id": `${pageUrl}#webpage`,
+            url: pageUrl,
+            name: page.title,
+            description: page.subtitle,
+            about: {
+              "@type": "Thing",
+              name: "Exécution de projets d’intelligence artificielle en entreprise"
+            }
+          }
+        : {
+            "@type": "Service",
+            "@id": `${pageUrl}#service`,
+            url: pageUrl,
+            name: page.title,
+            description: page.subtitle,
+            category: page.universe,
+            provider: {
+              "@id": organizationId
+            }
+          },
+      {
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        mainEntity: (page.faq || []).map(([question, answer]) => ({
+          "@type": "Question",
+          name: question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: answer
+          }
+        }))
       }
-    }))
+    ]
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <IntentPage page={page} />
     </>
