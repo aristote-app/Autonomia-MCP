@@ -60,3 +60,5 @@ export default async function TrainingArticlePage({ params }) {
 }
 
 export const dynamicParams = false;
+
+export const revalidate = 21600;
