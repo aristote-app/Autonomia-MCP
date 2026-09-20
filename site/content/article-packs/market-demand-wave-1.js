@@ -45,6 +45,10 @@ export const marketDemandExecutionArticles = [
       {
         label: "Microsoft Learn — génération augmentée par récupération et indexation",
         url: "https://learn.microsoft.com/fr-fr/azure/foundry/concepts/retrieval-augmented-generation"
+      },
+      {
+        label: "Elastic — RAG avec Elasticsearch",
+        url: "https://www.elastic.co/docs/solutions/search/rag"
       }
     ],
     related: [
