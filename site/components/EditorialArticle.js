@@ -18,6 +18,20 @@ export default function EditorialArticle({ article }) {
 
   return (
     <main className="editorialArticle">
+      <nav className="articleBreadcrumb" aria-label="Fil d’Ariane">
+        <Link href="/">Autonomia</Link>
+        <span>→</span>
+        <Link href={isTraining ? "/formation-ia/cas-usage" : "/cas-usage-ia"}>
+          {isTraining ? "Formation IA" : "Cas d’usage IA"}
+        </Link>
+        {graph.pillar && (
+          <>
+            <span>→</span>
+            <Link href={graph.pillar.href}>{graph.pillar.label}</Link>
+          </>
+        )}
+      </nav>
+
       <header className={isTraining ? "articleHero training" : "articleHero execution"}>
         <div className="articleHeroMeta">
           <span>{isTraining ? "SCÉNARIO DE FORMATION" : "SCÉNARIO IA"}</span>
@@ -26,6 +40,12 @@ export default function EditorialArticle({ article }) {
         <p className="eyebrow">{article.cluster}</p>
         <h1>{article.title}</h1>
         <p className="articleDek">{article.dek}</p>
+        <div className="articleEditorialMeta">
+          <span>Publié par <Link href="/a-propos">Autonomia</Link></span>
+          {article.publishedAt && <span>Publié le {new Date(article.publishedAt).toLocaleDateString("fr-FR")}</span>}
+          {article.modifiedAt && <span>Mis à jour le {new Date(article.modifiedAt).toLocaleDateString("fr-FR")}</span>}
+          <Link href="/methodologie/politique-editoriale">Méthode éditoriale</Link>
+        </div>
         <div className="articleQuickFacts">
           {article.quickFacts.map(([label, value]) => (
             <div key={label}>
