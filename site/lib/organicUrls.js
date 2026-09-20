@@ -19,7 +19,8 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/methodologie/execution-matrix`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
-    { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
+    { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/observatoire-ia`, kind: "original-dataset", priority: 0.9, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE }
   ];
 
   const commercialPages = getAllPages()
