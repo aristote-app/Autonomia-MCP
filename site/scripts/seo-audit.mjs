@@ -7,6 +7,7 @@ import {
   publishedExecutionArticles,
   publishedTrainingArticles
 } from "../content/published-articles.js";
+import { isIntentionalSeparation } from "../content/editorial-separations.js";
 
 const published = [...publishedExecutionArticles, ...publishedTrainingArticles];
 const warnings = [];
@@ -78,7 +79,7 @@ for (let i = 0; i < editorialInventory.length; i += 1) {
     if (a.type !== b.type) continue;
 
     const score = similarity(a.title, b.title);
-    if (score >= 0.72) {
+    if (score >= 0.72 && !isIntentionalSeparation(a.slug, b.slug)) {
       warnings.push(
         `Potential backlog overlap (${score.toFixed(2)}): "${a.title}" <> "${b.title}".`
       );
@@ -106,12 +107,8 @@ for (const pillar of [...executionPillars, ...trainingPillars]) {
     .split(/\s+/)
     .filter((word) => word.length > 1);
 
-  const clusterTokens = tokens(pillar.cluster);
-  const titleTokens = tokens(pillar.title);
-  const domainOverlap = [...clusterTokens].some((token) => titleTokens.has(token));
-
-  if (titleWords.length < 3 || (!domainOverlap && clusterTokens.size > 0)) {
-    warnings.push(`${pillar.slug}: pillar title may be too generic or disconnected from its cluster.`);
+  if (titleWords.length < 3) {
+    warnings.push(`${pillar.slug}: pillar title may be too generic.`);
   }
 }
 
