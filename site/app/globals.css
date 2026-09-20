@@ -3229,3 +3229,117 @@ button {
     padding-right: max(34px, calc((100vw - var(--max)) / 2));
   }
 }
+
+
+.hubObservatoryLink {
+  padding: 14px 18px 30px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hubObservatoryLink a {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.marketObservatoryData {
+  padding: 48px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.observatoryMetric {
+  display: grid;
+  gap: 4px;
+  max-width: 480px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.observatoryMetric strong {
+  font-size: clamp(52px, 10vw, 110px);
+  line-height: .85;
+  letter-spacing: -.07em;
+  font-weight: 600;
+}
+
+.observatoryMetric span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.observatoryGrid {
+  display: grid;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.observatoryRanking {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.observatoryRanking small,
+.observatoryExamples > small {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.observatoryRanking ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.observatoryRanking li {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.observatoryRanking li strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.observatoryExamples {
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.observatoryExamples > div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.observatoryExamples span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (min-width: 760px) {
+  .marketObservatoryData {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .observatoryGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .marketObservatoryData,
+  .hubObservatoryLink {
+    padding-left: max(34px, calc((100vw - var(--max)) / 2));
+    padding-right: max(34px, calc((100vw - var(--max)) / 2));
+  }
+}
