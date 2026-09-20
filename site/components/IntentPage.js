@@ -41,7 +41,7 @@ export default function IntentPage({ page }) {
                 Le Scan vous rend une première orientation : capacité à ajouter, compétences à mobiliser,
                 profils à évaluer et prochaines étapes. Vos coordonnées ne sont demandées qu’après le résultat.
               </p>
-              <Link href="/scan-ia" className="primaryButton">Lancer Autonomia Scan</Link>
+              <Link href={`/scan-ia?focus=${encodeURIComponent(page.slug)}`} className="primaryButton">Lancer Autonomia Scan</Link>
             </div>
           ) : (
             <>
@@ -177,7 +177,7 @@ export default function IntentPage({ page }) {
         <p className="eyebrow">AUTONOMIA</p>
         <h2>{isExpert ? "Votre projet a besoin d’une compétence précise." : isAcademy ? "Vos équipes ont besoin d’une trajectoire claire." : "Votre prochain choix IA peut être clarifié."}</h2>
         <div className="closingActions">
-          <Link href={isDiagnostic ? "/scan-ia" : "#top"} className="primaryButton">{page.cta}</Link>
+          <Link href={isDiagnostic ? `/scan-ia?focus=${encodeURIComponent(page.slug)}` : "#top"} className="primaryButton">{page.cta}</Link>
           {!isDiagnostic && <Link href="/scan-ia" className="secondaryButton">Lancer le Scan</Link>}
         </div>
       </section>
