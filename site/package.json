@@ -9,7 +9,8 @@
     "content:validate": "node scripts/validate-content.mjs",
     "organic:report": "node scripts/organic-report.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
-    "seo:engine-test": "node scripts/test-organic-decision-engine.mjs"
+    "seo:engine-test": "node scripts/test-organic-decision-engine.mjs",
+    "seo:opportunity-test": "node scripts/test-editorial-opportunity-engine.mjs"
   },
   "engines": {
     "node": "22.x"
