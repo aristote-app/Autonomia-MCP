@@ -218,7 +218,8 @@ function track(event, detail = {}) {
 export default function AutonomiaScan({
   captureLead = false,
   source = "autonomia_scan",
-  leadFormId = "scan-inline"
+  leadFormId = "scan-inline",
+  requestedService = null
 } = {}) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -412,7 +413,7 @@ export default function AutonomiaScan({
               <LeadForm
                 mode="diagnostic"
                 formId={leadFormId}
-                requestedService={`scan_${recommendation.plan}`}
+                requestedService={requestedService || `scan_${recommendation.plan}`}
                 scanContext={leadContext}
               />
             </div>
