@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import LeadForm from "@/components/LeadForm";
+import { trackEvent } from "@/lib/clientTracking";
 
 const QUESTIONS = [
   {
@@ -133,6 +134,24 @@ const GAP_GUIDANCE = {
   unknown: "Le blocage reste à qualifier ; le prochain échange doit d’abord isoler le vrai point de friction."
 };
 
+const COMMERCIAL_HANDOFF = {
+  experts: [
+    "Quel livrable ou résultat doit être obtenu par l’expert ?",
+    "Dans quel environnement technique et organisationnel devra-t-il intervenir ?",
+    "Quel niveau d’autonomie et de séniorité est réellement nécessaire ?"
+  ],
+  academy: [
+    "Quelles populations doivent changer leur façon de travailler ?",
+    "Quels usages doivent être maîtrisés en priorité ?",
+    "Quels outils, règles internes et contraintes doivent être intégrés au parcours ?"
+  ],
+  hybrid: [
+    "Quelle partie doit avancer immédiatement avec une expertise externe ?",
+    "Quelles compétences doivent rester durablement dans l’organisation ?",
+    "Quels risques ou dépendances doivent être cadrés avant le déploiement ?"
+  ]
+};
+
 function unique(values) {
   return [...new Set(values.filter(Boolean))];
 }
@@ -209,12 +228,6 @@ function buildRecommendation(answers) {
   };
 }
 
-function track(event, detail = {}) {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event, ...detail });
-}
-
 export default function AutonomiaScan({
   captureLead = false,
   source = "autonomia_scan",
@@ -232,13 +245,13 @@ export default function AutonomiaScan({
   function choose(id, value) {
     const next = { ...answers, [id]: value };
     setAnswers(next);
-    track("autonomia_scan_answer", { scan_step: id, scan_value: value });
+    trackEvent("autonomia_scan_answer", { scan_step: id, scan_value: value, scan_source: source });
     setTimeout(() => setStep((current) => Math.min(current + 1, QUESTIONS.length)), 110);
   }
 
   function back() {
     setStep((current) => Math.max(0, current - 1));
-    track("autonomia_scan_back");
+    trackEvent("autonomia_scan_back", { scan_source: source });
   }
 
   function buildPayload() {
@@ -263,6 +276,10 @@ export default function AutonomiaScan({
         capabilities: recommendation.execution.capabilities,
         academy: recommendation.execution.academy
       },
+      commercial_handoff: {
+        route: recommendation.plan,
+        questions_to_qualify_next: COMMERCIAL_HANDOFF[recommendation.plan]
+      },
       created_at: new Date().toISOString()
     };
   }
@@ -280,10 +297,11 @@ export default function AutonomiaScan({
       window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
     }
 
-    track("autonomia_scan_cta", {
+    trackEvent("autonomia_scan_cta", {
       scan_plan: recommendation.plan,
       scan_version: payload.scan_version,
       scan_capture_mode: captureLead ? "inline" : "handoff",
+      scan_source: source,
       ...answers
     });
   }
@@ -292,7 +310,7 @@ export default function AutonomiaScan({
     setAnswers({});
     setLeadContext(null);
     setStep(0);
-    track("autonomia_scan_restart");
+    trackEvent("autonomia_scan_restart", { scan_source: source });
   }
 
   return (
