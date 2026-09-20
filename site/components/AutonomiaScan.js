@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { trackEvent } from "@/lib/clientTracking";
 
 const QUESTIONS = [
   {
@@ -183,12 +184,6 @@ function buildDiagnosis(answers, focus) {
   };
 }
 
-function track(event, detail = {}) {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event, ...detail });
-}
-
 export default function AutonomiaScan() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -206,7 +201,7 @@ export default function AutonomiaScan() {
   function choose(id, value) {
     const next = { ...answers, [id]: value };
     setAnswers(next);
-    track("autonomia_scan_answer", {
+    trackEvent("autonomia_scan_answer", {
       scan_step: id,
       scan_value: value,
       scan_focus: focus
@@ -242,7 +237,7 @@ export default function AutonomiaScan() {
     } catch {}
 
     window.dispatchEvent(new CustomEvent("autonomia-scan-complete", { detail: payload }));
-    track("autonomia_scan_cta", {
+    trackEvent("autonomia_scan_cta", {
       scan_plan: diagnosis.plan,
       scan_objective: answers.objective,
       scan_stage: answers.stage,
@@ -254,7 +249,7 @@ export default function AutonomiaScan() {
   function restart() {
     setAnswers({});
     setStep(0);
-    track("autonomia_scan_restart", { scan_focus: focus });
+    trackEvent("autonomia_scan_restart", { scan_focus: focus });
   }
 
   return (
