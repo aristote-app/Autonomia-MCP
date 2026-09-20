@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SOURCES, SOURCE_GROUPS } from "../lib/sources.js";
 import { hasAutonomiaDatabase } from "../lib/db/supabase.js";
 import {
@@ -9,6 +10,7 @@ import {
   buildTodayQueue,
   summarizeTodayQueue
 } from "../lib/intelligence/today.js";
+import { searchJobSignals } from "../lib/db/jobSignals.js";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +40,7 @@ async function loadLiveData() {
   if (!hasAutonomiaDatabase()) return null;
 
   try {
-    const [summary, opportunities, buyers] = await Promise.all([
+    const [summary, opportunities, buyers, jobSignals] = await Promise.all([
       getIntelligenceDashboardSummary(),
       searchRankedOpportunities({
         actionability: "open",
@@ -49,6 +51,10 @@ async function loadLiveData() {
       getBuyerMarketIntelligence({
         minAiAwardRows: 1,
         limit: 6
+      }),
+      searchJobSignals({
+        sources: ["linkedin", "indeed"],
+        limit: 12
       })
     ]);
 
@@ -58,7 +64,8 @@ async function loadLiveData() {
       summary,
       today,
       todaySummary: summarizeTodayQueue(today),
-      buyers: buyers.items
+      buyers: buyers.items,
+      jobSignals: jobSignals.items
     };
   } catch (error) {
     console.error("Autonomia dashboard data error", error);
@@ -174,9 +181,62 @@ export default async function Home() {
                       <strong>Staffing inféré :</strong> {item.inferred_staffing_roles.join(" · ")}
                     </p>
                   )}
+
+                  <div className="oppActions">
+                    <Link href={`/opportunities/${item.id}`}>Voir le besoin</Link>
+                    {item.primary_source_url && (
+                      <a href={item.primary_source_url} target="_blank" rel="noreferrer">
+                        Voir la source {item.primary_source_id ? `· ${item.primary_source_id}` : ""} ↗
+                      </a>
+                    )}
+                  </div>
                 </article>
               )) : (
                 <div className="emptyState">Aucune opportunité IA ouverte dans le lot actuellement chargé.</div>
+              )}
+            </div>
+          </section>
+
+          <section className="jobSignalSection">
+            <div className="sectionTitle">
+              <div>
+                <p className="eyebrow">LINKEDIN + INDEED</p>
+                <h2>Besoins IA détectés dans les offres d'emploi</h2>
+              </div>
+              <p>
+                Une mission freelance est un besoin direct. Un recrutement salarié est traité comme un signal de demande IA.
+              </p>
+            </div>
+
+            <div className="jobSignalGrid">
+              {live.jobSignals.length ? live.jobSignals.map((signal) => {
+                const freelance = /freelance|indépendant/i.test(signal.contract_type || "");
+                return (
+                  <article className="jobSignalCard" key={signal.id}>
+                    <div className="jobSignalTop">
+                      <span className="sourceBadge">{signal.source_id}</span>
+                      <span className="signalType">{freelance ? "MISSION FREELANCE" : "SIGNAL RECRUTEMENT"}</span>
+                    </div>
+                    <p className="buyer">{signal.company_name || "Entreprise non identifiée"}</p>
+                    <h3>{signal.title}</h3>
+                    <div className="oppMeta">
+                      <span>{signal.location || "Lieu inconnu"}</span>
+                      <span>{signal.contract_type || "Contrat non précisé"}</span>
+                    </div>
+                    <div className="chips">
+                      {(signal.skills || []).slice(0, 6).map((skill) => <span key={skill}>{skill}</span>)}
+                    </div>
+                    {signal.source_url && (
+                      <div className="oppActions">
+                        <a href={signal.source_url} target="_blank" rel="noreferrer">Voir le besoin original ↗</a>
+                      </div>
+                    )}
+                  </article>
+                );
+              }) : (
+                <div className="emptyState">
+                  Aucun signal LinkedIn/Indeed n'est encore persisté. Le pipeline d'ingestion est prêt ; le prochain branchement est le moteur de découverte automatique.
+                </div>
               )}
             </div>
           </section>
