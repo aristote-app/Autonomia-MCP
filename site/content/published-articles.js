@@ -1,4 +1,6 @@
-export const publishedExecutionArticles = [
+import { marketDemandExecutionArticles, marketDemandTrainingArticles } from "./article-packs/market-demand-wave-1.js";
+
+const baseExecutionArticles = [
   {
     type: "execution",
     slug: "connecter-gmail-a-google-drive-pour-ranger-automatiquement-les-pieces-jointes",
@@ -157,7 +159,7 @@ export const publishedExecutionArticles = [
   }
 ];
 
-export const publishedTrainingArticles = [
+const baseTrainingArticles = [
   {
     type: "training",
     slug: "apprendre-a-automatiser-gmail-et-google-drive-avec-l-ia-sans-coder",
@@ -308,6 +310,16 @@ export const publishedTrainingArticles = [
       }
     ]
   }
+];
+
+export const publishedExecutionArticles = [
+  ...baseExecutionArticles,
+  ...marketDemandExecutionArticles
+];
+
+export const publishedTrainingArticles = [
+  ...baseTrainingArticles,
+  ...marketDemandTrainingArticles
 ];
 
 export function getPublishedExecutionArticle(slug) {

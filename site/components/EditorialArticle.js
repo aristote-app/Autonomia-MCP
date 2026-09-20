@@ -96,6 +96,22 @@ export default function EditorialArticle({ article }) {
             </ul>
           </section>
 
+          {article.related?.length > 0 && (
+            <section className="articleRelated">
+              <p className="sectionIndex">À LIRE ENSUITE</p>
+              <h2>Continuer par un scénario proche</h2>
+              <div className="articleRelatedGrid">
+                {article.related.map((item) => (
+                  <Link key={item.href} href={item.href} className="articleRelatedCard">
+                    <small>{item.kicker}</small>
+                    <strong>{item.label}</strong>
+                    <span>Explorer →</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="articleCta">
             <p className="eyebrow">AUTONOMIA</p>
             <h2>{isTraining ? "Vous voulez transformer ce scénario en formation pour vos équipes ?" : "Vous voulez transformer ce scénario en système réel ?"}</h2>
