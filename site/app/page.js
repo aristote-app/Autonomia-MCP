@@ -205,8 +205,42 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="librarySection">
+        <div className="sectionHeading">
+          <p className="sectionIndex">05 — BIBLIOTHÈQUE</p>
+          <div>
+            <h2>400 façons concrètes de passer de “l’IA pourrait…” à “voilà comment”.</h2>
+            <p>
+              200 scénarios montrent ce que l’entreprise peut automatiser ou augmenter avec l’IA.
+              200 scénarios montrent ce que les équipes peuvent apprendre à faire elles-mêmes.
+              Chaque page publiée doit expliquer le workflow, les choix techniques, les limites,
+              les contrôles et les compétences nécessaires.
+            </p>
+          </div>
+        </div>
+
+        <div className="libraryDoors">
+          <Link href="/cas-usage-ia" className="libraryDoor">
+            <span>200</span>
+            <div>
+              <p>AUTONOMIA / SCÉNARIOS IA</p>
+              <h3>Ce que l’IA peut réellement faire dans votre entreprise.</h3>
+            </div>
+            <b>↗</b>
+          </Link>
+          <Link href="/formation-ia/cas-usage" className="libraryDoor signal">
+            <span>200</span>
+            <div>
+              <p>AUTONOMIA ACADEMY / SCÉNARIOS</p>
+              <h3>Ce que vos équipes peuvent apprendre à faire avec l’IA.</h3>
+            </div>
+            <b>↗</b>
+          </Link>
+        </div>
+      </section>
+
       <section className="whySection">
-        <p className="sectionIndex">05 — POURQUOI AUTONOMIA</p>
+        <p className="sectionIndex">06 — POURQUOI AUTONOMIA</p>
         <div className="whyGrid">
           <article>
             <span>01</span>
@@ -233,7 +267,7 @@ export default function Home() {
 
       <section className="proofSection">
         <div>
-          <p className="sectionIndex">06 — PREUVES</p>
+          <p className="sectionIndex">07 — PREUVES</p>
           <h2>Une architecture prête pour les preuves réelles.</h2>
         </div>
         <div className="proofPlaceholders">
@@ -245,7 +279,7 @@ export default function Home() {
       </section>
 
       <section className="faqSection homeFaq" id="faq">
-        <p className="sectionIndex">07 — QUESTIONS</p>
+        <p className="sectionIndex">08 — QUESTIONS</p>
         <div>
           <h2>Ce qu’Autonomia est — et n’est pas.</h2>
           <div className="faqList">
