@@ -7,6 +7,8 @@ export const marketDemandExecutionArticles = [
     dek: "Imaginez un assistant interne capable de répondre « où est la procédure ? », « que dit notre politique ? » ou « retrouve-moi la dernière règle validée » en citant les documents réellement utilisés — sans lui donner accès à tout, sans inventer une nouvelle vérité et sans transformer l’entreprise en projet de développement de six mois.",
     summary: "Un RAG — Retrieval-Augmented Generation — ajoute une étape de recherche documentaire avant la génération d’une réponse. Le système récupère les passages pertinents dans une base autorisée, transmet ce contexte au modèle puis produit une réponse ancrée dans les sources. Une première version peut être construite en no-code/low-code avec un stockage documentaire, un moteur de recherche ou vector store, un orchestrateur et un LLM. La difficulté principale n’est pas le chatbot : ce sont la qualité des documents, les droits d’accès, le découpage, la récupération, les citations, l’évaluation et la gestion des contenus obsolètes.",
     readingTime: "20–24 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["rag", "knowledge_management", "vector_search", "llm", "api_integration", "governance", "guardrails", "observability", "human_in_loop"],
     search: {
       primaryKeyword: "RAG entreprise assistant documentaire",
@@ -184,6 +186,8 @@ export const marketDemandTrainingArticles = [
     dek: "Copilot dans Outlook devient réellement utile quand les équipes apprennent à résumer un fil, reconstruire le contexte, préparer une réponse, extraire les décisions et transformer un message en prochaine action — tout en sachant ce que Copilot peut voir, ce qu’il faut vérifier et quand il vaut mieux ne pas l’utiliser.",
     summary: "Ce scénario de formation part d’un problème universel : la boîte de réception consomme de l’attention parce que chaque message demande de retrouver le contexte, comprendre la demande et décider de la suite. Microsoft documente des usages Copilot dans Outlook, Teams, Word et Excel, ainsi que des parcours de formation par cas d’usage. Une formation efficace ne doit pas empiler des prompts : elle apprend à choisir le bon contexte, vérifier les sources, passer d’une application à l’autre, construire des routines reproductibles et respecter les règles de l’entreprise.",
     readingTime: "19–23 min",
+    publishedAt: "2026-09-20",
+    modifiedAt: "2026-09-20",
     jobSignalTags: ["copilot", "power_platform", "change_adoption", "prompt_engineering", "governance", "human_in_loop", "messaging_collaboration", "process_integration"],
     search: {
       primaryKeyword: "formation Microsoft Copilot entreprise",
