@@ -148,3 +148,22 @@ export const aiGlossaryTerms = [
 export function getGlossaryTerm(slug) {
   return aiGlossaryTerms.find((item) => item.slug === slug) || null;
 }
+
+
+function normalizeGlossaryText(value = "") {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+export function getRelatedGlossaryTermsForText(value, limit = 6) {
+  const text = normalizeGlossaryText(value);
+  return aiGlossaryTerms
+    .map((item) => ({
+      ...item,
+      matched: normalizeGlossaryText(item.term)
+    }))
+    .filter((item) => text.includes(item.matched))
+    .slice(0, limit);
+}
