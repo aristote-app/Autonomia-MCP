@@ -20,6 +20,9 @@ const insightSchema = z.object({
   citations: z.number().nonnegative().nullable().optional(),
   position: z.number().nullable().optional(),
   conversions: z.number().nonnegative().nullable().optional(),
+  previous_impressions: z.number().nonnegative().nullable().optional(),
+  published_at: z.string().nullable().optional(),
+  modified_at: z.string().nullable().optional(),
   metadata: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional()
 });
 
