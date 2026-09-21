@@ -1,0 +1,99 @@
+name: deploy-public-site-preview
+
+on:
+  push:
+    branches:
+      - feat/autonomia-public-site-v2
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-public-site-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TEAM_SLUG: aristote
+      VERCEL_PROJECT_NAME: autonomia-public-site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Vercel credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing repository secret VERCEL_TOKEN."
+            exit 1
+          fi
+
+      - name: Install pinned Vercel CLI
+        run: npm install -g vercel@59.23.2
+
+      - name: Ensure dedicated Vercel project exists
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel project add "$VERCEL_PROJECT_NAME"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --yes || true
+
+      - name: Deploy /site as preview
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy             --cwd site             --project "$VERCEL_PROJECT_NAME"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --yes)"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Preview URL: $URL"
+
+      - name: Smoke test public-site identity
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          BODY="$(vercel curl /             --deployment "$DEPLOYMENT_URL"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN")"
+
+          echo "$BODY" | grep -q "L’IA ne manque pas de promesses\|L'IA ne manque pas de promesses" || {
+            echo "::error::Deployment does not look like the Autonomia public site."
+            exit 1
+          }
+
+          echo "$BODY" | grep -q "AI EXECUTION PARTNER" || {
+            echo "::error::Public-site positioning marker missing."
+            exit 1
+          }
+
+      - name: Smoke test SEO routes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for path in             /experts             /academy             /scan-ia             /cas-usage-ia             /formation-ia/cas-usage             /glossaire-ia             /observatoire-ia             /sitemap.xml             /robots.txt             /llms.txt
+          do
+            vercel curl "$path"               --deployment "$DEPLOYMENT_URL"               --scope "$VERCEL_TEAM_SLUG"               --token "$VERCEL_TOKEN"               >/dev/null
+          done
+
+      - name: Publish preview summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          {
+            echo "## Autonomia public-site preview"
+            echo ""
+            echo "- Project: `$VERCEL_PROJECT_NAME`"
+            echo "- Root: `site`"
+            echo "- URL: $DEPLOYMENT_URL"
+            echo "- Branch: `feat/autonomia-public-site-v2`"
+            echo "- Public-site identity smoke: passed"
+            echo "- SEO route smoke: passed"
+          } >> "$GITHUB_STEP_SUMMARY"
