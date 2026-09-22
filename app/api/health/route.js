@@ -12,6 +12,10 @@ export async function GET() {
       process.env.SUPABASE_PUBLISHABLE_KEY
     ),
     jobDiscoveryConfigured: Boolean(process.env.BRAVE_SEARCH_API_KEY),
+    franceTravailConfigured: Boolean(
+      process.env.FRANCE_TRAVAIL_CLIENT_ID &&
+      process.env.FRANCE_TRAVAIL_CLIENT_SECRET
+    ),
     timestamp: new Date().toISOString()
   });
 }
