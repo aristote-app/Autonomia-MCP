@@ -87,4 +87,27 @@ assert.equal(hub?.intermediary_risk, true);
 assert.equal(hub?.heat_label, "À qualifier");
 assert.ok(ordered.indexOf(direct) < ordered.indexOf(hub), "Credible end-client should rank ahead of intermediary-risk hub");
 
+const knownMarketplace = buildAccountIntelligence({
+  jobSignals: [{
+    id: "marketplace-1",
+    source_id: "france_travail_jobs",
+    title: "Mission IA",
+    company_name: "Collective.work",
+    location: "Paris",
+    contract_type: "Freelance / indépendant",
+    source_url: "https://example.test/marketplace/1",
+    published_at: iso(1),
+    signal_keys: ["freelance", "agentic_llm"]
+  }]
+})[0];
+
+assert.equal(knownMarketplace?.intermediary_risk, true);
+assert.equal(knownMarketplace?.account_type, "intermediary");
+assert.ok(knownMarketplace?.heat_score <= 58);
+
+assert.equal(direct?.account_type, "end_client_candidate");
+assert.ok(direct?.recommended_offer);
+assert.ok(direct?.playbook?.target_role);
+assert.ok(direct?.playbook?.trigger);
+
 console.log("account intelligence smoke ok");
