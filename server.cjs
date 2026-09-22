@@ -1,4 +1,9 @@
 const { createServer } = require("node:http");
+
+// o2switch/Passenger runtime bridge: keep server-only config dynamic after build.
+if (!process.env.SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  process.env.SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+}
 const next = require("next");
 
 const dev = process.env.NODE_ENV !== "production";
