@@ -408,3 +408,14 @@ h3 { margin: 0 0 8px; }
   .queueFilters a:nth-last-child(-n+2) { border-bottom: 0; }
   .queueResultMeta { display: grid; }
 }
+
+
+.adminReadiness { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+.adminReadiness article { display: grid; gap: 4px; padding: 16px; border: 1px solid #d9ddd7; background: #f8f9f6; }
+.adminReadiness strong { font-size: 12px; letter-spacing: .08em; }
+.adminReadiness span { font-size: 16px; font-weight: 800; }
+.adminReadiness small, .adminStateHint { color: #677068; line-height: 1.5; }
+.adminStateHint { margin-top: 18px; font-size: 12px; }
+@media (max-width: 620px) {
+  .adminReadiness { grid-template-columns: 1fr; }
+}
