@@ -11,6 +11,10 @@ import {
   authConfigured,
   getCurrentClaims
 } from "../../lib/auth/server.js";
+import {
+  runAutomatedFreelanceRefresh,
+  runAutomatedJobSignalRefresh
+} from "../../lib/market/automatedRefresh.js";
 
 function slugify(value) {
   return String(value || "autonomia")
@@ -286,3 +290,78 @@ export async function setMemberActive(formData) {
   revalidatePath("/admin");
   redirectAdmin({ success: active ? "member_activated" : "member_deactivated" });
 }
+
+export async function refreshMarketNow() {
+  const context = await requireWorkspaceAdmin();
+  if (!context.authorized) {
+    redirect(context.reason === "not_authenticated" ? "/login?next=/admin" : "/");
+  }
+
+  const client = getAutonomiaServerClient();
+
+  let freelance;
+  try {
+    freelance = await runAutomatedFreelanceRefresh({
+      category: "ia",
+      limit: 50,
+      triggerMode: "on_demand"
+    });
+  } catch (error) {
+    await client.from("activity_log").insert({
+      workspace_id: context.membership.workspace_id,
+      actor_user_id: context.claims.sub,
+      entity_type: "collector",
+      entity_id: "freework",
+      action: "market_refresh_failed",
+      metadata: {
+        source: "freework",
+        error: error instanceof Error ? error.message : String(error)
+      }
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    redirectAdmin({ error: "market_refresh_failed" });
+  }
+
+  let jobSignals;
+  try {
+    jobSignals = await runAutomatedJobSignalRefresh({
+      triggerMode: "on_demand"
+    });
+  } catch (error) {
+    jobSignals = {
+      available: false,
+      reason: error instanceof Error ? error.message : String(error),
+      discoveredRows: 0,
+      persistedRows: 0
+    };
+  }
+
+  await client.from("activity_log").insert({
+    workspace_id: context.membership.workspace_id,
+    actor_user_id: context.claims.sub,
+    entity_type: "collector",
+    entity_id: "market-refresh",
+    action: "market_refresh_completed",
+    metadata: {
+      freework_fetched: freelance?.fetchedRows || 0,
+      freework_persisted: freelance?.persistedRows || 0,
+      job_signals_available: Boolean(jobSignals?.available),
+      job_signals_discovered: jobSignals?.discoveredRows || 0,
+      job_signals_persisted: jobSignals?.persistedRows || 0,
+      job_signals_reason: jobSignals?.reason || null
+    }
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+
+  redirectAdmin({
+    success: "market_refreshed",
+    freelance: String(freelance?.persistedRows || 0),
+    signals: String(jobSignals?.persistedRows || 0),
+    signals_status: jobSignals?.available ? "ok" : "unavailable"
+  });
+}
+
