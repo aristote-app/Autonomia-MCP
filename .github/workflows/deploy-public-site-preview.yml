@@ -45,14 +45,48 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          vercel project add "$VERCEL_PROJECT_NAME"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --yes || true
+          STATUS="$(curl -sS -o /tmp/vercel-project.json -w "%{http_code}" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_NAME?slug=$VERCEL_TEAM_SLUG")"
+
+          if [ "$STATUS" = "404" ]; then
+            curl -fsS \
+              -X POST \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              "https://api.vercel.com/v11/projects?slug=$VERCEL_TEAM_SLUG" \
+              -d "{\"name\":\"$VERCEL_PROJECT_NAME\",\"framework\":\"nextjs\"}" \
+              > /tmp/vercel-project-created.json
+            cat /tmp/vercel-project-created.json
+          elif [ "$STATUS" = "200" ]; then
+            cat /tmp/vercel-project.json
+          else
+            cat /tmp/vercel-project.json
+            echo "::error::Unable to inspect or create dedicated Vercel project (HTTP $STATUS)."
+            exit 1
+          fi
+
+      - name: Link /site to dedicated Vercel project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --cwd site \
+            --project "$VERCEL_PROJECT_NAME" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
 
       - name: Deploy /site as preview
         id: deploy
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          URL="$(vercel deploy             --cwd site             --project "$VERCEL_PROJECT_NAME"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN"             --yes)"
+          URL="$(vercel deploy \
+            --cwd site \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes)"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Preview URL: $URL"
 
