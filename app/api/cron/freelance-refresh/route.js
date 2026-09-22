@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request) {
-  if (!isAuthorizedMarketRefreshRequest(request)) {
+  if (!(await isAuthorizedMarketRefreshRequest(request))) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
