@@ -430,6 +430,7 @@ export default function Home() {
         <nav aria-label="Liens de pied de page">
           <Link href="/experts">Experts</Link>
           <Link href="/academy">Academy</Link>
+          <Link href="/territoires">Territoires</Link>
           <Link href="/cas-usage-ia">Cas d’usage</Link>
           <Link href="/formation-ia/cas-usage">Formations</Link>
           <Link href="/observatoire-ia">Observatoire</Link>
