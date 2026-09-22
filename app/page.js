@@ -174,6 +174,27 @@ const QUEUE_SORTS = [
   ["recent", "Plus récent"]
 ];
 
+const SOURCE_FILTERS = [
+  ["all", "Toutes les sources"],
+  ["france_travail_jobs", "France Travail"],
+  ["linkedin", "LinkedIn"],
+  ["indeed", "Indeed"],
+  ["freework", "Free-Work"],
+  ["freelancerepublik", "FreelanceRepublik"],
+  ["lehibou", "LeHibou"],
+  ["boamp", "BOAMP"],
+  ["ted", "TED / JOUE"]
+];
+
+function filterBySource(items, source) {
+  if (!source || source === "all") return items;
+  return items.filter((item) => String(item.source_id || "").toLowerCase() === source);
+}
+
+function countBySource(items, source) {
+  return filterBySource(items, source).length;
+}
+
 function filterQueue(items, filter) {
   if (filter === "public") return items.filter((item) => item.type_label === "Marché public");
   if (filter === "freelance") return items.filter((item) => item.type_label === "Mission freelance");
@@ -216,7 +237,10 @@ export default async function Home({ searchParams }) {
   const params = await searchParams;
   const activeFilter = QUEUE_FILTERS.some(([value]) => value === params?.filter) ? params.filter : "all";
   const activeSort = QUEUE_SORTS.some(([value]) => value === params?.sort) ? params.sort : "priority";
-  const filteredToday = live ? sortQueue(filterQueue(live.today, activeFilter), activeSort) : [];
+  const activeSource = SOURCE_FILTERS.some(([value]) => value === params?.source) ? params.source : "all";
+  const filteredToday = live
+    ? sortQueue(filterBySource(filterQueue(live.today, activeFilter), activeSource), activeSort)
+    : [];
 
   const staticCounts = SOURCES.reduce((acc, source) => {
     acc[source.status] = (acc[source.status] || 0) + 1;
@@ -266,7 +290,7 @@ export default async function Home({ searchParams }) {
                   <Link
                     key={value}
                     className={activeFilter === value ? "active" : ""}
-                    href={`/?filter=${value}&sort=${activeSort}#queue`}
+                    href={`/?filter=${value}&source=${activeSource}&sort=${activeSort}#queue`}
                   >
                     <strong>{countQueue(live.today, value)}</strong>
                     <span>{label}</span>
@@ -274,8 +298,22 @@ export default async function Home({ searchParams }) {
                 ))}
               </nav>
 
+              <nav className="sourceFilters" aria-label="Filtrer par source">
+                {SOURCE_FILTERS.map(([value, label]) => (
+                  <Link
+                    key={value}
+                    className={activeSource === value ? "active" : ""}
+                    href={`/?filter=${activeFilter}&source=${value}&sort=${activeSort}#queue`}
+                  >
+                    <strong>{countBySource(filterQueue(live.today, activeFilter), value)}</strong>
+                    <span>{label}</span>
+                  </Link>
+                ))}
+              </nav>
+
               <form className="queueSort" method="get" action="/">
                 <input type="hidden" name="filter" value={activeFilter} />
+                <input type="hidden" name="source" value={activeSource} />
                 <label htmlFor="queue-sort">Trier par</label>
                 <select id="queue-sort" name="sort" defaultValue={activeSort}>
                   {QUEUE_SORTS.map(([value, label]) => (
@@ -288,7 +326,10 @@ export default async function Home({ searchParams }) {
 
             <div className="queueResultMeta">
               <strong>{filteredToday.length} résultat{filteredToday.length > 1 ? "s" : ""}</strong>
-              <span>sur {live.today.length} éléments chargés dans la file active</span>
+              <span>
+                sur {live.today.length} éléments chargés
+                {activeSource !== "all" ? ` · source ${SOURCE_FILTERS.find(([value]) => value === activeSource)?.[1]}` : ""}
+              </span>
             </div>
 
             <div className="opportunityList">
