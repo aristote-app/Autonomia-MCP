@@ -426,3 +426,66 @@ h3 { margin: 0 0 8px; }
 @media (max-width: 620px) {
   .adminReadiness { grid-template-columns: 1fr; }
 }
+
+
+/* Account Intelligence */
+.accountHero, .accountDetailHero { display:flex; justify-content:space-between; gap:32px; align-items:flex-end; padding:24px 0 38px; border-bottom:1px solid #d9ddd7; }
+.accountHero h1, .accountDetailHero h1 { max-width:900px; }
+.accountHeroMetric, .accountHeat { min-width:120px; display:grid; justify-items:end; gap:4px; }
+.accountHeroMetric strong, .accountHeat strong { font-size:46px; line-height:1; }
+.accountHeroMetric span, .accountHeat span { color:#677068; font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
+.accountHeatLarge strong { font-size:58px; }
+.accountSummaryStrip { display:grid; grid-template-columns:repeat(4,1fr); margin:26px 0 54px; border:1px solid #d9ddd7; background:#fff; }
+.accountSummaryStrip article { display:grid; gap:5px; padding:20px; border-right:1px solid #d9ddd7; }
+.accountSummaryStrip article:last-child { border-right:0; }
+.accountSummaryStrip strong { font-size:28px; }
+.accountSummaryStrip span { color:#677068; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+.accountListSection { margin:54px 0; }
+.accountList { display:grid; gap:12px; }
+.accountCard { padding:22px; background:#fff; border:1px solid #d9ddd7; }
+.accountCardTop { display:flex; justify-content:space-between; gap:24px; align-items:flex-start; }
+.accountCardTop h3 { font-size:23px; }
+.accountStats { display:flex; flex-wrap:wrap; gap:8px 18px; margin:14px 0; color:#677068; font-size:12px; }
+.accountStats strong { color:#111; }
+.whyNow { margin-top:14px; padding:14px 16px; background:#f1f3ef; }
+.whyNow > span { display:block; margin-bottom:8px; color:#677068; font-size:10px; font-weight:800; letter-spacing:.08em; }
+.whyNow ul { margin:0; padding-left:18px; }
+.whyNow li { margin:5px 0; font-size:13px; line-height:1.45; }
+.whyNow.large { margin-top:18px; }
+.accountLatest { margin:14px 0 0; color:#677068; font-size:12px; }
+.accountDetailGrid { display:grid; grid-template-columns:1.3fr .7fr; gap:16px; margin:28px 0; }
+.offerStack { display:grid; gap:8px; margin-top:18px; }
+.offerStack div { padding:12px 14px; border:1px solid #d9ddd7; background:#f8f9f6; }
+.offerStack strong { font-size:13px; }
+.decisionRoleList { display:grid; gap:8px; margin-top:18px; }
+.decisionRoleList article { display:grid; grid-template-columns:auto 1fr; gap:12px; padding:13px 0; border-top:1px solid #e8ebe7; }
+.decisionRoleList article > span { display:grid; place-items:center; width:30px; height:30px; background:#111; color:#fff; font-size:11px; font-weight:800; }
+.decisionRoleList strong { font-size:14px; }
+.decisionRoleList p { margin:4px 0 0; color:#677068; font-size:12px; line-height:1.45; }
+.accountHint { margin-top:18px; padding-top:14px; border-top:1px solid #e8ebe7; color:#677068; font-size:12px; line-height:1.5; }
+.accountTimelineSection { margin:54px 0; }
+.accountTimeline { display:grid; border:1px solid #d9ddd7; background:#fff; }
+.accountTimeline article { display:grid; grid-template-columns:150px 1fr; gap:22px; padding:18px 20px; border-bottom:1px solid #e8ebe7; }
+.accountTimeline article:last-child { border-bottom:0; }
+.timelineDate { color:#677068; font-size:12px; font-weight:800; }
+.timelineBody h3 { margin:0 0 6px; font-size:17px; line-height:1.35; }
+.timelineBody p { margin:4px 0; color:#677068; font-size:12px; }
+.timelineBody a { display:inline-flex; margin-top:8px; color:#111; font-size:12px; font-weight:800; text-decoration:none; }
+.timelineBody a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+@media (max-width:820px) {
+  .accountHero, .accountDetailHero { display:block; }
+  .accountHeroMetric, .accountHeat { justify-items:start; margin-top:22px; }
+  .accountSummaryStrip { grid-template-columns:1fr 1fr; }
+  .accountSummaryStrip article:nth-child(2) { border-right:0; }
+  .accountSummaryStrip article:nth-child(-n+2) { border-bottom:1px solid #d9ddd7; }
+  .accountDetailGrid { grid-template-columns:1fr; }
+}
+@media (max-width:560px) {
+  .accountSummaryStrip { grid-template-columns:1fr; }
+  .accountSummaryStrip article { border-right:0; border-bottom:1px solid #d9ddd7; }
+  .accountSummaryStrip article:last-child { border-bottom:0; }
+  .accountCardTop { display:block; }
+  .accountHeat { margin-top:14px; }
+  .accountTimeline article { grid-template-columns:1fr; gap:8px; }
+}
