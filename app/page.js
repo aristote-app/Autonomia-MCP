@@ -148,7 +148,6 @@ const QUEUE_FILTERS = [
   ["all", "Tout"],
   ["public", "Marchés publics"],
   ["freelance", "Missions freelance"],
-  ["company", "Signaux entreprises"],
   ["training", "Formation IA"],
   ["urgent", "Urgents"]
 ];
@@ -478,7 +477,7 @@ export default async function Home({ searchParams }) {
               <h3>{group.label}</h3>
               <p>{group.description}</p>
               <ul>
-                {SOURCES.filter((source) => source.group === group.id).map((source) => (
+                {SOURCES.filter((source) => source.group === group.id && source.id !== "decp").map((source) => (
                   <li key={source.id}>
                     <span>{source.name}</span>
                     <small className={source.status}>{source.priority} · {source.status}</small>
