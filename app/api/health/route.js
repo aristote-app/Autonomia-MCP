@@ -16,6 +16,8 @@ export async function GET() {
       process.env.FRANCE_TRAVAIL_CLIENT_ID &&
       process.env.FRANCE_TRAVAIL_CLIENT_SECRET
     ),
+    kasprConfigured: Boolean(process.env.KASPR_API_KEY),
+    waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY),
     timestamp: new Date().toISOString()
   });
 }
