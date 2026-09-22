@@ -21,7 +21,7 @@ fi
 echo "Deploying Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "origin/$BRANCH"
 
-npm install --no-audit --no-fund
+npm install --no-audit --no-fund --package-lock=false
 npm run build
 
 mkdir -p tmp
