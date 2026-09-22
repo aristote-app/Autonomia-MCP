@@ -4,6 +4,7 @@ import {
   runAutomatedJobSignalRefresh
 } from "../../../../lib/market/automatedRefresh.js";
 import { isAuthorizedMarketRefreshRequest } from "../../../../lib/security/marketRefreshAuth.js";
+import { runAutomatedTerritorySignalRefresh } from "../../../../lib/market/territorySignals.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,6 +26,15 @@ export async function GET(request) {
   ];
 
   const runs = [];
+
+  const territorySignalsPromise = runAutomatedTerritorySignalRefresh({
+    triggerMode: "scheduled"
+  }).catch((error) => ({
+    available: false,
+    source: "boamp",
+    persisted: 0,
+    error: error instanceof Error ? error.message : String(error)
+  }));
 
   let freelance = null;
   let jobSignals = null;
@@ -78,6 +88,7 @@ export async function GET(request) {
     }
   }
 
+  const territorySignals = await territorySignalsPromise;
   const publicOk = runs.some((run) => run.ok);
 
   return Response.json({
@@ -86,6 +97,7 @@ export async function GET(request) {
     completedAt: new Date().toISOString(),
     freelance,
     jobSignals,
+    territorySignals,
     runs
   }, {
     status: publicOk || (!publicOnly && freelance?.ok) ? 200 : 502
