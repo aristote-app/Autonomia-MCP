@@ -290,8 +290,30 @@ export default function TerritoriesPage() {
         </div>
       </section>
 
+
+      <section className="territoryResources">
+        <p className="sectionIndex">07 — RESSOURCES</p>
+        <div>
+          <h2>Approfondir selon votre point d’entrée.</h2>
+          <div className="territoryResourceGrid">
+            <Link href="/territoires/ia-agents-collectivite">
+              <span>AGENTS</span>
+              <strong>IA pour les agents de collectivité</strong>
+              <p>12 cas d’usage, garde-fous, AI literacy et méthode pour choisir les premiers workflows.</p>
+              <b>Lire le guide →</b>
+            </Link>
+            <Link href="/territoires/accelerateur-ia-tpe-pme">
+              <span>ENTREPRISES</span>
+              <strong>Accélérateur IA territorial pour TPE/PME</strong>
+              <p>Une méthode de cohorte pour passer de la sensibilisation à un workflow testé et documenté.</p>
+              <b>Lire le guide →</b>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="territoryFaq">
-        <p className="sectionIndex">07 — QUESTIONS</p>
+        <p className="sectionIndex">08 — QUESTIONS</p>
         <div>
           <h2>Questions fréquentes des intercommunalités.</h2>
           <div className="faqList">
@@ -307,7 +329,7 @@ export default function TerritoriesPage() {
 
       <section className="territoryLeadSection" id="territory-contact">
         <div className="territoryLeadIntro">
-          <p className="sectionIndex">08 — ÉCHANGE</p>
+          <p className="sectionIndex">09 — ÉCHANGE</p>
           <div>
             <h2>Quel programme voulez-vous activer sur votre territoire ?</h2>
             <p>
