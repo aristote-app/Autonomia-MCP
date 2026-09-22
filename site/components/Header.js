@@ -17,6 +17,7 @@ export default function Header() {
         <nav className="desktopNav" aria-label="Navigation principale">
           <Link href="/experts">Experts</Link>
           <Link href="/academy">Academy</Link>
+          <Link href="/territoires">Territoires</Link>
           <Link href="/cas-usage-ia">Cas d’usage</Link>
           <Link href="/observatoire-ia">Observatoire</Link>
           <Link href="/#methode">Méthode</Link>
