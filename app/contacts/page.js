@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import { listWorkspaceSalesContacts } from "../../lib/db/salesContacts.js";
+import {
+  updateContactPipelineStage,
+  optOutContact
+} from "../actions/contact-pipeline.js";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +63,7 @@ export default async function ContactsPage({ searchParams }) {
   }));
 
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
+  const canWrite = hasSession && context.membership.role !== "viewer";
 
   if (!hasSession) {
     return (
@@ -143,6 +148,35 @@ export default async function ContactsPage({ searchParams }) {
               {contact.next_action_at && (
                 <span>Action : {date(contact.next_action_at)}</span>
               )}
+
+              {canWrite &&
+                contact.verification_status === "verified" &&
+                !contact.do_not_contact && (
+                  <form action={updateContactPipelineStage} className="contactStageForm">
+                    <input type="hidden" name="contact_id" value={contact.id} />
+                    <select name="status" defaultValue={contact.outreach_status}>
+                      <option value="active">Prospection</option>
+                      <option value="replied">Réponse reçue</option>
+                      <option value="meeting">RDV obtenu</option>
+                      <option value="proposal">Proposition envoyée</option>
+                      <option value="won">Gagné</option>
+                      <option value="lost">Perdu</option>
+                      <option value="stopped">Arrêter</option>
+                    </select>
+                    <button type="submit">Mettre à jour</button>
+                  </form>
+                )}
+
+              {canWrite &&
+                contact.verification_status === "verified" &&
+                !contact.do_not_contact && (
+                  <form action={optOutContact} className="contactOptOutForm">
+                    <input type="hidden" name="contact_id" value={contact.id} />
+                    <button type="submit">Ne plus contacter</button>
+                  </form>
+                )}
+
+              {contact.do_not_contact && <span>Ne plus contacter</span>}
             </div>
           </article>
         )) : (
