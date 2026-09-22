@@ -79,6 +79,15 @@ jobs:
             --token "$VERCEL_TOKEN" \
             --yes
 
+      - name: Disable Vercel Authentication for public site
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel project protection disable "$VERCEL_PROJECT_NAME" \
+            --sso \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
       - name: Deploy /site as preview
         id: deploy
         env:
@@ -97,7 +106,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
         run: |
-          BODY="$(vercel curl /             --deployment "$DEPLOYMENT_URL"             --scope "$VERCEL_TEAM_SLUG"             --token "$VERCEL_TOKEN")"
+          BODY="$(curl -fsSL "$DEPLOYMENT_URL/")"
 
           echo "$BODY" | grep -q "L’IA ne manque pas de promesses\|L'IA ne manque pas de promesses" || {
             echo "::error::Deployment does not look like the Autonomia public site."
@@ -116,7 +125,7 @@ jobs:
         run: |
           for path in             /experts             /academy             /scan-ia             /cas-usage-ia             /formation-ia/cas-usage             /glossaire-ia             /observatoire-ia             /sitemap.xml             /robots.txt             /llms.txt
           do
-            vercel curl "$path"               --deployment "$DEPLOYMENT_URL"               --scope "$VERCEL_TEAM_SLUG"               --token "$VERCEL_TOKEN"               >/dev/null
+            curl -fsSL "$DEPLOYMENT_URL$path" >/dev/null
           done
 
       - name: Publish preview summary
