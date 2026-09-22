@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { buildAccountOutreachPlan } from "../lib/intelligence/outreach.js";
 import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
 import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
+import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
 
 const account = {
@@ -83,6 +84,15 @@ globalThis.fetch = async (url, options = {}) => {
 };
 
 try {
+  const research = await researchAccountPublicContext({
+    company: "Acme",
+    apiKey: "test-brave",
+    countPerQuery: 5
+  });
+  assert.equal(research.available, true);
+  assert.ok(research.searches.length === 2);
+  assert.ok(research.evidence.length >= 1);
+
   const dm = await discoverDecisionMakers({
     company: "Acme",
     roles: [{ label: "Head of AI" }],
