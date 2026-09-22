@@ -139,26 +139,49 @@ def parse_csv(path):
 
 def parse_xlsx(path):
     from openpyxl import load_workbook
-    items = {}
     wb = load_workbook(path, read_only=True, data_only=True)
+
+    # The national BANATIC workbook contains several large datasets. For the
+    # exhaustive prospecting universe we only need the "liste des groupements"
+    # sheet: SIREN + name + legal nature. Scan at most the first 100 rows of
+    # each sheet to identify it, then parse that sheet only.
     for ws in wb.worksheets:
+        rows = ws.iter_rows(values_only=True)
         header = None
         headers = None
-        for row in ws.iter_rows(values_only=True):
+
+        for index, row in enumerate(rows):
+            if index >= 100:
+                break
             values = list(row)
             normalized = [norm(v) for v in values]
-            if header is None:
-                has_siren = any(v in ALIASES["siren"] for v in normalized)
-                has_name = any(v in ALIASES["name"] for v in normalized)
-                has_type = any(v in ALIASES["type"] for v in normalized)
-                if has_siren and has_name and has_type:
-                    header = values
-                    headers = {norm(v): idx for idx, v in enumerate(values) if v not in (None, "")}
-                continue
+            has_siren = any(v in ALIASES["siren"] for v in normalized)
+            has_name = any(v in ALIASES["name"] for v in normalized)
+            has_type = any(v in ALIASES["type"] for v in normalized)
+
+            if has_siren and has_name and has_type:
+                header = values
+                headers = {
+                    norm(v): idx
+                    for idx, v in enumerate(values)
+                    if v not in (None, "")
+                }
+                break
+
+        if header is None:
+            continue
+
+        items = {}
+        for row in rows:
+            values = list(row)
             item = make_item(values, headers)
             if item:
                 items[item["siren"]] = merge(items.get(item["siren"]), item)
-    return items
+
+        if items:
+            return items
+
+    return {}
 
 def main():
     if len(sys.argv) != 3:
