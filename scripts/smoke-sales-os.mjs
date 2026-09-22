@@ -5,6 +5,7 @@ import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
 import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
+import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 
 const account = {
   name: "Acme",
@@ -47,6 +48,30 @@ assert.equal(learning.funnel.replies, 2);
 assert.equal(learning.funnel.won, 1);
 assert.equal(learning.learning_ready, false);
 assert.ok(learning.by_offer.some((item) => item.key === "Prestation / automatisation IA"));
+
+const revenueActions = buildRevenueActions({
+  accounts: [{
+    slug: "acme",
+    name: "Acme",
+    heat_score: 82,
+    intermediary_risk: false,
+    playbook: { trigger: "Déploiement Copilot" }
+  }],
+  contacts: [{
+    id: "contact-1",
+    account_key: "beta",
+    account_name: "Beta",
+    full_name: "Jane Doe",
+    verification_status: "candidate",
+    outreach_status: "not_started",
+    enrichment_status: "not_requested",
+    do_not_contact: false,
+    trigger_title: "Mission IA"
+  }]
+});
+
+assert.equal(revenueActions[0].kind, "verify_contact");
+assert.ok(revenueActions.some((item) => item.kind === "find_contact" && item.account_key === "acme"));
 
 const originalFetch = globalThis.fetch;
 const calls = [];
