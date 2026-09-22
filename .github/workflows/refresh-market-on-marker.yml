@@ -108,6 +108,59 @@ jobs:
           if (!summary.freelance.ok) process.exit(1);
           NODE
 
+      - name: Refresh territory signals
+        id: territory_signals
+        run: |
+          rm -f /tmp/autonomia-territories.json
+
+          status="$(curl -sS \
+            --max-time 75 \
+            -o /tmp/autonomia-territories.json \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
+            "https://autonomia-mcp.vercel.app/api/cron/market-refresh?mode=territories" || true)"
+
+          echo "Territory refresh: HTTP $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+          if [ "$status" != "200" ]; then
+            cat /tmp/autonomia-territories.json || true
+            echo "::error::Territory signal refresh did not complete successfully."
+            exit 1
+          fi
+
+      - name: Report territory signal refresh
+        if: always() && steps.territory_signals.outputs.status != ''
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+
+          if (!fs.existsSync("/tmp/autonomia-territories.json")) process.exit(0);
+          const raw = fs.readFileSync("/tmp/autonomia-territories.json", "utf8");
+          let payload;
+          try {
+            payload = JSON.parse(raw);
+          } catch {
+            console.log(raw);
+            process.exit(1);
+          }
+
+          console.log(JSON.stringify({
+            ok: Boolean(payload.ok),
+            mode: payload.mode ?? null,
+            territorySignals: {
+              available: Boolean(payload.territorySignals?.available),
+              matchedTerritories: payload.territorySignals?.matched_territories ?? 0,
+              candidateSignals: payload.territorySignals?.candidate_signals ?? 0,
+              persistedRows: payload.territorySignals?.persisted ?? 0,
+              duplicates: payload.territorySignals?.duplicates ?? 0,
+              fetched: payload.territorySignals?.fetched ?? 0,
+              withBuyerSiren: payload.territorySignals?.with_buyer_siren ?? 0,
+              error: payload.territorySignals?.error ?? null
+            }
+          }, null, 2));
+          NODE
+
       - name: Refresh public and training market
         id: public_market
         run: |
@@ -150,13 +203,6 @@ jobs:
               (sum, run) => sum + Number(run.persistedRows || 0),
               0
             ),
-            territorySignals: {
-              available: Boolean(payload.territorySignals?.available),
-              matchedTerritories: payload.territorySignals?.matched_territories ?? 0,
-              candidateSignals: payload.territorySignals?.candidate_signals ?? 0,
-              persistedRows: payload.territorySignals?.persisted ?? 0,
-              duplicates: payload.territorySignals?.duplicates ?? 0,
-              error: payload.territorySignals?.error ?? null
-            }
+            territorySignals: payload.territorySignals ?? null
           }, null, 2));
           NODE
