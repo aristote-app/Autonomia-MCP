@@ -154,6 +154,24 @@ export default function Home() {
         </Link>
       </section>
 
+      <section className="territoryHomePromo">
+        <div>
+          <p className="sectionIndex">02 — TERRITOIRES</p>
+          <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · COMMUNAUTÉS D’AGGLOMÉRATION</span>
+          <h2>Faire de l’IA un outil concret pour les agents et les entreprises du territoire.</h2>
+          <p>
+            Formation des agents, automatisation de processus internes et programmes d’accélération IA
+            pour les TPE/PME locales : Autonomia transforme un enjeu territorial en programme exécutable.
+          </p>
+          <Link className="primaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>
+        </div>
+        <div className="territoryHomeTracks">
+          <span><b>01</b>Agents</span>
+          <span><b>02</b>Academy collectivités</span>
+          <span><b>03</b>Entreprises du territoire</span>
+        </div>
+      </section>
+
       <section className="homeMethod" id="methode">
         <div className="methodIntro">
           <p className="sectionIndex">02 — LA MÉTHODE</p>
