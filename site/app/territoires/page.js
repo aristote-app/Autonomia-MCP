@@ -302,6 +302,12 @@ export default function TerritoriesPage() {
               <p>12 cas d’usage, garde-fous, AI literacy et méthode pour choisir les premiers workflows.</p>
               <b>Lire le guide →</b>
             </Link>
+            <Link href="/territoires/academy-ia-collectivites">
+              <span>ACADEMY</span>
+              <strong>Formation IA pour agents, managers et directions</strong>
+              <p>Socle commun, parcours par rôle, AI literacy, gouvernance et ateliers sur les vrais processus.</p>
+              <b>Lire le guide →</b>
+            </Link>
             <Link href="/territoires/accelerateur-ia-tpe-pme">
               <span>ENTREPRISES</span>
               <strong>Accélérateur IA territorial pour TPE/PME</strong>
