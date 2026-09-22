@@ -3,18 +3,19 @@ import {
   runAutomatedFreelanceRefresh,
   runAutomatedJobSignalRefresh
 } from "../../../../lib/market/automatedRefresh.js";
+import { isAuthorizedMarketRefreshRequest } from "../../../../lib/security/marketRefreshAuth.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request) {
-  const secret = process.env.CRON_SECRET;
-  const auth = request.headers.get("authorization");
-
-  if (!secret || auth !== `Bearer ${secret}`) {
+  if (!isAuthorizedMarketRefreshRequest(request)) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const mode = new URL(request.url).searchParams.get("mode") || "full";
+  const publicOnly = mode === "public";
 
   const queries = [
     "intelligence artificielle",
@@ -25,36 +26,37 @@ export async function GET(request) {
 
   const runs = [];
 
-  // Persist Free-Work independently from public-market refreshes so the freelance
-  // feed cannot be starved by slower BOAMP/TED loops.
   let freelance = null;
-  try {
-    freelance = {
-      ok: true,
-      ...(await runAutomatedFreelanceRefresh({
-        category: "ia",
-        limit: 50,
-        triggerMode: "scheduled"
-      }))
-    };
-  } catch (error) {
-    freelance = {
-      ok: false,
-      source: "freework",
-      error: error instanceof Error ? error.message : String(error)
-    };
-  }
-
   let jobSignals = null;
-  try {
-    jobSignals = await runAutomatedJobSignalRefresh({
-      triggerMode: "scheduled"
-    });
-  } catch (error) {
-    jobSignals = {
-      available: true,
-      error: error instanceof Error ? error.message : String(error)
-    };
+
+  if (!publicOnly) {
+    try {
+      freelance = {
+        ok: true,
+        ...(await runAutomatedFreelanceRefresh({
+          category: "ia",
+          limit: 50,
+          triggerMode: "scheduled"
+        }))
+      };
+    } catch (error) {
+      freelance = {
+        ok: false,
+        source: "freework",
+        error: error instanceof Error ? error.message : String(error)
+      };
+    }
+
+    try {
+      jobSignals = await runAutomatedJobSignalRefresh({
+        triggerMode: "scheduled"
+      });
+    } catch (error) {
+      jobSignals = {
+        available: false,
+        error: error instanceof Error ? error.message : String(error)
+      };
+    }
   }
 
   for (const query of queries) {
@@ -76,11 +78,16 @@ export async function GET(request) {
     }
   }
 
+  const publicOk = runs.some((run) => run.ok);
+
   return Response.json({
-    ok: Boolean(freelance?.ok) || runs.some((run) => run.ok),
+    ok: publicOnly ? publicOk : Boolean(freelance?.ok) || publicOk,
+    mode,
     completedAt: new Date().toISOString(),
     freelance,
     jobSignals,
     runs
+  }, {
+    status: publicOk || (!publicOnly && freelance?.ok) ? 200 : 502
   });
 }
