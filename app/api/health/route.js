@@ -16,6 +16,9 @@ export async function GET() {
       process.env.FRANCE_TRAVAIL_CLIENT_ID &&
       process.env.FRANCE_TRAVAIL_CLIENT_SECRET
     ),
+    accountResearchConfigured:
+      process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
+      Boolean(process.env.BRAVE_SEARCH_API_KEY),
     kasprConfigured: Boolean(process.env.KASPR_API_KEY),
     waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY),
     timestamp: new Date().toISOString()
