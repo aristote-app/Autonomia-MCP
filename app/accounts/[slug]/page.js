@@ -251,6 +251,9 @@ export default async function AccountDetailPage({ params, searchParams }) {
                             <input type="hidden" name="relevance_score" value={candidate.relevance_score} />
                             <input type="hidden" name="trigger_title" value={account.timeline[0]?.title || ""} />
                             <input type="hidden" name="trigger_url" value={account.timeline[0]?.source_url || ""} />
+                            <input type="hidden" name="offer_track" value={account.recommended_offer || ""} />
+                            <input type="hidden" name="trigger_source" value={account.timeline[0]?.source_id || ""} />
+                            <input type="hidden" name="account_type" value={account.account_type || ""} />
                             <button type="submit">Sauvegarder candidat</button>
                           </form>
                         )}
