@@ -43,4 +43,48 @@ assert.ok(accounts[0].decision_roles.some((role) => role.label.includes("Head of
 assert.ok(accounts[0].why_now.length > 0);
 assert.equal(findAccountBySlug(accounts, accounts[0].slug)?.name, accounts[0].name);
 
+const concentrationSignals = Array.from({ length: 9 }, (_, index) => ({
+  id: "hub-" + index,
+  source_id: "france_travail_jobs",
+  title: "Mission IA " + index,
+  company_name: "Recruiting Hub",
+  location: "Paris",
+  contract_type: "Freelance / indépendant",
+  source_url: "https://example.test/hub/" + index,
+  published_at: iso(index % 3),
+  signal_keys: ["freelance", "agentic_llm"]
+}));
+
+const ordered = buildAccountIntelligence({
+  jobSignals: [
+    ...concentrationSignals,
+    {
+      id: "client-1",
+      source_id: "linkedin",
+      title: "AI Product Manager",
+      company_name: "Client Direct",
+      location: "Paris",
+      source_url: "https://example.test/client/1",
+      published_at: iso(1),
+      signal_keys: ["ai_product"]
+    },
+    {
+      id: "client-2",
+      source_id: "indeed",
+      title: "Formateur Copilot",
+      company_name: "Client Direct",
+      location: "Paris",
+      source_url: "https://example.test/client/2",
+      published_at: iso(2),
+      signal_keys: ["training_need"]
+    }
+  ]
+});
+
+const hub = ordered.find((item) => item.name === "Recruiting Hub");
+const direct = ordered.find((item) => item.name === "Client Direct");
+assert.equal(hub?.intermediary_risk, true);
+assert.equal(hub?.heat_label, "À qualifier");
+assert.ok(ordered.indexOf(direct) < ordered.indexOf(hub), "Credible end-client should rank ahead of intermediary-risk hub");
+
 console.log("account intelligence smoke ok");
