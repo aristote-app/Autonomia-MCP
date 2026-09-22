@@ -31,7 +31,10 @@ function filterContacts(items, filter) {
         item.outreach_status === "not_started"
     );
   }
-  if (["active","replied","meeting","proposal","won","lost"].includes(filter)) {
+  if (filter === "active") {
+    return items.filter((item) => ["queued", "active"].includes(item.outreach_status));
+  }
+  if (["replied","meeting","proposal","won","lost"].includes(filter)) {
     return items.filter((item) => item.outreach_status === filter);
   }
   return items;
