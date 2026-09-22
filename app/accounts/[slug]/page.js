@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { loadAccountBySlug } from "../../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
 import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
+import { researchAccountPublicContext } from "../../../lib/collectors/accountResearch.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 import { getCurrentWorkspaceMembership } from "../../../lib/auth/access.js";
 import { listSalesContacts } from "../../../lib/db/salesContacts.js";
@@ -55,9 +56,14 @@ export default async function AccountDetailPage({ params, searchParams }) {
     hasWorkspaceSession && workspaceContext.membership.role !== "viewer";
 
   const shouldDiscover = query?.discover === "1";
+  const shouldResearch = query?.research === "1";
   const decisionDiscoveryEnabled =
     hasWorkspaceSession &&
     process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
+    Boolean(process.env.BRAVE_SEARCH_API_KEY);
+  const accountResearchEnabled =
+    hasWorkspaceSession &&
+    process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
@@ -67,7 +73,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
     hasWorkspaceSession &&
     waalaxyConfigured;
 
-  const [decisionMakers, savedContacts, waalaxyOptions] = await Promise.all([
+  const [decisionMakers, accountResearch, savedContacts, waalaxyOptions] = await Promise.all([
     shouldDiscover && decisionDiscoveryEnabled
       ? discoverDecisionMakers({
           company: account.name,
@@ -78,6 +84,17 @@ export default async function AccountDetailPage({ params, searchParams }) {
           available: false,
           reason: error instanceof Error ? error.message : String(error),
           candidates: [],
+          searches: []
+        }))
+      : Promise.resolve(null),
+    shouldResearch && accountResearchEnabled && !account.intermediary_risk
+      ? researchAccountPublicContext({
+          company: account.name,
+          countPerQuery: 8
+        }).catch((error) => ({
+          available: false,
+          reason: error instanceof Error ? error.message : String(error),
+          evidence: [],
           searches: []
         }))
       : Promise.resolve(null),
@@ -157,6 +174,68 @@ export default async function AccountDetailPage({ params, searchParams }) {
           )}
         </div>
       </section>
+
+      {!account.intermediary_risk && (
+        <section className="accountResearchPanel" id="account-research">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">ACCOUNT RESEARCHER</p>
+              <h2>Contexte public complémentaire.</h2>
+            </div>
+            <p>
+              Recherche volontaire et à la demande. Ces résultats n'augmentent jamais le score
+              tant qu'ils ne sont pas validés comme preuves utiles.
+            </p>
+          </div>
+
+          {!accountResearch && (
+            <div className="accountResearchAction">
+              {accountResearchEnabled ? (
+                <Link href={`/accounts/${account.slug}?research=1#account-research`}>
+                  Rechercher le contexte public →
+                </Link>
+              ) : (
+                <span>
+                  Account Researcher prêt · activation après sécurisation du cockpit
+                </span>
+              )}
+              <small>2 recherches Brave maximum par déclenchement.</small>
+            </div>
+          )}
+
+          {accountResearch?.available && accountResearch.evidence.length > 0 && (
+            <div className="accountResearchGrid">
+              {accountResearch.evidence.map((item) => (
+                <article key={item.url}>
+                  <div className="attentionLine">
+                    <span className="attentionBucket">{item.kind}</span>
+                    <span>{item.domain || "web"}</span>
+                  </div>
+                  <strong>{item.title}</strong>
+                  {item.snippet && <p>{item.snippet}</p>}
+                  <a href={item.url} target="_blank" rel="noreferrer">Ouvrir la source ↗</a>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {accountResearch?.available && accountResearch.evidence.length === 0 && (
+            <div className="emptyState">Aucun contexte public supplémentaire suffisamment exploitable.</div>
+          )}
+
+          {shouldResearch && !accountResearchEnabled && (
+            <div className="emptyState">
+              Recherche compte désactivée tant que le cockpit n'est pas sécurisé.
+            </div>
+          )}
+
+          {accountResearch && !accountResearch.available && (
+            <div className="emptyState">
+              Account Researcher indisponible : {accountResearch.reason || "configuration manquante"}.
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="accountDetailGrid">
         <div className="detailPanel">
