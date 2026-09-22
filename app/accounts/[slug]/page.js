@@ -33,6 +33,12 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const outreach = buildAccountOutreachPlan(account);
   const shouldDiscover = query?.discover === "1";
+  const decisionDiscoveryEnabled =
+    process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
+    Boolean(process.env.BRAVE_SEARCH_API_KEY);
+  const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
+  const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
+
   const decisionMakers = shouldDiscover && decisionDiscoveryEnabled
     ? await discoverDecisionMakers({
         company: account.name,
@@ -46,12 +52,6 @@ export default async function AccountDetailPage({ params, searchParams }) {
         searches: []
       }))
     : null;
-
-  const decisionDiscoveryEnabled =
-    process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
-    Boolean(process.env.BRAVE_SEARCH_API_KEY);
-  const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
-  const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
   return (
     <main>
