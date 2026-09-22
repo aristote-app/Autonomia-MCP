@@ -3,7 +3,6 @@ import { SOURCES, SOURCE_GROUPS } from "../lib/sources.js";
 import { hasAutonomiaDatabase } from "../lib/db/supabase.js";
 import {
   searchRankedOpportunities,
-  getBuyerMarketIntelligence,
   getIntelligenceDashboardSummary
 } from "../lib/db/intelligence.js";
 import {
@@ -71,28 +70,38 @@ async function loadLiveData() {
   if (!hasAutonomiaDatabase()) return null;
 
   try {
-    const [summary, opportunities, buyers, jobSignals] = await Promise.all([
+    const [summary, opportunities, jobSignals] = await Promise.all([
       getIntelligenceDashboardSummary(),
       searchRankedOpportunities({
         actionability: "active",
         aiRelatedOnly: true,
         minFitScore: 0,
-        limit: 60
-      }),
-      getBuyerMarketIntelligence({
-        minAiAwardRows: 1,
-        limit: 6
+        limit: 200
       }),
       searchJobSignals({
         sources: ["linkedin", "indeed"],
-        limit: 40
+        freelanceOnly: true,
+        limit: 60
       })
     ]);
 
+    const visibleOpportunities = opportunities.items.filter((item) => {
+      const source = String(item.primary_source_id || "").toLowerCase();
+      const isPublicProcurement =
+        item.opportunity_type === "public_ai" ||
+        source === "boamp" ||
+        source === "ted";
+
+      // Public procurement is operational only while the stored deadline is open.
+      // Award notices / historical results and unknown-deadline public notices stay out
+      // of the commercial queue.
+      return !isPublicProcurement || item.actionability_state === "open_by_deadline";
+    });
+
     const today = buildUnifiedTodayQueue({
-      opportunities: opportunities.items,
+      opportunities: visibleOpportunities,
       jobSignals: jobSignals.items,
-      limit: 100
+      limit: 200
     });
 
     const workflow = await getTeamWorkflowContext(today);
@@ -126,7 +135,6 @@ async function loadLiveData() {
             ? "Échéance ≤ 3 jours"
             : "Aucune échéance ≤ 3 jours"
       },
-      buyers: buyers.items,
       workflow
     };
   } catch (error) {
@@ -216,7 +224,7 @@ export default async function Home({ searchParams }) {
           <span>{live ? "Supabase Autonomia connecté" : "Secrets production à connecter"}</span>
           {live && (
             <small className="statusMeta">
-              {formatNumber(live.summary.totalOpportunities)} opportunités · {formatNumber(live.summary.publicAwards)} attributions
+              {countQueue(live.today, "public")} marchés ouverts · {countQueue(live.today, "freelance")} missions freelance
             </small>
           )}
           <Link className="adminNav" href="/territoires">Territoires</Link>
@@ -451,28 +459,7 @@ export default async function Home({ searchParams }) {
             </div>
           </section>
 
-          <section className="buyerSection">
-            <div className="sectionTitle">
-              <div>
-                <p className="eyebrow">HISTORIQUE DECP</p>
-                <h2>Acheteurs observés</h2>
-              </div>
-              <p>Données factuelles agrégées depuis les attributions persistées.</p>
-            </div>
-            <div className="buyerGrid">
-              {live.buyers.map((buyer) => (
-                <article className="buyerCard" key={buyer.buyer_org_id}>
-                  <h3>{buyer.buyer_name}</h3>
-                  <dl>
-                    <div><dt>Lignes IA</dt><dd>{buyer.ai_related_award_rows}</dd></div>
-                    <div><dt>Titulaires observés</dt><dd>{buyer.observed_suppliers}</dd></div>
-                    <div><dt>Montants connus</dt><dd>{formatMoney(buyer.known_amount_total)}</dd></div>
-                    <div><dt>Dernière attribution</dt><dd>{formatDate(buyer.last_award_date)}</dd></div>
-                  </dl>
-                </article>
-              ))}
-            </div>
-          </section>
+
         </>
       )}
 
