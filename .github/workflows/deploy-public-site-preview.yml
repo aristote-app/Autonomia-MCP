@@ -106,15 +106,14 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
         run: |
-          BODY="$(curl -fsSL "$DEPLOYMENT_URL/")"
-
-          echo "$BODY" | grep -q "L’IA ne manque pas de promesses\|L'IA ne manque pas de promesses" || {
-            echo "::error::Deployment does not look like the Autonomia public site."
+          curl -fsSL "$DEPLOYMENT_URL/experts" >/dev/null || {
+            echo "::error::Public Experts route is missing."
             exit 1
           }
 
-          echo "$BODY" | grep -q "AI EXECUTION PARTNER" || {
-            echo "::error::Public-site positioning marker missing."
+          BODY="$(curl -fsSL "$DEPLOYMENT_URL/territoires")"
+          echo "$BODY" | grep -q "Autonomia Territoires\|AUTONOMIA TERRITOIRES" || {
+            echo "::error::Territoires offer marker missing from public deployment."
             exit 1
           }
 
@@ -123,7 +122,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
         run: |
-          for path in             /experts             /academy             /scan-ia             /cas-usage-ia             /formation-ia/cas-usage             /glossaire-ia             /observatoire-ia             /sitemap.xml             /robots.txt             /llms.txt
+          for path in             /experts             /academy             /territoires             /scan-ia             /cas-usage-ia             /formation-ia/cas-usage             /glossaire-ia             /observatoire-ia             /sitemap.xml             /robots.txt             /llms.txt
           do
             curl -fsSL "$DEPLOYMENT_URL$path" >/dev/null
           done
