@@ -125,10 +125,14 @@ jobs:
           AGENTS="$(curl -fsSL "$DEPLOYMENT_URL/territoires/ia-agents-collectivite")"
           echo "$AGENTS" | grep -q "L’IA pour les agents"
 
+          ACADEMY="$(curl -fsSL "$DEPLOYMENT_URL/territoires/academy-ia-collectivites")"
+          echo "$ACADEMY" | grep -q "Former les agents à l’IA"
+
           SME="$(curl -fsSL "$DEPLOYMENT_URL/territoires/accelerateur-ia-tpe-pme")"
           echo "$SME" | grep -q "TPE/PME"
 
           curl -fsSL "$DEPLOYMENT_URL/sitemap.xml" | grep -q "territoires/ia-agents-collectivite"
+          curl -fsSL "$DEPLOYMENT_URL/sitemap.xml" | grep -q "territoires/academy-ia-collectivites"
           curl -fsSL "$DEPLOYMENT_URL/sitemap.xml" | grep -q "territoires/accelerateur-ia-tpe-pme"
 
       - name: Promote verified public deployment
@@ -146,6 +150,7 @@ jobs:
           for path in \
             /territoires \
             /territoires/ia-agents-collectivite \
+            /territoires/academy-ia-collectivites \
             /territoires/accelerateur-ia-tpe-pme \
             /sitemap.xml
           do
