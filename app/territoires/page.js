@@ -8,6 +8,25 @@ function number(value) {
   return new Intl.NumberFormat("fr-FR").format(Number(value) || 0);
 }
 
+function safeWebsite(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return `https://${raw.replace(/^\/+/, "")}`;
+}
+
+function firstEmail(value) {
+  const match = String(value || "").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  return match ? match[0] : null;
+}
+
+function seatName(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const parts = raw.split(/\s+-\s+/);
+  return parts.length > 1 ? parts.slice(1).join(" - ") : raw;
+}
+
 function buildHref(params, patch) {
   const next = new URLSearchParams();
   for (const [key, value] of Object.entries(params || {})) {
@@ -110,13 +129,18 @@ export default async function TerritoriesPage({ searchParams }) {
             <span>Source</span>
           </div>
 
-          {results.items.map((territory) => (
+          {results.items.map((territory) => {
+            const email = firstEmail(territory.email);
+            const website = safeWebsite(territory.website);
+            const seat = seatName(territory.seat_commune);
+
+            return (
             <article className="territoryRow" key={territory.id}>
               <div>
                 <strong>{territory.name}</strong>
                 <small>
                   {territory.department_code ? `Dép. ${territory.department_code}` : "Département —"}
-                  {territory.seat_commune ? ` · siège : ${territory.seat_commune}` : ""}
+                  {seat ? ` · siège : ${seat}` : ""}
                 </small>
               </div>
               <div><span className="territoryType">{territory.territory_type}</span></div>
@@ -125,7 +149,7 @@ export default async function TerritoriesPage({ searchParams }) {
                 <small>{territory.member_count ? `${territory.member_count} communes/membres` : "membres —"}</small>
               </div>
               <div className="territoryContact">
-                {territory.email ? <a href={`mailto:${territory.email}`}>{territory.email}</a> : <span>email —</span>}
+                {email ? <a href={`mailto:${email}`}>{email}</a> : <span>email —</span>}
                 {territory.phone && <small>{territory.phone}</small>}
               </div>
               <div>
@@ -138,10 +162,11 @@ export default async function TerritoriesPage({ searchParams }) {
               </div>
               <div>
                 <a href={territory.banatic_url} target="_blank" rel="noreferrer">BANATIC ↗</a>
-                {territory.website && <a href={territory.website} target="_blank" rel="noreferrer">Site ↗</a>}
+                {website && <a href={website} target="_blank" rel="noreferrer">Site ↗</a>}
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
 
         <div className="territoryPagination">
