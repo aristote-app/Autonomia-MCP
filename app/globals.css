@@ -265,3 +265,53 @@ h3 { margin: 0 0 8px; }
   .teamWorkflowSummary, .workflowForm, .workflowForm.compact { grid-template-columns: 1fr; }
   .workflowForm .workflowWide { grid-column: auto; }
 }
+
+
+/* Territories acquisition universe */
+.territoryHero { display:flex; justify-content:space-between; gap:32px; align-items:flex-start; margin:48px 0 28px; padding-bottom:34px; border-bottom:1px solid #d9ddd7; }
+.territoryHero h1 { max-width:980px; margin:8px 0 14px; font-size:clamp(38px,5vw,72px); line-height:.95; letter-spacing:-.05em; }
+.territoryHero p:not(.eyebrow) { max-width:780px; color:#66706a; font-size:17px; line-height:1.55; }
+.territoryBack { flex:0 0 auto; border:1px solid #111; padding:10px 13px; font-size:12px; font-weight:700; }
+.territoryMetrics { display:grid; grid-template-columns:repeat(5,1fr); border:1px solid #d9ddd7; background:#fff; }
+.territoryMetrics article { min-height:104px; padding:22px; border-right:1px solid #d9ddd7; display:grid; align-content:center; gap:6px; }
+.territoryMetrics article:last-child { border-right:0; }
+.territoryMetrics strong { font-size:31px; line-height:1; }
+.territoryMetrics span { color:#69716d; font-size:11px; text-transform:uppercase; letter-spacing:.08em; }
+.territoryControls { margin:34px 0 44px; display:grid; gap:16px; }
+.territorySearch { display:flex; gap:10px; }
+.territorySearch input { flex:1; min-width:0; padding:13px 14px; border:1px solid #cfd4cf; background:#fff; font:inherit; }
+.territorySearch button { padding:12px 18px; border:1px solid #111; background:#111; color:#fff; font-weight:700; }
+.territoryFilters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.territoryFilters a { padding:8px 11px; border:1px solid #d0d5d0; background:#fff; font-size:11px; font-weight:700; }
+.territoryFilters a.active { background:#111; color:#fff; border-color:#111; }
+.territoryFilterDivider { width:1px; height:24px; background:#d0d5d0; margin:0 5px; }
+.territoryTable { border:1px solid #d9ddd7; background:#fff; }
+.territoryRow { display:grid; grid-template-columns:minmax(260px,2.1fr) .45fr .8fr 1.35fr .8fr .6fr; gap:16px; align-items:center; padding:16px 18px; border-bottom:1px solid #e2e5e1; }
+.territoryRow:last-child { border-bottom:0; }
+.territoryRow > div { display:grid; gap:4px; min-width:0; }
+.territoryRow strong { font-size:14px; }
+.territoryRow small { color:#7a817d; font-size:10px; line-height:1.35; }
+.territoryHead { color:#6b746f; background:#f5f5f1; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+.territoryType { display:inline-flex; width:fit-content; padding:5px 7px; background:#111; color:#fff; font-size:10px; font-weight:800; }
+.territoryContact a { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.territorySignal { display:inline-flex; width:fit-content; padding:6px 8px; border:1px solid #d1d6d1; color:#69716d; font-size:10px; font-weight:800; text-transform:uppercase; }
+.territorySignal.hot { border-color:#111; background:#111; color:#fff; }
+.territoryRow > div:last-child a { font-size:11px; font-weight:700; }
+.territoryPagination { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px; margin:22px 0 60px; font-size:12px; }
+.territoryPagination a:last-child { justify-self:end; }
+.territoryPagination strong { font-size:11px; color:#6c746f; }
+
+@media (max-width: 980px) {
+  .territoryMetrics { grid-template-columns:repeat(2,1fr); }
+  .territoryMetrics article { border-bottom:1px solid #d9ddd7; }
+  .territoryRow { grid-template-columns:1.6fr .4fr .8fr 1fr; }
+  .territoryRow > div:nth-child(4), .territoryRow > div:nth-child(6), .territoryHead > span:nth-child(4), .territoryHead > span:nth-child(6) { display:none; }
+}
+@media (max-width: 640px) {
+  .territoryHero { display:grid; }
+  .territoryMetrics { grid-template-columns:1fr; }
+  .territoryMetrics article { border-right:0; }
+  .territorySearch { display:grid; }
+  .territoryRow { grid-template-columns:1fr auto; }
+  .territoryRow > div:nth-child(3), .territoryRow > div:nth-child(4), .territoryRow > div:nth-child(6), .territoryHead > span:nth-child(3), .territoryHead > span:nth-child(4), .territoryHead > span:nth-child(6) { display:none; }
+}
