@@ -265,6 +265,7 @@ export default async function Home({ searchParams }) {
               {countQueue(live.today, "public")} marchés ouverts · {countQueue(live.today, "freelance")} missions freelance
             </small>
           )}
+          <Link className="adminNav" href="/accounts">Comptes 360°</Link>
           <Link className="adminNav" href="/territoires">Territoires</Link>
           <Link className="adminNav" href="/admin">Admin</Link>
         </div>
