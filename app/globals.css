@@ -489,3 +489,34 @@ h3 { margin: 0 0 8px; }
   .accountHeat { margin-top:14px; }
   .accountTimeline article { grid-template-columns:1fr; gap:8px; }
 }
+
+
+/* Account Sales OS */
+.decisionFinderActions { display:grid; gap:5px; margin-top:16px; }
+.decisionFinderActions a { width:max-content; max-width:100%; padding:10px 12px; border:1px solid #111; background:#111; color:#fff; text-decoration:none; font-size:12px; font-weight:800; }
+.decisionFinderActions span { color:#677068; font-size:10px; }
+.decisionCandidates { display:grid; gap:8px; margin-top:18px; }
+.decisionCandidates > article { display:grid; grid-template-columns:auto 1fr; gap:12px; padding:14px; border:1px solid #d9ddd7; background:#fff; }
+.decisionCandidates strong { font-size:14px; }
+.decisionCandidates p { margin:4px 0; color:#677068; font-size:11px; }
+.decisionCandidates small { display:block; margin-top:6px; color:#677068; font-size:10px; line-height:1.45; }
+.candidateRank { display:grid; place-items:center; width:31px; height:31px; border:1px solid #111; font-size:10px; font-weight:800; }
+.candidateActions { display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-top:10px; }
+.candidateActions a, .candidateActions span { display:inline-flex; padding:6px 8px; border:1px solid #d9ddd7; color:#111; text-decoration:none; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+.candidateActions a { border-color:#111; }
+.candidateActions span.ready { background:#111; color:#fff; border-color:#111; }
+.integrationState { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
+.integrationState span { padding:7px 9px; background:#f1f3ef; font-size:10px; }
+.accountAttackSection { margin:54px 0; }
+.outreachSequence { display:grid; border:1px solid #d9ddd7; background:#fff; }
+.outreachSequence article { display:grid; grid-template-columns:90px 1fr; gap:18px; padding:18px 20px; border-bottom:1px solid #e8ebe7; }
+.outreachSequence article:last-child { border-bottom:0; }
+.outreachDay { font-size:22px; font-weight:900; line-height:1; }
+.outreachSequence p { white-space:pre-wrap; margin:8px 0 0; color:#404740; font-size:13px; line-height:1.55; }
+.outreachGuardrails { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
+.outreachGuardrails span { padding:11px 12px; border:1px dashed #b8beb8; color:#677068; font-size:10px; line-height:1.4; }
+
+@media (max-width:560px) {
+  .outreachSequence article { grid-template-columns:1fr; gap:8px; }
+  .outreachGuardrails { grid-template-columns:1fr; }
+}
