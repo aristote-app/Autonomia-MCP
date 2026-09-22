@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 APP_ROOT="/home/dide4169/autonomia-cockpit-app"
 NODE_ENV_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate"
 BRANCH="main"
 
 source "$NODE_ENV_ACTIVATE"
+set -u
 cd "$APP_ROOT"
 
 git fetch --depth=1 origin "$BRANCH"
