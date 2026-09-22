@@ -4,6 +4,7 @@ set -eo pipefail
 APP_ROOT="/home/dide4169/autonomia-cockpit-app"
 NODE_ENV_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate"
 BRANCH="main"
+FORCE_DEPLOY="${FORCE_DEPLOY:-0}"
 
 source "$NODE_ENV_ACTIVATE"
 set -u
@@ -14,7 +15,7 @@ git fetch --depth=1 origin "$BRANCH"
 LOCAL_SHA="$(git rev-parse HEAD 2>/dev/null || true)"
 REMOTE_SHA="$(git rev-parse "origin/$BRANCH")"
 
-if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
+if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ]; then
   echo "Autonomia cockpit already up to date: $LOCAL_SHA"
   exit 0
 fi
