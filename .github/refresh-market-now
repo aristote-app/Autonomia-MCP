@@ -6,3 +6,4 @@ retry=create-cron-secret
 retry=vercel-rest-api-cron-secret
 retry=secure-derived-github-scheduler
 retry=github-oidc-auth
+retry=verified-job-signal-fallback
