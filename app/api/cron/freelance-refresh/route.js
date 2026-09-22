@@ -2,19 +2,14 @@ import {
   runAutomatedFreelanceRefresh,
   runAutomatedJobSignalRefresh
 } from "../../../../lib/market/automatedRefresh.js";
+import { isAuthorizedMarketRefreshRequest } from "../../../../lib/security/marketRefreshAuth.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-function authorized(request) {
-  const secret = process.env.CRON_SECRET;
-  const auth = request.headers.get("authorization");
-  return Boolean(secret && auth === `Bearer ${secret}`);
-}
-
 export async function GET(request) {
-  if (!authorized(request)) {
+  if (!isAuthorizedMarketRefreshRequest(request)) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
