@@ -128,6 +128,36 @@ export default async function AccountDetailPage({ params, searchParams }) {
         </div>
       </header>
 
+      <section className="accountBrief">
+        <div>
+          <span>TYPE DE COMPTE</span>
+          <strong>
+            {account.account_type === "intermediary"
+              ? "Intermédiaire / marketplace"
+              : account.account_type === "public_buyer"
+                ? "Acheteur public"
+                : "Client final à qualifier"}
+          </strong>
+        </div>
+        <div>
+          <span>OFFRE À OUVRIR</span>
+          <strong>{account.recommended_offer || "Qualification IA"}</strong>
+        </div>
+        <div>
+          <span>CIBLE PRIORITAIRE</span>
+          <strong>{account.primary_decision_role?.label || "DSI / Direction digitale"}</strong>
+        </div>
+        <div>
+          <span>SIGNAL D'ACCROCHE</span>
+          <strong>{account.playbook?.trigger || "Signal à qualifier"}</strong>
+          {account.playbook?.proof_url && (
+            <a href={account.playbook.proof_url} target="_blank" rel="noreferrer">
+              Preuve source ↗
+            </a>
+          )}
+        </div>
+      </section>
+
       <section className="accountDetailGrid">
         <div className="detailPanel">
           <p className="eyebrow">POURQUOI MAINTENANT ?</p>
