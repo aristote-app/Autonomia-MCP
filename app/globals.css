@@ -677,3 +677,26 @@ h3 { margin: 0 0 8px; }
   .accountBrief > div { border-right:0; border-bottom:1px solid #d9ddd7; }
   .accountBrief > div:last-child { border-bottom:0; }
 }
+
+
+/* Autonomia Today command center */
+.commandCenter { margin:44px 0 24px; }
+.commandGrid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid #111; background:#fff; }
+.commandGrid article { display:grid; align-content:start; gap:8px; min-width:0; min-height:190px; padding:18px; border-right:1px solid #d9ddd7; }
+.commandGrid article:last-child { border-right:0; }
+.commandGrid span { color:#677068; font-size:9px; font-weight:900; letter-spacing:.07em; text-transform:uppercase; }
+.commandGrid strong { font-size:18px; line-height:1.2; overflow-wrap:anywhere; }
+.commandGrid p { margin:0; color:#4f5750; font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
+.commandGrid a { align-self:end; width:max-content; max-width:100%; margin-top:auto; color:#111; font-size:10px; font-weight:900; text-decoration:none; }
+.commandGrid a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+@media (max-width:900px) {
+  .commandGrid { grid-template-columns:1fr 1fr; }
+  .commandGrid article:nth-child(2) { border-right:0; }
+  .commandGrid article:nth-child(-n+2) { border-bottom:1px solid #d9ddd7; }
+}
+@media (max-width:540px) {
+  .commandGrid { grid-template-columns:1fr; }
+  .commandGrid article { min-height:0; border-right:0; border-bottom:1px solid #d9ddd7; }
+  .commandGrid article:last-child { border-bottom:0; }
+}
