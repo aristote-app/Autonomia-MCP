@@ -60,6 +60,58 @@ jobs:
             --scope "$VERCEL_TEAM_SLUG" \
             --token "$VERCEL_TOKEN"
 
+      - name: Ensure CRON_SECRET exists
+        id: cron_secret
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set +x
+          set -a
+          source /tmp/autonomia-production.env
+          set +a
+
+          if [ -n "$CRON_SECRET" ]; then
+            echo "CRON_SECRET already configured."
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          generated_secret="$(openssl rand -hex 32)"
+          echo "::add-mask::$generated_secret"
+          secret_file="$(mktemp)"
+          printf "%s" "$generated_secret" > "$secret_file"
+
+          vercel env add CRON_SECRET production \
+            --sensitive \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            < "$secret_file"
+
+          rm -f "$secret_file"
+          echo "created=true" >> "$GITHUB_OUTPUT"
+          echo "CRON_SECRET created securely in Vercel production."
+
+      - name: Redeploy production after secret creation
+        if: steps.cron_secret.outputs.created == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel deploy \
+            --prod \
+            --yes \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Pull refreshed production env
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          rm -f /tmp/autonomia-production.env
+          vercel env pull /tmp/autonomia-production.env \
+            --environment=production \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
       - name: Wait for route and refresh freelance market
         run: |
           rm -f /tmp/autonomia-refresh.json /tmp/autonomia-refresh-status.txt
@@ -70,7 +122,7 @@ jobs:
           set +a
 
           if [ -z "$CRON_SECRET" ]; then
-            echo "::error::CRON_SECRET is missing from the Vercel production environment."
+            echo "::error::CRON_SECRET is still missing after configuration."
             rm -f /tmp/autonomia-production.env
             exit 1
           fi
