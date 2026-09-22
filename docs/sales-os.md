@@ -69,13 +69,38 @@ Kaspr and Waalaxy keys are server-side only:
 KASPR_API_KEY
 WAALAXY_API_KEY
 
-## Next data layer
+## Commercial memory
 
-When authentication is active, persist:
-- verified account contacts;
-- enrichment status and source;
-- Waalaxy list/campaign IDs;
-- outreach state;
-- reply/meeting/proposal/won/lost outcomes.
+Implemented in Supabase:
 
-Only then should Autonomia learn from conversion outcomes.
+- `sales_contacts`: candidate/verified/rejected contact state, account link, LinkedIn evidence,
+  enrichment state, Waalaxy identifiers, outreach state, next action and do-not-contact flag.
+- `sales_contact_events`: append-only commercial event ledger covering candidate save,
+  verification, enrichment, Waalaxy handoff, outreach, reply, meeting, proposal, won/lost,
+  stop and opt-out.
+
+Both tables have RLS enabled. `anon` and `authenticated` have no table privileges;
+the server service role is the only direct data path until cockpit authentication is activated.
+
+The Account 360 page only loads contact data when a valid workspace session exists.
+
+## Waalaxy handoff
+
+Implemented server-side:
+- load Waalaxy lists and active campaigns on demand;
+- only verified, non-do-not-contact contacts can be sent;
+- user selects list and optional campaign;
+- provider result is written back to commercial memory;
+- no automatic campaign launch from an unverified candidate.
+
+## Kaspr
+
+The product architecture and readiness flag are implemented, but live Kaspr enrichment is intentionally
+not wired until the current official request/response contract is verified. Do not guess the API payload.
+When connected, enrichment must remain a deliberate action on a verified contact to preserve credits.
+
+## Learning loop
+
+The database can now record reply / meeting / proposal / won / lost events.
+Do not modify ranking weights from outcomes until enough real history exists to avoid overfitting
+to a tiny sample.
