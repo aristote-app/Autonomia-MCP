@@ -56,7 +56,11 @@ jobs:
         run: |
           rm -f /tmp/autonomia-refresh.json /tmp/autonomia-refresh-status.txt
 
-          vercel env run --environment=production -- \
+          vercel env run \
+            --environment=production \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            -- \
             bash -lc '
               set +x
               for attempt in $(seq 1 30); do
