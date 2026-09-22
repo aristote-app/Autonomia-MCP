@@ -10,6 +10,11 @@ import {
   saveDecisionMakerCandidate,
   verifyDecisionMaker
 } from "../../actions/sales-contacts.js";
+import { sendVerifiedContactToWaalaxy } from "../../actions/sales-outreach.js";
+import {
+  getWaalaxyProspectLists,
+  getWaalaxyCampaigns
+} from "../../../lib/integrations/waalaxy.js";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +62,12 @@ export default async function AccountDetailPage({ params, searchParams }) {
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
-  const [decisionMakers, savedContacts] = await Promise.all([
+  const shouldLoadWaalaxy =
+    query?.waalaxy === "1" &&
+    hasWorkspaceSession &&
+    waalaxyConfigured;
+
+  const [decisionMakers, savedContacts, waalaxyOptions] = await Promise.all([
     shouldDiscover && decisionDiscoveryEnabled
       ? discoverDecisionMakers({
           company: account.name,
@@ -77,7 +87,24 @@ export default async function AccountDetailPage({ params, searchParams }) {
           accountKey: account.slug,
           limit: 50
         }).catch(() => [])
-      : Promise.resolve([])
+      : Promise.resolve([]),
+    shouldLoadWaalaxy
+      ? Promise.all([
+          getWaalaxyProspectLists(),
+          getWaalaxyCampaigns()
+        ])
+          .then(([lists, campaigns]) => ({
+            available: true,
+            lists: Array.isArray(lists) ? lists : [],
+            campaigns: Array.isArray(campaigns?.campaigns) ? campaigns.campaigns : []
+          }))
+          .catch((error) => ({
+            available: false,
+            error: error instanceof Error ? error.message : String(error),
+            lists: [],
+            campaigns: []
+          }))
+      : Promise.resolve(null)
   ]);
 
   return (
@@ -282,6 +309,64 @@ export default async function AccountDetailPage({ params, searchParams }) {
                           <input type="hidden" name="status" value="rejected" />
                           <button type="submit" className="secondary">Rejeter</button>
                         </form>
+                      </div>
+                    )}
+
+                    {canWriteContacts &&
+                      contact.verification_status === "verified" &&
+                      !contact.do_not_contact &&
+                      waalaxyConfigured &&
+                      !contact.waalaxy_list_id && (
+                        <div className="waalaxyContactAction" id={"waalaxy-" + contact.id}>
+                          {!waalaxyOptions ? (
+                            <Link href={`/accounts/${account.slug}?waalaxy=1#waalaxy-${contact.id}`}>
+                              Préparer Waalaxy →
+                            </Link>
+                          ) : waalaxyOptions.available && waalaxyOptions.lists.length > 0 ? (
+                            <form action={sendVerifiedContactToWaalaxy}>
+                              <input type="hidden" name="contact_id" value={contact.id} />
+                              <input type="hidden" name="account_key" value={account.slug} />
+                              <label>
+                                <span>Liste Waalaxy</span>
+                                <select name="prospect_list_id" required defaultValue="">
+                                  <option value="" disabled>Choisir une liste</option>
+                                  {waalaxyOptions.lists.map((list) => (
+                                    <option key={list._id} value={list._id}>
+                                      {list.name || list._id}
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
+                              <label>
+                                <span>Campagne (optionnel)</span>
+                                <select name="campaign_id" defaultValue="">
+                                  <option value="">Liste uniquement</option>
+                                  {waalaxyOptions.campaigns.map((campaign) => (
+                                    <option key={campaign._id} value={campaign._id}>
+                                      {campaign.name || campaign._id}
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
+                              <button type="submit">Envoyer vers Waalaxy</button>
+                            </form>
+                          ) : (
+                            <small>
+                              {waalaxyOptions.error
+                                ? "Waalaxy indisponible : " + waalaxyOptions.error
+                                : "Aucune liste Waalaxy disponible."}
+                            </small>
+                          )}
+                        </div>
+                      )}
+
+                    {contact.waalaxy_list_id && (
+                      <div className="waalaxySynced">
+                        <strong>Waalaxy synchronisé</strong>
+                        <span>Liste : {contact.waalaxy_list_id}</span>
+                        {contact.waalaxy_campaign_id && (
+                          <span>Campagne : {contact.waalaxy_campaign_id}</span>
+                        )}
                       </div>
                     )}
                   </article>
