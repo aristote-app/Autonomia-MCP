@@ -3,3 +3,4 @@ purpose=seed-freework-and-job-signals
 retry=explicit-vercel-token
 retry=vercel-env-pull
 retry=create-cron-secret
+retry=vercel-rest-api-cron-secret
