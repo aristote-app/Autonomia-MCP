@@ -169,6 +169,7 @@ export default async function Home() {
         <div className={`status ${live ? "live" : ""}`}>
           <strong>{live ? "LIVE" : "V1"}</strong>
           <span>{live ? "Supabase Autonomia connecté" : "Secrets production à connecter"}</span>
+          <Link className="adminNav" href="/territoires">Territoires</Link>
           <Link className="adminNav" href="/admin">Admin</Link>
         </div>
       </header>
