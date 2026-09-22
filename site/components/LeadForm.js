@@ -6,7 +6,15 @@ import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 const OPTIONS = {
   experts: ["GenAI / LLM", "RAG", "Agents IA", "AI Project Manager", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance / AI Act", "Je ne sais pas encore"],
   academy: ["IA générative / ChatGPT", "Microsoft Copilot", "Prompt engineering", "Agents IA", "Automatisation", "IA pour managers", "Gouvernance / AI Act", "Formation sur mesure", "Je veux cadrer le besoin"],
-  diagnostic: ["Évaluer notre maturité IA", "Identifier les compétences manquantes", "Cadrer un projet IA", "Identifier le bon profil IA", "Construire un plan de formation", "Évaluer notre usage de Copilot"]
+  diagnostic: ["Évaluer notre maturité IA", "Identifier les compétences manquantes", "Cadrer un projet IA", "Identifier le bon profil IA", "Construire un plan de formation", "Évaluer notre usage de Copilot"],
+  territories: [
+    "Diagnostic IA pour les agents",
+    "Formation IA des agents et managers",
+    "Automatiser des processus internes",
+    "Programme IA pour les entreprises du territoire",
+    "Accélérateur IA TPE / PME",
+    "Je veux cadrer le besoin"
+  ]
 };
 
 function attribution() {
@@ -99,13 +107,17 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
     ? ["Que souhaitez-vous faire progresser ?", "Combien de collaborateurs sont concernés ?"]
     : mode === "diagnostic"
       ? ["Que voulez-vous clarifier en priorité ?", "À quel stade en êtes-vous ?"]
-      : ["De quelle expertise avez-vous besoin ?", "Quand souhaitez-vous démarrer ?"];
+      : mode === "territories"
+        ? ["Quel programme voulez-vous activer ?", "Quel périmètre souhaitez-vous toucher ?"]
+        : ["De quelle expertise avez-vous besoin ?", "Quand souhaitez-vous démarrer ?"];
 
   const qualifiers = mode === "academy"
     ? ["1–10", "11–50", "51–200", "201+", "À définir"]
     : mode === "diagnostic"
       ? ["Réflexion", "Projet cadré", "Pilote en cours", "Déploiement", "Je ne sais pas"]
-      : ["Dès que possible", "< 1 mois", "1–3 mois", "> 3 mois", "À définir"];
+      : mode === "territories"
+        ? ["Agents de la collectivité", "Entreprises du territoire", "Les deux", "Une direction / un service", "À définir"]
+        : ["Dès que possible", "< 1 mois", "1–3 mois", "> 3 mois", "À définir"];
 
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
 
@@ -138,7 +150,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       phone: data.phone || null,
       company_name: data.company,
       requested_service: requestedService || mode,
-      message: scanMessage(scanContext) || data.need,
+      message: scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
       desired_timeline: mode === "experts" ? data.qualifier : null,
       company_size: mode === "academy" ? data.qualifier : null,
       form_id: formId,
