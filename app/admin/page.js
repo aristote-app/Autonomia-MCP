@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAdminDashboard } from "../../lib/admin/dashboard.js";
-import { WORKSPACE_ROLES } from "../../lib/auth/access.js";
 import {
   bootstrapWorkspace,
   inviteMember,
@@ -12,14 +11,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const TEAM_ROLES = ["admin", "direction"];
+
 const ROLE_LABELS = {
   admin: "Admin",
-  direction: "Direction",
-  public_markets: "Marchés publics",
-  sales: "Commercial",
-  staffing: "Staffing / recrutement",
-  contributor: "Contributeur",
-  viewer: "Lecture seule"
+  direction: "Associé"
 };
 
 const STAGE_LABELS = {
@@ -190,9 +186,9 @@ export default async function AdminPage({ searchParams }) {
         <div className="sectionTitle">
           <div>
             <p className="eyebrow">COMPTES</p>
-            <h2>Utilisateurs et rôles</h2>
+            <h2>Les deux associés</h2>
           </div>
-          <p>Les invitations passent par Supabase Auth. La désactivation conserve l'historique.</p>
+          <p>Deux comptes séparés, mêmes droits de pilotage, historique conservé par utilisateur.</p>
         </div>
 
         <div className="adminSplit">
@@ -208,7 +204,7 @@ export default async function AdminPage({ searchParams }) {
                 <form action={updateMemberRole} className="memberRoleForm">
                   <input type="hidden" name="user_id" value={member.user_id} />
                   <select name="role" defaultValue={member.role}>
-                    {WORKSPACE_ROLES.map((role) => (
+                    {TEAM_ROLES.map((role) => (
                       <option key={role} value={role}>{ROLE_LABELS[role] || role}</option>
                     ))}
                   </select>
@@ -240,8 +236,8 @@ export default async function AdminPage({ searchParams }) {
               </label>
               <label>
                 <span>Rôle</span>
-                <select name="role" defaultValue="contributor">
-                  {WORKSPACE_ROLES.map((role) => (
+                <select name="role" defaultValue="direction">
+                  {TEAM_ROLES.map((role) => (
                     <option key={role} value={role}>{ROLE_LABELS[role] || role}</option>
                   ))}
                 </select>
