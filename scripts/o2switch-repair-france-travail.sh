@@ -12,6 +12,7 @@ read -r FT_CLIENT_ID
 printf "Clé secrète France Travail : "
 read -rs FT_CLIENT_SECRET
 printf "\n"
+printf "Clé reçue : %s caractères\n" "${#FT_CLIENT_SECRET}"
 
 TMP_ENV="$(mktemp)"
 if [ -f "$ENV_FILE" ]; then
