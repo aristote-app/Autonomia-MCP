@@ -21,6 +21,9 @@ export default function IntegrationsPage() {
     waalaxy: Boolean(process.env.WAALAXY_API_KEY),
     decisionDiscovery:
       process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
+      Boolean(process.env.BRAVE_SEARCH_API_KEY),
+    accountResearch:
+      process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY)
   };
 
@@ -73,6 +76,15 @@ export default function IntegrationsPage() {
           <p>
             Le connecteur API Autonomia est prêt pour importer un profil LinkedIn dans une liste
             Waalaxy et, si choisi, l'inscrire à une campagne.
+          </p>
+        </article>
+
+        <article>
+          <State ready={states.accountResearch} label="Account Researcher" />
+          <h2>Recherche compte</h2>
+          <p>
+            Contexte public IA, transformation, recrutement et partenariats. Deux recherches Brave
+            maximum par déclenchement, uniquement à la demande.
           </p>
         </article>
 
