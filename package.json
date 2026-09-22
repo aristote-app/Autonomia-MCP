@@ -25,7 +25,8 @@
     "smoke:private-signals": "node scripts/smoke-private-signals.mjs",
     "smoke:intelligence": "node scripts/smoke-intelligence.mjs",
     "smoke:today": "node scripts/smoke-today.mjs",
-    "smoke:job-discovery": "node scripts/smoke-job-discovery.mjs"
+    "smoke:job-discovery": "node scripts/smoke-job-discovery.mjs",
+    "smoke:territory-signals": "node scripts/smoke-territory-signals.mjs"
   },
   "engines": {
     "node": ">=22"
