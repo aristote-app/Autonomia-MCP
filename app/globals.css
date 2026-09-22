@@ -594,3 +594,21 @@ h3 { margin: 0 0 8px; }
 @media (max-width:560px) {
   .savedContactTop { display:grid; }
 }
+
+
+/* Guarded Waalaxy handoff */
+.waalaxyContactAction { margin-top:12px; padding-top:12px; border-top:1px solid #e8ebe7; }
+.waalaxyContactAction > a { display:inline-flex; padding:8px 10px; border:1px solid #111; color:#111; text-decoration:none; font-size:10px; font-weight:800; }
+.waalaxyContactAction form { display:grid; grid-template-columns:minmax(150px,1fr) minmax(150px,1fr) auto; gap:8px; align-items:end; }
+.waalaxyContactAction label { display:grid; gap:5px; }
+.waalaxyContactAction label > span { color:#677068; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; }
+.waalaxyContactAction select { min-height:36px; width:100%; border:1px solid #cfd4ce; background:#fff; padding:7px 8px; font:inherit; font-size:11px; }
+.waalaxyContactAction button { min-height:36px; border:1px solid #111; background:#111; color:#fff; padding:8px 10px; font:inherit; font-size:10px; font-weight:800; cursor:pointer; }
+.waalaxyContactAction small { color:#677068; font-size:10px; line-height:1.4; }
+.waalaxySynced { display:flex; flex-wrap:wrap; gap:6px 10px; margin-top:12px; padding:10px 12px; background:#111; color:#fff; font-size:9px; }
+.waalaxySynced strong { font-size:10px; }
+.waalaxySynced span { color:#d6dad6; }
+
+@media (max-width:720px) {
+  .waalaxyContactAction form { grid-template-columns:1fr; }
+}
