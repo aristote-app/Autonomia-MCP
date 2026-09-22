@@ -11,6 +11,9 @@ import {
 import { buildAccountIntelligence, slugifyAccountName } from "../lib/intelligence/accounts.js";
 import { searchJobSignals } from "../lib/db/jobSignals.js";
 import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
+import { getCurrentWorkspaceMembership } from "../lib/auth/access.js";
+import { listWorkspaceSalesContacts } from "../lib/db/salesContacts.js";
+import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 import {
   claimWorkItem,
   assignWorkItem,
@@ -253,6 +256,32 @@ function countQueue(items, filter) {
 
 export default async function Home({ searchParams }) {
   const live = await loadLiveData();
+  const privateContext = await getCurrentWorkspaceMembership().catch(() => ({
+    configured: false,
+    claims: null,
+    membership: null
+  }));
+  const hasWorkspaceSession = Boolean(
+    privateContext?.claims?.sub && privateContext?.membership?.workspace_id
+  );
+  const privateContacts =
+    live && hasWorkspaceSession
+      ? await listWorkspaceSalesContacts({
+          workspaceId: privateContext.membership.workspace_id,
+          limit: 500
+        }).catch(() => [])
+      : [];
+  const revenueActions =
+    live && hasWorkspaceSession
+      ? buildRevenueActions({
+          accounts: live.accounts || [],
+          contacts: privateContacts,
+          kasprReady: Boolean(process.env.KASPR_API_KEY),
+          waalaxyReady: Boolean(process.env.WAALAXY_API_KEY),
+          limit: 8
+        })
+      : [];
+
   const params = await searchParams;
   const activeFilter = QUEUE_FILTERS.some(([value]) => value === params?.filter) ? params.filter : "all";
   const activeSort = QUEUE_SORTS.some(([value]) => value === params?.sort) ? params.sort : "priority";
@@ -295,6 +324,42 @@ export default async function Home({ searchParams }) {
 
       {live && (
         <>
+          {revenueActions.length > 0 && (
+            <section className="revenueActions">
+              <div className="sectionTitle">
+                <div>
+                  <p className="eyebrow">NEXT BEST ACTION</p>
+                  <h2>Autonomia te dit quoi faire.</h2>
+                </div>
+                <p>
+                  Actions calculées à partir de l'état réel des comptes et contacts. Aucun envoi n'est automatique.
+                </p>
+              </div>
+
+              <div className="revenueActionList">
+                {revenueActions.map((action) => (
+                  <article key={action.id}>
+                    <div className="revenueActionPriority">{action.priority}</div>
+                    <div>
+                      <div className="attentionLine">
+                        <span className="attentionBucket">{action.label}</span>
+                        <span>{action.account_name}</span>
+                      </div>
+                      <strong>{action.contact_name || action.account_name}</strong>
+                      {action.trigger && <p>Signal : {action.trigger}</p>}
+                      <small>{action.action}</small>
+                    </div>
+                    <div className="revenueActionOpen">
+                      {action.account_key && (
+                        <Link href={`/accounts/${action.account_key}`}>Ouvrir →</Link>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="commandCenter">
             <div className="sectionTitle">
               <div>
