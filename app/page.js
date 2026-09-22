@@ -8,6 +8,7 @@ import {
 import {
   buildUnifiedTodayQueue
 } from "../lib/intelligence/today.js";
+import { buildAccountIntelligence } from "../lib/intelligence/accounts.js";
 import { searchJobSignals } from "../lib/db/jobSignals.js";
 import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
 import {
@@ -119,6 +120,11 @@ async function loadLiveData() {
       limit: 200
     });
 
+    const accounts = buildAccountIntelligence({
+      opportunities: visibleOpportunities,
+      jobSignals: [...freelanceSignals.items, ...trainingSignals.items]
+    }).slice(0, 6);
+
     const workflow = await getTeamWorkflowContext(today);
 
     const directMissions = today.filter((item) => item.type_label === "Mission freelance").length;
@@ -127,8 +133,9 @@ async function loadLiveData() {
     return {
       summary,
       today,
+      accounts,
       todaySummary: {
-        total: (summary.activeAiOpportunities || 0) + (summary.totalJobSignals || 0),
+        total: today.length,
         directMissions,
         trainingNeeds,
         companySignals: summary.companyJobSignals || 0,
@@ -273,6 +280,43 @@ export default async function Home({ searchParams }) {
 
       {live && (
         <>
+          {live.accounts?.length > 0 && (
+            <section className="hotAccountsSection">
+              <div className="sectionTitle">
+                <div>
+                  <p className="eyebrow">ACCOUNT INTELLIGENCE</p>
+                  <h2>Comptes à travailler maintenant.</h2>
+                </div>
+                <p>
+                  Signaux empilés par entreprise : récence, convergence des sources et potentiel multi-offres.
+                </p>
+              </div>
+
+              <div className="hotAccountsGrid">
+                {live.accounts.map((account) => (
+                  <article key={account.slug}>
+                    <div className="hotAccountTop">
+                      <div>
+                        <p className="buyer">{account.name}</p>
+                        <h3>{account.heat_label}</h3>
+                      </div>
+                      <strong>{account.heat_score}</strong>
+                    </div>
+                    <p>
+                      {account.signal_count} signaux · {account.source_count} sources · {account.recent_7d} sur 7 j
+                    </p>
+                    {account.why_now[0] && <small>{account.why_now[0]}</small>}
+                    <Link href={`/accounts/${account.slug}`}>Ouvrir le compte 360° →</Link>
+                  </article>
+                ))}
+              </div>
+
+              <div className="hotAccountsMore">
+                <Link href="/accounts">Voir tous les comptes →</Link>
+              </div>
+            </section>
+          )}
+
           <section className="todaySection" id="queue">
             <div className="sectionTitle">
               <div>
