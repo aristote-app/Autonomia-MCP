@@ -1,6 +1,7 @@
 import {
   runAutomatedFreelanceRefresh,
-  runAutomatedJobSignalRefresh
+  runAutomatedJobSignalRefresh,
+  runAutomatedExtendedDemandRefresh
 } from "../lib/market/automatedRefresh.js";
 
 async function main() {
@@ -31,10 +32,25 @@ async function main() {
     };
   }
 
+  try {
+    result.extendedDemand = await runAutomatedExtendedDemandRefresh({
+      triggerMode: "scheduled"
+    });
+  } catch (error) {
+    result.extendedDemand = {
+      available: false,
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
+
   result.completedAt = new Date().toISOString();
   console.log(JSON.stringify(result, null, 2));
 
-  if (!result.freelance?.available && !result.linkedinIndeed?.available) {
+  if (
+    !result.freelance?.available &&
+    !result.linkedinIndeed?.available &&
+    !result.extendedDemand?.available
+  ) {
     process.exitCode = 1;
   }
 }
