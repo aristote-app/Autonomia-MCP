@@ -38,6 +38,23 @@ jobs:
           echo "::add-mask::$TOKEN"
           echo "TERRITORY_REFRESH_TOKEN=$TOKEN" >> "$GITHUB_ENV"
 
+          TOKEN="$TOKEN" python - <<'PY'
+          import base64, json, os
+          token = os.environ["TOKEN"]
+          payload = token.split(".")[1]
+          payload += "=" * (-len(payload) % 4)
+          claims = json.loads(base64.urlsafe_b64decode(payload))
+          safe = {
+              "repository": claims.get("repository"),
+              "ref": claims.get("ref"),
+              "workflow_ref": claims.get("workflow_ref"),
+              "job_workflow_ref": claims.get("job_workflow_ref"),
+              "event_name": claims.get("event_name"),
+              "aud": claims.get("aud"),
+          }
+          print("OIDC claims:", json.dumps(safe, sort_keys=True))
+          PY
+
       - name: Download current BANATIC national export
         id: download
         run: |
