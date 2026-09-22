@@ -612,3 +612,34 @@ h3 { margin: 0 0 8px; }
 @media (max-width:720px) {
   .waalaxyContactAction form { grid-template-columns:1fr; }
 }
+
+
+/* Commercial contact pipeline */
+.lockedContactState { display:grid; gap:6px; margin:30px 0 60px; padding:24px; border:1px dashed #aeb5ae; background:#fff; }
+.lockedContactState strong { font-size:18px; }
+.lockedContactState span { color:#677068; font-size:12px; }
+.contactPipelineFilters { display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); margin:28px 0 16px; border:1px solid #d9ddd7; background:#fff; }
+.contactPipelineFilters a { display:grid; gap:4px; min-width:0; padding:13px 11px; border-right:1px solid #d9ddd7; color:#111; text-decoration:none; }
+.contactPipelineFilters a:last-child { border-right:0; }
+.contactPipelineFilters a.active { background:#111; color:#fff; }
+.contactPipelineFilters strong { font-size:20px; line-height:1; }
+.contactPipelineFilters span { font-size:9px; text-transform:uppercase; letter-spacing:.05em; }
+.contactPipelineList { display:grid; gap:9px; margin-bottom:60px; }
+.contactPipelineList > article { display:grid; grid-template-columns:1.4fr .8fr 1.2fr .75fr; gap:16px; align-items:center; padding:16px 18px; border:1px solid #d9ddd7; background:#fff; }
+.contactPipelineIdentity h3 { margin:0 0 4px; font-size:15px; }
+.contactPipelineIdentity > p:last-child { margin:0; color:#677068; font-size:11px; }
+.contactPipelineState, .contactPipelineProof, .contactPipelineAction { display:grid; gap:5px; min-width:0; }
+.contactPipelineState > span:not(.contactStatus), .contactPipelineProof span, .contactPipelineAction span { color:#677068; font-size:10px; }
+.contactPipelineProof strong { font-size:11px; line-height:1.35; }
+.contactPipelineAction a { color:#111; font-size:10px; font-weight:800; text-decoration:none; }
+.contactPipelineAction a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+@media (max-width:980px) {
+  .contactPipelineFilters { grid-template-columns:repeat(3,1fr); }
+  .contactPipelineFilters a { border-bottom:1px solid #d9ddd7; }
+  .contactPipelineList > article { grid-template-columns:1.2fr .8fr; }
+}
+@media (max-width:560px) {
+  .contactPipelineFilters { grid-template-columns:1fr 1fr; }
+  .contactPipelineList > article { grid-template-columns:1fr; }
+}
