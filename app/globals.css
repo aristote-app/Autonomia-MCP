@@ -643,3 +643,16 @@ h3 { margin: 0 0 8px; }
   .contactPipelineFilters { grid-template-columns:1fr 1fr; }
   .contactPipelineList > article { grid-template-columns:1fr; }
 }
+
+
+/* Commercial outcome controls */
+.contactStageForm { display:grid; grid-template-columns:minmax(120px,1fr) auto; gap:6px; margin-top:7px; }
+.contactStageForm select { min-height:32px; width:100%; border:1px solid #cfd4ce; background:#fff; padding:6px 7px; font:inherit; font-size:10px; }
+.contactStageForm button,
+.contactOptOutForm button { min-height:32px; border:1px solid #111; background:#111; color:#fff; padding:6px 8px; font:inherit; font-size:9px; font-weight:800; cursor:pointer; }
+.contactOptOutForm { margin-top:2px; }
+.contactOptOutForm button { background:#fff; color:#111; border-style:dashed; width:100%; }
+
+@media (max-width:560px) {
+  .contactStageForm { grid-template-columns:1fr; }
+}
