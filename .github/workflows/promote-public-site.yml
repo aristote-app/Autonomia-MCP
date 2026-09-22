@@ -13,31 +13,160 @@ permissions:
 jobs:
   promote:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
+    env:
+      VERCEL_TEAM_SLUG: aristote
+      VERCEL_PROJECT_NAME: autonomia-public-site
+      PRODUCTION_URL: https://autonomia-public-site.vercel.app
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@50.1.6
-
-      - name: Promote verified public-site preview
+      - name: Check Vercel credentials
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          vercel promote \
-            https://autonomia-public-site-89myngd9c-aristote.vercel.app \
-            --scope aristote \
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing repository secret VERCEL_TOKEN."
+            exit 1
+          fi
+
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.23.2
+
+      - name: Ensure dedicated Vercel project exists
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          STATUS="$(curl -sS -o /tmp/vercel-project.json -w "%{http_code}" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_NAME?slug=$VERCEL_TEAM_SLUG")"
+
+          if [ "$STATUS" = "404" ]; then
+            curl -fsS \
+              -X POST \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              "https://api.vercel.com/v11/projects?slug=$VERCEL_TEAM_SLUG" \
+              -d "{\"name\":\"$VERCEL_PROJECT_NAME\",\"framework\":\"nextjs\"}" \
+              > /tmp/vercel-project-created.json
+          elif [ "$STATUS" != "200" ]; then
+            cat /tmp/vercel-project.json
+            echo "::error::Unable to inspect or create dedicated Vercel project (HTTP $STATUS)."
+            exit 1
+          fi
+
+      - name: Link public site
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --cwd site \
+            --project "$VERCEL_PROJECT_NAME" \
+            --scope "$VERCEL_TEAM_SLUG" \
             --token "$VERCEL_TOKEN" \
             --yes
 
-      - name: Verify public Territoires offer
+      - name: Pull production environment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          BODY="$(curl -fsSL --retry 12 --retry-delay 5 https://autonomia-public-site.vercel.app/territoires)"
+          vercel pull \
+            --cwd site \
+            --yes \
+            --environment=production \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Build public site in GitHub Actions
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel build \
+            --cwd site \
+            --prod \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Upload prebuilt public deployment without alias
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy \
+            --cwd site \
+            --prebuilt \
+            --prod \
+            --skip-domain \
+            --archive=tgz \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes \
+            --meta githubCommitSha="$GITHUB_SHA" \
+            --meta githubCommitRef="$GITHUB_REF_NAME")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Deployment URL: $URL"
+
+      - name: Smoke test current Territoires vertical
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          TERRITORIES="$(curl -fsSL "$DEPLOYMENT_URL/territoires")"
+          echo "$TERRITORIES" | grep -q "AUTONOMIA TERRITOIRES"
+          echo "$TERRITORIES" | grep -q "Academy collectivités"
+          echo "$TERRITORIES" | grep -q "Accélérateur IA"
+
+          AGENTS="$(curl -fsSL "$DEPLOYMENT_URL/territoires/ia-agents-collectivite")"
+          echo "$AGENTS" | grep -q "L’IA pour les agents"
+
+          SME="$(curl -fsSL "$DEPLOYMENT_URL/territoires/accelerateur-ia-tpe-pme")"
+          echo "$SME" | grep -q "TPE/PME"
+
+          curl -fsSL "$DEPLOYMENT_URL/sitemap.xml" | grep -q "territoires/ia-agents-collectivite"
+          curl -fsSL "$DEPLOYMENT_URL/sitemap.xml" | grep -q "territoires/accelerateur-ia-tpe-pme"
+
+      - name: Promote verified public deployment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          vercel promote "$DEPLOYMENT_URL" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Verify public production alias
+        run: |
+          for path in \
+            /territoires \
+            /territoires/ia-agents-collectivite \
+            /territoires/accelerateur-ia-tpe-pme \
+            /sitemap.xml
+          do
+            curl -fsSL --retry 12 --retry-delay 5 "$PRODUCTION_URL$path" >/dev/null
+          done
+
+          BODY="$(curl -fsSL "$PRODUCTION_URL/territoires")"
           echo "$BODY" | grep -q "AUTONOMIA TERRITOIRES"
-          echo "$BODY" | grep -q "Academy collectivités"
-          echo "$BODY" | grep -q "Accélérateur IA"
-          echo "Autonomia Territoires is live."
+          echo "Autonomia Territoires production verification passed."
+
+      - name: Publish deployment summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          {
+            echo "## Autonomia public site deployment"
+            echo ""
+            echo "- Project: `$VERCEL_PROJECT_NAME`"
+            echo "- Commit: `$GITHUB_SHA`"
+            echo "- Deployment: $DEPLOYMENT_URL"
+            echo "- Production: $PRODUCTION_URL"
+            echo "- Build: GitHub Actions / prebuilt"
+            echo "- Territoires + guide cluster smoke: passed"
+          } >> "$GITHUB_STEP_SUMMARY"
