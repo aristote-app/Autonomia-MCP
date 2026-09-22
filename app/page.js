@@ -127,6 +127,15 @@ async function loadLiveData() {
       .filter((account) => !account.intermediary_risk)
       .slice(0, 6);
 
+    const dailyFocus = {
+      account: accounts[0] || null,
+      freelance: today.find((item) => item.type_label === "Mission freelance") || null,
+      training: today.find((item) =>
+        item.type_label === "Besoin formation IA" || item.type_label === "Formation IA"
+      ) || null,
+      publicMarket: today.find((item) => item.type_label === "Marché public") || null
+    };
+
     const workflow = await getTeamWorkflowContext(today);
 
     const directMissions = today.filter((item) => item.type_label === "Mission freelance").length;
@@ -136,6 +145,7 @@ async function loadLiveData() {
       summary,
       today,
       accounts,
+      dailyFocus,
       todaySummary: {
         total: today.length,
         directMissions,
@@ -284,6 +294,62 @@ export default async function Home({ searchParams }) {
 
       {live && (
         <>
+          <section className="commandCenter">
+            <div className="sectionTitle">
+              <div>
+                <p className="eyebrow">AUTONOMIA · TODAY</p>
+                <h2>Qu'est-ce qu'on fait maintenant ?</h2>
+              </div>
+              <p>
+                Une action prioritaire par moteur. Chaque recommandation reste reliée au signal source.
+              </p>
+            </div>
+
+            <div className="commandGrid">
+              <article>
+                <span>COMPTE À OUVRIR</span>
+                <strong>{live.dailyFocus?.account?.name || "Aucun compte chaud"}</strong>
+                <p>{live.dailyFocus?.account?.why_now?.[0] || "Attendre un signal plus fort."}</p>
+                {live.dailyFocus?.account && (
+                  <Link href={`/accounts/${live.dailyFocus.account.slug}`}>Compte 360° →</Link>
+                )}
+              </article>
+
+              <article>
+                <span>MISSION À QUALIFIER</span>
+                <strong>{live.dailyFocus?.freelance?.company_name || "Aucune mission"}</strong>
+                <p>{live.dailyFocus?.freelance?.title || "Aucune mission freelance active."}</p>
+                {live.dailyFocus?.freelance?.source_url && (
+                  <a href={live.dailyFocus.freelance.source_url} target="_blank" rel="noreferrer">
+                    Source ↗
+                  </a>
+                )}
+              </article>
+
+              <article>
+                <span>FORMATION À OUVRIR</span>
+                <strong>{live.dailyFocus?.training?.company_name || "Aucun besoin"}</strong>
+                <p>{live.dailyFocus?.training?.title || "Aucun besoin formation IA actif."}</p>
+                {live.dailyFocus?.training?.source_url && (
+                  <a href={live.dailyFocus.training.source_url} target="_blank" rel="noreferrer">
+                    Source ↗
+                  </a>
+                )}
+              </article>
+
+              <article>
+                <span>MARCHÉ PUBLIC</span>
+                <strong>{live.dailyFocus?.publicMarket?.company_name || "Aucun marché ouvert"}</strong>
+                <p>{live.dailyFocus?.publicMarket?.title || "Aucun marché public IA actif dans la file."}</p>
+                {live.dailyFocus?.publicMarket?.source_url && (
+                  <a href={live.dailyFocus.publicMarket.source_url} target="_blank" rel="noreferrer">
+                    Source ↗
+                  </a>
+                )}
+              </article>
+            </div>
+          </section>
+
           {live.accounts?.length > 0 && (
             <section className="hotAccountsSection">
               <div className="sectionTitle">
