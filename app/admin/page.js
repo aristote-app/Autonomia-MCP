@@ -94,16 +94,31 @@ export default async function AdminPage({ searchParams }) {
       <main>
         <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
         <section className="adminState">
-          <p className="eyebrow">ADMIN · PRÉPARATION</p>
-          <h1>Multi-utilisateur prêt à activer</h1>
+          <p className="eyebrow">ESPACE ÉQUIPE</p>
+          <h1>Le cockpit fonctionne. L’accès multi-utilisateur n’est pas encore activé.</h1>
           <p>
-            Le code est installé mais l'authentification reste volontairement inactive tant que
-            les variables de production ne sont pas configurées.
+            Ce n’est pas un problème de base de données : Supabase alimente déjà le cockpit.
+            Seule la connexion par comptes utilisateurs reste à finaliser avant d’ouvrir les rôles,
+            affectations et invitations.
           </p>
-          <div className="adminSetupCode">
-            <code>SUPABASE_PUBLISHABLE_KEY</code>
-            <code>AUTONOMIA_AUTH_REQUIRED=true</code>
+
+          <div className="adminReadiness">
+            <article>
+              <strong>OK</strong>
+              <span>Base Supabase</span>
+              <small>Données du cockpit connectées</small>
+            </article>
+            <article>
+              <strong>À ACTIVER</strong>
+              <span>Connexion équipe</span>
+              <small>Création du premier administrateur puis activation de l’authentification</small>
+            </article>
           </div>
+
+          <p className="adminStateHint">
+            Tant que cette étape n’est pas activée, le bouton Admin sert uniquement à signaler cet état.
+            Les opportunités, signaux, territoires et sources restent accessibles depuis le cockpit.
+          </p>
         </section>
       </main>
     );
