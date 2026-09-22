@@ -1,5 +1,6 @@
 name: deploy-public-site-preview
 # manual-trigger: 2026-09-22
+# deploy-retrigger-after-token: 2026-09-22
 
 on:
   push:
