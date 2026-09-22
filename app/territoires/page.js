@@ -40,10 +40,20 @@ function buildHref(params, patch) {
   return query ? `/territoires?${query}` : "/territoires";
 }
 
+function priorityLabel(value) {
+  return {
+    P1: "P1 · à traiter",
+    P2: "P2 · prioritaire",
+    P3: "P3 · potentiel",
+    P4: "P4 · enrichir"
+  }[value] || value;
+}
+
 export default async function TerritoriesPage({ searchParams }) {
   const params = await searchParams;
   const type = ["CC", "CA"].includes(params?.type) ? params.type : null;
   const signal = ["with", "without"].includes(params?.signal) ? params.signal : null;
+  const priority = ["P1", "P2", "P3", "P4"].includes(params?.priority) ? params.priority : null;
   const query = params?.q ? String(params.q).trim() : null;
   const page = Math.max(Number(params?.page) || 1, 1);
   const limit = 100;
@@ -63,21 +73,24 @@ export default async function TerritoriesPage({ searchParams }) {
 
   const [summary, results] = await Promise.all([
     getTerritorySummary(),
-    searchTerritories({ type, signal, query, limit, offset })
+    searchTerritories({ type, signal, priority, query, limit, offset })
   ]);
 
   const totalPages = Math.max(Math.ceil(results.count / limit), 1);
-  const baseParams = { type, signal, q: query };
+  const baseParams = { type, signal, priority, q: query };
 
   return (
     <main>
       <section className="territoryHero">
         <div>
           <p className="eyebrow">AUTONOMIA / TERRITOIRES</p>
-          <h1>Communautés de communes & communautés d’agglomération</h1>
+          <h1>1217 territoires. Une priorité explicable.</h1>
           <p>
-            Univers complet de prospection BANATIC. Un territoire reste visible même sans signal ;
-            les signaux servent à prioriser, pas à décider qui existe dans le cockpit.
+            Tous les territoires restent visibles. Le score sert uniquement à ordonner l’effort commercial :
+            signaux publics 60 points, portée territoriale 25 points, joignabilité 15 points.
+          </p>
+          <p className="territoryScoreDisclaimer">
+            Ce score n’évalue pas la maturité IA d’une collectivité.
           </p>
         </div>
         <Link className="territoryBack" href="/">← Market Intelligence</Link>
@@ -88,14 +101,28 @@ export default async function TerritoriesPage({ searchParams }) {
         <article><strong>{number(summary.communitiesOfCommunes)}</strong><span>communautés de communes</span></article>
         <article><strong>{number(summary.communitiesOfAgglomeration)}</strong><span>communautés d’agglomération</span></article>
         <article><strong>{number(summary.withSignal)}</strong><span>avec signal</span></article>
-        <article><strong>{number(summary.withoutSignal)}</strong><span>sans signal</span></article>
+        <article><strong>{number(summary.p1 + summary.p2)}</strong><span>P1 + P2</span></article>
+      </section>
+
+      <section className="territoryPriorityStrip" aria-label="Répartition des priorités">
+        {["P1","P2","P3","P4"].map((band) => (
+          <Link
+            key={band}
+            href={buildHref(baseParams, { priority: priority === band ? null : band, page: 1 })}
+            className={priority === band ? "active" : ""}
+          >
+            <strong>{number(summary[band.toLowerCase()])}</strong>
+            <span>{priorityLabel(band)}</span>
+          </Link>
+        ))}
       </section>
 
       <section className="territoryControls">
         <form className="territorySearch">
-          <input name="q" defaultValue={query || ""} placeholder="Rechercher un territoire…" />
+          <input name="q" defaultValue={query || ""} placeholder="Territoire, SIREN, département, ville…" />
           {type && <input type="hidden" name="type" value={type} />}
           {signal && <input type="hidden" name="signal" value={signal} />}
+          {priority && <input type="hidden" name="priority" value={priority} />}
           <button type="submit">Rechercher</button>
         </form>
 
@@ -116,17 +143,17 @@ export default async function TerritoriesPage({ searchParams }) {
             <p className="eyebrow">BASE DE PROSPECTION</p>
             <h2>{number(results.count)} territoire{results.count > 1 ? "s" : ""}</h2>
           </div>
-          <p>Source principale : BANATIC / Direction générale des collectivités locales.</p>
+          <p>Source d’identité : BANATIC / DGCL. Les signaux sont conservés avec leur URL source lorsqu’elle existe.</p>
         </div>
 
-        <div className="territoryTable">
-          <div className="territoryRow territoryHead">
+        <div className="territoryTable territoryTableV2">
+          <div className="territoryRow territoryHead territoryRowV2">
             <span>Territoire</span>
-            <span>Type</span>
-            <span>Population</span>
+            <span>Priorité</span>
+            <span>Pourquoi</span>
+            <span>Angle</span>
             <span>Contact</span>
-            <span>Signal</span>
-            <span>Source</span>
+            <span>Action</span>
           </div>
 
           {results.items.map((territory) => {
@@ -135,36 +162,53 @@ export default async function TerritoriesPage({ searchParams }) {
             const seat = seatName(territory.seat_commune);
 
             return (
-            <article className="territoryRow" key={territory.id}>
-              <div>
-                <strong>{territory.name}</strong>
-                <small>
-                  {territory.department_code ? `Dép. ${territory.department_code}` : "Département —"}
-                  {seat ? ` · siège : ${seat}` : ""}
-                </small>
-              </div>
-              <div><span className="territoryType">{territory.territory_type}</span></div>
-              <div>
-                <strong>{territory.population_total ? number(territory.population_total) : "—"}</strong>
-                <small>{territory.member_count ? `${territory.member_count} communes/membres` : "membres —"}</small>
-              </div>
-              <div className="territoryContact">
-                {email ? <a href={`mailto:${email}`}>{email}</a> : <span>email —</span>}
-                {territory.phone && <small>{territory.phone}</small>}
-              </div>
-              <div>
-                <span className={territory.has_signal ? "territorySignal hot" : "territorySignal"}>
-                  {territory.has_signal ? `${territory.signal_count} signal${territory.signal_count > 1 ? "s" : ""}` : "Sans signal"}
-                </span>
-                {territory.last_signal_at && (
-                  <small>Dernier : {new Intl.DateTimeFormat("fr-FR").format(new Date(territory.last_signal_at))}</small>
-                )}
-              </div>
-              <div>
-                <a href={territory.banatic_url} target="_blank" rel="noreferrer">BANATIC ↗</a>
-                {website && <a href={website} target="_blank" rel="noreferrer">Site ↗</a>}
-              </div>
-            </article>
+              <article className="territoryRow territoryRowV2" key={territory.id}>
+                <div className="territoryIdentity">
+                  <Link href={`/territoires/${territory.siren}`}><strong>{territory.name}</strong></Link>
+                  <small>
+                    {territory.territory_type} · {territory.department_code ? `Dép. ${territory.department_code}` : "Département —"}
+                    {seat ? ` · siège : ${seat}` : ""}
+                  </small>
+                  <small>{territory.population_total ? `${number(territory.population_total)} hab.` : "Population —"}</small>
+                </div>
+
+                <div className="territoryPriorityCell">
+                  <strong className={`territoryPriorityBadge ${String(territory.priority_band || "").toLowerCase()}`}>
+                    {territory.priority_band} · {territory.commercial_score}/100
+                  </strong>
+                  <small>{priorityLabel(territory.priority_band)}</small>
+                </div>
+
+                <div className="territoryScoreBreakdown">
+                  <span>Signal <b>{territory.signal_score}/60</b></span>
+                  <span>Portée <b>{territory.reach_score}/25</b></span>
+                  <span>Contact <b>{territory.contact_score}/15</b></span>
+                  {territory.signal_count > 0 ? (
+                    <a href={territory.latest_signal_url || `/territoires/${territory.siren}`}>
+                      {territory.signal_count} signal{territory.signal_count > 1 ? "s" : ""}
+                    </a>
+                  ) : <small>Aucun signal rattaché</small>}
+                </div>
+
+                <div className="territoryOfferCell">
+                  <strong>{territory.suggested_offer}</strong>
+                  <small>{Array.isArray(territory.recommended_roles) ? territory.recommended_roles.join(" · ") : ""}</small>
+                </div>
+
+                <div className="territoryContact">
+                  {email ? <a href={`mailto:${email}`}>{email}</a> : <span>email —</span>}
+                  {territory.phone && <small>{territory.phone}</small>}
+                  <div className="territoryMiniLinks">
+                    <a href={territory.banatic_url} target="_blank" rel="noreferrer">BANATIC ↗</a>
+                    {website && <a href={website} target="_blank" rel="noreferrer">Site ↗</a>}
+                  </div>
+                </div>
+
+                <div className="territoryActionCell">
+                  <small>{territory.next_action}</small>
+                  <Link href={`/territoires/${territory.siren}`}>Ouvrir la fiche →</Link>
+                </div>
+              </article>
             );
           })}
         </div>
