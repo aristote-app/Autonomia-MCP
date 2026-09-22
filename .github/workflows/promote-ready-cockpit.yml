@@ -1,0 +1,68 @@
+name: promote-ready-cockpit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/promote-ready-cockpit-now"
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_TEAM_SLUG: aristote
+      CANDIDATE_URL: https://autonomia-molbqimlr-aristote.vercel.app
+      PRODUCTION_URL: https://autonomia-mcp.vercel.app
+
+    steps:
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Vercel credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing repository secret VERCEL_TOKEN."
+            exit 1
+          fi
+
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.23.2
+
+      - name: Smoke test READY candidate
+        run: |
+          BODY="$(curl -fsSL "$CANDIDATE_URL/territoires")"
+          echo "$BODY" | grep -q "Une priorité explicable"
+          echo "$BODY" | grep -q "BASE DE PROSPECTION"
+          echo "$BODY" | grep -q "P1"
+
+      - name: Promote READY candidate
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel promote "$CANDIDATE_URL" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Verify production alias
+        run: |
+          for attempt in $(seq 1 24); do
+            BODY="$(curl -fsSL "$PRODUCTION_URL/territoires" || true)"
+            if echo "$BODY" | grep -q "Une priorité explicable" \
+              && echo "$BODY" | grep -q "BASE DE PROSPECTION"; then
+              echo "Cockpit scoring is live."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Production alias did not expose the scored Territories cockpit."
+          exit 1
