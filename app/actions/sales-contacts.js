@@ -37,6 +37,9 @@ export async function saveDecisionMakerCandidate(formData) {
   const triggerTitle = clean(formData.get("trigger_title"), 500) || null;
   const triggerUrl = clean(formData.get("trigger_url"), 900) || null;
   const relevanceScore = Number(formData.get("relevance_score"));
+  const offerTrack = clean(formData.get("offer_track"), 240) || null;
+  const triggerSource = clean(formData.get("trigger_source"), 120) || null;
+  const accountType = clean(formData.get("account_type"), 80) || null;
 
   if (!accountKey || !accountName || !linkedinUrl) {
     throw new Error("Missing decision-maker candidate identity");
@@ -58,6 +61,11 @@ export async function saveDecisionMakerCandidate(formData) {
     trigger: {
       title: triggerTitle,
       url: triggerUrl
+    },
+    commercialContext: {
+      offer_track: offerTrack,
+      trigger_source: triggerSource,
+      account_type: accountType
     }
   });
 
