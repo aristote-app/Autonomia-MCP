@@ -1,0 +1,147 @@
+name: deploy-cockpit-prebuilt
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/deploy-cockpit-prebuilt-now"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_TEAM_SLUG: aristote
+      VERCEL_PROJECT_NAME: autonomia-mcp
+      PRODUCTION_URL: https://autonomia-mcp.vercel.app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Vercel credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing repository secret VERCEL_TOKEN."
+            exit 1
+          fi
+
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.23.2
+
+      - name: Link cockpit project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --project "$VERCEL_PROJECT_NAME" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Pull production environment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel pull \
+            --yes \
+            --environment=production \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Build in GitHub Actions
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel build \
+            --prod \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Upload prebuilt deployment without production alias
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy \
+            --prebuilt \
+            --prod \
+            --skip-domain \
+            --archive=tgz \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes \
+            --meta githubCommitSha="$GITHUB_SHA" \
+            --meta githubCommitRef="$GITHUB_REF_NAME")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Deployment URL: $URL"
+
+      - name: Smoke test deployment
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for attempt in $(seq 1 24); do
+            BODY="$(curl -fsSL "$DEPLOYMENT_URL/territoires" || true)"
+            if echo "$BODY" | grep -q "Une priorité explicable" \
+              && echo "$BODY" | grep -q "BASE DE PROSPECTION"; then
+              echo "Territories cockpit smoke passed."
+              exit 0
+            fi
+            echo "Smoke attempt $attempt not ready yet."
+            sleep 5
+          done
+
+          echo "::error::Territories cockpit markers were not found."
+          exit 1
+
+      - name: Promote verified deployment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          vercel promote "$DEPLOYMENT_URL" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Verify production alias
+        run: |
+          for attempt in $(seq 1 24); do
+            BODY="$(curl -fsSL "$PRODUCTION_URL/territoires" || true)"
+            if echo "$BODY" | grep -q "Une priorité explicable" \
+              && echo "$BODY" | grep -q "BASE DE PROSPECTION"; then
+              echo "Cockpit production verification passed."
+              exit 0
+            fi
+            echo "Production verification attempt $attempt not ready yet."
+            sleep 5
+          done
+
+          echo "::error::Production alias does not expose the verified Territories cockpit."
+          exit 1
+
+      - name: Publish deployment summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          {
+            echo "## Autonomia cockpit prebuilt deployment"
+            echo ""
+            echo "- Project: `$VERCEL_PROJECT_NAME`"
+            echo "- Commit: `$GITHUB_SHA`"
+            echo "- Deployment: $DEPLOYMENT_URL"
+            echo "- Production: $PRODUCTION_URL"
+            echo "- Build: GitHub Actions / prebuilt"
+            echo "- Territories smoke: passed"
+          } >> "$GITHUB_STEP_SUMMARY"
