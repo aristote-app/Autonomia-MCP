@@ -520,3 +520,24 @@ h3 { margin: 0 0 8px; }
   .outreachSequence article { grid-template-columns:1fr; gap:8px; }
   .outreachGuardrails { grid-template-columns:1fr; }
 }
+
+
+/* Home hot accounts */
+.hotAccountsSection { margin: 54px 0 42px; }
+.hotAccountsGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.hotAccountsGrid article { display:grid; gap:10px; padding:18px; border:1px solid #d9ddd7; background:#fff; }
+.hotAccountTop { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; }
+.hotAccountTop h3 { margin:0; font-size:18px; }
+.hotAccountTop > strong { font-size:34px; line-height:1; }
+.hotAccountsGrid article > p { margin:0; color:#677068; font-size:11px; }
+.hotAccountsGrid article > small { color:#404740; font-size:11px; line-height:1.45; }
+.hotAccountsGrid article > a, .hotAccountsMore a { color:#111; text-decoration:none; font-size:11px; font-weight:800; }
+.hotAccountsGrid article > a:hover, .hotAccountsMore a:hover { text-decoration:underline; text-underline-offset:3px; }
+.hotAccountsMore { margin-top:12px; text-align:right; }
+
+@media (max-width:900px) {
+  .hotAccountsGrid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px) {
+  .hotAccountsGrid { grid-template-columns:1fr; }
+}
