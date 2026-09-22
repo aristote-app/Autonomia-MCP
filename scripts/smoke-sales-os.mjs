@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { buildAccountOutreachPlan } from "../lib/intelligence/outreach.js";
 import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
 import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
+import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
 
 const account = {
   name: "Acme",
@@ -14,6 +15,37 @@ const plan = buildAccountOutreachPlan(account);
 assert.equal(plan.sequence.length, 4);
 assert.ok(plan.sequence[0].content.includes("Acme"));
 assert.ok(plan.sequence[1].content.includes("Déploiement Copilot"));
+
+const learning = buildSalesLearningSnapshot([
+  {
+    verification_status: "verified",
+    outreach_status: "won",
+    matched_role: "Head of AI / Data",
+    enrichment_status: "enriched",
+    metadata: { offer_track: "Prestation / automatisation IA", trigger_source: "linkedin" }
+  },
+  {
+    verification_status: "verified",
+    outreach_status: "replied",
+    matched_role: "Head of AI / Data",
+    enrichment_status: "not_requested",
+    metadata: { offer_track: "Prestation / automatisation IA", trigger_source: "france_travail_jobs" }
+  },
+  {
+    verification_status: "candidate",
+    outreach_status: "not_started",
+    matched_role: "DRH / Talent",
+    enrichment_status: "not_requested",
+    metadata: { offer_track: "Formation & adoption IA", trigger_source: "indeed" }
+  }
+]);
+
+assert.equal(learning.funnel.contacts, 3);
+assert.equal(learning.funnel.verified, 2);
+assert.equal(learning.funnel.replies, 2);
+assert.equal(learning.funnel.won, 1);
+assert.equal(learning.learning_ready, false);
+assert.ok(learning.by_offer.some((item) => item.key === "Prestation / automatisation IA"));
 
 const originalFetch = globalThis.fetch;
 const calls = [];
