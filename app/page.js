@@ -8,7 +8,7 @@ import {
 import {
   buildUnifiedTodayQueue
 } from "../lib/intelligence/today.js";
-import { buildAccountIntelligence } from "../lib/intelligence/accounts.js";
+import { buildAccountIntelligence, slugifyAccountName } from "../lib/intelligence/accounts.js";
 import { searchJobSignals } from "../lib/db/jobSignals.js";
 import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
 import {
@@ -544,6 +544,12 @@ export default async function Home({ searchParams }) {
                     {item.internal_href && (
                       <Link href={item.internal_href}>Ouvrir la fiche →</Link>
                     )}
+                    {item.company_name &&
+                      !/^(entreprise|organisation|acheteur) non identifi[eé]e$/i.test(item.company_name) && (
+                        <Link href={`/accounts/${slugifyAccountName(item.company_name)}`}>
+                          Compte 360° →
+                        </Link>
+                      )}
                     {item.source_url && (
                       <a href={item.source_url} target="_blank" rel="noreferrer">
                         Ouvrir la source · {item.source_label} ↗
