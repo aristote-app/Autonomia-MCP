@@ -20,6 +20,7 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/territoires`, kind: "territories-offer", priority: 0.9, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/observatoire-ia`, kind: "original-dataset", priority: 0.9, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
