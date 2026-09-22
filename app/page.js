@@ -123,7 +123,9 @@ async function loadLiveData() {
     const accounts = buildAccountIntelligence({
       opportunities: visibleOpportunities,
       jobSignals: [...freelanceSignals.items, ...trainingSignals.items]
-    }).slice(0, 6);
+    })
+      .filter((account) => !account.intermediary_risk)
+      .slice(0, 6);
 
     const workflow = await getTeamWorkflowContext(today);
 
