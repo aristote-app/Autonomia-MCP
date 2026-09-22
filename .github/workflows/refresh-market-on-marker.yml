@@ -12,82 +12,42 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      VERCEL_PROJECT_NAME: autonomia-mcp
-      VERCEL_TEAM_SLUG: aristote
-      MARKET_REFRESH_CONTEXT: autonomia-market-refresh-v1
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Check Vercel token
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          if [ -z "$VERCEL_TOKEN" ]; then
-            echo "::error::Missing VERCEL_TOKEN repository secret."
-            exit 1
-          fi
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@50.1.6
-
-      - name: Link production project
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          vercel link \
-            --yes \
-            --project "$VERCEL_PROJECT_NAME" \
-            --scope "$VERCEL_TEAM_SLUG" \
-            --token "$VERCEL_TOKEN"
-
-      - name: Pull production env without printing values
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          rm -f /tmp/autonomia-production.env
-          vercel env pull /tmp/autonomia-production.env \
-            --environment=production \
-            --scope "$VERCEL_TEAM_SLUG" \
-            --token "$VERCEL_TOKEN"
-
-      - name: Derive scoped refresh token
+      - name: Request scoped GitHub OIDC token
         run: |
           set +x
-          set -a
-          source /tmp/autonomia-production.env
-          set +a
 
-          if [ -z "$SUPABASE_SECRET_KEY" ]; then
-            echo "::error::SUPABASE_SECRET_KEY is missing from Vercel production."
-            rm -f /tmp/autonomia-production.env
+          if [ -z "$ACTIONS_ID_TOKEN_REQUEST_URL" ] || [ -z "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
+            echo "::error::GitHub OIDC token request environment is unavailable."
             exit 1
           fi
 
-          AUTH_TOKEN="$(node --input-type=module -e '
-            import { createHmac } from "node:crypto";
-            const secret = process.env.SUPABASE_SECRET_KEY;
-            const context = process.env.MARKET_REFRESH_CONTEXT;
-            process.stdout.write(
-              createHmac("sha256", secret).update(context).digest("hex")
-            );
+          response="$(curl -fsS \
+            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=autonomia-market-refresh")"
+
+          MARKET_REFRESH_TOKEN="$(printf "%s" "$response" | node --input-type=module -e '
+            let raw = "";
+            for await (const chunk of process.stdin) raw += chunk;
+            const payload = JSON.parse(raw);
+            if (!payload?.value) process.exit(2);
+            process.stdout.write(payload.value);
           ')"
 
-          echo "::add-mask::$AUTH_TOKEN"
-          echo "MARKET_REFRESH_TOKEN=$AUTH_TOKEN" >> "$GITHUB_ENV"
-          rm -f /tmp/autonomia-production.env
+          echo "::add-mask::$MARKET_REFRESH_TOKEN"
+          echo "MARKET_REFRESH_TOKEN=$MARKET_REFRESH_TOKEN" >> "$GITHUB_ENV"
 
       - name: Refresh Free-Work and job signals
         id: freelance
@@ -154,7 +114,7 @@ jobs:
           rm -f /tmp/autonomia-public-market.json
 
           status="$(curl -sS \
-            --max-time 70 \
+            --max-time 75 \
             -o /tmp/autonomia-public-market.json \
             -w "%{http_code}" \
             -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
