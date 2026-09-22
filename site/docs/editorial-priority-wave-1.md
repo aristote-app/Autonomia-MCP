@@ -192,3 +192,42 @@ Evidence:
 - Elastic documents RAG and configurable chunking for semantic retrieval;
 - direct commercial fit with Autonomia Academy because source preparation, metadata, rights and evaluation are repeatable capabilities that non-developer knowledge / operations teams can learn;
 - editorial separation from the existing execution RAG guide: the execution guide explains the system to build; this training guide teaches teams how to prepare and govern the corpus before implementation.
+
+
+## Published in wave 7
+
+### Automated narrative reporting from structured data
+
+Primary query: `automatiser reporting IA`
+
+Evidence:
+- Google currently documents Gemini in Sheets for data analysis, trend identification, charts and AI-assisted cell functions;
+- Google Apps Script documents installable and time-driven triggers suitable for recurring reporting workflows;
+- Microsoft documents Copilot report summaries grounded in Power BI report data;
+- direct commercial fit with Autonomia Experts around data pipelines, reporting automation, guardrails and human validation;
+- editorial separation from the existing meeting / CRM pages: this guide targets structured KPI reporting and the boundary between deterministic calculation and generative commentary.
+
+Published guide:
+`/cas-usage-ia/creer-un-rapport-narratif-a-partir-d-un-google-sheet`
+
+### ChatGPT: from one-off prompt to reusable workflow
+
+Primary query: `formation ChatGPT entreprise workflow`
+
+Evidence:
+- current French SERPs show active enterprise demand around ChatGPT training, workflows and professional usage;
+- OpenAI currently documents Projects as reusable contexts containing chats, files and instructions;
+- OpenAI documents connected apps / plugins and advanced work capabilities for business workflows, subject to workspace plan and permissions;
+- OpenAI states that Business and Enterprise workspace data is not used by default to train models;
+- direct commercial fit with Autonomia Academy because the training objective is workflow transfer, not prompt collection;
+- editorial separation from generic prompt-engineering content: the guide teaches process mapping, context design, sequencing, controls, tool choice and reuse.
+
+Published guide:
+`/formation-ia/cas-usage/former-les-metiers-a-passer-d-un-prompt-ponctuel-a-un-workflow`
+
+Wave 7 safeguards:
+- deterministic KPI calculation is kept separate from generative interpretation;
+- causal claims are explicitly constrained in the reporting guide;
+- ChatGPT feature availability is described as plan / workspace dependent rather than universally guaranteed;
+- Business-data privacy statements rely on current OpenAI official documentation;
+- both guides remain subject to the same long-form quality and CI gates.
