@@ -1,0 +1,43 @@
+name: promote-public-site
+
+on:
+  push:
+    branches:
+      - feat/autonomia-public-site-v2
+    paths:
+      - ".github/promote-public-site-now"
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@50.1.6
+
+      - name: Promote verified public-site preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel promote \
+            https://autonomia-public-site-89myngd9c-aristote.vercel.app \
+            --scope aristote \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Verify public Territoires offer
+        run: |
+          BODY="$(curl -fsSL --retry 12 --retry-delay 5 https://autonomia-public-site.vercel.app/territoires)"
+          echo "$BODY" | grep -q "AUTONOMIA TERRITOIRES"
+          echo "$BODY" | grep -q "Academy collectivités"
+          echo "$BODY" | grep -q "Accélérateur IA"
+          echo "Autonomia Territoires is live."
