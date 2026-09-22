@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadAccountBySlug } from "../../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
+import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
+import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 
 export const dynamic = "force-dynamic";
 
@@ -21,12 +23,32 @@ const KIND_LABELS = {
   private: "Signal entreprise"
 };
 
-export default async function AccountDetailPage({ params }) {
+export default async function AccountDetailPage({ params, searchParams }) {
   if (!hasAutonomiaDatabase()) notFound();
 
   const { slug } = await params;
+  const query = await searchParams;
   const account = await loadAccountBySlug(slug).catch(() => null);
   if (!account) notFound();
+
+  const outreach = buildAccountOutreachPlan(account);
+  const shouldDiscover = query?.discover === "1";
+  const decisionMakers = shouldDiscover
+    ? await discoverDecisionMakers({
+        company: account.name,
+        roles: account.decision_roles,
+        maxRoles: 3,
+        countPerRole: 5
+      }).catch((error) => ({
+        available: false,
+        reason: error instanceof Error ? error.message : String(error),
+        candidates: [],
+        searches: []
+      }))
+    : null;
+
+  const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
+  const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
   return (
     <main>
@@ -97,6 +119,63 @@ export default async function AccountDetailPage({ params }) {
             Étape suivante : identifier 1 à 3 personnes réelles correspondant à ces fonctions,
             puis enrichir seulement les meilleurs contacts avec Kaspr.
           </p>
+
+          <div className="decisionFinderActions">
+            <Link href={`/accounts/${account.slug}?discover=1#decision-makers`}>
+              Trouver les décideurs maintenant →
+            </Link>
+            <span>Recherche publique à la demande · pas de boucle automatique</span>
+          </div>
+
+          <div id="decision-makers" className="decisionCandidates">
+            {decisionMakers?.available && decisionMakers.candidates.length > 0 && (
+              <>
+                <div className="integrationState">
+                  <span>Kaspr : <strong>{kasprConfigured ? "clé détectée" : "à brancher"}</strong></span>
+                  <span>Waalaxy : <strong>{waalaxyConfigured ? "clé détectée" : "à brancher"}</strong></span>
+                </div>
+                {decisionMakers.candidates.map((candidate, index) => (
+                  <article key={candidate.linkedin_url}>
+                    <div>
+                      <span className="candidateRank">#{index + 1}</span>
+                    </div>
+                    <div>
+                      <strong>{candidate.name_guess || candidate.headline || "Profil LinkedIn"}</strong>
+                      <p>{candidate.matched_role} · pertinence {candidate.relevance_score}/100</p>
+                      {candidate.snippet && <small>{candidate.snippet}</small>}
+                      <div className="candidateActions">
+                        <a href={candidate.linkedin_url} target="_blank" rel="noreferrer">
+                          Vérifier le profil LinkedIn ↗
+                        </a>
+                        <span className={kasprConfigured ? "ready" : ""}>
+                          {kasprConfigured ? "Kaspr prêt" : "Kaspr à connecter"}
+                        </span>
+                        <span className={waalaxyConfigured ? "ready" : ""}>
+                          {waalaxyConfigured ? "Waalaxy prêt" : "Waalaxy à connecter"}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+                <p className="accountHint">
+                  Ces profils sont des candidats issus de résultats publics : vérifie la fonction
+                  avant tout enrichissement ou prospection.
+                </p>
+              </>
+            )}
+
+            {decisionMakers?.available && decisionMakers.candidates.length === 0 && (
+              <div className="emptyState">
+                Aucun profil suffisamment crédible trouvé sur les trois premiers rôles. Aucun crédit Kaspr dépensé.
+              </div>
+            )}
+
+            {decisionMakers && !decisionMakers.available && (
+              <div className="emptyState">
+                Recherche décideurs indisponible : {decisionMakers.reason || "configuration manquante"}.
+              </div>
+            )}
+          </div>
         </div>
 
         <aside className="detailPanel">
@@ -111,6 +190,38 @@ export default async function AccountDetailPage({ params }) {
             <div><dt>Sources</dt><dd>{account.sources.join(" · ") || "—"}</dd></div>
           </dl>
         </aside>
+      </section>
+
+      <section className="accountAttackSection">
+        <div className="sectionTitle">
+          <div>
+            <p className="eyebrow">PLAN D'ATTAQUE</p>
+            <h2>Que dire et quand ?</h2>
+          </div>
+          <p>
+            Séquence générée par règles à partir des preuves du compte. Elle doit être validée avant envoi.
+          </p>
+        </div>
+
+        <div className="outreachSequence">
+          {outreach.sequence.map((step) => (
+            <article key={step.day + ":" + step.channel + ":" + step.action}>
+              <div className="outreachDay">J+{step.day}</div>
+              <div>
+                <div className="attentionLine">
+                  <span className="attentionBucket">{step.channel}</span>
+                  <span>{step.action}</span>
+                </div>
+                {step.subject && <strong>{step.subject}</strong>}
+                <p>{step.content}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="outreachGuardrails">
+          {outreach.guardrails.map((rule) => <span key={rule}>{rule}</span>)}
+        </div>
       </section>
 
       <section className="accountTimelineSection">
