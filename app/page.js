@@ -84,20 +84,16 @@ async function loadLiveData() {
           "indeed",
           "freelancerepublik",
           "lehibou",
-          "linkedin_post",
-          "francetravail",
-          "francetravail_web"
+          "france_travail_jobs"
         ],
         freelanceOnly: true,
         limit: 80
       }),
       searchJobSignals({
         sources: [
-          "francetravail",
-          "linkedin_training",
-          "linkedin_training_post",
-          "indeed_training",
-          "francetravail_training_web"
+          "france_travail_jobs",
+          "linkedin",
+          "indeed"
         ],
         signalKey: "training_need",
         limit: 80
