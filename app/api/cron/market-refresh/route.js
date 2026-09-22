@@ -17,6 +17,36 @@ export async function GET(request) {
 
   const mode = new URL(request.url).searchParams.get("mode") || "full";
   const publicOnly = mode === "public";
+  const territoryOnly = mode === "territories";
+
+  if (territoryOnly) {
+    try {
+      const territorySignals = await runAutomatedTerritorySignalRefresh({
+        triggerMode: "scheduled"
+      });
+
+      return Response.json({
+        ok: Boolean(territorySignals.available),
+        mode,
+        completedAt: new Date().toISOString(),
+        territorySignals
+      }, {
+        status: territorySignals.available ? 200 : 502
+      });
+    } catch (error) {
+      return Response.json({
+        ok: false,
+        mode,
+        completedAt: new Date().toISOString(),
+        territorySignals: {
+          available: false,
+          source: "boamp",
+          persisted: 0,
+          error: error instanceof Error ? error.message : String(error)
+        }
+      }, { status: 502 });
+    }
+  }
 
   const queries = [
     "intelligence artificielle",
@@ -26,15 +56,6 @@ export async function GET(request) {
   ];
 
   const runs = [];
-
-  const territorySignalsPromise = runAutomatedTerritorySignalRefresh({
-    triggerMode: "scheduled"
-  }).catch((error) => ({
-    available: false,
-    source: "boamp",
-    persisted: 0,
-    error: error instanceof Error ? error.message : String(error)
-  }));
 
   let freelance = null;
   let jobSignals = null;
@@ -88,7 +109,6 @@ export async function GET(request) {
     }
   }
 
-  const territorySignals = await territorySignalsPromise;
   const publicOk = runs.some((run) => run.ok);
 
   return Response.json({
@@ -97,7 +117,7 @@ export async function GET(request) {
     completedAt: new Date().toISOString(),
     freelance,
     jobSignals,
-    territorySignals,
+    territorySignals: null,
     runs
   }, {
     status: publicOk || (!publicOnly && freelance?.ok) ? 200 : 502
