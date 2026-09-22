@@ -92,7 +92,7 @@ async function loadLiveData() {
     const today = buildUnifiedTodayQueue({
       opportunities: opportunities.items,
       jobSignals: jobSignals.items,
-      limit: 24
+      limit: 100
     });
 
     const workflow = await getTeamWorkflowContext(today);
@@ -135,26 +135,71 @@ async function loadLiveData() {
   }
 }
 
-export default async function Home() {
+
+const QUEUE_FILTERS = [
+  ["all", "Tout"],
+  ["public", "Marchés publics"],
+  ["freelance", "Missions freelance"],
+  ["company", "Signaux entreprises"],
+  ["training", "Formation IA"],
+  ["urgent", "Urgents"]
+];
+
+const QUEUE_SORTS = [
+  ["priority", "Priorité commerciale"],
+  ["deadline", "Échéance la plus proche"],
+  ["fit", "Meilleur FIT"],
+  ["recent", "Plus récent"]
+];
+
+function filterQueue(items, filter) {
+  if (filter === "public") return items.filter((item) => item.type_label === "Marché public");
+  if (filter === "freelance") return items.filter((item) => item.type_label === "Mission freelance");
+  if (filter === "company") return items.filter((item) => item.type_label === "Signal entreprise");
+  if (filter === "training") return items.filter((item) => item.type_label === "Formation IA");
+  if (filter === "urgent") return items.filter((item) => item.attention_bucket === "Urgent");
+  return items;
+}
+
+function sortQueue(items, sort) {
+  return [...items].sort((a, b) => {
+    if (sort === "deadline") {
+      const aValue = a.days_to_deadline == null ? Number.POSITIVE_INFINITY : Number(a.days_to_deadline);
+      const bValue = b.days_to_deadline == null ? Number.POSITIVE_INFINITY : Number(b.days_to_deadline);
+      return aValue - bValue || b.triage_score - a.triage_score;
+    }
+
+    if (sort === "fit") {
+      const aValue = a.fit_score == null ? -1 : Number(a.fit_score);
+      const bValue = b.fit_score == null ? -1 : Number(b.fit_score);
+      return bValue - aValue || b.triage_score - a.triage_score;
+    }
+
+    if (sort === "recent") {
+      const aValue = new Date(a.detected_at || a.published_at || 0).getTime() || 0;
+      const bValue = new Date(b.detected_at || b.published_at || 0).getTime() || 0;
+      return bValue - aValue || b.triage_score - a.triage_score;
+    }
+
+    return b.triage_score - a.triage_score;
+  });
+}
+
+function countQueue(items, filter) {
+  return filterQueue(items, filter).length;
+}
+
+export default async function Home({ searchParams }) {
   const live = await loadLiveData();
+  const params = await searchParams;
+  const activeFilter = QUEUE_FILTERS.some(([value]) => value === params?.filter) ? params.filter : "all";
+  const activeSort = QUEUE_SORTS.some(([value]) => value === params?.sort) ? params.sort : "priority";
+  const filteredToday = live ? sortQueue(filterQueue(live.today, activeFilter), activeSort) : [];
+
   const staticCounts = SOURCES.reduce((acc, source) => {
     acc[source.status] = (acc[source.status] || 0) + 1;
     return acc;
   }, {});
-
-  const metrics = live
-    ? [
-        [live.summary.totalOpportunities, "opportunités persistées"],
-        [live.summary.aiRelatedOpportunities, "classées IA V2"],
-        [live.summary.openAiOpportunities, "IA avec échéance ouverte"],
-        [live.summary.publicAwards, "attributions historiques"]
-      ]
-    : [
-        [SOURCES.length, "sources référencées"],
-        [staticCounts.active || 0, "connecteurs actifs"],
-        [staticCounts.ready_for_credentials || 0, "prêts pour credentials"],
-        [3, "marchés principaux"]
-      ];
 
   return (
     <main>
@@ -169,59 +214,63 @@ export default async function Home() {
         <div className={`status ${live ? "live" : ""}`}>
           <strong>{live ? "LIVE" : "V1"}</strong>
           <span>{live ? "Supabase Autonomia connecté" : "Secrets production à connecter"}</span>
+          {live && (
+            <small className="statusMeta">
+              {formatNumber(live.summary.totalOpportunities)} opportunités · {formatNumber(live.summary.publicAwards)} attributions
+            </small>
+          )}
           <Link className="adminNav" href="/territoires">Territoires</Link>
           <Link className="adminNav" href="/admin">Admin</Link>
         </div>
       </header>
 
-      <section className="metrics">
-        {metrics.map(([value, label]) => (
-          <article key={label}>
-            <strong>{formatNumber(value)}</strong>
-            <span>{label}</span>
-          </article>
-        ))}
-      </section>
-
       {live && (
         <>
-          <section className="todaySection">
+          <section className="todaySection" id="queue">
             <div className="sectionTitle">
               <div>
-                <p className="eyebrow">À TRAITER AUJOURD'HUI</p>
-                <h2>Une seule file. Toutes les opportunités.</h2>
+                <p className="eyebrow">FILE COMMERCIALE</p>
+                <h2>Choisir, trier, ouvrir.</h2>
               </div>
               <p>
-                La priorité de tri organise le travail à partir des preuves disponibles.
-                Elle ne représente pas une probabilité de gagner.
+                Le score sert à ordonner le travail à partir des preuves disponibles.
+                Il ne représente pas une probabilité de gagner.
               </p>
             </div>
 
-            <div className="todaySummary">
-              <article>
-                <strong>{live.todaySummary.total}</strong>
-                <span>à traiter</span>
-                <small>Base active, pas seulement les cartes visibles</small>
-              </article>
-              <article>
-                <strong>{live.todaySummary.directMissions}</strong>
-                <span>missions freelance</span>
-                <small>{live.sourceHealth.freelance}</small>
-              </article>
-              <article>
-                <strong>{live.todaySummary.companySignals}</strong>
-                <span>signaux entreprises</span>
-                <small>{live.sourceHealth.companySignals}</small>
-              </article>
-              <article>
-                <strong>{live.todaySummary.urgent}</strong>
-                <span>urgents</span>
-                <small>{live.sourceHealth.urgent}</small>
-              </article>
+            <div className="queueToolbar">
+              <nav className="queueFilters" aria-label="Filtres des opportunités">
+                {QUEUE_FILTERS.map(([value, label]) => (
+                  <Link
+                    key={value}
+                    className={activeFilter === value ? "active" : ""}
+                    href={`/?filter=${value}&sort=${activeSort}#queue`}
+                  >
+                    <strong>{countQueue(live.today, value)}</strong>
+                    <span>{label}</span>
+                  </Link>
+                ))}
+              </nav>
+
+              <form className="queueSort" method="get" action="/">
+                <input type="hidden" name="filter" value={activeFilter} />
+                <label htmlFor="queue-sort">Trier par</label>
+                <select id="queue-sort" name="sort" defaultValue={activeSort}>
+                  {QUEUE_SORTS.map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                <button type="submit">Appliquer</button>
+              </form>
+            </div>
+
+            <div className="queueResultMeta">
+              <strong>{filteredToday.length} résultat{filteredToday.length > 1 ? "s" : ""}</strong>
+              <span>sur {live.today.length} éléments chargés dans la file active</span>
             </div>
 
             <div className="opportunityList">
-              {live.today.length ? live.today.map((item) => {
+              {filteredToday.length ? filteredToday.map((item) => {
                 const workKey = queueKey(item.queue_kind, item.entity_id);
                 const workItem = live.workflow?.workItems?.[workKey] || null;
                 const owner = workItem?.owner_user_id
@@ -243,8 +292,12 @@ export default async function Home() {
                         <span>Priorité {item.triage_score}/100</span>
                         <span>{item.attention_bucket}</span>
                       </div>
-                      <p className="buyer">{item.company_name}</p>
-                      <h3>{item.title}</h3>
+                      <p className="buyer">
+                        {item.internal_href ? <Link href={item.internal_href}>{item.company_name}</Link> : item.company_name}
+                      </p>
+                      <h3>
+                        {item.internal_href ? <Link href={item.internal_href}>{item.title}</Link> : item.title}
+                      </h3>
                     </div>
 
                     {item.fit_score != null && (
@@ -380,11 +433,11 @@ export default async function Home() {
 
                   <div className="oppActions">
                     {item.internal_href && (
-                      <Link href={item.internal_href}>Voir le besoin</Link>
+                      <Link href={item.internal_href}>Ouvrir la fiche →</Link>
                     )}
                     {item.source_url && (
                       <a href={item.source_url} target="_blank" rel="noreferrer">
-                        Voir la source · {item.source_label} ↗
+                        Ouvrir la source · {item.source_label} ↗
                       </a>
                     )}
                   </div>
