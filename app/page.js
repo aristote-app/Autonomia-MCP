@@ -70,7 +70,7 @@ async function loadLiveData() {
   if (!hasAutonomiaDatabase()) return null;
 
   try {
-    const [summary, opportunities, jobSignals] = await Promise.all([
+    const [summary, opportunities, freelanceSignals, trainingSignals] = await Promise.all([
       getIntelligenceDashboardSummary(),
       searchRankedOpportunities({
         actionability: "active",
@@ -79,9 +79,26 @@ async function loadLiveData() {
         limit: 200
       }),
       searchJobSignals({
-        sources: ["linkedin", "indeed"],
+        sources: [
+          "linkedin",
+          "indeed",
+          "freelancerepublik",
+          "lehibou",
+          "linkedin_post",
+          "francetravail"
+        ],
         freelanceOnly: true,
-        limit: 60
+        limit: 80
+      }),
+      searchJobSignals({
+        sources: [
+          "francetravail",
+          "linkedin_training",
+          "linkedin_training_post",
+          "indeed_training"
+        ],
+        signalKey: "training_need",
+        limit: 80
       })
     ]);
 
@@ -100,15 +117,14 @@ async function loadLiveData() {
 
     const today = buildUnifiedTodayQueue({
       opportunities: visibleOpportunities,
-      jobSignals: jobSignals.items,
+      jobSignals: [...freelanceSignals.items, ...trainingSignals.items],
       limit: 200
     });
 
     const workflow = await getTeamWorkflowContext(today);
 
-    const directMissions =
-      (summary.activeFreelanceOpportunities || 0) +
-      (summary.freelanceJobSignals || 0);
+    const directMissions = today.filter((item) => item.type_label === "Mission freelance").length;
+    const trainingNeeds = today.filter((item) => item.type_label === "Besoin formation IA").length;
 
     return {
       summary,
@@ -116,6 +132,7 @@ async function loadLiveData() {
       todaySummary: {
         total: (summary.activeAiOpportunities || 0) + (summary.totalJobSignals || 0),
         directMissions,
+        trainingNeeds,
         companySignals: summary.companyJobSignals || 0,
         urgent: summary.urgentAiOpportunities || 0
       },
@@ -127,9 +144,9 @@ async function loadLiveData() {
               ? "Aucune mission IA active"
               : "Free-Work non persisté",
         companySignals:
-          (summary.totalJobSignals || 0) > 0
+          directMissions > 0
             ? "Flux alimenté"
-            : "LinkedIn / Indeed non alimentés",
+            : "Missions web non alimentées",
         urgent:
           (summary.urgentAiOpportunities || 0) > 0
             ? "Échéance ≤ 3 jours"
@@ -163,7 +180,7 @@ function filterQueue(items, filter) {
   if (filter === "public") return items.filter((item) => item.type_label === "Marché public");
   if (filter === "freelance") return items.filter((item) => item.type_label === "Mission freelance");
   if (filter === "company") return items.filter((item) => item.type_label === "Signal entreprise");
-  if (filter === "training") return items.filter((item) => item.type_label === "Formation IA");
+  if (filter === "training") return items.filter((item) => item.type_label === "Formation IA" || item.type_label === "Besoin formation IA");
   if (filter === "urgent") return items.filter((item) => item.attention_bucket === "Urgent");
   return items;
 }
