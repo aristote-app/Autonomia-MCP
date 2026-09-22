@@ -79,7 +79,7 @@ export default async function AdminPage({ searchParams }) {
         <section className="adminState">
           <p className="eyebrow">ADMIN</p>
           <h1>Accès refusé</h1>
-          <p>Ce compte n'a pas de rôle Direction ou Admin.</p>
+          <p>Ce compte n'a pas de rôle Associé ou Admin.</p>
         </section>
       </main>
     );
