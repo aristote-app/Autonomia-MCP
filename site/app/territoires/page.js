@@ -56,30 +56,95 @@ const contacts = [
   "Communication / services métiers"
 ];
 
+const valueLayers = [
+  {
+    index: "01",
+    title: "Mieux travailler en interne",
+    text: "Repérer les tâches répétitives, la recherche d’information, les documents, réunions ou reportings qui peuvent être simplifiés sans engager une refonte globale du SI."
+  },
+  {
+    index: "02",
+    title: "Faire monter les agents en compétence",
+    text: "Former par usages réels, avec des règles de confidentialité, de contrôle et de validation adaptées au contexte de la collectivité."
+  },
+  {
+    index: "03",
+    title: "Accélérer les entreprises du territoire",
+    text: "Créer un programme collectif pour aider les TPE/PME à identifier un cas d’usage, construire un premier workflow et gagner en autonomie."
+  }
+];
+
+const deliverables = [
+  "Cartographie des usages et irritants prioritaires",
+  "Plan d’action Agents / Academy / Entreprises",
+  "Ateliers et parcours conçus autour des métiers",
+  "Premier workflow ou démonstrateur lorsque le besoin s’y prête",
+  "Garde-fous, validation humaine et règles d’usage",
+  "Bilan de programme et prochaines étapes"
+];
+
+const faq = [
+  {
+    question: "À quels territoires s’adresse Autonomia Territoires ?",
+    answer: "L’offre est conçue pour les communautés de communes et les communautés d’agglomération, partout en France."
+  },
+  {
+    question: "Faut-il déjà avoir une stratégie IA ?",
+    answer: "Non. Le point de départ peut être un besoin très concret : gagner du temps sur certaines tâches, former des agents ou accompagner les entreprises locales. Le diagnostic sert justement à qualifier la bonne porte d’entrée."
+  },
+  {
+    question: "Peut-on commencer uniquement par de la formation ?",
+    answer: "Oui. Le programme peut commencer par une Academy agents ou managers, puis évoluer vers des workflows ciblés si des cas d’usage pertinents émergent."
+  },
+  {
+    question: "L’accélérateur entreprises est-il une formation standard ?",
+    answer: "Non. L’objectif est d’amener chaque entreprise à travailler sur une tâche réelle, à tester un workflow utile et à repartir avec une méthode transférable."
+  },
+  {
+    question: "Autonomia intervient-il sur les données sensibles ?",
+    answer: "Le cadrage inclut la nature des données, les outils autorisés, les droits d’accès et les validations humaines nécessaires. Une automatisation n’est proposée que si le contexte permet de la cadrer proprement."
+  }
+];
+
 export default function TerritoriesPage() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
   const url = `${base}/territoires`;
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Autonomia Territoires",
-    provider: {
-      "@type": "Organization",
-      name: "Autonomia",
-      url: base
-    },
-    areaServed: {
-      "@type": "Country",
-      name: "France"
-    },
-    audience: {
-      "@type": "Audience",
-      audienceType: "Communautés de communes et communautés d’agglomération"
-    },
-    serviceType:
-      "Accompagnement IA, formation des agents, automatisation et programme d’accélération IA pour les entreprises du territoire",
-    url
+    "@graph": [
+      {
+        "@type": "Service",
+        name: "Autonomia Territoires",
+        provider: {
+          "@type": "Organization",
+          name: "Autonomia",
+          url: base
+        },
+        areaServed: {
+          "@type": "Country",
+          name: "France"
+        },
+        audience: {
+          "@type": "Audience",
+          audienceType: "Communautés de communes et communautés d’agglomération"
+        },
+        serviceType:
+          "Accompagnement IA, formation des agents, automatisation et programme d’accélération IA pour les entreprises du territoire",
+        url
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer
+          }
+        }))
+      }
+    ]
   };
 
   return (
@@ -140,8 +205,31 @@ export default function TerritoriesPage() {
         ))}
       </section>
 
+      <section className="territoryValueLayers">
+        <div className="territoryValueIntro">
+          <p className="sectionIndex">02 — TROIS LEVIERS D’IMPACT</p>
+          <div>
+            <h2>Une seule relation peut activer trois niveaux de transformation.</h2>
+            <p>
+              Autonomia Territoires n’est pas limité à une session de sensibilisation. Le programme peut
+              agir sur le fonctionnement interne de l’intercommunalité, sur les compétences des agents
+              et sur l’accompagnement économique des entreprises locales.
+            </p>
+          </div>
+        </div>
+        <div className="territoryValueGrid">
+          {valueLayers.map((item) => (
+            <article key={item.index}>
+              <span>{item.index}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="territoryProgram">
-        <p className="sectionIndex">02 — PROGRAMME ENTREPRISES</p>
+        <p className="sectionIndex">03 — PROGRAMME ENTREPRISES</p>
         <div>
           <h2>Un accélérateur IA territorial, sans transformer l’accompagnement en catalogue de formations.</h2>
           <p>
@@ -160,7 +248,7 @@ export default function TerritoriesPage() {
       </section>
 
       <section className="territoryBuyers">
-        <p className="sectionIndex">03 — QUI MOBILISER</p>
+        <p className="sectionIndex">04 — QUI MOBILISER</p>
         <div>
           <h2>Une offre qui peut être portée par plusieurs directions.</h2>
           <div className="territoryBuyerGrid">
@@ -175,7 +263,7 @@ export default function TerritoriesPage() {
       </section>
 
       <section className="territoryDiagnostic">
-        <p className="sectionIndex">04 — PORTE D’ENTRÉE</p>
+        <p className="sectionIndex">05 — PORTE D’ENTRÉE</p>
         <div>
           <h2>Commencer petit : un diagnostic court pour sélectionner les priorités.</h2>
           <p>
@@ -187,9 +275,39 @@ export default function TerritoriesPage() {
         </div>
       </section>
 
+      <section className="territoryDeliverables">
+        <p className="sectionIndex">06 — LIVRABLES</p>
+        <div>
+          <h2>Un programme doit produire autre chose qu’une présentation sur l’IA.</h2>
+          <div className="territoryDeliverableGrid">
+            {deliverables.map((item, index) => (
+              <article key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{item}</strong>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="territoryFaq">
+        <p className="sectionIndex">07 — QUESTIONS</p>
+        <div>
+          <h2>Questions fréquentes des intercommunalités.</h2>
+          <div className="faqList">
+            {faq.map((item) => (
+              <details key={item.question}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="territoryLeadSection" id="territory-contact">
         <div className="territoryLeadIntro">
-          <p className="sectionIndex">05 — ÉCHANGE</p>
+          <p className="sectionIndex">08 — ÉCHANGE</p>
           <div>
             <h2>Quel programme voulez-vous activer sur votre territoire ?</h2>
             <p>
