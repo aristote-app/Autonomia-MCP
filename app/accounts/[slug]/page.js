@@ -33,7 +33,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const outreach = buildAccountOutreachPlan(account);
   const shouldDiscover = query?.discover === "1";
-  const decisionMakers = shouldDiscover
+  const decisionMakers = shouldDiscover && decisionDiscoveryEnabled
     ? await discoverDecisionMakers({
         company: account.name,
         roles: account.decision_roles,
@@ -47,6 +47,9 @@ export default async function AccountDetailPage({ params, searchParams }) {
       }))
     : null;
 
+  const decisionDiscoveryEnabled =
+    process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
+    Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
@@ -121,9 +124,15 @@ export default async function AccountDetailPage({ params, searchParams }) {
           </p>
 
           <div className="decisionFinderActions">
-            <Link href={`/accounts/${account.slug}?discover=1#decision-makers`}>
-              Trouver les décideurs maintenant →
-            </Link>
+            {decisionDiscoveryEnabled ? (
+              <Link href={`/accounts/${account.slug}?discover=1#decision-makers`}>
+                Trouver les décideurs maintenant →
+              </Link>
+            ) : (
+              <span className="disabledAction">
+                Recherche décideurs prête · activation après sécurisation du cockpit
+              </span>
+            )}
             <span>Recherche publique à la demande · pas de boucle automatique</span>
           </div>
 
@@ -167,6 +176,12 @@ export default async function AccountDetailPage({ params, searchParams }) {
             {decisionMakers?.available && decisionMakers.candidates.length === 0 && (
               <div className="emptyState">
                 Aucun profil suffisamment crédible trouvé sur les trois premiers rôles. Aucun crédit Kaspr dépensé.
+              </div>
+            )}
+
+            {shouldDiscover && !decisionDiscoveryEnabled && (
+              <div className="emptyState">
+                Recherche décideurs désactivée pour protéger le quota Brave tant que le cockpit n'est pas sécurisé.
               </div>
             )}
 
