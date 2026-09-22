@@ -11,6 +11,7 @@ export async function GET() {
       (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       process.env.SUPABASE_PUBLISHABLE_KEY
     ),
+    jobDiscoveryConfigured: Boolean(process.env.BRAVE_SEARCH_API_KEY),
     timestamp: new Date().toISOString()
   });
 }
