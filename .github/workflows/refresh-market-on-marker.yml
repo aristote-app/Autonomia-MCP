@@ -50,39 +50,52 @@ jobs:
             --scope "$VERCEL_TEAM_SLUG" \
             --token "$VERCEL_TOKEN"
 
-      - name: Wait for route and refresh freelance market
+      - name: Pull production env without printing values
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          rm -f /tmp/autonomia-refresh.json /tmp/autonomia-refresh-status.txt
-
-          vercel env run \
+          rm -f /tmp/autonomia-production.env
+          vercel env pull /tmp/autonomia-production.env \
             --environment=production \
             --scope "$VERCEL_TEAM_SLUG" \
-            --token "$VERCEL_TOKEN" \
-            -- \
-            bash -lc '
-              set +x
-              for attempt in $(seq 1 30); do
-                status=$(curl -sS \
-                  -o /tmp/autonomia-refresh.json \
-                  -w "%{http_code}" \
-                  -H "Authorization: Bearer $CRON_SECRET" \
-                  "https://autonomia-mcp.vercel.app/api/cron/freelance-refresh" || true)
+            --token "$VERCEL_TOKEN"
 
-                echo "Attempt $attempt: HTTP $status"
+      - name: Wait for route and refresh freelance market
+        run: |
+          rm -f /tmp/autonomia-refresh.json /tmp/autonomia-refresh-status.txt
 
-                if [ "$status" = "200" ] || [ "$status" = "502" ]; then
-                  printf "%s" "$status" > /tmp/autonomia-refresh-status.txt
-                  exit 0
-                fi
+          set +x
+          set -a
+          source /tmp/autonomia-production.env
+          set +a
 
-                sleep 10
-              done
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET is missing from the Vercel production environment."
+            rm -f /tmp/autonomia-production.env
+            exit 1
+          fi
 
-              echo "Timed out waiting for the production refresh route."
-              exit 1
-            '
+          for attempt in $(seq 1 30); do
+            status=$(curl -sS \
+              -o /tmp/autonomia-refresh.json \
+              -w "%{http_code}" \
+              -H "Authorization: Bearer $CRON_SECRET" \
+              "https://autonomia-mcp.vercel.app/api/cron/freelance-refresh" || true)
+
+            echo "Attempt $attempt: HTTP $status"
+
+            if [ "$status" = "200" ] || [ "$status" = "502" ]; then
+              printf "%s" "$status" > /tmp/autonomia-refresh-status.txt
+              rm -f /tmp/autonomia-production.env
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          rm -f /tmp/autonomia-production.env
+          echo "Timed out waiting for the production refresh route."
+          exit 1
 
       - name: Report safe refresh summary
         run: |
