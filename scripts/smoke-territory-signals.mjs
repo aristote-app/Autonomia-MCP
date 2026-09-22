@@ -24,6 +24,11 @@ const digital = classifyTerritoryMarketSignal({
 });
 assert.equal(digital.signalType, "territory_digital_transformation");
 
+const sme = classifyTerritoryMarketSignal({
+  title: "Programme d'accompagnement des TPE PME à l'intelligence artificielle"
+});
+assert.equal(sme.signalType, "territory_sme_ai_program");
+
 const irrelevant = classifyTerritoryMarketSignal({
   title: "Entretien des espaces verts communautaires"
 });
