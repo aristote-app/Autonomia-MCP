@@ -543,3 +543,18 @@ h3 { margin: 0 0 8px; }
 }
 
 .disabledAction { display:inline-flex; width:max-content; max-width:100%; padding:10px 12px; border:1px dashed #9ca49d; background:#f5f6f3; color:#677068; font-size:11px; font-weight:800; }
+
+
+/* Integration readiness */
+.integrationHero { padding:24px 0 38px; border-bottom:1px solid #d9ddd7; }
+.integrationGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:30px 0 60px; }
+.integrationGrid article { display:grid; gap:10px; padding:22px; border:1px solid #d9ddd7; background:#fff; }
+.integrationGrid h2 { font-size:22px; }
+.integrationGrid p { margin:0; color:#677068; font-size:12px; line-height:1.55; }
+.integrationReady, .integrationMissing { display:inline-flex; width:max-content; max-width:100%; padding:6px 8px; border:1px solid #111; font-size:9px; font-weight:900; letter-spacing:.07em; }
+.integrationReady { background:#111; color:#fff; }
+.integrationMissing { border-style:dashed; color:#677068; }
+
+@media (max-width:720px) {
+  .integrationGrid { grid-template-columns:1fr; }
+}
