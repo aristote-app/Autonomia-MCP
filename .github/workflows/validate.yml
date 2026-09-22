@@ -72,5 +72,7 @@ jobs:
         run: npm run smoke:accounts
       - name: Smoke test Sales OS
         run: npm run smoke:sales-os
+      - name: Smoke test Brave search budget
+        run: npm run smoke:search-budget
       - name: Smoke test MCP
         run: npm run smoke:mcp
