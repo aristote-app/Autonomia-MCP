@@ -4,6 +4,12 @@ import { loadAccountBySlug } from "../../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
 import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
+import { getCurrentWorkspaceMembership } from "../../../lib/auth/access.js";
+import { listSalesContacts } from "../../../lib/db/salesContacts.js";
+import {
+  saveDecisionMakerCandidate,
+  verifyDecisionMaker
+} from "../../actions/sales-contacts.js";
 
 export const dynamic = "force-dynamic";
 
@@ -32,26 +38,47 @@ export default async function AccountDetailPage({ params, searchParams }) {
   if (!account) notFound();
 
   const outreach = buildAccountOutreachPlan(account);
+  const workspaceContext = await getCurrentWorkspaceMembership().catch(() => ({
+    configured: false,
+    claims: null,
+    membership: null
+  }));
+  const hasWorkspaceSession = Boolean(
+    workspaceContext?.claims?.sub && workspaceContext?.membership?.workspace_id
+  );
+  const canWriteContacts =
+    hasWorkspaceSession && workspaceContext.membership.role !== "viewer";
+
   const shouldDiscover = query?.discover === "1";
   const decisionDiscoveryEnabled =
+    hasWorkspaceSession &&
     process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
-  const decisionMakers = shouldDiscover && decisionDiscoveryEnabled
-    ? await discoverDecisionMakers({
-        company: account.name,
-        roles: account.decision_roles,
-        maxRoles: 3,
-        countPerRole: 5
-      }).catch((error) => ({
-        available: false,
-        reason: error instanceof Error ? error.message : String(error),
-        candidates: [],
-        searches: []
-      }))
-    : null;
+  const [decisionMakers, savedContacts] = await Promise.all([
+    shouldDiscover && decisionDiscoveryEnabled
+      ? discoverDecisionMakers({
+          company: account.name,
+          roles: account.decision_roles,
+          maxRoles: 3,
+          countPerRole: 5
+        }).catch((error) => ({
+          available: false,
+          reason: error instanceof Error ? error.message : String(error),
+          candidates: [],
+          searches: []
+        }))
+      : Promise.resolve(null),
+    hasWorkspaceSession
+      ? listSalesContacts({
+          workspaceId: workspaceContext.membership.workspace_id,
+          accountKey: account.slug,
+          limit: 50
+        }).catch(() => [])
+      : Promise.resolve([])
+  ]);
 
   return (
     <main>
@@ -156,6 +183,20 @@ export default async function AccountDetailPage({ params, searchParams }) {
                         <a href={candidate.linkedin_url} target="_blank" rel="noreferrer">
                           Vérifier le profil LinkedIn ↗
                         </a>
+                        {canWriteContacts && (
+                          <form action={saveDecisionMakerCandidate}>
+                            <input type="hidden" name="account_key" value={account.slug} />
+                            <input type="hidden" name="account_name" value={account.name} />
+                            <input type="hidden" name="linkedin_url" value={candidate.linkedin_url} />
+                            <input type="hidden" name="name_guess" value={candidate.name_guess || ""} />
+                            <input type="hidden" name="headline" value={candidate.headline || ""} />
+                            <input type="hidden" name="matched_role" value={candidate.matched_role || ""} />
+                            <input type="hidden" name="relevance_score" value={candidate.relevance_score} />
+                            <input type="hidden" name="trigger_title" value={account.timeline[0]?.title || ""} />
+                            <input type="hidden" name="trigger_url" value={account.timeline[0]?.source_url || ""} />
+                            <button type="submit">Sauvegarder candidat</button>
+                          </form>
+                        )}
                         <span className={kasprConfigured ? "ready" : ""}>
                           {kasprConfigured ? "Kaspr prêt" : "Kaspr à connecter"}
                         </span>
@@ -192,6 +233,67 @@ export default async function AccountDetailPage({ params, searchParams }) {
             )}
           </div>
         </div>
+
+        {hasWorkspaceSession && (
+          <div className="detailPanel savedContactsPanel">
+            <p className="eyebrow">MÉMOIRE COMMERCIALE</p>
+            <h2>Contacts sauvegardés</h2>
+            {savedContacts.length ? (
+              <div className="savedContactList">
+                {savedContacts.map((contact) => (
+                  <article key={contact.id}>
+                    <div className="savedContactTop">
+                      <div>
+                        <strong>{contact.full_name || contact.role_title || "Contact LinkedIn"}</strong>
+                        <p>
+                          {contact.matched_role || contact.role_title || "Fonction à vérifier"}
+                        </p>
+                      </div>
+                      <span className={"contactStatus " + contact.verification_status}>
+                        {contact.verification_status === "verified"
+                          ? "Vérifié"
+                          : contact.verification_status === "rejected"
+                            ? "Rejeté"
+                            : "Candidat"}
+                      </span>
+                    </div>
+
+                    <div className="savedContactFacts">
+                      <a href={contact.linkedin_url} target="_blank" rel="noreferrer">
+                        LinkedIn ↗
+                      </a>
+                      {contact.email_b2b && <span>Email pro : {contact.email_b2b}</span>}
+                      {contact.phone && <span>Téléphone : {contact.phone}</span>}
+                      <span>Kaspr : {contact.enrichment_status}</span>
+                      <span>Waalaxy : {contact.outreach_status}</span>
+                    </div>
+
+                    {canWriteContacts && contact.verification_status === "candidate" && (
+                      <div className="savedContactActions">
+                        <form action={verifyDecisionMaker}>
+                          <input type="hidden" name="contact_id" value={contact.id} />
+                          <input type="hidden" name="account_key" value={account.slug} />
+                          <input type="hidden" name="status" value="verified" />
+                          <button type="submit">Confirmer le contact</button>
+                        </form>
+                        <form action={verifyDecisionMaker}>
+                          <input type="hidden" name="contact_id" value={contact.id} />
+                          <input type="hidden" name="account_key" value={account.slug} />
+                          <input type="hidden" name="status" value="rejected" />
+                          <button type="submit" className="secondary">Rejeter</button>
+                        </form>
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="accountHint">
+                Aucun contact sauvegardé. Les candidats ne sont enregistrés qu'après action explicite.
+              </p>
+            )}
+          </div>
+        )}
 
         <aside className="detailPanel">
           <p className="eyebrow">COUVERTURE</p>
