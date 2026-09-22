@@ -14,15 +14,19 @@ export async function GET(request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const mode = new URL(request.url).searchParams.get("mode") || "full";
+  const url = new URL(request.url);
+  const mode = url.searchParams.get("mode") || "full";
   const publicOnly = mode === "public";
+  const requestedQuery = String(url.searchParams.get("query") || "").trim().slice(0, 160);
 
-  const queries = [
-    "intelligence artificielle",
-    "IA générative",
-    "LLM",
-    "agent IA"
-  ];
+  const queries = requestedQuery
+    ? [requestedQuery]
+    : [
+        "intelligence artificielle",
+        "IA générative",
+        "LLM",
+        "agent IA"
+      ];
 
   const runs = [];
 
@@ -83,6 +87,7 @@ export async function GET(request) {
   return Response.json({
     ok: publicOnly ? publicOk : Boolean(freelance?.ok) || publicOk,
     mode,
+    requestedQuery: requestedQuery || null,
     completedAt: new Date().toISOString(),
     freelance,
     jobSignals,
