@@ -7,8 +7,7 @@ import {
   getIntelligenceDashboardSummary
 } from "../lib/db/intelligence.js";
 import {
-  buildUnifiedTodayQueue,
-  summarizeUnifiedTodayQueue
+  buildUnifiedTodayQueue
 } from "../lib/intelligence/today.js";
 import { searchJobSignals } from "../lib/db/jobSignals.js";
 import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
@@ -98,10 +97,35 @@ async function loadLiveData() {
 
     const workflow = await getTeamWorkflowContext(today);
 
+    const directMissions =
+      (summary.activeFreelanceOpportunities || 0) +
+      (summary.freelanceJobSignals || 0);
+
     return {
       summary,
       today,
-      todaySummary: summarizeUnifiedTodayQueue(today),
+      todaySummary: {
+        total: (summary.activeAiOpportunities || 0) + (summary.totalJobSignals || 0),
+        directMissions,
+        companySignals: summary.companyJobSignals || 0,
+        urgent: summary.urgentAiOpportunities || 0
+      },
+      sourceHealth: {
+        freelance:
+          directMissions > 0
+            ? "Flux alimenté"
+            : summary.freeworkRows > 0
+              ? "Aucune mission IA active"
+              : "Free-Work non persisté",
+        companySignals:
+          (summary.totalJobSignals || 0) > 0
+            ? "Flux alimenté"
+            : "LinkedIn / Indeed non alimentés",
+        urgent:
+          (summary.urgentAiOpportunities || 0) > 0
+            ? "Échéance ≤ 3 jours"
+            : "Aucune échéance ≤ 3 jours"
+      },
       buyers: buyers.items,
       workflow
     };
@@ -173,10 +197,26 @@ export default async function Home() {
             </div>
 
             <div className="todaySummary">
-              <article><strong>{live.todaySummary.total}</strong><span>à traiter</span></article>
-              <article><strong>{live.todaySummary.directMissions}</strong><span>missions freelance</span></article>
-              <article><strong>{live.todaySummary.companySignals}</strong><span>signaux entreprises</span></article>
-              <article><strong>{live.todaySummary.urgent}</strong><span>urgents</span></article>
+              <article>
+                <strong>{live.todaySummary.total}</strong>
+                <span>à traiter</span>
+                <small>Base active, pas seulement les cartes visibles</small>
+              </article>
+              <article>
+                <strong>{live.todaySummary.directMissions}</strong>
+                <span>missions freelance</span>
+                <small>{live.sourceHealth.freelance}</small>
+              </article>
+              <article>
+                <strong>{live.todaySummary.companySignals}</strong>
+                <span>signaux entreprises</span>
+                <small>{live.sourceHealth.companySignals}</small>
+              </article>
+              <article>
+                <strong>{live.todaySummary.urgent}</strong>
+                <span>urgents</span>
+                <small>{live.sourceHealth.urgent}</small>
+              </article>
             </div>
 
             <div className="opportunityList">
