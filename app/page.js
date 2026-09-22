@@ -85,7 +85,8 @@ async function loadLiveData() {
           "freelancerepublik",
           "lehibou",
           "linkedin_post",
-          "francetravail"
+          "francetravail",
+          "francetravail_web"
         ],
         freelanceOnly: true,
         limit: 80
@@ -95,7 +96,8 @@ async function loadLiveData() {
           "francetravail",
           "linkedin_training",
           "linkedin_training_post",
-          "indeed_training"
+          "indeed_training",
+          "francetravail_training_web"
         ],
         signalKey: "training_need",
         limit: 80
