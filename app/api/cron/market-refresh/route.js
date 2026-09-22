@@ -20,23 +20,26 @@ export async function GET(request) {
   ];
 
   const runs = [];
-  for (const query of queries) {
-    try {
-      runs.push({
-        ok: true,
-        ...(await runAutomatedMarketRefresh({
-          query,
-          scopes: ["public", "training", "freelance"],
-          limitPerQuery: 6
-        }))
-      });
-    } catch (error) {
-      runs.push({
-        ok: false,
-        query,
-        error: error instanceof Error ? error.message : String(error)
-      });
-    }
+
+  // Run freelance first and only once. Free-Work does not depend on the text query,
+  // so fetching it four times wastes execution time and can starve persistence.
+  let freelance = null;
+  try {
+    freelance = {
+      ok: true,
+      ...(await runAutomatedMarketRefresh({
+        query: "intelligence artificielle",
+        scopes: ["freelance"],
+        limitPerQuery: 6
+      }))
+    };
+  } catch (error) {
+    freelance = {
+      ok: false,
+      query: "intelligence artificielle",
+      scopes: ["freelance"],
+      error: error instanceof Error ? error.message : String(error)
+    };
   }
 
   let jobSignals = null;
@@ -49,10 +52,30 @@ export async function GET(request) {
     };
   }
 
+  for (const query of queries) {
+    try {
+      runs.push({
+        ok: true,
+        ...(await runAutomatedMarketRefresh({
+          query,
+          scopes: ["public", "training"],
+          limitPerQuery: 6
+        }))
+      });
+    } catch (error) {
+      runs.push({
+        ok: false,
+        query,
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  }
+
   return Response.json({
-    ok: runs.some((run) => run.ok),
+    ok: Boolean(freelance?.ok) || runs.some((run) => run.ok),
     completedAt: new Date().toISOString(),
-    runs,
-    jobSignals
+    freelance,
+    jobSignals,
+    runs
   });
 }
