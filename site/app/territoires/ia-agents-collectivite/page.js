@@ -174,9 +174,10 @@ export default function TerritoryAgentsAIPage() {
           <h2>La formation doit être reliée aux systèmes réellement utilisés.</h2>
           <p className="territoryInsightLead">
             L’article 4 de l’AI Act prévoit des mesures de littératie IA pour les personnes qui utilisent
-            des systèmes d’IA pour le compte d’une organisation. La Commission précise que l’approche doit
-            tenir compte des connaissances, de l’expérience, de la formation et du contexte d’usage ; elle
-            n’impose pas un certificat spécifique. Pour une intercommunalité, cela pousse vers des parcours
+            des systèmes d’IA pour le compte d’une organisation. Depuis la modification entrée en vigueur
+            à la mi-juillet 2026, la Commission précise qu’aucun niveau individuel spécifique n’est imposé
+            et que l’approche doit tenir compte des connaissances, de l’expérience, de la formation et du
+            contexte d’usage. Aucun certificat spécifique n’est requis. Pour une intercommunalité, cela pousse vers des parcours
             concrets : règles internes, outils autorisés, risques, vérification des sorties et cas d’usage métier.
           </p>
           <div className="territoryDecisionGrid">
