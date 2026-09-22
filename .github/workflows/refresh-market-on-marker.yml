@@ -78,16 +78,24 @@ jobs:
 
           generated_secret="$(openssl rand -hex 32)"
           echo "::add-mask::$generated_secret"
-          secret_file="$(mktemp)"
-          printf "%s" "$generated_secret" > "$secret_file"
 
-          vercel env add CRON_SECRET production \
-            --sensitive \
-            --scope "$VERCEL_TEAM_SLUG" \
-            --token "$VERCEL_TOKEN" \
-            < "$secret_file"
+          payload="$(printf '{"key":"CRON_SECRET","value":"%s","type":"sensitive","target":["production"],"comment":"Autonomia scheduled market refresh authentication"}' "$generated_secret")"
+          api_status="$(curl -sS \
+            -o /tmp/vercel-cron-secret-response.json \
+            -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.vercel.com/v10/projects/$VERCEL_PROJECT_NAME/env?slug=$VERCEL_TEAM_SLUG&upsert=true" \
+            --data "$payload")"
 
-          rm -f "$secret_file"
+          rm -f /tmp/vercel-cron-secret-response.json
+
+          if [ "$api_status" != "200" ] && [ "$api_status" != "201" ]; then
+            echo "::error::Vercel env API returned HTTP $api_status while creating CRON_SECRET."
+            exit 1
+          fi
+
           echo "created=true" >> "$GITHUB_OUTPUT"
           echo "CRON_SECRET created securely in Vercel production."
 
