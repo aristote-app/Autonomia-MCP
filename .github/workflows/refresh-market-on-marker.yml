@@ -149,6 +149,14 @@ jobs:
             persistedRows: runs.reduce(
               (sum, run) => sum + Number(run.persistedRows || 0),
               0
-            )
+            ),
+            territorySignals: {
+              available: Boolean(payload.territorySignals?.available),
+              matchedTerritories: payload.territorySignals?.matched_territories ?? 0,
+              candidateSignals: payload.territorySignals?.candidate_signals ?? 0,
+              persistedRows: payload.territorySignals?.persisted ?? 0,
+              duplicates: payload.territorySignals?.duplicates ?? 0,
+              error: payload.territorySignals?.error ?? null
+            }
           }, null, 2));
           NODE
