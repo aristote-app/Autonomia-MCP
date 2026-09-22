@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 function enabled() {
   return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
     process.env.SUPABASE_PUBLISHABLE_KEY &&
     process.env.AUTONOMIA_AUTH_REQUIRED === "true"
   );
@@ -22,7 +22,7 @@ export async function proxy(request) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_PUBLISHABLE_KEY,
     {
       cookies: {
