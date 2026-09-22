@@ -138,21 +138,20 @@ def parse_csv(path):
     return items
 
 def parse_xlsx(path):
-    from openpyxl import load_workbook
-    wb = load_workbook(path, read_only=True, data_only=True)
+    from python_calamine import CalamineWorkbook
 
-    # The national BANATIC workbook contains several large datasets. For the
-    # exhaustive prospecting universe we only need the "liste des groupements"
-    # sheet: SIREN + name + legal nature. Scan at most the first 100 rows of
-    # each sheet to identify it, then parse that sheet only.
-    for ws in wb.worksheets:
-        rows = ws.iter_rows(values_only=True)
-        header = None
+    wb = CalamineWorkbook.from_path(str(path))
+
+    # Read only the sheet that contains the canonical groupement identity
+    # columns. Calamine lets us sample each sheet without materializing the
+    # 70+ MB workbook through openpyxl.
+    for sheet_name in wb.sheet_names:
+        ws = wb.get_sheet_by_name(sheet_name)
+        sample = ws.to_python(nrows=100, skip_empty_area=False)
+        header_index = None
         headers = None
 
-        for index, row in enumerate(rows):
-            if index >= 100:
-                break
+        for index, row in enumerate(sample):
             values = list(row)
             normalized = [norm(v) for v in values]
             has_siren = any(v in ALIASES["siren"] for v in normalized)
@@ -160,7 +159,7 @@ def parse_xlsx(path):
             has_type = any(v in ALIASES["type"] for v in normalized)
 
             if has_siren and has_name and has_type:
-                header = values
+                header_index = index
                 headers = {
                     norm(v): idx
                     for idx, v in enumerate(values)
@@ -168,11 +167,13 @@ def parse_xlsx(path):
                 }
                 break
 
-        if header is None:
+        if header_index is None:
             continue
 
         items = {}
-        for row in rows:
+        for row_index, row in enumerate(ws.iter_rows()):
+            if row_index <= header_index:
+                continue
             values = list(row)
             item = make_item(values, headers)
             if item:
