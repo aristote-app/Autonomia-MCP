@@ -93,6 +93,15 @@ export default function IntegrationsPage() {
             offres possibles, rôles cibles et plan d'approche.
           </p>
         </article>
+
+        <article>
+          <State ready={true} label="Commercial Memory" />
+          <h2>Contacts & apprentissage</h2>
+          <p>
+            Mémoire contacts et journal d'événements actifs côté serveur. Les données personnelles
+            restent invisibles sans session de workspace.
+          </p>
+        </article>
       </section>
     </main>
   );
