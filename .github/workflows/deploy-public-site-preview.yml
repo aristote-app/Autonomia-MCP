@@ -132,3 +132,27 @@ jobs:
             echo "- Public-site identity smoke: passed"
             echo "- SEO route smoke: passed"
           } >> "$GITHUB_STEP_SUMMARY"
+
+
+      - name: Report deployment result to PR #10
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [ -n "$DEPLOYMENT_URL" ]; then
+            BODY="PUBLIC_SITE_DEPLOY_STATUS: $JOB_STATUS
+PUBLIC_SITE_DEPLOY_URL: $DEPLOYMENT_URL
+PUBLIC_SITE_DEPLOY_SHA: $GITHUB_SHA"
+          else
+            BODY="PUBLIC_SITE_DEPLOY_STATUS: $JOB_STATUS
+PUBLIC_SITE_DEPLOY_URL: unavailable
+PUBLIC_SITE_DEPLOY_SHA: $GITHUB_SHA"
+          fi
+
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$GITHUB_REPOSITORY/issues/10/comments" \
+            -f body="$BODY"
