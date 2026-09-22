@@ -111,44 +111,80 @@ jobs:
       - name: Refresh public and training market
         id: public_market
         run: |
-          rm -f /tmp/autonomia-public-market.json
+          rm -rf /tmp/autonomia-public-market
+          mkdir -p /tmp/autonomia-public-market
 
-          status="$(curl -sS \
-            --max-time 75 \
-            -o /tmp/autonomia-public-market.json \
-            -w "%{http_code}" \
-            -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
-            "https://autonomia-mcp.vercel.app/api/cron/market-refresh?mode=public" || true)"
+          queries=(
+            "intelligence artificielle"
+            "IA générative"
+            "LLM"
+            "agent IA"
+          )
 
-          echo "Public/training refresh: HTTP $status"
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+          failed=0
+          index=0
 
-          if [ "$status" != "200" ]; then
-            echo "::error::Public/training refresh did not complete successfully."
+          for query in "${queries[@]}"; do
+            index=$((index + 1))
+            encoded="$(node -p 'encodeURIComponent(process.argv[1])' "$query")"
+            output="/tmp/autonomia-public-market/query-${index}.json"
+
+            status="$(curl -sS \
+              --max-time 65 \
+              -o "$output" \
+              -w "%{http_code}" \
+              -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
+              "https://autonomia-mcp.vercel.app/api/cron/market-refresh?mode=public&query=$encoded" || true)"
+
+            echo "Public/training refresh [$index/4]: HTTP $status"
+
+            if [ "$status" != "200" ]; then
+              failed=$((failed + 1))
+            fi
+          done
+
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+
+          if [ "$failed" -gt 0 ]; then
+            echo "::error::$failed public/training refresh request(s) failed."
             exit 1
           fi
 
       - name: Report public market refresh
-        if: always() && steps.public_market.outputs.status != ''
+        if: always()
         run: |
           node --input-type=module <<'NODE'
           import fs from "node:fs";
 
-          if (!fs.existsSync("/tmp/autonomia-public-market.json")) process.exit(0);
+          const dir = "/tmp/autonomia-public-market";
+          if (!fs.existsSync(dir)) process.exit(0);
 
-          const payload = JSON.parse(
-            fs.readFileSync("/tmp/autonomia-public-market.json", "utf8")
-          );
+          const files = fs.readdirSync(dir).filter((name) => name.endsWith(".json")).sort();
+          const summaries = [];
 
-          const runs = Array.isArray(payload.runs) ? payload.runs : [];
-          console.log(JSON.stringify({
-            ok: Boolean(payload.ok),
-            mode: payload.mode ?? null,
-            successfulQueries: runs.filter((run) => run.ok).length,
-            failedQueries: runs.filter((run) => !run.ok).length,
-            persistedRows: runs.reduce(
-              (sum, run) => sum + Number(run.persistedRows || 0),
-              0
-            )
-          }, null, 2));
+          for (const file of files) {
+            const raw = fs.readFileSync(`${dir}/${file}`, "utf8");
+            try {
+              const payload = JSON.parse(raw);
+              const runs = Array.isArray(payload.runs) ? payload.runs : [];
+              summaries.push({
+                query: payload.requestedQuery ?? null,
+                ok: Boolean(payload.ok),
+                successfulQueries: runs.filter((run) => run.ok).length,
+                failedQueries: runs.filter((run) => !run.ok).length,
+                persistedRows: runs.reduce(
+                  (sum, run) => sum + Number(run.persistedRows || 0),
+                  0
+                )
+              });
+            } catch {
+              summaries.push({
+                query: null,
+                ok: false,
+                error: "non_json_response"
+              });
+            }
+          }
+
+          console.log(JSON.stringify(summaries, null, 2));
           NODE
