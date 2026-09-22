@@ -6,7 +6,8 @@ import {
   bootstrapWorkspace,
   inviteMember,
   updateMemberRole,
-  setMemberActive
+  setMemberActive,
+  refreshMarketNow
 } from "./actions.js";
 
 export const dynamic = "force-dynamic";
@@ -60,7 +61,9 @@ function messageFor(code) {
     invite_missing_user: "Supabase n'a pas retourné l'utilisateur invité.",
     invalid_member_update: "Mise à jour utilisateur invalide.",
     last_admin: "Impossible de retirer ou désactiver le dernier administrateur.",
-    cannot_disable_self: "Tu ne peux pas désactiver ton propre compte."
+    cannot_disable_self: "Tu ne peux pas désactiver ton propre compte.",
+    market_refreshed: "Rafraîchissement terminé.",
+    market_refresh_failed: "Le rafraîchissement Free-Work a échoué. Consulte le journal des collectes."
   };
   return messages[code] || code;
 }
@@ -151,7 +154,13 @@ export default async function AdminPage({ searchParams }) {
 
       {(params?.success || params?.error) && (
         <div className={`adminFlash ${params?.error ? "error" : "success"}`}>
-          {messageFor(params?.error || params?.success)}
+          <strong>{messageFor(params?.error || params?.success)}</strong>
+          {params?.success === "market_refreshed" && (
+            <span>
+              Free-Work persisté : {params?.freelance || "0"} · Signaux emploi persistés : {params?.signals || "0"}
+              {params?.signals_status === "unavailable" ? " · LinkedIn/Indeed : connecteur de découverte indisponible" : ""}
+            </span>
+          )}
         </div>
       )}
 
@@ -251,17 +260,32 @@ export default async function AdminPage({ searchParams }) {
             <p className="eyebrow">SANTÉ DU RADAR</p>
             <h2>Dernières collectes</h2>
           </div>
+          <form action={refreshMarketNow} className="radarRefreshForm">
+            <button type="submit">Rafraîchir maintenant</button>
+            <small>Free-Work + découverte LinkedIn/Indeed</small>
+          </form>
         </div>
         <div className="adminTable">
-          <div className="adminTableRow header">
-            <span>Source</span><span>Statut</span><span>Démarré</span><span>Terminé</span>
+          <div className="adminTableRow header radar">
+            <span>Source</span><span>Statut</span><span>Démarré</span><span>Terminé</span><span>Détail</span>
           </div>
           {collectorRuns.map((run) => (
-            <div className="adminTableRow" key={run.id}>
-              <span>{run.source_id || "multi-source"}</span>
+            <div className="adminTableRow radar" key={run.id}>
+              <span>{run.source_id || "job-signals / multi-source"}</span>
               <span>{run.status}</span>
               <span>{formatDate(run.started_at)}</span>
               <span>{formatDate(run.completed_at)}</span>
+              <span className="collectorDetail">
+                {run.error_message
+                  ? run.error_message
+                  : run.stats
+                    ? [
+                        run.stats.fetched != null ? `${run.stats.fetched} récupérés` : null,
+                        run.stats.persisted != null ? `${run.stats.persisted} persistés` : null,
+                        run.stats.discovered != null ? `${run.stats.discovered} détectés` : null
+                      ].filter(Boolean).join(" · ") || "OK"
+                    : "OK"}
+              </span>
             </div>
           ))}
         </div>

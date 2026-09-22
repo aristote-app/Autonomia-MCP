@@ -1,0 +1,113 @@
+name: refresh-market-on-marker
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/refresh-market-now"
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERCEL_PROJECT_NAME: autonomia-mcp
+      VERCEL_TEAM_SLUG: aristote
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Vercel token
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing VERCEL_TOKEN repository secret."
+            exit 1
+          fi
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@50.1.6
+
+      - name: Link production project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --yes \
+            --project "$VERCEL_PROJECT_NAME" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Wait for route and refresh freelance market
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          rm -f /tmp/autonomia-refresh.json /tmp/autonomia-refresh-status.txt
+
+          vercel env run --environment=production -- \
+            bash -lc '
+              set +x
+              for attempt in $(seq 1 30); do
+                status=$(curl -sS \
+                  -o /tmp/autonomia-refresh.json \
+                  -w "%{http_code}" \
+                  -H "Authorization: Bearer $CRON_SECRET" \
+                  "https://autonomia-mcp.vercel.app/api/cron/freelance-refresh" || true)
+
+                echo "Attempt $attempt: HTTP $status"
+
+                if [ "$status" = "200" ] || [ "$status" = "502" ]; then
+                  printf "%s" "$status" > /tmp/autonomia-refresh-status.txt
+                  exit 0
+                fi
+
+                sleep 10
+              done
+
+              echo "Timed out waiting for the production refresh route."
+              exit 1
+            '
+
+      - name: Report safe refresh summary
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+
+          const raw = fs.readFileSync("/tmp/autonomia-refresh.json", "utf8");
+          const payload = JSON.parse(raw);
+
+          const summary = {
+            ok: Boolean(payload.ok),
+            freelance: {
+              ok: Boolean(payload.freelance?.ok),
+              fetchedRows: payload.freelance?.fetchedRows ?? 0,
+              persistedRows: payload.freelance?.persistedRows ?? 0,
+              source: payload.freelance?.source ?? "freework",
+              error: payload.freelance?.error ?? null
+            },
+            jobSignals: {
+              available: Boolean(payload.jobSignals?.available),
+              discoveredRows: payload.jobSignals?.discoveredRows ?? 0,
+              persistedRows: payload.jobSignals?.persistedRows ?? 0,
+              reason: payload.jobSignals?.reason ?? payload.jobSignals?.error ?? null
+            }
+          };
+
+          console.log(JSON.stringify(summary, null, 2));
+
+          if (!summary.freelance.ok) {
+            process.exitCode = 1;
+          }
+          NODE

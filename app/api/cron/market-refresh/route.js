@@ -1,4 +1,8 @@
-import { runAutomatedMarketRefresh, runAutomatedJobSignalRefresh } from "../../../../lib/market/automatedRefresh.js";
+import {
+  runAutomatedMarketRefresh,
+  runAutomatedFreelanceRefresh,
+  runAutomatedJobSignalRefresh
+} from "../../../../lib/market/automatedRefresh.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,30 +25,31 @@ export async function GET(request) {
 
   const runs = [];
 
-  // Run freelance first and only once. Free-Work does not depend on the text query,
-  // so fetching it four times wastes execution time and can starve persistence.
+  // Persist Free-Work independently from public-market refreshes so the freelance
+  // feed cannot be starved by slower BOAMP/TED loops.
   let freelance = null;
   try {
     freelance = {
       ok: true,
-      ...(await runAutomatedMarketRefresh({
-        query: "intelligence artificielle",
-        scopes: ["freelance"],
-        limitPerQuery: 6
+      ...(await runAutomatedFreelanceRefresh({
+        category: "ia",
+        limit: 50,
+        triggerMode: "scheduled"
       }))
     };
   } catch (error) {
     freelance = {
       ok: false,
-      query: "intelligence artificielle",
-      scopes: ["freelance"],
+      source: "freework",
       error: error instanceof Error ? error.message : String(error)
     };
   }
 
   let jobSignals = null;
   try {
-    jobSignals = await runAutomatedJobSignalRefresh();
+    jobSignals = await runAutomatedJobSignalRefresh({
+      triggerMode: "scheduled"
+    });
   } catch (error) {
     jobSignals = {
       available: true,
