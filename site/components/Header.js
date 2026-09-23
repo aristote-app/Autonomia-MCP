@@ -1,5 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import AutonomiaMark from "@/components/AutonomiaMark";
+
+const NAV_ITEMS = [
+  ["Experts", "/experts"],
+  ["Academy", "/academy"],
+  ["Territoires", "/territoires"],
+  ["Cas d’usage", "/cas-usage-ia"],
+  ["Explorer les besoins IA", "/observatoire-ia"],
+  ["Méthode", "/#methode"]
+];
 
 export default function Header() {
   return (
@@ -16,12 +27,9 @@ export default function Header() {
         </Link>
 
         <nav className="desktopNav" aria-label="Navigation principale">
-          <Link href="/experts">Experts</Link>
-          <Link href="/academy">Academy</Link>
-          <Link href="/territoires">Territoires</Link>
-          <Link href="/cas-usage-ia">Cas d’usage</Link>
-          <Link href="/observatoire-ia">Explorer les besoins IA</Link>
-          <Link href="/#methode">Méthode</Link>
+          {NAV_ITEMS.map(([label, href]) => (
+            <Link href={href} key={href}>{label}</Link>
+          ))}
         </nav>
 
         <div className="headerActions">
@@ -29,6 +37,21 @@ export default function Header() {
             <span>Trouver ma solution</span>
             <b aria-hidden="true">↗</b>
           </Link>
+
+          <details className="mobileMenu">
+            <summary aria-label="Ouvrir le menu">
+              <span>Menu</span>
+              <b aria-hidden="true">☰</b>
+            </summary>
+            <nav className="mobileMenuPanel" aria-label="Navigation mobile">
+              {NAV_ITEMS.map(([label, href]) => (
+                <Link href={href} key={href} onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>{label}<span aria-hidden="true">↗</span></Link>
+              ))}
+              <Link className="mobileMenuPrimary" href="/#solution-finder" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
+                Trouver ma solution <span aria-hidden="true">→</span>
+              </Link>
+            </nav>
+          </details>
         </div>
       </header>
 
