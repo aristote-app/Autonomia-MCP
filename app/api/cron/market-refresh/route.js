@@ -48,12 +48,15 @@ export async function GET(request) {
     }
   }
 
-  const queries = [
-    "intelligence artificielle",
-    "IA générative",
-    "LLM",
-    "agent IA"
-  ];
+  const requestedQuery = new URL(request.url).searchParams.get("q");
+  const queries = requestedQuery
+    ? [requestedQuery]
+    : [
+        "intelligence artificielle",
+        "IA générative",
+        "LLM",
+        "agent IA"
+      ];
 
   const runs = [];
 
