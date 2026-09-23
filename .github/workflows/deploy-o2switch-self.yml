@@ -79,3 +79,31 @@ jobs:
 
           echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE."
           exit 1
+
+
+      - name: Bootstrap consultant candidates once
+        env:
+          BOOTSTRAP_URL: https://cockpit.build-autonomia.com/api/internal/talent-bootstrap
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: |
+          echo "Waiting for the newly deployed Talent Hunter endpoint..."
+          for attempt in $(seq 1 24); do
+            HTTP_CODE="$(curl -sS \
+              -o /tmp/autonomia-talent-bootstrap.json \
+              -w "%{http_code}" \
+              -X POST "$BOOTSTRAP_URL" \
+              -H "Authorization: Bearer $OIDC_TOKEN")"
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              cat /tmp/autonomia-talent-bootstrap.json
+              echo
+              echo "Talent Hunter bootstrap completed or was already seeded."
+              exit 0
+            fi
+
+            echo "Talent bootstrap not ready yet (HTTP $HTTP_CODE, attempt $attempt/24)."
+            sleep 10
+          done
+
+          echo "::warning::Talent Hunter bootstrap did not become available during the deployment window."
+          exit 0
