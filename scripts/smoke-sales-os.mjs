@@ -15,7 +15,10 @@ import {
   extractKasprContactData,
   kasprRequestedFields
 } from "../lib/integrations/kaspr.js";
-import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
+import {
+  discoverDecisionMakers,
+  scoreDecisionMakerCandidate
+} from "../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
@@ -312,6 +315,19 @@ const routedLists = rankWaalaxyLists({
   ]
 });
 assert.equal(routedLists.recommended?._id, "l1");
+
+const rightCompanyScore = scoreDecisionMakerCandidate({
+  text: "Jane Doe - Head of AI chez Acme, Paris, France",
+  company: "Acme France",
+  role: "Head of AI / Data"
+});
+const wrongCompanyScore = scoreDecisionMakerCandidate({
+  text: "Jane Doe - Head of AI chez Other Corp, Paris, France",
+  company: "Acme France",
+  role: "Head of AI / Data"
+});
+assert.ok(rightCompanyScore >= 65);
+assert.ok(wrongCompanyScore < 65);
 
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {
