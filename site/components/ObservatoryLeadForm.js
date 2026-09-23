@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 
 function attribution() {
   if (typeof window === "undefined") return {};
@@ -37,6 +38,11 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
     }
 
     setStatus("sending");
+    trackEvent("observatory_lead_submit", {
+      form_id: "observatoire-landing-" + topic.slug,
+      requested_service: "OBSERVATOIRE IA - " + topic.title,
+      landing_page_topic: topic.slug
+    });
 
     const payload = {
       external_lead_id: crypto.randomUUID(),
@@ -62,6 +68,11 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         body: JSON.stringify(payload)
       });
       if (!response.ok) throw new Error("failed");
+      trackLeadConversion({
+        form_id: payload.form_id,
+        requested_service: payload.requested_service,
+        landing_page_topic: topic.slug
+      });
       setStatus("sent");
     } catch {
       setStatus("error");
