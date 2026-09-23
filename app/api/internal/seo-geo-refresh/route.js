@@ -61,6 +61,20 @@ export async function GET(request) {
       evidence: item.evidence,
       briefReady: Boolean(item.brief)
     }));
+  const territoryDraftBriefs = (
+    Array.isArray(snapshot.territoryDraftQueue)
+      ? snapshot.territoryDraftQueue
+      : []
+  ).map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    family: item.family,
+    cluster: item.cluster,
+    action: item.action,
+    score: item.score,
+    evidence: item.evidence,
+    briefReady: Boolean(item.brief)
+  }));
 
   return Response.json({
     ok: Boolean(
@@ -78,8 +92,10 @@ export async function GET(request) {
     territorySignals: Number(snapshot.signalSummary?.territory) || 0,
     recommendations: recommendations.length,
     preparedBriefs: draftBriefs.length,
+    preparedTerritoryBriefs: territoryDraftBriefs.length,
     territoryRecommendations,
     draftBriefs,
+    territoryDraftBriefs,
     topClusters: snapshot.signalSummary?.topClusters || [],
     sourceCounts: snapshot.sourceCounts || {},
     errors: {
