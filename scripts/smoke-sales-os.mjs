@@ -134,6 +134,37 @@ assert.equal(outreachActions[0].channel, "LinkedIn / Waalaxy");
 assert.ok(outreachActions[0].message.includes("Déploiement Copilot"));
 assert.ok(outreachActions[0].message.includes("Acme"));
 
+const inboundRevenueActions = buildRevenueActions({
+  accounts: [],
+  contacts: [{
+    id: "cold-contact",
+    account_key: "cold-account",
+    account_name: "Cold Account",
+    full_name: "Cold Contact",
+    verification_status: "candidate",
+    outreach_status: "not_started",
+    enrichment_status: "not_requested",
+    do_not_contact: false
+  }],
+  inboundLeads: [{
+    id: "lead-hot",
+    status: "new",
+    first_name: "Alice",
+    last_name: "Martin",
+    company_name: "Inbound Acme",
+    requested_service: "Automatisation IA",
+    scan_context: {
+      classification: "automation",
+      next_action: "Qualifier le processus et proposer un échange."
+    }
+  }]
+});
+
+assert.equal(inboundRevenueActions[0].kind, "inbound_lead");
+assert.equal(inboundRevenueActions[0].account_name, "Inbound Acme");
+assert.equal(inboundRevenueActions[0].href, "/inbound");
+assert.ok(inboundRevenueActions[0].priority > inboundRevenueActions[1].priority);
+
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {
     linkedinUrl: "https://fr.linkedin.com/in/jane-doe-ai/",
