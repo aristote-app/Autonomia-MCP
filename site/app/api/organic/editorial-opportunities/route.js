@@ -6,7 +6,7 @@ const signalSchema = z.object({
   query: z.string().optional(),
   term: z.string().optional(),
   cluster: z.string().optional(),
-  family: z.enum(["execution-use-case", "training-use-case"]).optional(),
+  family: z.enum(["execution-use-case", "training-use-case", "territory-use-case"]).optional(),
   search_impressions: z.number().nonnegative().optional(),
   impressions: z.number().nonnegative().optional(),
   search_clicks: z.number().nonnegative().optional(),
@@ -14,6 +14,8 @@ const signalSchema = z.object({
   paid_search_conversions: z.number().nonnegative().optional(),
   inbound_mentions: z.number().nonnegative().optional(),
   job_mentions: z.number().nonnegative().optional(),
+  public_procurement_mentions: z.number().nonnegative().optional(),
+  territory_mentions: z.number().nonnegative().optional(),
   ai_citations: z.number().nonnegative().optional(),
   citations: z.number().nonnegative().optional(),
   revenue: z.number().nonnegative().optional()

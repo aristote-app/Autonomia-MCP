@@ -2,6 +2,7 @@ import {
   executionBacklog,
   trainingBacklog
 } from "../content/editorial-backlog.js";
+import { territoryBacklog } from "../content/territory-editorial.js";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -53,6 +54,8 @@ function normalizeSignal(signal) {
     paid_search_conversions: number(signal.paid_search_conversions),
     inbound_mentions: number(signal.inbound_mentions),
     job_mentions: number(signal.job_mentions),
+    public_procurement_mentions: number(signal.public_procurement_mentions),
+    territory_mentions: number(signal.territory_mentions),
     ai_citations: number(signal.ai_citations ?? signal.citations),
     revenue: number(signal.revenue)
   };
@@ -78,6 +81,8 @@ function signalValue(signal) {
   const paid = Math.log10(1 + signal.paid_search_conversions);
   const inbound = Math.log10(1 + signal.inbound_mentions);
   const jobs = Math.log10(1 + signal.job_mentions);
+  const procurement = Math.log10(1 + signal.public_procurement_mentions);
+  const territory = Math.log10(1 + signal.territory_mentions);
   const citations = Math.log10(1 + signal.ai_citations);
   const revenue = Math.log10(1 + Math.max(0, signal.revenue) / 100);
 
@@ -87,19 +92,23 @@ function signalValue(signal) {
     paid * 2.2 +
     inbound * 2 +
     jobs * 1.05 +
+    procurement * 1.7 +
+    territory * 1.5 +
     citations * 1.2 +
     revenue * 2.6
   );
 }
 
 function publishedFor(topic) {
-  return topic.type === "execution-use-case"
-    ? publishedExecutionArticles
-    : publishedTrainingArticles;
+  if (topic.type === "execution-use-case") return publishedExecutionArticles;
+  if (topic.type === "training-use-case") return publishedTrainingArticles;
+  return [];
 }
 
 function familyKey(topic) {
-  return topic.type === "execution-use-case" ? "execution" : "training";
+  if (topic.type === "execution-use-case") return "execution";
+  if (topic.type === "training-use-case") return "training";
+  return "territory";
 }
 
 function publishedClusterCount(topic) {
@@ -119,7 +128,7 @@ function closestPublished(topic) {
 export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
   const signals = rawSignals.map(normalizeSignal);
   const maxResults = Math.max(1, Math.min(number(options.max_results) || 30, 100));
-  const backlog = [...executionBacklog, ...trainingBacklog];
+  const backlog = [...executionBacklog, ...trainingBacklog, ...territoryBacklog];
 
   const publishedSlugs = new Set([
     ...publishedExecutionArticles.map((article) => article.slug),
@@ -157,6 +166,8 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
         paid_search_conversions: matches.reduce((sum, match) => sum + match.signal.paid_search_conversions, 0),
         inbound_mentions: matches.reduce((sum, match) => sum + match.signal.inbound_mentions, 0),
         job_mentions: matches.reduce((sum, match) => sum + match.signal.job_mentions, 0),
+        public_procurement_mentions: matches.reduce((sum, match) => sum + match.signal.public_procurement_mentions, 0),
+        territory_mentions: matches.reduce((sum, match) => sum + match.signal.territory_mentions, 0),
         ai_citations: matches.reduce((sum, match) => sum + match.signal.ai_citations, 0),
         revenue: matches.reduce((sum, match) => sum + match.signal.revenue, 0),
         matched_signals: matches.length

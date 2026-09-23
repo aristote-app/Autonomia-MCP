@@ -3,6 +3,7 @@ import {
   executionBacklog,
   trainingBacklog
 } from "@/content/editorial-backlog";
+import { territoryBacklog } from "@/content/territory-editorial";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -15,7 +16,11 @@ function authorized(request) {
 
 function rows(family, backlog, published) {
   const publishedSlugs = new Set(published.map((article) => article.slug));
-  const base = family === "training" ? "/formation-ia/cas-usage" : "/cas-usage-ia";
+  const base = family === "training"
+    ? "/formation-ia/cas-usage"
+    : family === "territory"
+      ? "/territoires/guides"
+      : "/cas-usage-ia";
 
   return backlog.map((item) => ({
     family,
@@ -37,7 +42,8 @@ export async function GET(request) {
 
   const items = [
     ...rows("execution", executionBacklog, publishedExecutionArticles),
-    ...rows("training", trainingBacklog, publishedTrainingArticles)
+    ...rows("training", trainingBacklog, publishedTrainingArticles),
+    ...rows("territory", territoryBacklog, [])
   ];
 
   return NextResponse.json({
