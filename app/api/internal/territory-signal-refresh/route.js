@@ -51,10 +51,16 @@ export async function GET(request) {
       failedQueries: result?.failed_queries || 0,
       fetched: result?.fetched || 0,
       withBuyerSiren: result?.with_buyer_siren || 0,
+      territoryDirectory: result?.territory_directory || 0,
+      matchedBySiren: result?.matched_by_siren || 0,
+      matchedByName: result?.matched_by_name || 0,
       matchedTerritories: result?.matched_territories || 0,
       candidateSignals: result?.candidate_signals || 0,
+      fresh180d: result?.fresh_180d || 0,
+      fresh365d: result?.fresh_365d || 0,
       persisted: result?.persisted || 0,
-      duplicates: result?.duplicates || 0
+      duplicates: result?.duplicates || 0,
+      samples: Array.isArray(result?.samples) ? result.samples : []
     }, {
       headers: { "cache-control": "no-store, no-cache, must-revalidate" }
     });
