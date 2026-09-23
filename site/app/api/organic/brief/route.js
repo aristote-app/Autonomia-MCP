@@ -3,7 +3,7 @@ import { z } from "zod";
 import { buildEditorialBrief } from "@/lib/editorialBrief";
 
 const payloadSchema = z.object({
-  family: z.enum(["execution", "training"]),
+  family: z.enum(["execution", "training", "territory"]),
   slug: z.string().min(1)
 });
 
