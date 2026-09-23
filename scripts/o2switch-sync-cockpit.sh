@@ -90,25 +90,45 @@ node scripts/ensure-inbound-token.mjs
 echo "Building cockpit Next.js..."
 npm run build
 
-if [ -f "$PUBLIC_SITE_ROOT/package.json" ]; then
-  echo "Building public site for build-autonomia.com..."
-  cd "$PUBLIC_SITE_ROOT"
+# The production public site lives in its own o2switch Node application.
+# Bootstrap/sync it from the working cockpit deploy path so future public-site
+# self-deploys can run independently.
+PUBLIC_PROD_REPO="/home/dide4169/autonomia-public-site-src"
+PUBLIC_PROD_APP="$PUBLIC_PROD_REPO/site"
+PUBLIC_PROD_ACTIVATE="/home/dide4169/nodevenv/autonomia-public-site-src/site/22/bin/activate"
+PUBLIC_PROD_BRANCH="public-site-production"
 
+if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; then
+  echo "Syncing production public site from origin/$PUBLIC_PROD_BRANCH..."
+  source "$PUBLIC_PROD_ACTIVATE"
+  cd "$PUBLIC_PROD_REPO"
+  git fetch --depth=200 origin "$PUBLIC_PROD_BRANCH"
+  PUBLIC_PROD_SHA="$(git rev-parse "origin/$PUBLIC_PROD_BRANCH")"
+  git reset --hard "$PUBLIC_PROD_SHA"
+
+  cd "$PUBLIC_PROD_APP"
   if [ -x node_modules/.bin/next ]; then
-    echo "Reusing public-site node_modules; skipping npm install."
+    echo "Reusing production public-site node_modules; skipping npm install."
   else
-    echo "Public-site node_modules incomplete; installing dependencies."
+    echo "Production public-site node_modules incomplete; installing dependencies."
     npm install --ignore-scripts --no-audit --no-fund --package-lock=false
   fi
 
+  export NODE_ENV=production
+  export NEXT_TELEMETRY_DISABLED=1
   export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
+
   npm run content:validate
   npm run build
-  mkdir -p tmp
+  mkdir -p .runtime tmp
+  printf '%s\n' "$PUBLIC_PROD_SHA" > .runtime/deployed-sha
   touch tmp/restart.txt
+  echo "Production public site synced: $PUBLIC_PROD_SHA"
+
+  source "$NODE_ENV_ACTIVATE"
   cd "$APP_ROOT"
 else
-  echo "Public site not present at $PUBLIC_SITE_ROOT; skipping public-site build."
+  echo "Production public-site repo unavailable at $PUBLIC_PROD_REPO; skipping bootstrap sync."
 fi
 
 mkdir -p .runtime tmp
