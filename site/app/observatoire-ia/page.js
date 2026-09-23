@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ObservatoryExplorer from "@/components/ObservatoryExplorer";
 import { observatoryGroups, observatoryTopics } from "@/content/observatory-solutions";
 
@@ -31,6 +32,15 @@ export default function ObservatoryPage() {
       </section>
 
       <ObservatoryExplorer groups={observatoryGroups} topics={observatoryTopics} />
+
+      <section className="obsProblemBridge">
+        <div>
+          <p className="eyebrow">VOUS CONNAISSEZ DÉJÀ LE PROBLÈME ?</p>
+          <h2>Partez directement de la tâche à automatiser.</h2>
+          <p>Comptes rendus, documents, leads, e-mails, reporting, factures, appels d’offres, réserves chantier… Une page dédiée montre le flux et les micro-apps associés.</p>
+        </div>
+        <Link className="primaryButton" href="/solutions-ia">Explorer les problèmes précis</Link>
+      </section>
     </main>
   );
 }

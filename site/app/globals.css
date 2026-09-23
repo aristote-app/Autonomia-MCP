@@ -12198,3 +12198,43 @@ body:has(.territoryCampaignPage) .desktopNav {
 .obsLeadForm textarea {
   font-size: 16px;
 }
+
+
+/* Observatory problem bridge */
+.obsProblemBridge {
+  display: grid;
+  gap: 20px;
+  align-items: end;
+  margin: 0 18px 64px;
+  padding: 24px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+}
+.obsProblemBridge h2 {
+  max-width: 760px;
+  margin: 8px 0 9px;
+  font-size: clamp(30px,4vw,44px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+.obsProblemBridge p:not(.eyebrow) {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  font-size: 16px;
+  line-height: 1.5;
+}
+@media (min-width:760px) {
+  .obsProblemBridge {
+    grid-template-columns: minmax(0,1fr) auto;
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+}
+@media (min-width:1180px) {
+  .obsProblemBridge {
+    margin-left: max(34px,calc((100vw - var(--max))/2));
+    margin-right: max(34px,calc((100vw - var(--max))/2));
+  }
+}
