@@ -12411,7 +12411,31 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemSequence small {
   color: rgba(255,255,255,.55);
-  font-size: 13px;
+  font-size: 14px;
+}
+.problemSequenceDetail {
+  margin-top: 10px;
+  padding: 14px;
+  border-left: 3px solid #ffd16a;
+  background: rgba(255,209,106,.08);
+}
+.problemSequenceDetail > span {
+  display: block;
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemSequenceDetail > strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 19px;
+}
+.problemSequenceDetail > p {
+  margin: 6px 0 0;
+  color: rgba(255,255,255,.7);
+  font-size: 15px;
+  line-height: 1.5;
 }
 .problemCompare article,
 .problemQuality article {
