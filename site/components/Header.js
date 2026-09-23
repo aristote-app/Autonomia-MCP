@@ -45,7 +45,7 @@ export default function Header() {
             </summary>
             <nav className="mobileMenuPanel" aria-label="Navigation mobile">
               {NAV_ITEMS.map(([label, href]) => (
-                <Link href={href} key={href}>{label}<span aria-hidden="true">↗</span></Link>
+                <Link href={href} key={href} onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>{label}<span aria-hidden="true">↗</span></Link>
               ))}
               <Link className="mobileMenuPrimary" href="/#solution-finder" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
                 Trouver ma solution <span aria-hidden="true">→</span>
