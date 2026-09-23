@@ -37,7 +37,8 @@
     "smoke:company-registry": "node scripts/smoke-company-registry.mjs",
     "smoke:deploy-oidc": "node scripts/smoke-deploy-oidc.mjs",
     "smoke:runtime-settings": "node scripts/smoke-runtime-settings.mjs",
-    "smoke:talent-hunter": "node scripts/smoke-talent-hunter.mjs"
+    "smoke:talent-hunter": "node scripts/smoke-talent-hunter.mjs",
+    "smoke:no-admin-gates": "node scripts/smoke-no-admin-gates.mjs"
   },
   "engines": {
     "node": ">=22"
