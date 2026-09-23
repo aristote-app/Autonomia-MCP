@@ -5,6 +5,10 @@ import {
   TERRITORY_SIGNAL_QUERIES
 } from "../lib/signals/territory.js";
 import { buildSeoGeoSignals, summarizeSeoGeoSignals } from "../lib/seo-geo/demandSignals.js";
+import {
+  buildTerritoryNameIndex,
+  matchTerritoryByName
+} from "../lib/market/territorySignals.js";
 
 assert.ok(TERRITORY_SIGNAL_QUERIES.includes("intelligence artificielle"));
 assert.ok(TERRITORY_SIGNAL_QUERIES.includes("TPE PME numérique"));
@@ -130,3 +134,28 @@ const abbreviatedBuyerSignals = buildSeoGeoSignals({
 assert.equal(abbreviatedBuyerSignals.length, 2);
 assert.ok(abbreviatedBuyerSignals.every((item) => item.family === "territory-use-case"));
 assert.ok(abbreviatedBuyerSignals.every((item) => item.territory_mentions === 1));
+
+
+const territoryIndex = buildTerritoryNameIndex([
+  {
+    id: "cc-test",
+    siren: "111111111",
+    name: "Communauté de communes du Pays Exemple",
+    territory_type: "CC"
+  },
+  {
+    id: "ca-test",
+    siren: "222222222",
+    name: "Communauté d'agglomération Grand Exemple",
+    territory_type: "CA"
+  }
+]);
+
+assert.equal(
+  matchTerritoryByName("CC du Pays Exemple", territoryIndex)?.id,
+  "cc-test"
+);
+assert.equal(
+  matchTerritoryByName("CA Grand Exemple", territoryIndex)?.id,
+  "ca-test"
+);
