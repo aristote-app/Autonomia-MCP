@@ -1,5 +1,34 @@
 import { prioritizeEditorialBacklog } from "../lib/editorialOpportunityEngine.js";
 
+const territoryResult = prioritizeEditorialBacklog(
+  [
+    {
+      query: "communauté de communes feuille de route IA agents entreprises locales",
+      cluster: "Collectivités & territoires",
+      family: "territory-use-case",
+      public_procurement_mentions: 8,
+      territory_mentions: 12,
+      job_mentions: 2
+    }
+  ],
+  { max_results: 50 }
+);
+
+const territoryRecommendation = territoryResult.recommendations.find(
+  (item) => item.family === "territory" && item.evidence.matched_signals > 0
+);
+
+if (!territoryRecommendation) {
+  throw new Error("Expected an evidence-backed territory editorial recommendation.");
+}
+
+if (
+  territoryRecommendation.evidence.public_procurement_mentions <= 0 ||
+  territoryRecommendation.evidence.territory_mentions <= 0
+) {
+  throw new Error("Territory recommendation must preserve public/territory evidence.");
+}
+
 const result = prioritizeEditorialBacklog(
   [
     {
