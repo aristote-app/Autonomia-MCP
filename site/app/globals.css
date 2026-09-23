@@ -8081,3 +8081,219 @@ button {
     grid-template-columns: repeat(3,minmax(0,1fr));
   }
 }
+
+
+/* Observatoire landing pages */
+.obsLandingHero {
+  display: grid;
+  gap: 26px;
+  padding: 82px 18px 58px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.obsLandingCopy h1 {
+  max-width: 980px;
+  margin: 10px 0 18px;
+  font-size: clamp(46px, 6.5vw, 84px);
+  line-height: .94;
+  letter-spacing: -.055em;
+  font-weight: 610;
+}
+.obsLandingCopy > p:not(.eyebrow) {
+  max-width: 820px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.55;
+}
+.obsPromiseRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+.obsPromiseRow span {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 800;
+}
+.obsLeadSticky {
+  align-self: start;
+}
+.obsLeadForm {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(23,32,51,.08);
+}
+.obsLeadForm h2 {
+  margin: 0 0 4px;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+.obsLeadForm label {
+  display: grid;
+  gap: 6px;
+}
+.obsLeadForm label span {
+  font-size: 12px;
+  font-weight: 800;
+}
+.obsLeadForm input,
+.obsLeadForm textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+.obsLeadForm button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 900;
+  cursor: pointer;
+}
+.obsLeadForm > small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.obsLeadSuccess {
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.obsTransformations {
+  padding: 62px 18px;
+}
+.obsTransformationGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+.obsTransformationGrid article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.obsTransformationGrid article > span {
+  color: #9b6a00;
+  font-size: 12px;
+  font-weight: 900;
+}
+.obsTransformationGrid h2 {
+  margin: 18px 0 16px;
+  font-size: 26px;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+}
+.obsTransformationGrid p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.48;
+}
+.obsTransformationGrid p b {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ink);
+}
+.obsLandingBridge {
+  display: grid;
+  gap: 28px;
+  padding: 62px 18px;
+  background: var(--ink);
+  color: #fff;
+}
+.obsLandingBridge h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.obsAB {
+  display: grid;
+  gap: 10px;
+}
+.obsAB article {
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background: var(--ink-2);
+}
+.obsAB article > span {
+  color: #ffd16a;
+  font-weight: 900;
+}
+.obsAB strong {
+  display: block;
+  margin: 18px 0 8px;
+  font-size: 22px;
+}
+.obsAB p {
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  line-height: 1.5;
+}
+.obsLandingCta {
+  display: grid;
+  gap: 28px;
+  padding: 62px 18px;
+}
+.obsLandingCta h2 {
+  max-width: 760px;
+  margin: 8px 0 14px;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.obsLandingCta > div > p:not(.eyebrow) {
+  max-width: 700px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+@media (min-width: 900px) {
+  .obsLandingHero {
+    grid-template-columns: minmax(0,1fr) minmax(320px, 430px);
+    align-items: start;
+    gap: 42px;
+  }
+  .obsLeadSticky {
+    position: sticky;
+    top: 96px;
+  }
+  .obsTransformationGrid {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .obsLandingBridge,
+  .obsLandingCta {
+    grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr);
+  }
+  .obsAB {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+@media (min-width: 1180px) {
+  .obsLandingHero,
+  .obsTransformations,
+  .obsLandingBridge,
+  .obsLandingCta {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+}
