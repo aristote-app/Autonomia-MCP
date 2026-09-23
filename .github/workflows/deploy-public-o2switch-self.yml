@@ -24,23 +24,7 @@ jobs:
     timeout-minutes: 12
 
     steps:
-      - name: Skip stale deployment target
-        id: gate
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
-        run: |
-          CURRENT_SHA="$(curl -fsS             -H "Authorization: Bearer $GITHUB_TOKEN"             -H "Accept: application/vnd.github+json"             https://api.github.com/repos/${{ github.repository }}/branches/public-site-production             | python -c 'import json,sys; print(json.load(sys.stdin)["commit"]["sha"])')"
-          if [ "$CURRENT_SHA" != "$TARGET_SHA" ]; then
-            echo "Skipping stale deploy target $TARGET_SHA; current public head is $CURRENT_SHA"
-            echo "should_deploy=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Deploy target is current: $TARGET_SHA"
-            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Request GitHub OIDC deployment identity
-        if: steps.gate.outputs.should_deploy == 'true'
         id: oidc
         env:
           AUDIENCE: autonomia-public-o2switch
@@ -56,7 +40,6 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Trigger public-site o2switch deploy
-        if: steps.gate.outputs.should_deploy == 'true'
         env:
           DEPLOY_URL: https://build-autonomia.com/api/internal/self-deploy
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
@@ -79,7 +62,6 @@ jobs:
           fi
 
       - name: Verify public production
-        if: steps.gate.outputs.should_deploy == 'true'
         env:
           HEALTH_URL: https://build-autonomia.com/api/health
           TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
@@ -137,7 +119,7 @@ jobs:
           exit 1
 
       - name: Dump public o2switch worker log on failure
-        if: failure() && steps.gate.outputs.should_deploy == 'true'
+        if: failure()
         run: |
           echo "===== PUBLIC O2SWITCH WORKER LOG ====="
           curl -fsS "https://build-autonomia.com/__autonomia_deploy_debug.txt" || echo "Diagnostic log not reachable yet."
@@ -145,7 +127,6 @@ jobs:
           echo "===== END PUBLIC O2SWITCH WORKER LOG ====="
 
       - name: Refresh GitHub OIDC identity for SEO diagnostic
-        if: steps.gate.outputs.should_deploy == 'true'
         id: seo_oidc
         env:
           AUDIENCE: autonomia-public-o2switch
@@ -157,7 +138,6 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Verify Search Console connection
-        if: steps.gate.outputs.should_deploy == 'true'
         env:
           STATUS_URL: https://build-autonomia.com/api/internal/search-console-status
           OIDC_TOKEN: ${{ steps.seo_oidc.outputs.token }}
