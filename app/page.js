@@ -328,6 +328,7 @@ export default async function Home({ searchParams }) {
           <Link className="adminNav" href="/accounts">Comptes 360°</Link>
           <Link className="adminNav" href="/inbound">Inbound</Link>
           <Link className="adminNav" href="/contacts">Contacts</Link>
+          <Link className="adminNav" href="/consultants">Consultants</Link>
           <Link className="adminNav" href="/learning">Learning</Link>
           <Link className="adminNav" href="/integrations">Intégrations</Link>
           <Link className="adminNav" href="/territoires">Territoires</Link>
