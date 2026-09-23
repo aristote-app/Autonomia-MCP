@@ -5,6 +5,7 @@ import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
 import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../../../lib/collectors/accountResearch.js";
 import { resolveHiddenEndClient } from "../../../lib/collectors/endClientResolver.js";
+import { resolveFrenchCompanyRegistry } from "../../../lib/collectors/companyRegistry.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 import { buildAccountBattlecard } from "../../../lib/intelligence/battlecard.js";
 import { buildAccountOpportunityGraph } from "../../../lib/intelligence/accountGraph.js";
@@ -62,6 +63,9 @@ export default async function AccountDetailPage({ params, searchParams }) {
   const outreach = buildAccountOutreachPlan(account);
   const battlecard = buildAccountBattlecard(account);
   const opportunityGraph = buildAccountOpportunityGraph(account);
+  const companyRegistry = !account.intermediary_risk
+    ? await resolveFrenchCompanyRegistry(account.name, { perPage: 5 }).catch(() => null)
+    : null;
   const workspaceContext = await getCurrentWorkspaceMembership().catch(() => ({
     configured: false,
     claims: null,
@@ -270,6 +274,46 @@ export default async function AccountDetailPage({ params, searchParams }) {
           )}
         </div>
       </section>
+
+      {!account.intermediary_risk && companyRegistry?.available && companyRegistry.best && (
+        <section className="detailPanel companyRegistryPanel">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">IDENTITÉ ENTREPRISE · SOURCE PUBLIQUE</p>
+              <h2>{companyRegistry.best.name}</h2>
+            </div>
+            <p>
+              Correspondance registre : {companyRegistry.best.match_status} · score {companyRegistry.best.score}/100.
+              Les données juridiques restent distinctes du signal commercial.
+            </p>
+          </div>
+          <div className="accountBrief">
+            <div>
+              <span>SIREN</span>
+              <strong>{companyRegistry.best.siren || "—"}</strong>
+            </div>
+            <div>
+              <span>ACTIVITÉ / NAF</span>
+              <strong>{companyRegistry.best.naf || "—"}</strong>
+            </div>
+            <div>
+              <span>EFFECTIF</span>
+              <strong>{companyRegistry.best.employee_bracket || "Non disponible"}</strong>
+            </div>
+            <div>
+              <span>SIÈGE</span>
+              <strong>
+                {[companyRegistry.best.postal_code, companyRegistry.best.city].filter(Boolean).join(" ") || "Non disponible"}
+              </strong>
+            </div>
+          </div>
+          {companyRegistry.best.score < 80 && (
+            <p className="accountHint">
+              Correspondance insuffisante pour considérer cette unité légale comme identifiée : vérification humaine requise.
+            </p>
+          )}
+        </section>
+      )}
 
       {account.intermediary_risk && (
         <section className="accountResearchPanel" id="hidden-client-resolver">

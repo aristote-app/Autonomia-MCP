@@ -33,7 +33,8 @@
     "smoke:inbound": "node scripts/smoke-inbound.mjs",
     "smoke:consultant-accounts": "node scripts/smoke-consultant-account-matching.mjs",
     "smoke:consultant-import": "node scripts/smoke-consultant-import.mjs",
-    "smoke:account-watch": "node scripts/smoke-account-watch.mjs"
+    "smoke:account-watch": "node scripts/smoke-account-watch.mjs",
+    "smoke:company-registry": "node scripts/smoke-company-registry.mjs"
   },
   "engines": {
     "node": ">=22"

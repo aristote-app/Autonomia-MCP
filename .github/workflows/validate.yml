@@ -76,6 +76,8 @@ jobs:
         run: npm run smoke:accounts
       - name: Smoke test account watch state
         run: npm run smoke:account-watch
+      - name: Smoke test French company registry matching
+        run: npm run smoke:company-registry
       - name: Smoke test Sales OS
         run: npm run smoke:sales-os
       - name: Smoke test inbound acquisition
