@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AutonomiaMark from "@/components/AutonomiaMark";
 
 export default function Header() {
   return (
@@ -6,7 +7,7 @@ export default function Header() {
       <header className="siteHeader">
         <Link className="brand" href="/" aria-label="Autonomia, accueil">
           <span className="brandMark" aria-hidden="true">
-            <span>A</span>
+            <AutonomiaMark size={38} />
           </span>
           <span className="brandLockup">
             <strong>AUTONOMIA</strong>
@@ -24,20 +25,20 @@ export default function Header() {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerScanLink" href="/#scan">
+          <Link className="headerScanLink" href="/#fiche-besoin">
             <span className="headerPulse" aria-hidden="true" />
-            Scan IA
+            Audit IA offert
           </Link>
-          <Link className="headerCta" href="/#scan">
-            <span>Lancer le Scan</span>
+          <Link className="headerCta" href="/#fiche-besoin">
+            <span>Préciser mon besoin</span>
             <b aria-hidden="true">↗</b>
           </Link>
         </div>
       </header>
 
       <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/#scan">Lancer le Scan</Link>
-        <Link href="/#contact">Parler à Autonomia</Link>
+        <Link href="/#fiche-besoin">Préciser mon besoin</Link>
+        <Link href="/#audit-ia">Audit IA offert</Link>
       </nav>
     </>
   );
