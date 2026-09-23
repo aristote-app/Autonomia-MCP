@@ -11,19 +11,22 @@ WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
 
 mkdir -p "$APP_ROOT/.runtime"
 
-# The Node self-deploy endpoint already launches this script as a detached,
-# unreferenced child process. Do not daemonize a second time here: on o2switch
-# Passenger that grandchild can be reaped before the build actually starts.
-echo "Running detached deploy child directly (spawned by Node self-deploy endpoint)."
+# Passenger may reap long-lived children created by the request worker.
+# Re-parent the actual deployment once with nohup, then let the HTTP child exit.
+if [ "${AUTONOMIA_DEPLOY_DAEMONIZED:-0}" != "1" ]; then
+  echo "Launching detached o2switch deploy worker..."
+  AUTONOMIA_DEPLOY_DAEMONIZED=1 \
+  FORCE_DEPLOY="$FORCE_DEPLOY" \
+  AUTONOMIA_DEPLOY_SHA="$TARGET_SHA" \
+  nohup bash "$0" >> "$WORKER_LOG" 2>&1 </dev/null &
+  echo "Detached deploy worker pid=$! log=$WORKER_LOG"
+  exit 0
+fi
 
 DEBUG_FILE="$APP_ROOT/public/__autonomia_cockpit_deploy_debug.txt"
 mkdir -p "$APP_ROOT/public"
 : > "$DEBUG_FILE"
-if [ -t 1 ]; then
-  echo "Interactive terminal detected; keeping deployment output on screen."
-else
-  exec >> "$WORKER_LOG" 2>&1
-fi
+exec > >(tee -a "$WORKER_LOG" "$DEBUG_FILE") 2>&1
 
 echo
 echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
