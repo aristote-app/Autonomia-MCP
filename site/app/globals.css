@@ -12434,6 +12434,49 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: #ffd16a;
   font-size: 18px;
 }
+.problemCompare article.top {
+  border-color: rgba(255,209,106,.5);
+  background: rgba(255,209,106,.075);
+}
+.problemCompare article > small {
+  grid-column: 1 / -1;
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 850;
+}
+.problemCompareHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+  padding: 11px 13px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemCompareHeader > span,
+.problemCompareExplain > span {
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemCompareHeader > strong {
+  font-size: 16px;
+}
+.problemCompareExplain {
+  margin-top: 10px;
+  padding: 14px;
+  border-left: 3px solid #ffd16a;
+  background: rgba(255,209,106,.08);
+}
+.problemCompareExplain p {
+  margin: 7px 0 0;
+  color: rgba(255,255,255,.7);
+  font-size: 15px;
+  line-height: 1.5;
+}
 .problemQuality article.warning {
   box-shadow: inset 3px 0 0 #ffd16a;
 }
