@@ -2,6 +2,10 @@
 import assert from "node:assert/strict";
 import { buildAccountOutreachPlan } from "../lib/intelligence/outreach.js";
 import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
+import {
+  enrichKasprLinkedInProfile,
+  standardLinkedInProfileId
+} from "../lib/integrations/kaspr.js";
 import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
@@ -96,6 +100,18 @@ globalThis.fetch = async (url, options = {}) => {
     });
   }
 
+  if (String(url).includes("api.developers.kaspr.io")) {
+    return new Response(JSON.stringify({
+      profile: {
+        name: "Jane Doe",
+        email: "jane@example.test"
+      }
+    }), {
+      status: 200,
+      headers: { "content-type": "application/json" }
+    });
+  }
+
   if (String(url).includes("developers.waalaxy.com")) {
     return new Response(JSON.stringify({
       result: [{ importCode: "success" }]
@@ -129,6 +145,29 @@ try {
   assert.equal(dm.available, true);
   assert.equal(dm.candidates.length, 1);
   assert.equal(dm.candidates[0].linkedin_url, "https://www.linkedin.com/in/jane-doe-ai");
+
+  assert.equal(
+    standardLinkedInProfileId("https://www.linkedin.com/in/jane-doe-ai/"),
+    "jane-doe-ai"
+  );
+
+  const kaspr = await enrichKasprLinkedInProfile({
+    apiKey: "test-kaspr",
+    linkedinUrl: "https://www.linkedin.com/in/jane-doe-ai",
+    name: "Jane Doe",
+    dataToGet: ["provider-field-id"]
+  });
+  assert.equal(kaspr.profile.name, "Jane Doe");
+
+  const kasprCall = calls.find((call) =>
+    call.url.includes("api.developers.kaspr.io/profile/linkedin")
+  );
+  assert.ok(kasprCall);
+  const kasprBody = JSON.parse(kasprCall.options.body);
+  assert.equal(kasprBody.name, "Jane Doe");
+  assert.equal(kasprBody.id, "jane-doe-ai");
+  assert.deepEqual(kasprBody.dataToGet, ["provider-field-id"]);
+  assert.equal(kasprCall.options.headers.Authorization, "test-kaspr");
 
   const imported = await importWaalaxyProspects({
     apiKey: "test-waalaxy",
