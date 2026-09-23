@@ -1,0 +1,39 @@
+name: seo-weekly-health
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Validate content
+        run: npm run content:validate
+
+      - name: Organic inventory
+        run: npm run organic:report
+
+      - name: Static SEO audit
+        run: npm run seo:audit
+
+      - name: Organic decision engine tests
+        run: npm run seo:engine-test

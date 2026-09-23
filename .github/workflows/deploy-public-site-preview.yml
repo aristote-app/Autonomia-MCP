@@ -1,0 +1,143 @@
+name: deploy-public-site-preview
+# manual-trigger: 2026-09-22
+# deploy-retrigger-after-token: 2026-09-22
+
+on:
+  push:
+    branches:
+      - feat/autonomia-public-site-v2
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-public-site-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TEAM_SLUG: aristote
+      VERCEL_PROJECT_NAME: autonomia-public-site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Vercel credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Missing repository secret VERCEL_TOKEN."
+            exit 1
+          fi
+
+      - name: Install pinned Vercel CLI
+        run: npm install -g vercel@59.23.2
+
+      - name: Ensure dedicated Vercel project exists
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          STATUS="$(curl -sS -o /tmp/vercel-project.json -w "%{http_code}" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_NAME?slug=$VERCEL_TEAM_SLUG")"
+
+          if [ "$STATUS" = "404" ]; then
+            curl -fsS \
+              -X POST \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              "https://api.vercel.com/v11/projects?slug=$VERCEL_TEAM_SLUG" \
+              -d "{\"name\":\"$VERCEL_PROJECT_NAME\",\"framework\":\"nextjs\"}" \
+              > /tmp/vercel-project-created.json
+            cat /tmp/vercel-project-created.json
+          elif [ "$STATUS" = "200" ]; then
+            cat /tmp/vercel-project.json
+          else
+            cat /tmp/vercel-project.json
+            echo "::error::Unable to inspect or create dedicated Vercel project (HTTP $STATUS)."
+            exit 1
+          fi
+
+      - name: Link /site to dedicated Vercel project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --cwd site \
+            --project "$VERCEL_PROJECT_NAME" \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes
+
+      - name: Disable Vercel Authentication for public site
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel project protection disable "$VERCEL_PROJECT_NAME" \
+            --sso \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN"
+
+      - name: Deploy /site as preview
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy \
+            --cwd site \
+            --scope "$VERCEL_TEAM_SLUG" \
+            --token "$VERCEL_TOKEN" \
+            --yes)"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Preview URL: $URL"
+
+      - name: Smoke test public-site identity
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          curl -fsSL "$DEPLOYMENT_URL/experts" >/dev/null || {
+            echo "::error::Public Experts route is missing."
+            exit 1
+          }
+
+          BODY="$(curl -fsSL "$DEPLOYMENT_URL/territoires")"
+          echo "$BODY" | grep -q "Autonomia Territoires\|AUTONOMIA TERRITOIRES" || {
+            echo "::error::Territoires offer marker missing from public deployment."
+            exit 1
+          }
+
+      - name: Smoke test SEO routes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for path in             /experts             /academy             /territoires             /territoires/ia-agents-collectivite             /territoires/academy-ia-collectivites             /territoires/accelerateur-ia-tpe-pme             /scan-ia             /cas-usage-ia             /formation-ia/cas-usage             /glossaire-ia             /observatoire-ia             /sitemap.xml             /robots.txt             /llms.txt
+          do
+            curl -fsSL "$DEPLOYMENT_URL$path" >/dev/null
+          done
+
+      - name: Publish preview summary
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          {
+            echo "## Autonomia public-site preview"
+            echo ""
+            echo "- Project: `$VERCEL_PROJECT_NAME`"
+            echo "- Root: `site`"
+            echo "- URL: $DEPLOYMENT_URL"
+            echo "- Branch: `feat/autonomia-public-site-v2`"
+            echo "- Public-site identity smoke: passed"
+            echo "- SEO route smoke: passed"
+          } >> "$GITHUB_STEP_SUMMARY"
