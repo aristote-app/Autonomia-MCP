@@ -173,11 +173,62 @@ function Extract({ demo }) {
 }
 
 function Control({ demo }) {
-  const [checks,setChecks]=useState([true,true,false,true]);
-  const labels=["Pièce principale","Référence cohérente","Justificatif attendu","Date valide"];
-  const ok=checks.filter(Boolean).length;
-  return <Shell demo={demo} side={<div className="problemChecklist">{labels.map((label,i)=><label key={label}><input type="checkbox" checked={checks[i]} onChange={()=>setChecks((cur)=>cur.map((v,j)=>j===i?!v:v))}/><span>{label}</span></label>)}</div>}>
-    <div className="problemControlPanel"><div><span>CONFORME</span><strong>{ok}/4</strong></div><div><span>EXCEPTIONS</span><strong>{4-ok}</strong></div><div><span>STATUT</span><strong>{ok===4?"Prêt à valider":"Relecture requise"}</strong></div></div>
+  const [selected,setSelected]=useState(2);
+  const [overrides,setOverrides]=useState({});
+  const [prepared,setPrepared]=useState(false);
+  const baseRules=[
+    {id:"piece",label:"Pièce principale",status:"ok",confidence:98,source:"Dossier_2481.pdf · p. 1",evidence:"Formulaire principal détecté et lisible.",action:"Aucune action requise"},
+    {id:"reference",label:"Référence cohérente",status:"ok",confidence:94,source:"Formulaire + justificatif",evidence:"Référence 2026-0842 retrouvée dans les deux pièces.",action:"Aucune action requise"},
+    {id:"justificatif",label:"Justificatif attendu",status:"missing",confidence:99,source:"Référentiel dossier · règle 3.2",evidence:"Le justificatif de domicile attendu n’est pas présent dans les pièces reçues.",action:"Préparer une demande de pièce"},
+    {id:"date",label:"Date valide",status:"conflict",confidence:82,source:"Formulaire · p. 2",evidence:"La date saisie diffère de celle figurant sur la pièce annexe.",action:"Soumettre la date à relecture"}
+  ];
+  const rules=baseRules.map((rule)=>({...rule,status:overrides[rule.id] || rule.status}));
+  const current=rules[selected];
+  const statusLabel={ok:"CONFORME",missing:"PIÈCE MANQUANTE",conflict:"À CONTRÔLER"};
+  const ok=rules.filter((rule)=>rule.status==="ok").length;
+  const exceptions=rules.length-ok;
+
+  function markResolved() {
+    setOverrides((state)=>({...state,[current.id]:"ok"}));
+    setPrepared(false);
+  }
+
+  return <Shell demo={demo} side={<>
+    <p className="problemHint">Sélectionnez une règle pour voir la preuve qui justifie le contrôle.</p>
+    <div className="problemReviewRules">
+      {rules.map((rule,i)=><button type="button" key={rule.id} className={(selected===i?"active ":"")+rule.status} onClick={()=>{setSelected(i);setPrepared(false);}}>
+        <span>{statusLabel[rule.status]}</span>
+        <strong>{rule.label}</strong>
+        <small>{rule.confidence}% de confiance</small>
+      </button>)}
+    </div>
+  </>}>
+    <div className="problemReviewWorkspace">
+      <div className="problemReviewSummary">
+        <article><span>CONFORME</span><strong>{ok}/{rules.length}</strong></article>
+        <article><span>EXCEPTIONS</span><strong>{exceptions}</strong></article>
+        <article><span>STATUT</span><strong>{exceptions===0?"Prêt pour validation":"Relecture requise"}</strong></article>
+      </div>
+
+      <div className={"problemEvidenceCard "+current.status}>
+        <div className="problemEvidenceHead"><span>{statusLabel[current.status]}</span><b>{current.confidence}%</b></div>
+        <h4>{current.label}</h4>
+        <p>{current.evidence}</p>
+        <div><span>PREUVE / SOURCE</span><strong>{current.source}</strong></div>
+        <div><span>ACTION PROPOSÉE</span><strong>{current.action}</strong></div>
+      </div>
+
+      {current.status!=="ok"&&<div className="problemReviewActions">
+        <button type="button" onClick={()=>setPrepared(true)}>Préparer l’action</button>
+        <button type="button" className="secondary" onClick={markResolved}>Marquer conforme après vérification</button>
+      </div>}
+
+      {prepared&&<div className="problemPreparedAction">
+        <span>PRÊT À RELIRE</span>
+        <strong>{current.action}</strong>
+        <small>Aucune décision ni demande n’est envoyée automatiquement dans cette démonstration.</small>
+      </div>}
+    </div>
   </Shell>;
 }
 
