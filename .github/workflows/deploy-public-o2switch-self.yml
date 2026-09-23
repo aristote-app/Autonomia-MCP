@@ -88,6 +88,13 @@ jobs:
           echo "::error::Public site did not switch to target SHA."
           exit 1
 
+      - name: Dump public o2switch worker log on failure
+        if: failure()
+        run: |
+          echo "===== PUBLIC O2SWITCH WORKER LOG ====="
+          curl -fsS "https://build-autonomia.com/__autonomia_deploy_debug.txt" || echo "Diagnostic log not reachable yet."
+          echo
+          echo "===== END PUBLIC O2SWITCH WORKER LOG ====="
 
       - name: Refresh GitHub OIDC identity for SEO diagnostic
         id: seo_oidc
