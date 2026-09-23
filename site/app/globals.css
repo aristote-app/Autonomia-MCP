@@ -14008,3 +14008,298 @@ body:has(.territoryCampaignPage) .desktopNav {
     align-self: start;
   }
 }
+\n/* AI Match v2 — direct brief handoff + live-catalog result cards */
+#solution-finder {
+  scroll-margin-top: 92px;
+}
+
+.solutionFinderPulse {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 5px rgba(255, 200, 87, .1);
+}
+
+.solutionCardTop > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.solutionCardTop > div > small {
+  color: rgba(247,245,240,.45);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.solutionCardTop > div > strong {
+  font-size: 17px;
+  line-height: 1.12;
+}
+
+.solutionExpertIdentity {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0,1fr);
+  gap: 9px !important;
+  align-items: start !important;
+}
+
+.solutionExpertIdentity > div {
+  display: grid;
+  gap: 2px;
+}
+
+.solutionExpertIdentity > div small {
+  color: rgba(247,245,240,.42);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .09em;
+}
+
+.solutionExpertIdentity > div strong {
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.solutionExpertMeta {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center !important;
+  gap: 10px !important;
+  padding-top: 9px;
+  border-top: 1px solid var(--line-dark);
+  color: rgba(247,245,240,.42);
+  font-size: 9px;
+}
+
+.solutionExpertMeta a {
+  color: var(--signal);
+  font-weight: 800;
+}
+
+.solutionNoExpert a {
+  color: var(--signal);
+  font-weight: 800;
+}
+
+.solutionAcademyLane {
+  background: rgba(24,117,109,.12);
+}
+
+.solutionTrainingCard > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-dark);
+  color: rgba(247,245,240,.5);
+  font-size: 9px;
+}
+
+.solutionTrainingCard > div b {
+  color: var(--signal);
+}
+
+.solutionSend {
+  padding: 18px;
+  border-top: 1px solid var(--line-dark);
+  background: rgba(255,255,255,.025);
+}
+
+.solutionContactForm {
+  display: grid;
+  gap: 18px;
+}
+
+.solutionSendCopy {
+  display: grid;
+  gap: 6px;
+}
+
+.solutionSendCopy > small {
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.solutionSendCopy h3 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.solutionSendCopy p {
+  max-width: 650px;
+  margin: 0;
+  color: rgba(247,245,240,.58);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.solutionContactFields {
+  display: grid;
+  gap: 10px;
+}
+
+.solutionContactFields label {
+  display: grid;
+  gap: 5px;
+}
+
+.solutionContactFields label > span {
+  color: rgba(247,245,240,.7);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.solutionContactFields input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 11px;
+  border: 1px solid rgba(247,245,240,.18);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255,255,255,.045);
+  color: var(--paper);
+}
+
+.solutionContactFields input:focus {
+  border-color: var(--signal);
+  background: rgba(255,255,255,.065);
+}
+
+.solutionConsent {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  align-items: start;
+  color: rgba(247,245,240,.58);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.solutionConsent input {
+  margin: 2px 0 0;
+}
+
+.solutionPrivacy {
+  margin: -8px 0 0;
+  color: rgba(247,245,240,.38);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.solutionSendActions {
+  display: grid;
+  gap: 10px;
+}
+
+.solutionSendActions button {
+  min-height: 50px;
+  padding: 0 16px;
+  border: 1px solid var(--signal);
+  border-radius: 8px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.solutionSendActions button:disabled {
+  cursor: progress;
+  opacity: .65;
+}
+
+.solutionSendActions a {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(247,245,240,.55);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.solutionSendSuccess {
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  gap: 13px;
+  align-items: start;
+}
+
+.solutionSendSuccess > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.solutionSendSuccess small {
+  display: block;
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+}
+
+.solutionSendSuccess strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.solutionSendSuccess p {
+  margin: 6px 0 0;
+  color: rgba(247,245,240,.56);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (min-width: 620px) {
+  .solutionContactFields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .solutionContactFields .fullField {
+    grid-column: 1 / -1;
+  }
+
+  .solutionSendActions {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .solutionSendActions button {
+    min-width: 250px;
+  }
+}
+
+@media (min-width: 1080px) {
+  .solutionContactForm {
+    grid-template-columns: minmax(180px,.65fr) minmax(0,1.35fr);
+    column-gap: 20px;
+  }
+
+  .solutionContactFields,
+  .solutionConsent,
+  .solutionPrivacy,
+  .solutionSendActions,
+  .solutionContactForm > .solutionFinderError {
+    grid-column: 2;
+  }
+}
