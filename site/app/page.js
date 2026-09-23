@@ -2,6 +2,21 @@ import Link from "next/link";
 import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
 import AutonomiaMark from "@/components/AutonomiaMark";
 import { academyTrainings } from "@/content/academy-trainings";
+import { problemSolutions } from "@/content/problem-solutions";
+import ProblemLink from "@/components/ProblemLink";
+
+const homeProblemSlugs = [
+  "automatiser-comptes-rendus-reunion",
+  "assistant-documentaire-ia-rag",
+  "qualification-automatique-leads",
+  "trier-router-emails-ia",
+  "automatiser-reporting",
+  "reponse-appel-offres-ia"
+];
+
+const homeProblems = homeProblemSlugs
+  .map((slug) => problemSolutions.find((item) => item.slug === slug))
+  .filter(Boolean);
 
 const expertRoles = [
   { label: "AI Project Manager", slug: "ai-project-manager" },
@@ -106,8 +121,42 @@ export default function Home() {
         </Link>
       </section>
 
+      <section className="homeProblemStrip">
+        <div className="sectionHeading">
+          <p className="sectionIndex">03 — PROBLÈMES PRÉCIS</p>
+          <div>
+            <h2>Vous savez déjà ce que vous voulez arrêter de faire à la main ?</h2>
+            <p>
+              Partez directement de la tâche : compte rendu, documents, leads, e-mails, reporting ou appels d’offres.
+              Chaque page contient une démo manipulable et un cadrage orienté prototype.
+            </p>
+          </div>
+        </div>
+
+        <div className="homeProblemGrid">
+          {homeProblems.map((item, index) => (
+            <ProblemLink
+              href={"/solutions-ia/" + item.slug}
+              problemSlug={item.slug}
+              problemCluster={item.cluster}
+              surface="home_problem_strip"
+              key={item.slug}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <small>{item.cluster}</small>
+              <strong>{item.title}</strong>
+              <b>Tester ↗</b>
+            </ProblemLink>
+          ))}
+        </div>
+
+        <ProblemLink className="secondaryButton" href="/solutions-ia" surface="home_problem_strip_all">
+          Voir toutes les solutions par problème
+        </ProblemLink>
+      </section>
+
       <section className="homeDiagnosticIntro" id="diagnostic-ia">
-        <p className="sectionIndex">03 — UN SEUL POINT D’ENTRÉE</p>
+        <p className="sectionIndex">04 — UN SEUL POINT D’ENTRÉE</p>
         <div>
           <p className="auditKicker">VOUS NE SAVEZ PAS ENCORE QUOI DEMANDER ?</p>
           <h2>Faites le diagnostic IA Autonomia.</h2>
@@ -122,7 +171,7 @@ export default function Home() {
 
       <section className="roleSection homeRoleDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex">04 — MÉTIERS IA</p>
+          <p className="sectionIndex">05 — MÉTIERS IA</p>
           <div>
             <h2>Vous savez déjà quel profil vous cherchez ?</h2>
             <p>
@@ -145,7 +194,7 @@ export default function Home() {
 
       <section className="academySection homeAcademyDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex">05 — FORMATIONS IA</p>
+          <p className="sectionIndex">06 — FORMATIONS IA</p>
           <div>
             <h2>Vous savez déjà ce que vos équipes doivent apprendre ?</h2>
             <p>
@@ -168,7 +217,7 @@ export default function Home() {
 
       <section className="homeMethod homeMethodCompact" id="methode">
         <div className="methodIntro">
-          <p className="sectionIndex">06 — COMMENT NOUS TRAVAILLONS</p>
+          <p className="sectionIndex">07 — COMMENT NOUS TRAVAILLONS</p>
           <h2>Besoin → exécution → transfert.</h2>
           <p>
             Nous ne partons ni d’un catalogue, ni d’un outil, ni d’un CV.
@@ -194,7 +243,7 @@ export default function Home() {
 
       <section className="territoryHomePromo homeTerritoryCompact">
         <div>
-          <p className="sectionIndex">07 — TERRITOIRES</p>
+          <p className="sectionIndex">08 — TERRITOIRES</p>
           <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
           <h2>Des programmes IA adaptés aux collectivités et aux entreprises du territoire.</h2>
           <Link className="secondaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ProblemLink from "@/components/ProblemLink";
 import ProblemLeadForm from "@/components/ProblemLeadForm";
 import ProblemLab from "@/components/ProblemLab";
 import { getProblemFaq } from "@/content/problem-solutions";
@@ -41,7 +41,7 @@ export default function ProblemLanding({ problem }) {
         <p className="eyebrow">PARTIR DU FLUX RÉEL</p>
         <h2>Montrez-nous où le temps se perd. Nous vous montrons ce qui peut devenir un outil.</h2>
         <a className="primaryButton" href="#diagnostic">{problem.cta}</a>
-        <Link href="/solutions-ia">Voir les autres problèmes traités</Link>
+        <ProblemLink href="/solutions-ia" surface="problem_lp_footer">Voir les autres problèmes traités</ProblemLink>
       </section>
     </main>
   );

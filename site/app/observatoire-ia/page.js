@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ProblemLink from "@/components/ProblemLink";
 import ObservatoryExplorer from "@/components/ObservatoryExplorer";
 import { observatoryGroups, observatoryTopics } from "@/content/observatory-solutions";
 
@@ -39,7 +39,7 @@ export default function ObservatoryPage() {
           <h2>Partez directement de la tâche à automatiser.</h2>
           <p>Comptes rendus, documents, leads, e-mails, reporting, factures, appels d’offres, réserves chantier… Une page dédiée montre le flux et les micro-apps associés.</p>
         </div>
-        <Link className="primaryButton" href="/solutions-ia">Explorer les problèmes précis</Link>
+        <ProblemLink className="primaryButton" href="/solutions-ia" surface="observatory_problem_bridge">Explorer les problèmes précis</ProblemLink>
       </section>
     </main>
   );
