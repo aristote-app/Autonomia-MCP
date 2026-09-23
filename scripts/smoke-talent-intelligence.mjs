@@ -26,4 +26,15 @@ assert.notDeepEqual(
   "Daily rotation must advance"
 );
 
+const grownPool = selectTalentFamilies({
+  date,
+  batchSize: 4,
+  rotationOffset: 130
+});
+assert.notDeepEqual(
+  first.map((item) => item.id),
+  grownPool.map((item) => item.id),
+  "A growing pool must advance the family window even on the same day"
+);
+
 console.log("talent intelligence smoke ok");
