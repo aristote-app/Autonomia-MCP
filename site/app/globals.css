@@ -12461,6 +12461,86 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: #ffd16a;
   font-size: 13px;
 }
+.problemOutputWorkspace {
+  display: grid;
+  gap: 10px;
+}
+.problemOutputToolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 13px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemOutputToolbar > span {
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemOutputToolbar > b {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(255,209,106,.1);
+  color: #ffd16a;
+  font-size: 13px;
+}
+.problemOutputBlocks {
+  display: grid;
+  gap: 8px;
+}
+.problemOutputBlocks article {
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemOutputBlocks span {
+  display: block;
+  color: rgba(255,255,255,.56);
+  font-size: 14px;
+  font-weight: 900;
+}
+.problemOutputBlocks strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.problemOutputChecks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.problemOutputChecks span {
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.055);
+  color: rgba(255,255,255,.72);
+  font-size: 14px;
+}
+.problemOutputReady {
+  min-height: 46px;
+  border: 1px solid #ffd16a;
+  border-radius: 9px;
+  background: transparent;
+  color: #ffd16a;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.problemOutputReady.active {
+  background: #ffd16a;
+  color: var(--ink);
+}
+.problemOutputFoot {
+  color: rgba(255,255,255,.62);
+  font-size: 14px;
+  line-height: 1.45;
+}
 .problemTender article {
   display: grid;
   grid-template-columns: 34px minmax(0,1fr) auto;
@@ -12797,6 +12877,9 @@ body:has(.territoryCampaignPage) .desktopNav {
   }
   .problemReviewActions {
     grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .problemOutputBlocks {
+    grid-template-columns: repeat(3,minmax(0,1fr));
   }
   .problemStock {
     grid-template-columns: repeat(3,minmax(0,1fr));
