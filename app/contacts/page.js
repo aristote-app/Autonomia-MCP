@@ -12,6 +12,7 @@ const FILTERS = [
   ["all", "Tous"],
   ["candidate", "Candidats"],
   ["verified", "Vérifiés"],
+  ["due", "Relances dues"],
   ["active", "Prospection"],
   ["replied", "Réponses"],
   ["meeting", "RDV"],
@@ -30,6 +31,15 @@ function filterContacts(items, filter) {
         item.verification_status === "verified" &&
         item.outreach_status === "not_started"
     );
+  }
+  if (filter === "due") {
+    const now = Date.now();
+    return items.filter((item) => {
+      if (!item.next_action_at || item.do_not_contact) return false;
+      if (["won","lost","stopped"].includes(item.outreach_status)) return false;
+      const ts = new Date(item.next_action_at).getTime();
+      return Number.isFinite(ts) && ts <= now;
+    });
   }
   if (filter === "active") {
     return items.filter((item) => ["queued", "active"].includes(item.outreach_status));
@@ -157,7 +167,9 @@ export default async function ContactsPage({ searchParams }) {
                 LinkedIn ↗
               </a>
               {contact.next_action_at && (
-                <span>Action : {date(contact.next_action_at)}</span>
+                <span className={new Date(contact.next_action_at).getTime() <= Date.now() ? "contactDue" : ""}>
+                  Action : {date(contact.next_action_at)}
+                </span>
               )}
 
               {canWrite &&
