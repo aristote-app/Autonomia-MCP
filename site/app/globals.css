@@ -5217,3 +5217,580 @@ button {
     grid-template-columns: repeat(3, minmax(0,1fr));
   }
 }
+
+
+/* Long-form AI role guides */
+.aiRolePage {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.roleHero {
+  display: grid;
+  gap: 32px;
+  padding: 72px 18px 56px;
+  border-bottom: 1px solid var(--line);
+  background: var(--ink);
+  color: #fff;
+}
+
+.roleHeroIndex {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  color: rgba(255,255,255,.58);
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.roleHeroIndex strong {
+  color: var(--signal);
+  font-size: 14px;
+}
+
+.roleHeroCopy {
+  max-width: 1050px;
+}
+
+.roleHero .eyebrow {
+  color: var(--signal);
+}
+
+.roleHero h1 {
+  margin: 10px 0 22px;
+  font-size: clamp(56px, 10vw, 126px);
+  line-height: .86;
+  letter-spacing: -.07em;
+  font-weight: 620;
+}
+
+.roleDek {
+  max-width: 900px;
+  margin: 0;
+  color: rgba(255,255,255,.78);
+  font-size: clamp(20px, 3vw, 28px);
+  line-height: 1.35;
+}
+
+.roleHeroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.roleHero .primaryButton {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--signal-ink);
+}
+
+.roleHero .secondaryButton {
+  border-color: rgba(255,255,255,.4);
+  color: #fff;
+  background: transparent;
+}
+
+.roleToc {
+  position: sticky;
+  top: 64px;
+  z-index: 12;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(247,245,240,.96);
+  backdrop-filter: blur(10px);
+}
+
+.roleToc a {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.roleArticle > section {
+  scroll-margin-top: 120px;
+  padding: 66px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.roleSectionLong,
+.roleResponsibilities,
+.roleFaq,
+.roleSourcesMethod,
+.roleStaffing {
+  display: grid;
+  gap: 28px;
+}
+
+.roleReading {
+  max-width: 900px;
+}
+
+.roleReading h2,
+.roleMarketIntro h2,
+.roleLifecycleIntro h2,
+.roleCasesIntro h2,
+.roleSkillsIntro h2,
+.roleQuestions h2,
+.roleFaq h2,
+.roleExplore h2 {
+  margin: 0 0 22px;
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: .98;
+  letter-spacing: -.05em;
+  font-weight: 600;
+}
+
+.roleReading p,
+.roleMarketIntro p,
+.roleLifecycleIntro p,
+.roleCasesIntro p,
+.roleSkillsIntro p,
+.roleQuestions > div > p,
+.roleExplore > div > p {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.68;
+}
+
+.roleReading .roleLead {
+  color: var(--ink);
+  font-size: clamp(21px, 2.5vw, 27px);
+  line-height: 1.52;
+  letter-spacing: -.015em;
+}
+
+.roleMarketSection {
+  background: #fff;
+}
+
+.roleMarketSignals {
+  display: grid;
+  gap: 1px;
+  margin: 34px 0;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+
+.roleMarketSignals article {
+  min-height: 150px;
+  padding: 20px;
+  background: var(--paper);
+}
+
+.roleMarketSignals span,
+.roleLifecycleGrid > article > span,
+.roleCaseGrid > article > span {
+  color: #9b6a00;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.roleMarketSignals p {
+  margin: 26px 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.roleSources {
+  display: grid;
+  gap: 10px;
+}
+
+.roleSources a {
+  display: grid;
+  grid-template-columns: minmax(130px,.55fr) minmax(0,1.45fr) 28px;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.roleSources a:hover {
+  border-color: rgba(23,32,51,.45);
+}
+
+.roleSources span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: .06em;
+}
+
+.roleSources strong {
+  font-size: 15px;
+}
+
+.roleSources b {
+  font-size: 18px;
+}
+
+.roleResponsibilities ol,
+.roleQuestions ol {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.roleResponsibilities li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.roleResponsibilities li > span,
+.roleQuestions li > span {
+  color: #9b6a00;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.roleResponsibilities li p {
+  margin: 0;
+  max-width: 980px;
+  font-size: 18px;
+  line-height: 1.52;
+}
+
+.roleDeliverables {
+  display: grid;
+  gap: 20px;
+  margin-top: 34px;
+  padding: 26px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.roleDeliverables p:not(.roleMicroTitle) {
+  margin: 12px 0 0;
+  color: rgba(255,255,255,.7);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.roleMicroTitle {
+  margin: 0;
+  color: var(--signal);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.rolePills,
+.roleStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rolePills span {
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.roleLifecycle {
+  background: var(--ink);
+  color: #fff;
+}
+
+.roleLifecycleIntro p:not(.sectionIndex) {
+  color: rgba(255,255,255,.68);
+}
+
+.roleLifecycle .sectionIndex {
+  color: var(--signal);
+}
+
+.roleLifecycleGrid {
+  display: grid;
+  gap: 1px;
+  margin-top: 34px;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.roleLifecycleGrid article {
+  padding: 22px;
+  background: var(--ink-2);
+}
+
+.roleLifecycleGrid h3 {
+  margin: 36px 0 12px;
+  font-size: 28px;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+}
+
+.roleLifecycleGrid p {
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: 16px;
+  line-height: 1.58;
+}
+
+.roleDeepDive {
+  max-width: 940px;
+  margin-top: 38px;
+  padding: 26px 0 0;
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+.roleDeepDive h3,
+.roleCaseAnalysis h3,
+.roleBoundary h3 {
+  margin: 0 0 16px;
+  font-size: 30px;
+  letter-spacing: -.03em;
+}
+
+.roleDeepDive p {
+  color: rgba(255,255,255,.72);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.roleCaseGrid {
+  display: grid;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.roleCaseGrid article {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.roleCaseGrid h3 {
+  margin: 34px 0 20px;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+
+.roleCaseGrid dl {
+  margin: 0;
+}
+
+.roleCaseGrid dl > div {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.roleCaseGrid dt {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.roleCaseGrid dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.roleCaseAnalysis,
+.roleBoundary {
+  max-width: 980px;
+  margin-top: 32px;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,200,87,.11);
+}
+
+.roleCaseAnalysis p,
+.roleBoundary p {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.roleSkills {
+  background: #fff;
+}
+
+.roleStack {
+  margin-top: 30px;
+}
+
+.roleStack span {
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.roleQuestions {
+  display: grid;
+  gap: 28px;
+}
+
+.roleQuestions li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 16px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.roleQuestions strong {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.roleStaffing {
+  background: #fff;
+}
+
+.roleStaffing .primaryButton {
+  margin-top: 22px;
+}
+
+.roleFaq {
+  background: var(--paper-2);
+}
+
+.roleSourcesMethod {
+  background: #fff;
+}
+
+.roleExplore {
+  display: grid;
+  gap: 28px;
+}
+
+.roleCrossLinks {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+
+.roleCrossLinks a {
+  display: grid;
+  grid-template-columns: 46px minmax(0,1fr) 28px;
+  align-items: center;
+  gap: 14px;
+  min-height: 68px;
+  padding: 12px 16px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.roleCrossLinks a:hover {
+  background: rgba(255,200,87,.12);
+}
+
+.roleCrossLinks span {
+  color: #9b6a00;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.roleCrossLinks strong {
+  font-size: 18px;
+}
+
+.roleChip {
+  position: relative;
+}
+
+.roleChip b {
+  margin-left: auto;
+  font-size: 18px;
+  opacity: .55;
+}
+
+.roleChip:hover b {
+  opacity: 1;
+}
+
+@media (min-width: 760px) {
+  .roleHero,
+  .roleArticle > section {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .roleHero {
+    grid-template-columns: 180px minmax(0,1fr);
+    padding-top: 100px;
+    padding-bottom: 88px;
+  }
+
+  .roleToc {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .roleSectionLong,
+  .roleResponsibilities,
+  .roleFaq,
+  .roleSourcesMethod,
+  .roleStaffing,
+  .roleQuestions,
+  .roleExplore {
+    grid-template-columns: 180px minmax(0,1fr);
+    gap: 28px;
+  }
+
+  .roleMarketSignals {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+
+  .roleLifecycleGrid {
+    grid-template-columns: repeat(5, minmax(0,1fr));
+  }
+
+  .roleCaseGrid {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+
+  .roleDeliverables {
+    grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr);
+  }
+
+  .roleQuestions > ol {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1180px) {
+  .roleHero,
+  .roleArticle > section {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+
+  .roleToc {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+}
