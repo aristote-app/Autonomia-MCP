@@ -7,6 +7,9 @@ import {
   assertSuccessfulWaalaxyImport
 } from "../lib/integrations/waalaxy.js";
 import {
+  extractWaalaxyReplyIdentifiers
+} from "../lib/integrations/waalaxyWebhook.js";
+import {
   enrichKasprLinkedInProfile,
   standardLinkedInProfileId
 } from "../lib/integrations/kaspr.js";
@@ -128,6 +131,17 @@ assert.equal(outreachActions[0].kind, "prepare_outreach");
 assert.equal(outreachActions[0].channel, "LinkedIn / Waalaxy");
 assert.ok(outreachActions[0].message.includes("Déploiement Copilot"));
 assert.ok(outreachActions[0].message.includes("Acme"));
+
+const replyIds = extractWaalaxyReplyIdentifiers({
+  prospect: {
+    linkedinUrl: "https://fr.linkedin.com/in/jane-doe-ai/",
+    email: "Jane@example.test"
+  },
+  metadata: { prospectId: "waalaxy-prospect-1" }
+});
+assert.deepEqual(replyIds.linkedinUrls, ["https://www.linkedin.com/in/jane-doe-ai"]);
+assert.deepEqual(replyIds.emails, ["jane@example.test"]);
+assert.deepEqual(replyIds.prospectIds, []);
 
 const originalFetch = globalThis.fetch;
 const calls = [];
