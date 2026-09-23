@@ -850,3 +850,14 @@ h3 { margin: 0 0 8px; }
   .contactCalendarDay { position:static; }
   .contactCalendarCards { grid-template-columns:1fr; }
 }
+
+
+.revenueActionMessage {
+  margin-top:9px !important;
+  padding:9px 10px;
+  border-left:3px solid #111;
+  background:#f1f3ef;
+  color:#404740 !important;
+  font-size:10px !important;
+  line-height:1.5 !important;
+}
