@@ -110,3 +110,23 @@ assert.equal(directoryMatchedSignals.length, 1);
 assert.equal(directoryMatchedSignals[0].family, "territory-use-case");
 assert.equal(directoryMatchedSignals[0].territory_mentions, 1);
 assert.equal(directoryMatchedSignals[0].territory_name, "CA Grand Test");
+
+
+const abbreviatedBuyerSignals = buildSeoGeoSignals({
+  opportunities: [
+    {
+      title: "Audit et feuille de route IA",
+      buyer_name: "CA Plaine Exemple",
+      estimated_value_eur: 90000
+    },
+    {
+      title: "Automatisation des processus internes",
+      buyer_name: "CC Vallée Exemple",
+      estimated_value_eur: 75000
+    }
+  ]
+});
+
+assert.equal(abbreviatedBuyerSignals.length, 2);
+assert.ok(abbreviatedBuyerSignals.every((item) => item.family === "territory-use-case"));
+assert.ok(abbreviatedBuyerSignals.every((item) => item.territory_mentions === 1));
