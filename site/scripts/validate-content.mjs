@@ -4,7 +4,8 @@ import { dirname, resolve } from "node:path";
 import { getAllPages } from "../lib/pages.js";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "../content/published-articles.js";
 import {
   editorialCounts,
@@ -14,7 +15,7 @@ import {
   trainingPillars
 } from "../content/editorial-backlog.js";
 
-const articles = [...publishedExecutionArticles, ...publishedTrainingArticles];
+const articles = [...publishedExecutionArticles, ...publishedTrainingArticles, ...publishedTerritoryArticles];
 const errors = [];
 
 const requiredLandingSlugs = [
@@ -116,6 +117,9 @@ const requiredRuntimeFiles = [
   "lib/editorialBrief.js",
   "lib/googleSearchConsole.js",
   "content/territory-editorial.js",
+  "content/article-packs/territory-wave-1.js",
+  "app/territoires/guides/page.js",
+  "app/territoires/guides/[slug]/page.js",
   "app/api/leads/route.js",
   "app/scan-ia/page.js",
   "app/methodologie/execution-matrix/page.js",
@@ -266,6 +270,7 @@ if (new Set(trainingPillarSlugs).size !== trainingPillarSlugs.length) {
 
 const executionArticleSlugs = publishedExecutionArticles.map((article) => article.slug);
 const trainingArticleSlugs = publishedTrainingArticles.map((article) => article.slug);
+const territoryArticleSlugs = publishedTerritoryArticles.map((article) => article.slug);
 
 for (const slug of executionPillarSlugs) {
   if (executionArticleSlugs.includes(slug)) {
@@ -278,6 +283,9 @@ for (const slug of trainingPillarSlugs) {
     errors.push(`Training pillar slug collides with published article slug: ${slug}.`);
   }
 }
+
+const territorySource = readFileSync(resolve(siteRoot, "content/territory-editorial.js"), "utf8");
+if (!territorySource.includes("territoryBacklog")) errors.push("Territory editorial backlog is missing.");
 
 const backlogSlugs = [...executionBacklog, ...trainingBacklog].map((item) => item.slug);
 if (new Set(backlogSlugs).size !== backlogSlugs.length) {
