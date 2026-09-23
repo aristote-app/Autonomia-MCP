@@ -94,51 +94,9 @@ node scripts/ensure-inbound-token.mjs
 echo "Building cockpit Next.js..."
 npm run build
 
-# The production public site lives in its own o2switch Node application.
-# Bootstrap/sync it from the working cockpit deploy path so future public-site
-# self-deploys can run independently.
-PUBLIC_PROD_REPO="/home/dide4169/autonomia-public-site-src"
-PUBLIC_PROD_APP="$PUBLIC_PROD_REPO/site"
-PUBLIC_PROD_ACTIVATE="/home/dide4169/nodevenv/autonomia-public-site-src/site/22/bin/activate"
-PUBLIC_PROD_BRANCH="public-site-production"
-
-if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; then
-  echo "Syncing production public site from origin/$PUBLIC_PROD_BRANCH..."
-  set +u
-  source "$PUBLIC_PROD_ACTIVATE"
-  set -u
-  cd "$PUBLIC_PROD_REPO"
-  git fetch --depth=200 origin "$PUBLIC_PROD_BRANCH"
-  PUBLIC_PROD_SHA="$(git rev-parse "origin/$PUBLIC_PROD_BRANCH")"
-  git reset --hard "$PUBLIC_PROD_SHA"
-
-  cd "$PUBLIC_PROD_APP"
-  echo "Repairing production public-site dependencies..."
-  npm install --ignore-scripts --no-audit --no-fund --package-lock=false
-
-  export NODE_ENV=production
-  export NEXT_TELEMETRY_DISABLED=1
-  export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
-
-  echo "Using Next 15.5.18 Webpack build for o2switch legacy glibc compatibility..."
-  unset NODE_OPTIONS || true
-
-  echo "Cleaning previous public Next build..."
-  rm -rf .next
-  npm run content:validate
-  npm run build
-  mkdir -p .runtime tmp
-  printf '%s\n' "$PUBLIC_PROD_SHA" > "$PUBLIC_PROD_APP/.runtime/deployed-sha"
-  touch tmp/restart.txt
-  echo "Production public site synced: $PUBLIC_PROD_SHA"
-
-  set +u
-  source "$NODE_ENV_ACTIVATE"
-  set -u
-  cd "$APP_ROOT"
-else
-  echo "Production public-site repo unavailable at $PUBLIC_PROD_REPO; skipping bootstrap sync."
-fi
+# Public site deployment is intentionally independent.
+# build-autonomia.com has its own validated o2switch self-deploy workflow.
+echo "Public-site build skipped here; deploying cockpit only."
 
 mkdir -p .runtime tmp
 
