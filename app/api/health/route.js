@@ -20,6 +20,10 @@ export async function GET() {
       process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
     kasprConfigured: Boolean(process.env.KASPR_API_KEY),
+    kasprEnrichmentConfigured: Boolean(
+      process.env.KASPR_API_KEY &&
+      String(process.env.KASPR_DATA_TO_GET || "").trim()
+    ),
     waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY),
     waalaxyReplyWebhookConfigured: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
     selfDeployConfigured:
