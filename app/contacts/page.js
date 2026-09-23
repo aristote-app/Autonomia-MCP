@@ -53,6 +53,14 @@ function date(value) {
   }).format(new Date(value));
 }
 
+function datetimeLocal(value) {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  const offset = parsed.getTimezoneOffset() * 60000;
+  return new Date(parsed.getTime() - offset).toISOString().slice(0, 16);
+}
+
 export default async function ContactsPage({ searchParams }) {
   const params = await searchParams;
   const active = FILTERS.some(([key]) => key === params?.filter)
@@ -157,15 +165,34 @@ export default async function ContactsPage({ searchParams }) {
                 !contact.do_not_contact && (
                   <form action={updateContactPipelineStage} className="contactStageForm">
                     <input type="hidden" name="contact_id" value={contact.id} />
-                    <select name="status" defaultValue={contact.outreach_status}>
-                      <option value="active">Prospection</option>
-                      <option value="replied">Réponse reçue</option>
-                      <option value="meeting">RDV obtenu</option>
-                      <option value="proposal">Proposition envoyée</option>
-                      <option value="won">Gagné</option>
-                      <option value="lost">Perdu</option>
-                      <option value="stopped">Arrêter</option>
-                    </select>
+                    <label>
+                      <span>Étape</span>
+                      <select name="status" defaultValue={contact.outreach_status}>
+                        <option value="active">Prospection</option>
+                        <option value="replied">Réponse reçue</option>
+                        <option value="meeting">RDV obtenu</option>
+                        <option value="proposal">Proposition envoyée</option>
+                        <option value="won">Gagné</option>
+                        <option value="lost">Perdu</option>
+                        <option value="stopped">Arrêter</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span>Prochaine action</span>
+                      <input
+                        type="datetime-local"
+                        name="next_action_at"
+                        defaultValue={datetimeLocal(contact.next_action_at)}
+                      />
+                    </label>
+                    <label className="contactStageNote">
+                      <span>Note</span>
+                      <input
+                        name="note"
+                        placeholder="Ex. relancer après validation budget"
+                        maxLength={1000}
+                      />
+                    </label>
                     <button type="submit">Mettre à jour</button>
                   </form>
                 )}
