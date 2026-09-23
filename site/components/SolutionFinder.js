@@ -105,9 +105,11 @@ export default function SolutionFinder() {
 
     setLeadStatus("sending");
 
+    const originalQuery = result.query || query.trim();
+
     const solutionContext = {
       source: "solution_finder",
-      original_query: query.trim(),
+      original_query: originalQuery,
       summary: result.summary,
       route: result.route,
       recommended_roles: (result.roles || []).map((role) => ({
@@ -135,7 +137,7 @@ export default function SolutionFinder() {
       phone: contact.phone || null,
       company_name: contact.company,
       requested_service: `solution_${result.route || "hybrid"}`,
-      message: query.trim(),
+      message: originalQuery,
       desired_timeline: null,
       company_size: null,
       form_id: "home-solution-finder",
