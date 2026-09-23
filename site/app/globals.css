@@ -8297,3 +8297,564 @@ button {
     padding-right: max(34px, calc((100vw - var(--max))/2));
   }
 }
+
+
+/* Territories conversion landing */
+.territoryAdsPage {
+  background: var(--paper);
+  color: var(--ink);
+}
+.territoryAdsHero {
+  display: grid;
+  gap: 28px;
+  padding: 84px 18px 58px;
+  background: var(--ink);
+  color: #fff;
+}
+.territoryAdsCopy h1 {
+  max-width: 940px;
+  margin: 10px 0 20px;
+  font-size: clamp(48px, 6.6vw, 86px);
+  line-height: .93;
+  letter-spacing: -.055em;
+  font-weight: 610;
+}
+.territoryAdsCopy > p:not(.eyebrow) {
+  max-width: 780px;
+  margin: 0;
+  color: rgba(255,255,255,.76);
+  font-size: 19px;
+  line-height: 1.55;
+}
+.territoryGuarantees {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.territoryGuarantees span {
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  font-size: 12px;
+  font-weight: 800;
+}
+.territoryLeadCard {
+  display: grid;
+  gap: 11px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+.territoryLeadCard h2 {
+  margin: 0 0 4px;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+.territoryLeadCard label {
+  display: grid;
+  gap: 6px;
+}
+.territoryLeadCard label span {
+  font-size: 12px;
+  font-weight: 800;
+}
+.territoryLeadCard input,
+.territoryLeadCard textarea {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+.territoryLeadCard button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 900;
+  cursor: pointer;
+}
+.territoryLeadCard > small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.territorySectionIntro,
+.territoryDemoIntro {
+  display: grid;
+  gap: 24px;
+}
+.territorySectionIntro h2,
+.territoryDemoIntro h2 {
+  max-width: 900px;
+  margin: 0 0 12px;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.territorySectionIntro p:not(.sectionIndex),
+.territoryDemoIntro p:not(.sectionIndex) {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.territoryFlagship,
+.territoryDemoLab,
+.territoryOtherUses,
+.territoryOfferLadder,
+.territoryAcademyBlock,
+.territoryReferences,
+.territoryAdsFooter {
+  padding: 62px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.territoryFlagshipGrid,
+.territoryOtherGrid,
+.territoryOfferGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 26px;
+}
+.territoryFlagshipGrid article,
+.territoryOtherGrid article,
+.territoryOfferGrid article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+}
+.territoryFlagshipGrid article > span,
+.territoryOtherGrid article > span,
+.territoryOfferGrid article > span {
+  color: #9b6a00;
+  font-size: 12px;
+  font-weight: 900;
+}
+.territoryFlagshipGrid h3,
+.territoryOfferGrid h3 {
+  margin: 18px 0 14px;
+  font-size: 25px;
+  line-height: 1.08;
+}
+.territoryFlagshipGrid p,
+.territoryOtherGrid p,
+.territoryOfferGrid p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.territoryFlagshipGrid p b {
+  display: block;
+  color: var(--ink);
+}
+.territoryFlagshipGrid small {
+  display: block;
+  margin-top: 12px;
+  color: var(--academy);
+  font-weight: 800;
+  line-height: 1.4;
+}
+.territoryDemoTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 16px;
+}
+.territoryDemoTabs button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 850;
+  cursor: pointer;
+}
+.territoryDemoTabs button.active {
+  background: var(--ink);
+  color: #fff;
+}
+.territoryDemoPanel,
+.territoryConfigurator {
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+}
+.territoryDemoTopline {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.territoryDemoTopline > div {
+  display: grid;
+  gap: 5px;
+}
+.territoryDemoTopline span {
+  color: #ffd16a;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .07em;
+}
+.territoryDemoTopline strong {
+  font-size: 20px;
+}
+.territoryDemoTopline button {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 850;
+  cursor: pointer;
+}
+.conservatoryMetrics {
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+.conservatoryMetrics article {
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 9px;
+  background: var(--ink-2);
+}
+.conservatoryMetrics span,
+.conservatoryMetrics small {
+  display: block;
+  color: rgba(255,255,255,.65);
+  font-size: 11px;
+}
+.conservatoryMetrics strong {
+  display: block;
+  margin: 6px 0;
+  font-size: 26px;
+}
+.territorySchedule,
+.generatedRows {
+  display: grid;
+  gap: 8px;
+}
+.territorySchedule article,
+.generatedRows p {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+}
+.territorySchedule small,
+.generatedRows small {
+  color: rgba(255,255,255,.62);
+}
+.adsDemoLayout {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+.adsQueue {
+  display: grid;
+  gap: 7px;
+}
+.adsQueue button {
+  display: grid;
+  grid-template-columns: 52px minmax(0,1fr);
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 8px;
+  background: var(--ink-2);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.adsQueue button.active {
+  border-color: #ffd16a;
+}
+.adsQueue button > span {
+  display: grid;
+  gap: 3px;
+}
+.adsQueue small {
+  color: rgba(255,255,255,.62);
+}
+.adsDetail {
+  padding: 18px;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+}
+.adsDetail > span {
+  color: #9b6a00;
+  font-size: 11px;
+  font-weight: 900;
+}
+.adsDetail h3 {
+  margin: 12px 0;
+  font-size: 26px;
+}
+.adsDecision {
+  display: grid;
+  gap: 4px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--paper);
+}
+.territoryDemoDisclaimer {
+  margin: 16px 0 0;
+  color: rgba(255,255,255,.56);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.territoryConfigurator {
+  display: grid;
+  gap: 20px;
+}
+.territoryConfigForm {
+  display: grid;
+  gap: 11px;
+}
+.territoryConfigForm h3 {
+  margin: 0;
+  font-size: 31px;
+  line-height: 1;
+}
+.territoryConfigForm label {
+  display: grid;
+  gap: 6px;
+}
+.territoryConfigForm label span {
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 800;
+}
+.territoryConfigForm select,
+.territoryConfigForm textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+.territoryConfigForm button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 900;
+  cursor: pointer;
+}
+.territoryConfigForm > small {
+  color: rgba(255,255,255,.55);
+  font-size: 11px;
+}
+.territoryConfigOutput {
+  min-height: 320px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 10px;
+  background: var(--ink-2);
+}
+.configEmpty {
+  display: grid;
+  place-content: center;
+  min-height: 286px;
+  text-align: center;
+}
+.configEmpty span,
+.generatedDemo > span {
+  color: #ffd16a;
+  font-size: 11px;
+  font-weight: 900;
+}
+.configEmpty strong {
+  margin: 10px 0 4px;
+  font-size: 24px;
+}
+.configEmpty p {
+  max-width: 420px;
+  margin: 0 auto;
+  color: rgba(255,255,255,.62);
+}
+.configContext {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.configContext span {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  font-size: 11px;
+}
+.generatedDemo h3 {
+  margin: 10px 0 16px;
+  font-size: 24px;
+}
+.territoryOfferGrid article > strong {
+  display: block;
+  margin-top: 18px;
+  font-size: 20px;
+}
+.territoryLegalNote {
+  max-width: 940px;
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.territoryAcademyBlock {
+  display: grid;
+  gap: 24px;
+  padding: 58px 18px;
+  background: var(--academy);
+  color: #fff;
+}
+.territoryAcademyBlock h2 {
+  max-width: 760px;
+  margin: 8px 0 14px;
+  font-size: clamp(38px, 5vw, 60px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.territoryAcademyBlock p:not(.sectionIndex) {
+  max-width: 720px;
+  color: rgba(255,255,255,.72);
+  line-height: 1.55;
+}
+.territoryAcademyPrice {
+  align-self: center;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 12px;
+}
+.territoryAcademyPrice span {
+  color: #ffd16a;
+  font-size: 11px;
+  font-weight: 900;
+}
+.territoryAcademyPrice strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 34px;
+}
+.territoryReferencePlaceholder {
+  margin-top: 24px;
+  padding: 28px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.territoryReferencePlaceholder span {
+  color: #9b6a00;
+  font-size: 12px;
+  font-weight: 900;
+}
+.territoryReferencePlaceholder p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+.territoryAdsFooter {
+  display: grid;
+  gap: 28px;
+  background: var(--paper-2);
+}
+.territoryAdsFooter h2 {
+  max-width: 820px;
+  margin: 8px 0 14px;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.territoryAdsFooter > div > p:not(.eyebrow) {
+  max-width: 700px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.territoryResourceLinks {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+}
+.territoryResourceLinks a {
+  padding: 16px 18px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+}
+@media (min-width: 760px) {
+  .territorySectionIntro,
+  .territoryDemoIntro {
+    grid-template-columns: 180px minmax(0,1fr);
+  }
+  .territoryFlagshipGrid,
+  .territoryOfferGrid {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .territoryOtherGrid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .conservatoryMetrics {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+  .territorySchedule {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+  .adsDemoLayout {
+    grid-template-columns: minmax(260px,.8fr) minmax(0,1.2fr);
+  }
+  .territoryConfigurator {
+    grid-template-columns: minmax(300px,.85fr) minmax(0,1.15fr);
+  }
+  .territoryAcademyBlock,
+  .territoryAdsFooter {
+    grid-template-columns: minmax(0,1.2fr) minmax(320px,.8fr);
+  }
+  .territoryResourceLinks {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+}
+@media (min-width: 960px) {
+  .territoryAdsHero {
+    grid-template-columns: minmax(0,1fr) minmax(340px,430px);
+    align-items: start;
+    gap: 42px;
+  }
+  .territoryTopForm {
+    position: sticky;
+    top: 94px;
+  }
+}
+@media (min-width: 1180px) {
+  .territoryAdsHero,
+  .territoryFlagship,
+  .territoryDemoLab,
+  .territoryOtherUses,
+  .territoryOfferLadder,
+  .territoryAcademyBlock,
+  .territoryReferences,
+  .territoryAdsFooter,
+  .territoryResourceLinks {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+}
