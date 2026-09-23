@@ -6,6 +6,7 @@ import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.j
 import { researchAccountPublicContext } from "../../../lib/collectors/accountResearch.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 import { buildAccountBattlecard } from "../../../lib/intelligence/battlecard.js";
+import { buildAccountOpportunityGraph } from "../../../lib/intelligence/accountGraph.js";
 import { getCurrentWorkspaceMembership } from "../../../lib/auth/access.js";
 import { listSalesContacts } from "../../../lib/db/salesContacts.js";
 import {
@@ -49,6 +50,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const outreach = buildAccountOutreachPlan(account);
   const battlecard = buildAccountBattlecard(account);
+  const opportunityGraph = buildAccountOpportunityGraph(account);
   const workspaceContext = await getCurrentWorkspaceMembership().catch(() => ({
     configured: false,
     claims: null,
@@ -245,6 +247,65 @@ export default async function AccountDetailPage({ params, searchParams }) {
           )}
         </section>
       )}
+
+      <section className="accountGraphSection">
+        <div className="sectionTitle">
+          <div>
+            <p className="eyebrow">OPPORTUNITY GRAPH</p>
+            <h2>Du signal à l'action commerciale.</h2>
+          </div>
+          <p>
+            Lecture déterministe : chaque bloc est dérivé des signaux du compte, sans inventer
+            de besoin ou de décideur réel.
+          </p>
+        </div>
+
+        <div className="accountGraph">
+          <div className="accountGraphColumn">
+            <span>SIGNAUX</span>
+            {opportunityGraph.nodes.filter((item) => item.type === "signal").slice(0, 5).map((item) => (
+              <article key={item.id}>
+                <strong>{item.label}</strong>
+                <small>{item.source_id || "source"}</small>
+                {item.source_url && <a href={item.source_url} target="_blank" rel="noreferrer">Preuve ↗</a>}
+              </article>
+            ))}
+          </div>
+
+          <div className="accountGraphArrow">→</div>
+
+          <div className="accountGraphColumn">
+            <span>BESOINS</span>
+            {opportunityGraph.nodes.filter((item) => item.type === "need").map((item) => (
+              <article key={item.id}><strong>{item.label}</strong></article>
+            ))}
+          </div>
+
+          <div className="accountGraphArrow">→</div>
+
+          <div className="accountGraphColumn">
+            <span>DÉCIDEURS À CHERCHER</span>
+            {opportunityGraph.nodes.filter((item) => item.type === "decision_role").slice(0, 3).map((item) => (
+              <article key={item.id}>
+                <strong>{item.label}</strong>
+                {item.reason && <small>{item.reason}</small>}
+              </article>
+            ))}
+          </div>
+
+          <div className="accountGraphArrow">→</div>
+
+          <div className="accountGraphColumn">
+            <span>OFFRES</span>
+            {opportunityGraph.nodes.filter((item) => item.type === "offer").map((item) => (
+              <article key={item.id} className={item.recommended ? "recommended" : ""}>
+                <strong>{item.label}</strong>
+                {item.recommended && <small>Angle recommandé</small>}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="accountDetailGrid">
         <div className="detailPanel">
