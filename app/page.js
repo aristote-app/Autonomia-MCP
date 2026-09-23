@@ -15,6 +15,7 @@ import { getCurrentWorkspaceMembership } from "../lib/auth/access.js";
 import { listWorkspaceSalesContacts } from "../lib/db/salesContacts.js";
 import { listInboundLeads } from "../lib/db/inboundLeads.js";
 import { listConsultantsWithSkills } from "../lib/db/consultants.js";
+import { listAccountWatchAlerts } from "../lib/db/accountWatches.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 import {
   claimWorkItem,
@@ -266,7 +267,7 @@ export default async function Home({ searchParams }) {
   const hasWorkspaceSession = Boolean(
     privateContext?.claims?.sub && privateContext?.membership?.workspace_id
   );
-  const [privateContacts, inboundLeads, consultants] =
+  const [privateContacts, inboundLeads, consultants, accountWatchAlerts] =
     live && hasWorkspaceSession
       ? await Promise.all([
           listWorkspaceSalesContacts({
@@ -277,9 +278,12 @@ export default async function Home({ searchParams }) {
             workspaceId: privateContext.membership.workspace_id,
             limit: 200
           }).catch(() => []),
-          listConsultantsWithSkills({ limit: 500 }).catch(() => [])
+          listConsultantsWithSkills({ limit: 500 }).catch(() => []),
+          listAccountWatchAlerts({
+            ownerId: privateContext.claims.sub
+          }).catch(() => [])
         ])
-      : [[], [], []];
+      : [[], [], [], []];
 
   const revenueActions =
     live && hasWorkspaceSession
@@ -288,6 +292,7 @@ export default async function Home({ searchParams }) {
           contacts: privateContacts,
           inboundLeads,
           consultants,
+          accountWatchAlerts,
           kasprReady: Boolean(
             process.env.KASPR_API_KEY &&
             String(process.env.KASPR_DATA_TO_GET || "").trim()

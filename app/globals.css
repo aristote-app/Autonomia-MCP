@@ -962,3 +962,16 @@ h3 { margin: 0 0 8px; }
   .consultantMetrics article:nth-child(-n+2) { border-bottom:1px solid #d9ddd7; }
   .consultantList > article { grid-template-columns:1fr; }
 }
+
+
+/* Account proactive watch */
+.accountWatchBar { display:flex; justify-content:space-between; gap:18px; align-items:center; margin:20px 0; padding:16px 18px; border:1px solid #111; background:#fff; }
+.accountWatchBar > div:first-child { display:grid; gap:4px; }
+.accountWatchBar span { font-size:9px; font-weight:800; letter-spacing:.1em; }
+.accountWatchBar strong { font-size:16px; }
+.accountWatchBar small { color:#677068; }
+.accountWatchActions { display:flex; flex-wrap:wrap; gap:8px; }
+.accountWatchActions form { margin:0; }
+.accountWatchActions button { min-height:36px; border:1px solid #111; background:#111; color:#fff; padding:8px 11px; font-weight:800; cursor:pointer; }
+.accountWatchActions button.secondary { background:#fff; color:#111; }
+@media (max-width:640px) { .accountWatchBar { display:grid; } }

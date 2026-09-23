@@ -21,6 +21,12 @@ import {
   getWaalaxyProspectLists,
   getWaalaxyCampaigns
 } from "../../../lib/integrations/waalaxy.js";
+import { getAccountWatch } from "../../../lib/db/accountWatches.js";
+import {
+  acknowledgeWatchedAccount,
+  unwatchAccount,
+  watchAccount
+} from "../../actions/account-watches.js";
 import { rankWaalaxyCampaigns } from "../../../lib/intelligence/campaignRouter.js";
 
 export const dynamic = "force-dynamic";
@@ -79,6 +85,12 @@ export default async function AccountDetailPage({ params, searchParams }) {
     String(process.env.KASPR_DATA_TO_GET || "").trim()
   );
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
+  const accountWatch = hasWorkspaceSession
+    ? await getAccountWatch({
+        ownerId: workspaceContext.claims.sub,
+        accountSlug: account.slug
+      }).catch(() => null)
+    : null;
 
   const shouldLoadWaalaxy =
     query?.waalaxy === "1" &&
@@ -164,6 +176,43 @@ export default async function AccountDetailPage({ params, searchParams }) {
           <span>{account.heat_label}</span>
         </div>
       </header>
+
+      {hasWorkspaceSession && (
+        <section className="accountWatchBar">
+          <div>
+            <span>VEILLE COMPTE</span>
+            <strong>
+              {accountWatch?.enabled ? "Sous surveillance" : "Non surveillé"}
+            </strong>
+            {Number(accountWatch?.query?.unseen_signal_delta || 0) > 0 && (
+              <small>
+                {accountWatch.query.unseen_signal_delta} nouveau{accountWatch.query.unseen_signal_delta > 1 ? "x" : ""} signal{accountWatch.query.unseen_signal_delta > 1 ? "s" : ""} depuis ta dernière validation.
+              </small>
+            )}
+          </div>
+          <div className="accountWatchActions">
+            {accountWatch?.enabled ? (
+              <>
+                {Number(accountWatch?.query?.unseen_signal_delta || 0) > 0 && (
+                  <form action={acknowledgeWatchedAccount}>
+                    <input type="hidden" name="account_slug" value={account.slug} />
+                    <button type="submit">Marquer les signaux vus</button>
+                  </form>
+                )}
+                <form action={unwatchAccount}>
+                  <input type="hidden" name="account_slug" value={account.slug} />
+                  <button type="submit" className="secondary">Arrêter la veille</button>
+                </form>
+              </>
+            ) : (
+              <form action={watchAccount}>
+                <input type="hidden" name="account_slug" value={account.slug} />
+                <button type="submit">Surveiller ce compte</button>
+              </form>
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="accountBrief">
         <div>

@@ -74,6 +74,8 @@ jobs:
         run: npm run smoke:territory-signals
       - name: Smoke test account intelligence
         run: npm run smoke:accounts
+      - name: Smoke test account watch state
+        run: npm run smoke:account-watch
       - name: Smoke test Sales OS
         run: npm run smoke:sales-os
       - name: Smoke test inbound acquisition

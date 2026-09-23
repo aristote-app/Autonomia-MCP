@@ -5,6 +5,7 @@ import {
   runAutomatedJobSignalRefresh,
   runAutomatedExtendedDemandRefresh
 } from "../lib/market/automatedRefresh.js";
+import { refreshAllAccountWatches } from "../lib/db/accountWatches.js";
 
 const STATE_FILE = resolve(process.cwd(), ".runtime", "job-refresh-state.json");
 const HOUR = 60 * 60 * 1000;
@@ -109,6 +110,15 @@ async function main() {
     }
   } else {
     result.extendedWeb = { available: true, skipped: true, reason: "throttled" };
+  }
+
+  try {
+    result.accountWatches = await refreshAllAccountWatches();
+  } catch (error) {
+    result.accountWatches = {
+      available: false,
+      error: error instanceof Error ? error.message : String(error)
+    };
   }
 
   await saveState(state);

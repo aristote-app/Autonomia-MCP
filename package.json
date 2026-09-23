@@ -32,7 +32,8 @@
     "smoke:search-budget": "node scripts/smoke-search-budget.mjs",
     "smoke:inbound": "node scripts/smoke-inbound.mjs",
     "smoke:consultant-accounts": "node scripts/smoke-consultant-account-matching.mjs",
-    "smoke:consultant-import": "node scripts/smoke-consultant-import.mjs"
+    "smoke:consultant-import": "node scripts/smoke-consultant-import.mjs",
+    "smoke:account-watch": "node scripts/smoke-account-watch.mjs"
   },
   "engines": {
     "node": ">=22"
