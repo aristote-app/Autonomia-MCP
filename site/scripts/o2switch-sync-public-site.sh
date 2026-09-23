@@ -93,8 +93,30 @@ unset NODE_OPTIONS || true
 echo "Validating editorial content..."
 npm run content:validate
 
+PREVIOUS_STATIC="$APP_ROOT/.runtime/previous-next-static"
+rm -rf "$PREVIOUS_STATIC"
+if [ -d .next/static ]; then
+  echo "Preserving previous Next static assets during build..."
+  mkdir -p "$PREVIOUS_STATIC"
+  cp -a .next/static/. "$PREVIOUS_STATIC"/
+fi
+
 echo "Building public site Next.js 15.5.18 with Webpack..."
 npm run build
+
+# During Passenger rolling restarts, an old worker can briefly keep serving old
+# HTML. Preserve its hashed CSS/JS files inside the new build so those requests
+# still resolve until every worker has switched to the new release.
+if [ -d "$PREVIOUS_STATIC" ]; then
+  echo "Merging previous hashed static assets into the new build..."
+  mkdir -p .next/static
+  cp -a "$PREVIOUS_STATIC"/. .next/static/
+fi
+
+if ! find .next/static -type f \( -name '*.css' -o -name '*.js' \) -size +0c | grep -q .; then
+  echo "Refusing deploy: Next static assets are missing after build." >&2
+  exit 1
+fi
 
 mkdir -p .runtime tmp
 printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
