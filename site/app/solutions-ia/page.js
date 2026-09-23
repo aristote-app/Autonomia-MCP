@@ -19,7 +19,7 @@ export default function SolutionsIaPage() {
         {problemClusters.map((cluster)=>{
           const items=problemSolutions.filter((item)=>item.cluster===cluster);
           if (!items.length) return null;
-          return <div className="problemHubGroup" key={cluster}><div><span>{cluster}</span><strong>{items.length} problème{items.length>1?"s":""}</strong></div><div>{items.map((item)=><ProblemLink href={"/solutions-ia/"+item.slug} problemSlug={item.slug} problemCluster={item.cluster} surface="problem_hub" key={item.slug}><small>VAGUE {item.wave}</small><strong>{item.title}</strong><span>{item.intro}</span><b>Tester →</b></ProblemLink>)}</div></div>;
+          return <div className="problemHubGroup" key={cluster}><div><span>{cluster}</span><strong>{items.length} problème{items.length>1?"s":""}</strong></div><div>{items.map((item)=><ProblemLink href={"/solutions-ia/"+item.slug} problemSlug={item.slug} problemCluster={item.cluster} surface="problem_hub" key={item.slug}><small>MICRO-APP À TESTER</small><strong>{item.title}</strong><span>{item.intro}</span><b>Tester →</b></ProblemLink>)}</div></div>;
         })}
       </section>
     </main>
