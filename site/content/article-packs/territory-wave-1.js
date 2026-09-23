@@ -342,5 +342,172 @@ export const territoryArticlesWave1 = [
         }
       }
     ]
+  },
+  {
+    type: "territory",
+    slug: "construire-un-plan-de-formation-ia-pour-les-agents-d-une-communaute-de-communes",
+    cluster: "Formation & adoption collectivités",
+    title: "Construire un plan de formation IA pour les agents d'une communauté de communes",
+    dek: "Un plan de formation IA territorial efficace ne se résume pas à une initiation à ChatGPT. Il doit relier règles d'usage, cas métier, vérification, management, accompagnement et mesure de l'adoption.",
+    summary: "Ce guide propose une méthode opérationnelle pour une communauté de communes ou d'agglomération qui veut former ses agents à l'IA sans dissocier la pédagogie des usages réels. Il aide à segmenter les publics, construire un socle commun, organiser des ateliers métier, former les managers, créer un réseau de référents, encadrer les données et mesurer l'adoption sans inventer de gains.",
+    readingTime: "20–24 min",
+    publishedAt: "2026-09-23",
+    modifiedAt: "2026-09-23",
+    jobSignalTags: ["public_sector_ai", "training", "change_management", "ai_governance", "agents_territoriaux"],
+    search: {
+      primaryKeyword: "formation IA agents communauté de communes",
+      secondaryQueries: [
+        "formation intelligence artificielle agents territoriaux",
+        "formation IA collectivité territoriale",
+        "plan de formation IA collectivité",
+        "acculturation IA agents publics",
+        "former managers territoriaux intelligence artificielle"
+      ],
+      demandEvidence: ["territory_signals", "public_procurement", "cnfpt_training", "public_sector_guidance"],
+      observedAt: "2026-09-23"
+    },
+    quickFacts: [
+      ["PUBLIC", "Agents · managers · directions · référents internes"],
+      ["FORMAT", "Socle commun + ateliers métier + accompagnement"],
+      ["GARDE-FOU", "Outils autorisés, données maîtrisées, validation humaine"],
+      ["MESURE", "Adoption réelle, qualité, erreurs, temps de reprise"]
+    ],
+    sourceNote: "Le besoin de formation est visible dans plusieurs signaux publics récents : le CNFPT propose en 2026 des formations dédiées aux managers territoriaux sur l'éthique, la stratégie et le pilotage de projets IA, ainsi qu'un cycle de sensibilisation aux usages concrets pour les agents et les cadres dirigeants. La DINUM, avec la DITP et la DGAFP, a publié en juin 2026 un guide d'usage de l'IA pour les agents publics de l'État qui insiste sur la responsabilité de l'agent, le choix d'outils autorisés, la transparence, l'utilité réelle et la formation continue. Ces références ne constituent pas un programme imposé aux collectivités : elles fournissent des repères utiles à adapter au contexte, aux outils, aux compétences et aux règles de chaque intercommunalité.",
+    sources: [
+      {
+        label: "DINUM — Guide d'usage de l'IA pour les agents publics de l'État",
+        url: "https://ia.numerique.gouv.fr/ressources/guide-dusage-de-lia/"
+      },
+      {
+        label: "CNFPT / INET — IA pour les managers : entre éthique et stratégie",
+        url: "https://www.cnfpt.fr/s-informer/nos-actualites/le-fil-dactu/ia-managers-entre-ethique-strategie-formation-inet-territoires/centre-val-loire"
+      },
+      {
+        label: "CNFPT — Les Flash IA : sensibilisation des agents et cadres dirigeants",
+        url: "https://www.cnfpt.fr/se-former/se-former-autrement/participer-a-nos-evenements/webinaire-flash-ia/provence-alpes-cote-dazur"
+      },
+      {
+        label: "DINUM — Portail des chartes IA dans l'administration",
+        url: "https://ia.numerique.gouv.fr/ressources/portail-des-chartes-ia-dans-ladministration/"
+      }
+    ],
+    faq: [
+      ["Faut-il former tous les agents en même temps ?", "Pas nécessairement. Un socle commun peut être proposé largement, tandis que les ateliers métier gagnent à être organisés par vagues, sur des équipes volontaires ou des services où les cas d'usage sont déjà identifiés."],
+      ["Une formation IA doit-elle être centrée sur un outil comme ChatGPT ou Copilot ?", "L'outil compte, mais il ne doit pas structurer tout le programme. Les compétences durables portent aussi sur la formulation d'une tâche, la sélection des données, la vérification, la traçabilité, les limites du modèle et le choix du bon niveau d'automatisation."],
+      ["Comment éviter qu'une formation reste théorique ?", "Chaque séquence doit revenir au travail réel : documents, tâches, erreurs fréquentes, règles internes et critères de qualité. Un atelier utile se termine avec des usages testables, des limites explicites et un responsable de la suite."],
+      ["Quel rôle pour les managers territoriaux ?", "Ils doivent pouvoir encadrer les usages, arbitrer les risques, organiser la validation humaine, suivre l'adoption et créer un cadre dans lequel les agents savent quand utiliser l'IA, quand demander de l'aide et quand ne pas l'utiliser."],
+      ["Comment mesurer le succès d'un plan de formation ?", "On peut mesurer la participation, mais aussi l'utilisation réelle après quelques semaines, la qualité des productions, les erreurs évitées ou détectées, le nombre de cas d'usage réellement appliqués, la capacité des agents à vérifier une réponse et le temps de reprise humaine."]
+    ],
+    sections: [
+      {
+        id: "objectif",
+        kicker: "01 — LE BON OBJECTIF",
+        heading: "Former à l'IA ne veut pas dire apprendre une collection de prompts.",
+        paragraphs: [
+          "Une communauté de communes peut facilement acheter une journée de sensibilisation à l'intelligence artificielle, remplir une salle et considérer le sujet traité. Le problème apparaît quelques semaines plus tard : certains agents continuent à utiliser des outils grand public sans cadre, d'autres n'osent rien tester, les managers ne savent pas quelles pratiques valider et les premiers cas d'usage restent isolés. Une formation efficace doit donc viser autre chose qu'un moment de découverte. Elle doit construire une capacité collective à choisir, utiliser, vérifier et encadrer l'IA dans le travail quotidien.",
+          "Le premier objectif consiste à donner un langage commun. Un agent n'a pas besoin de devenir spécialiste des modèles pour comprendre qu'une réponse peut être plausible et fausse, qu'une donnée sensible ne doit pas être copiée dans n'importe quel service, qu'un texte généré doit être vérifié et qu'un outil autorisé n'est pas nécessairement adapté à toutes les tâches. Le guide interministériel publié en juin 2026 pour les agents de l'État insiste précisément sur la responsabilité de l'agent, la nature des données, la transparence, l'utilité et la formation continue. Une collectivité doit adapter ces principes à ses propres outils et règles.",
+          "Le deuxième objectif est métier. Une agente des ressources humaines, un responsable développement économique, un instructeur, un chargé de communication ou une secrétaire de direction ne rencontrent pas les mêmes documents ni les mêmes risques. Leur formation doit partir des tâches qu'ils exécutent réellement : chercher une information, préparer une synthèse, reformuler un courrier, comparer des versions, produire un compte rendu, classer des demandes, analyser un tableau ou préparer une réunion. L'IA devient alors un mécanisme à évaluer, pas un sujet abstrait.",
+          "Le troisième objectif est organisationnel. La formation doit laisser derrière elle des règles, des exemples, des référents et des méthodes de revue. Une collectivité qui apprend uniquement aux individus à utiliser un chatbot augmente les usages sans nécessairement augmenter la maîtrise. Une collectivité qui relie apprentissage, gouvernance et expérimentation crée une capacité durable à intégrer de nouveaux outils sans recommencer tout le travail à chaque évolution technologique."
+        ]
+      },
+      {
+        id: "segmenter",
+        kicker: "02 — SEGMENTER LES PUBLICS",
+        heading: "Agents, managers, directions et référents n'ont pas besoin de la même formation.",
+        paragraphs: [
+          "Un plan de formation unique pour tous semble simple à organiser mais répond mal aux responsabilités réelles. Les agents ont besoin de comprendre les usages autorisés, de savoir structurer une demande, contrôler une sortie et reconnaître une situation où l'IA n'est pas appropriée. Les managers doivent ajouter une compétence d'encadrement : définir les règles d'équipe, suivre la qualité, organiser la validation et traiter les écarts. Les directions générales ont davantage besoin d'arbitrage, de gouvernance, de portefeuille de cas d'usage et de mesure.",
+          "Les référents internes constituent un quatrième public. Leur rôle peut être très concret : recueillir les cas d'usage, aider à formaliser une tâche, documenter une bonne pratique, remonter un incident, orienter vers la DSI ou le DPO et maintenir une bibliothèque de ressources. Ils n'ont pas besoin d'être des experts capables de construire tous les systèmes. Ils doivent surtout savoir poser les bonnes questions et distinguer un usage individuel simple d'un projet qui nécessite une intégration, des données internes ou une analyse de risque approfondie.",
+          "Cette segmentation permet d'éviter deux erreurs fréquentes. La première est de surcharger tous les agents avec des éléments d'architecture, de réglementation ou de stratégie dont ils n'ont pas besoin pour agir. La seconde est de sous-former les managers en leur proposant exactement la même initiation que leurs équipes, alors qu'ils devront ensuite arbitrer les usages. Le CNFPT a d'ailleurs développé en 2026 des formats distincts pour les agents et pour les cadres dirigeants, ce qui illustre l'intérêt de cette différenciation.",
+          "La segmentation n'empêche pas un socle partagé. Tous les publics peuvent commencer par les mêmes principes : ce que l'outil sait faire, ce qu'il ne sait pas garantir, quelles données peuvent être utilisées, comment vérifier, quand déclarer l'usage et comment obtenir de l'aide. La spécialisation vient ensuite, au plus près des situations professionnelles."
+        ]
+      },
+      {
+        id: "socle",
+        kicker: "03 — LE SOCLE COMMUN",
+        heading: "Le socle doit donner des réflexes avant de donner des astuces.",
+        paragraphs: [
+          "Un bon socle commun peut tenir en quelques modules courts, mais il doit être exigeant sur les réflexes. Le premier module explique les capacités et limites : génération, synthèse, extraction, classification, recherche assistée, raisonnement apparent, erreurs factuelles et dépendance au contexte fourni. Le but n'est pas de détailler tous les modèles, mais de comprendre pourquoi une réponse fluide n'est pas une preuve.",
+          "Le deuxième module concerne les données. Les agents doivent savoir distinguer une information publique, une donnée interne, une donnée personnelle, une information sensible ou un document dont la diffusion est restreinte. La consigne ne peut pas se limiter à « ne mettez rien de confidentiel ». Il faut montrer des exemples réels et relier chaque catégorie aux outils autorisés par la collectivité. Une règle compréhensible est plus utile qu'une interdiction générale que chacun interprète différemment.",
+          "Le troisième module porte sur la vérification. Il faut apprendre à demander des sources lorsque le contexte le permet, à comparer la réponse au document d'origine, à vérifier les chiffres, les dates, les noms et les références, et à distinguer un brouillon d'une production validée. La DINUM met la vérification des réponses et des sources parmi les questions pratiques auxquelles son guide apporte des repères. Cette compétence est centrale car elle conditionne la qualité de tous les usages suivants.",
+          "Le quatrième module traite de la décision. L'IA peut proposer, synthétiser ou préparer ; elle ne devient pas automatiquement responsable du résultat. Une formation utile donne des exemples où l'humain doit conserver le dernier mot : décision individuelle, engagement budgétaire, information réglementaire, communication sensible, données personnelles, évaluation d'une personne ou tout processus où une erreur aurait un effet important. Le niveau de contrôle doit être proportionné au risque."
+        ]
+      },
+      {
+        id: "ateliers",
+        kicker: "04 — LES ATELIERS MÉTIER",
+        heading: "Chaque atelier doit résoudre une tâche réelle et produire une méthode réutilisable.",
+        paragraphs: [
+          "Après le socle, la formation doit quitter les exemples génériques. Un atelier métier commence par une tâche que les participants reconnaissent immédiatement. Par exemple : préparer un compte rendu à partir de notes, résumer un dossier long, transformer un échange en liste d'actions, rédiger un premier brouillon de réponse, comparer deux versions d'une procédure, extraire des éléments d'un document ou préparer un ordre du jour. Le formateur doit connaître la qualité attendue dans le métier, pas seulement la manière de parler au modèle.",
+          "L'exercice peut suivre une grille constante : objectif, entrée, consigne, résultat attendu, contrôle, données autorisées, erreurs possibles et décision finale. Cette structure apprend aux agents à penser en processus. Au lieu de chercher le prompt parfait, ils apprennent à préciser la tâche et à définir comment ils sauront si le résultat est acceptable. Cette compétence reste utile même lorsque l'outil change.",
+          "Les ateliers doivent inclure des échecs. Montrer uniquement des démonstrations impressionnantes crée une confiance artificielle. Il est plus formateur de comparer une bonne et une mauvaise instruction, de montrer une réponse incomplète, une citation inventée ou un résumé qui perd une nuance importante. Les participants peuvent alors discuter des contrôles nécessaires et des situations où il vaut mieux revenir à une méthode classique.",
+          "Chaque atelier devrait produire un petit livrable opérationnel : une fiche d'usage, un exemple validé, une liste de données autorisées, un contrôle à effectuer et un point de contact. Cette documentation constitue progressivement une bibliothèque interne. Au bout de plusieurs vagues, la collectivité dispose d'un patrimoine de pratiques testées plutôt que d'une collection de souvenirs de formation."
+        ]
+      },
+      {
+        id: "managers",
+        kicker: "05 — LES MANAGERS",
+        heading: "Le manager doit apprendre à encadrer l'usage, pas à surveiller chaque prompt.",
+        paragraphs: [
+          "Le manager territorial se retrouve dans une position délicate. Il doit encourager l'amélioration des méthodes de travail sans laisser chaque agent définir seul ses règles. Il doit pouvoir répondre à des questions concrètes : cet outil est-il autorisé ? cette donnée peut-elle être utilisée ? faut-il une validation humaine ? comment partage-t-on un usage qui fonctionne ? que faire lorsqu'une sortie est erronée ? À défaut de réponses, les pratiques se dispersent.",
+          "La formation des managers doit donc inclure une méthode de revue des cas d'usage. Pour chaque proposition : quel problème cherche-t-on à résoudre ? quelle fréquence ? quelles données ? quel impact si la sortie est fausse ? qui valide ? peut-on revenir en arrière ? comment mesure-t-on l'utilité ? Ces questions permettent de distinguer une expérimentation légère d'un véritable projet numérique. Elles empêchent aussi qu'un outil soit choisi avant le problème.",
+          "Le CNFPT a publié en 2026 une formation destinée aux managers et cadres territoriaux qui traite notamment des limites et opportunités de l'IA, du cadre éthique et de gouvernance, ainsi que du pilotage d'un projet IA territorial. Ce type de programme illustre une tendance importante : l'adoption ne relève plus seulement de la culture numérique individuelle ; elle devient un sujet de management et d'organisation.",
+          "Le rôle du manager est aussi de créer un espace de retour d'expérience. Les agents doivent pouvoir signaler qu'un usage ne fonctionne pas, qu'un document est trop sensible ou qu'une règle est impraticable sans craindre de bloquer l'innovation. Une bonne gouvernance apprend autant des erreurs que des succès. Le manager transforme ces retours en décisions : ajuster la règle, améliorer le processus, abandonner un cas d'usage ou l'étendre."
+        ]
+      },
+      {
+        id: "referents",
+        kicker: "06 — LES RÉFÉRENTS IA",
+        heading: "Un réseau de référents évite que chaque service reparte de zéro.",
+        paragraphs: [
+          "Lorsque plusieurs services commencent à expérimenter, les mêmes questions reviennent : comment formuler une demande, quelles données utiliser, comment vérifier, quel outil choisir, comment traiter un document volumineux, comment conserver une trace. Sans coordination, chaque équipe réinvente ses réponses. Un réseau de référents permet de capitaliser sans créer une structure lourde.",
+          "Le référent peut tenir une permanence légère, participer aux ateliers, maintenir les fiches d'usage et organiser une revue régulière des expérimentations. Il ne valide pas seul les sujets juridiques, techniques ou de sécurité. Il sait au contraire quand escalader vers la DSI, le DPO, les ressources humaines, la direction générale ou le métier concerné. Sa valeur vient de cette capacité d'orientation et de mémoire collective.",
+          "La formation des référents peut être plus approfondie sur la conception d'instructions, les sorties structurées, la recherche documentaire, les mécanismes d'automatisation, l'évaluation et le suivi des incidents. Mais elle doit rester reliée aux besoins de la collectivité. Former des référents à des techniques avancées qu'ils n'utiliseront pas ne crée pas de maturité ; cela crée une spécialisation sans débouché.",
+          "Un réseau efficace peut aussi organiser des démonstrations internes courtes. Un service présente un cas qui fonctionne, la règle qui l'encadre, le temps gagné ou la qualité améliorée, mais aussi les limites observées. Cette diffusion par les pairs rend l'adoption plus crédible qu'une succession de communications descendantes."
+        ]
+      },
+      {
+        id: "programme",
+        kicker: "07 — LE PROGRAMME",
+        heading: "Un parcours en quatre vagues permet d'apprendre sans immobiliser l'organisation.",
+        paragraphs: [
+          "Une première vague de sensibilisation peut donner le socle commun à un large public : fondamentaux, données, vérification, responsabilité et usages autorisés. Elle peut combiner sessions courtes, ressources en ligne et exercices. L'objectif est que chacun reparte avec quelques règles simples et sache à qui poser une question.",
+          "Une deuxième vague sélectionne plusieurs équipes métier. Chaque équipe arrive avec deux ou trois tâches réelles. Les ateliers transforment ces tâches en cas d'usage testables, définissent les contrôles et documentent les premiers résultats. On ne cherche pas à couvrir toute la collectivité : on cherche à créer de bons exemples.",
+          "Une troisième vague concerne les managers et référents. Elle s'appuie sur les enseignements des pilotes : quelles erreurs ont été observées ? quelles données posent problème ? quels usages sont réellement adoptés ? quelles règles doivent être clarifiées ? La formation devient alors un mécanisme de gouvernance alimenté par l'expérience locale.",
+          "La quatrième vague diffuse ce qui a fonctionné. Les fiches d'usage validées, exemples, checklists et règles sont intégrés dans un espace accessible. De nouvelles équipes rejoignent le dispositif en partant de cette base. Le programme peut alors évoluer avec les outils sans perdre son architecture pédagogique."
+        ],
+        steps: [
+          { title: "Vague 1", text: "Socle commun pour comprendre, vérifier et utiliser dans le cadre autorisé." },
+          { title: "Vague 2", text: "Ateliers métier sur des tâches et documents réels." },
+          { title: "Vague 3", text: "Managers et référents : gouvernance, arbitrage, accompagnement." },
+          { title: "Vague 4", text: "Capitalisation, diffusion et nouveaux pilotes." }
+        ]
+      },
+      {
+        id: "mesurer",
+        kicker: "08 — MESURER",
+        heading: "Le taux de présence ne mesure pas l'adoption.",
+        paragraphs: [
+          "Le premier indicateur d'une formation est souvent le nombre de participants. Il est utile administrativement mais insuffisant pour piloter l'adoption. Quelques semaines après une session, il faut regarder ce qui a réellement changé. Les agents utilisent-ils les outils autorisés ? sur quelles tâches ? avec quel niveau de vérification ? quels usages ont été abandonnés ? quelles erreurs reviennent ? quelles équipes demandent un accompagnement supplémentaire ?",
+          "On peut suivre le nombre de cas d'usage documentés, la proportion de participants qui utilisent encore un usage après un mois, le nombre de corrections nécessaires, le temps de reprise humaine, la fréquence des demandes d'aide et la qualité perçue par le métier. Pour un workflow précis, on peut mesurer un avant/après sur le délai de traitement ou le nombre d'étapes. Ces données ne doivent pas être généralisées au-delà du processus observé.",
+          "La formation doit aussi mesurer le discernement. Un agent formé sait-il reconnaître qu'une réponse doit être vérifiée ? sait-il identifier une donnée qu'il ne doit pas transmettre ? sait-il expliquer pourquoi il choisit un outil ? sait-il repérer un cas où l'IA n'apporte rien ? Ces compétences peuvent être évaluées avec des mises en situation plutôt qu'avec un questionnaire de satisfaction.",
+          "Les résultats alimentent la vague suivante. Si les agents utilisent bien la synthèse mais échouent sur la vérification des sources, le programme renforce ce point. Si les managers hésitent sur les règles, on clarifie la gouvernance. Si un cas d'usage n'est jamais réutilisé, il faut comprendre pourquoi avant de former davantage de personnes dessus."
+        ]
+      },
+      {
+        id: "demarrer",
+        kicker: "09 — DÉMARRER",
+        heading: "Un plan de 90 jours suffit pour créer la première boucle d'apprentissage.",
+        paragraphs: [
+          "Les trente premiers jours servent à cadrer : outils autorisés, règles existantes, publics, services pilotes, irritants, documents de référence et responsables. Une courte enquête ou quelques entretiens permettent d'identifier les tâches fréquentes et les attentes. Cette phase évite de concevoir un programme à partir d'exemples génériques.",
+          "Les trente jours suivants lancent le socle commun et les premiers ateliers métier. Chaque atelier produit au moins une fiche d'usage. Les managers reçoivent en parallèle une méthode simple d'arbitrage. Les référents commencent à recueillir les questions et à documenter les cas.",
+          "Les trente derniers jours observent l'usage réel. On organise une revue avec les équipes pilotes, on mesure quelques indicateurs, on ajuste les règles et on décide ce qui mérite d'être diffusé. La direction générale dispose alors d'informations concrètes pour choisir la suite : étendre, approfondir, automatiser certains flux ou arrêter des expérimentations.",
+          "Cette boucle de quatre-vingt-dix jours n'a rien de magique. Sa valeur vient du rythme : apprendre, tester, observer et corriger assez vite pour garder l'attention des équipes, mais avec suffisamment de temps pour voir si les pratiques survivent à l'effet de nouveauté. Le plan de formation devient ainsi une composante d'un programme d'adoption, pas un événement isolé."
+        ],
+        callout: {
+          title: "Le principe à retenir",
+          text: "Former les agents sur leurs vrais cas d'usage, former les managers à encadrer, puis mesurer ce qui est réellement réutilisé."
+        }
+      }
+    ]
   }
 ];
