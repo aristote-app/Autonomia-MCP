@@ -19,6 +19,12 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: Probe cockpit health
+        run: |
+          echo "Production health before deploy:"
+          curl -fsS "https://cockpit.build-autonomia.com/api/health" || true
+          echo
+
       - name: Trigger guarded o2switch self-deploy
         env:
           DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
