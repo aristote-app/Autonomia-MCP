@@ -78,9 +78,13 @@ export default async function AccountDetailPage({ params, searchParams }) {
   const canWriteContacts =
     hasWorkspaceSession && workspaceContext.membership.role !== "viewer";
 
-  const shouldDiscover = query?.discover === "1";
-  const shouldResearch = query?.research === "1";
-  const shouldResolveClient = query?.resolveClient === "1";
+  const shouldPrepare = query?.prepare === "1";
+  const shouldDiscover =
+    query?.discover === "1" || (shouldPrepare && !account.intermediary_risk);
+  const shouldResearch =
+    query?.research === "1" || (shouldPrepare && !account.intermediary_risk);
+  const shouldResolveClient =
+    query?.resolveClient === "1" || (shouldPrepare && account.intermediary_risk);
   const decisionDiscoveryEnabled =
     hasWorkspaceSession &&
     process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
@@ -221,6 +225,29 @@ export default async function AccountDetailPage({ params, searchParams }) {
           <span>{account.heat_label}</span>
         </div>
       </header>
+
+      {hasWorkspaceSession && (
+        <section className="accountPrepareBar">
+          <div>
+            <span>ACCOUNT AGENT</span>
+            <strong>Préparer le plan d'attaque en une passe</strong>
+            <small>
+              {account.intermediary_risk
+                ? "Recherche uniquement des traces possibles du client final ; aucune prospection de l'intermédiaire."
+                : "Contexte public + décideurs candidats + battlecard + messages sourcés. Cache activé pour éviter les appels répétés."}
+            </small>
+          </div>
+          {(account.intermediary_risk ? hiddenClientResolverEnabled : accountResearchEnabled && decisionDiscoveryEnabled) ? (
+            <Link href={`/accounts/${account.slug}?prepare=1#account-research`}>
+              {shouldPrepare ? "Brief préparé · actualiser" : "Préparer ce compte →"}
+            </Link>
+          ) : (
+            <span className="disabledAction">
+              Prêt après activation sécurisée des chercheurs
+            </span>
+          )}
+        </section>
+      )}
 
       {hasWorkspaceSession && (
         <section className="accountWatchBar">

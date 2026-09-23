@@ -1011,3 +1011,13 @@ h3 { margin: 0 0 8px; }
 .integrationSettingsFooter button { min-height:40px; padding:9px 14px; border:1px solid #111; background:#111; color:#fff; font-weight:800; cursor:pointer; }
 .integrationSettingsFooter small { color:#677068; }
 @media (max-width:900px) { .integrationSettingsForm { grid-template-columns:1fr; } .integrationSettingsFooter { grid-column:auto; } }
+
+/* One-click account preparation */
+.accountPrepareBar { display:flex; justify-content:space-between; gap:18px; align-items:center; margin:20px 0 10px; padding:17px 18px; background:#111; color:#fff; }
+.accountPrepareBar > div { display:grid; gap:4px; }
+.accountPrepareBar span:first-child { font-size:9px; font-weight:800; letter-spacing:.12em; color:#c9cfca; }
+.accountPrepareBar strong { font-size:16px; }
+.accountPrepareBar small { max-width:760px; color:#c9cfca; line-height:1.45; }
+.accountPrepareBar > a { flex:0 0 auto; padding:10px 12px; border:1px solid #fff; color:#fff; text-decoration:none; font-size:11px; font-weight:800; }
+.accountPrepareBar .disabledAction { color:#c9cfca; }
+@media (max-width:720px) { .accountPrepareBar { display:grid; } .accountPrepareBar > a { width:fit-content; } }
