@@ -2,6 +2,7 @@ import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
 import QualiopiProof from "@/components/QualiopiProof";
 import AutonomiaScan from "@/components/AutonomiaScan";
+import ExpertProfiles from "@/components/ExpertProfiles";
 
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
@@ -78,6 +79,8 @@ export default function IntentPage({ page }) {
           {(page.capabilities || []).map((item) => <span key={item}>{item}</span>)}
         </div>
       </section>
+
+      {isExpert && <ExpertProfiles pageSlug={page.slug} />}
 
       {page.translations?.length > 0 && (
         <section className="translationSection">
