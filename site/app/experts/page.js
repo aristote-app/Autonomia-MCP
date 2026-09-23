@@ -4,31 +4,21 @@ import { aiRoles } from "@/content/ai-roles";
 export const metadata = {
   title: "Experts IA — Sourcing, staffing et pilotage de projets | Autonomia",
   description:
-    "Autonomia source, qualifie et pilote des experts IA partout en France : AI Project Manager, GenAI, LLM, RAG, Agents IA, Data Science, MLOps, gouvernance et automatisation.",
-  alternates: { canonical: "/experts" },
-  openGraph: {
-    title: "Autonomia Experts — Experts IA partout en France",
-    description:
-      "Sourcing multicanal, qualification, staffing et pilotage de projets IA avec des profils spécialisés.",
-    url: "/experts"
-  }
+    "Autonomia source, qualifie et mobilise des experts IA partout en France : GenAI, LLM, RAG, Agents IA, Data Science, MLOps, gouvernance, produit et automatisation.",
+  alternates: { canonical: "/experts" }
 };
 
-const sourcingSteps = [
-  ["01", "Comprendre la mission", "Nous partons du problème, du contexte, du niveau d’autonomie attendu, des contraintes techniques et du résultat à obtenir."],
-  ["02", "Sourcer largement", "Nous activons plusieurs canaux spécialisés, notre vivier et nos outils de détection pour identifier des profils réellement proches du besoin."],
-  ["03", "Qualifier", "Nous regardons les expériences, les compétences, la capacité d’exécution, les environnements maîtrisés et l’adéquation avec la mission."],
-  ["04", "Présenter peu, mais juste", "L’objectif n’est pas d’envoyer une pile de CV. Nous cherchons à proposer les profils les plus cohérents avec le besoin exprimé."],
-  ["05", "Piloter avec le consultant", "Autonomia reste impliqué dans le cadrage, les objectifs, les livrables, les points de décision et les éventuels besoins complémentaires."]
+const expertStrengths = [
+  ["Expertise IA appliquée", "Nous comprenons les rôles, les architectures, les stacks et les livrables attendus. Le sourcing part de la mission réelle, pas d’un intitulé générique."],
+  ["Sourcing national", "Nous recherchons des profils partout en France et selon le format utile : présentiel, hybride ou remote."],
+  ["Qualification ciblée", "Expériences, autonomie, environnement technique, capacité à produire et adéquation avec le contexte sont examinés avant présentation."],
+  ["Pilotage possible", "Autonomia peut rester impliqué dans le cadrage, les points de décision, les livrables et la coordination avec les équipes internes."]
 ];
 
-const strengths = [
-  ["Expertise IA", "Nous comprenons les rôles, les architectures et les cas d’usage : GenAI, RAG, agents, data, ML, MLOps, automatisation, gouvernance et produit."],
-  ["Sourcing continu", "Le sourcing n’est pas ponctuel. Notre cockpit enrichit en continu le vivier afin d’identifier de nouveaux profils et compétences."],
-  ["Pilotage", "Nous pouvons accompagner la mission au-delà de la mise en relation : cadrage, coordination, points de contrôle, arbitrages et continuité."],
-  ["Couverture nationale", "Nous sourçons et mobilisons des consultants partout en France, en présentiel, hybride ou remote selon le besoin."],
-  ["Complémentarité des rôles", "Un projet IA mobilise rarement un seul métier. Nous pouvons assembler plusieurs compétences lorsque le projet l’exige."],
-  ["Transfert", "Lorsque c’est pertinent, Autonomia Academy peut former les équipes internes en parallèle de la mission pour réduire la dépendance externe."]
+const sourcingSteps = [
+  ["01", "Cadrer", "Transformer le besoin en mission claire : problème, résultat attendu, niveau d’autonomie, stack, contraintes et livrables."],
+  ["02", "Sourcer & qualifier", "Activer notre vivier et plusieurs canaux spécialisés, puis retenir les profils qui correspondent réellement au contexte."],
+  ["03", "Mobiliser & piloter", "Organiser la rencontre, le démarrage et, si nécessaire, le suivi du projet avec le consultant et vos équipes."]
 ];
 
 export default function ExpertsPage() {
@@ -41,12 +31,12 @@ export default function ExpertsPage() {
           <small>FRANCE · NATIONAL</small>
         </div>
         <div className="pillarHeroCopy">
-          <p className="eyebrow">EXPERTS IA · SOURCING · STAFFING · PILOTAGE</p>
-          <h1>Les bonnes compétences IA, au bon moment — et un pilotage qui reste avec vous.</h1>
+          <p className="eyebrow">EXPERTS IA · SOURCING · PILOTAGE</p>
+          <h1>Les compétences IA qu’il faut vraiment à votre projet.</h1>
           <p>
-            Autonomia ne se contente pas de mettre une entreprise en relation avec un consultant.
-            Nous comprenons le besoin, sourçons les profils, qualifions les compétences et pouvons piloter
-            le projet avec l’expert sélectionné jusqu’aux livrables attendus.
+            Autonomia comprend le besoin, source les profils, qualifie les compétences et peut rester aux côtés
+            de l’entreprise pendant l’exécution. L’objectif n’est pas d’envoyer des CV : c’est de mobiliser
+            les bonnes compétences pour le résultat attendu.
           </p>
           <div className="heroActions">
             <Link className="primaryButton" href="/#diagnostic-ia">Décrire mon besoin</Link>
@@ -55,20 +45,19 @@ export default function ExpertsPage() {
         </div>
       </section>
 
-      <section className="pillarStatement">
-        <p className="sectionIndex">01 — CE QUI NOUS DIFFÉRENCIE</p>
+      <section className="pillarStatement pillarStatementCompact">
+        <p className="sectionIndex">01 — AUTONOMIA EXPERTS</p>
         <div>
-          <h2>Nous connaissons l’IA suffisamment pour ne pas sourcer sur un simple intitulé de poste.</h2>
+          <h2>Un vivier n’a de valeur que si l’on sait précisément ce que l’on cherche.</h2>
           <p>
-            Un “GenAI Engineer” peut recouvrir des réalités très différentes. Nous cherchons à comprendre
-            l’architecture, la stack, le niveau d’autonomie, la maturité du produit, les dépendances data,
-            les contraintes de sécurité et ce que la personne devra réellement produire.
+            Un même intitulé peut recouvrir des niveaux et des expertises très différents. Nous relions donc
+            le sourcing au contexte technique, au métier, à la maturité du projet et aux livrables attendus.
           </p>
         </div>
       </section>
 
-      <section className="pillarStrengthGrid">
-        {strengths.map(([title, text], index) => (
+      <section className="pillarStrengthGrid pillarStrengthGridFour">
+        {expertStrengths.map(([title, text], index) => (
           <article key={title}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{title}</h3>
@@ -77,14 +66,14 @@ export default function ExpertsPage() {
         ))}
       </section>
 
-      <section className="pillarProcess">
+      <section className="pillarProcess pillarProcessCompact">
         <div className="pillarSectionIntro">
-          <p className="sectionIndex">02 — COMMENT NOUS SOURÇONS</p>
+          <p className="sectionIndex">02 — DU BESOIN À LA MISSION</p>
           <div>
-            <h2>Du besoin réel au consultant mobilisable.</h2>
+            <h2>Trois étapes. Pas une pile de CV.</h2>
             <p>
-              Notre sourcing est multicanal et national. Les plateformes ne sont qu’un moyen parmi d’autres :
-              le cœur du travail est de traduire une mission en critères de recherche et de qualification utiles.
+              Notre méthode reste simple : comprendre, sélectionner, mobiliser. Lorsque le projet le nécessite,
+              Autonomia peut aussi coordonner plusieurs expertises ou préparer le transfert vers les équipes internes.
             </p>
           </div>
         </div>
@@ -100,42 +89,22 @@ export default function ExpertsPage() {
             </li>
           ))}
         </ol>
-      </section>
 
-      <section className="pillarDark">
-        <div>
-          <p className="sectionIndex">03 — PAS SEULEMENT DU STAFFING</p>
-          <h2>Nous pouvons piloter le projet avec l’expert.</h2>
-        </div>
-        <div className="pillarDarkPoints">
-          <p><strong>Cadrage.</strong> Clarifier le résultat attendu, le périmètre, les contraintes et les critères de succès.</p>
-          <p><strong>Coordination.</strong> Faire le lien entre direction, métier, IT, data et consultant lorsque le projet le nécessite.</p>
-          <p><strong>Livrables.</strong> Définir ce qui doit être produit, validé et transmissible à la fin de la mission.</p>
-          <p><strong>Continuité.</strong> Ajouter une compétence complémentaire si le projet évolue vers RAG, MLOps, gouvernance, produit ou automatisation.</p>
-          <p><strong>Transfert.</strong> Organiser la montée en compétence interne lorsque l’objectif est de rendre les équipes plus autonomes.</p>
-        </div>
-      </section>
-
-      <section className="pillarNational">
-        <p className="sectionIndex">04 — FRANCE ENTIÈRE</p>
-        <div>
-          <h2>Une capacité de sourcing et d’intervention nationale.</h2>
-          <p>
-            Les besoins IA ne se concentrent pas sur une seule ville. Nous pouvons rechercher des consultants
-            partout en France et travailler selon le format le plus adapté : présentiel, hybride ou remote.
-            La localisation devient un critère de matching, pas une limite du dispositif.
-          </p>
+        <div className="pillarFactBar">
+          <span>FRANCE ENTIÈRE</span>
+          <strong>Présentiel · Hybride · Remote</strong>
+          <p>La localisation est un critère de matching, pas une limite du dispositif.</p>
         </div>
       </section>
 
       <section className="pillarDirectory" id="metiers">
         <div className="pillarSectionIntro">
-          <p className="sectionIndex">05 — EXPERTS PAR MÉTIER</p>
+          <p className="sectionIndex">03 — EXPERTS PAR MÉTIER</p>
           <div>
-            <h2>Explorer nos métiers IA.</h2>
+            <h2>Explorer les métiers IA.</h2>
             <p>
-              Chaque fiche détaille missions, responsabilités, livrables, compétences, questions de cadrage,
-              métiers voisins et profils consultants remontés par notre vivier.
+              Chaque fiche détaille missions, livrables, compétences, questions de cadrage, métiers voisins
+              et profils consultants remontés par notre vivier.
             </p>
           </div>
         </div>
@@ -154,13 +123,10 @@ export default function ExpertsPage() {
         </div>
       </section>
 
-      <section className="pillarFinalCta">
+      <section className="pillarFinalCta pillarFinalCtaCompact">
         <div>
-          <p className="eyebrow">VOUS AVEZ UN BESOIN IA ?</p>
+          <p className="eyebrow">BESOIN D’UN EXPERT IA ?</p>
           <h2>Décrivez le problème. Nous traduirons le besoin en compétences.</h2>
-          <p>
-            Vous n’avez pas besoin de connaître le bon intitulé de poste avant de nous contacter.
-          </p>
         </div>
         <Link className="primaryButton" href="/#diagnostic-ia">Faire le diagnostic IA</Link>
       </section>
