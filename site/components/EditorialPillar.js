@@ -49,7 +49,7 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
         <div className="articleEditorialMeta">
           <span>Publié par <Link href="/a-propos">Autonomia</Link></span>
           <span>Mis à jour le 20/09/2026</span>
-          <span>{publishedCount}/10 guides détaillés publiés</span>
+          <span>{publishedCount}/{pillar.topics.length} guides détaillés publiés</span>
           <Link href="/methodologie/politique-editoriale">Méthode éditoriale</Link>
         </div>
       </section>
