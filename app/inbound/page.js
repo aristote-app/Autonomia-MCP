@@ -116,6 +116,44 @@ export default async function InboundPage({ searchParams }) {
               </span>
               <strong>{lead.requested_service}</strong>
               {lead.message && <p>{lead.message}</p>}
+
+              {lead.scan_context?.solution_context && (
+                <div className="inboundSolutionContext">
+                  <span>
+                    AI MATCH · {(lead.scan_context.solution_context.route || "orientation").toUpperCase()}
+                  </span>
+
+                  {lead.scan_context.solution_context.summary && (
+                    <p>{lead.scan_context.solution_context.summary}</p>
+                  )}
+
+                  {(lead.scan_context.solution_context.recommended_roles || []).length > 0 && (
+                    <div>
+                      <small>MÉTIERS RECOMMANDÉS</small>
+                      <div className="inboundSolutionTags">
+                        {lead.scan_context.solution_context.recommended_roles.map((role, index) => (
+                          <b key={(role.slug || role.id || role.label || "role") + index}>
+                            {role.label || role.id || role.slug}
+                          </b>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {(lead.scan_context.solution_context.recommended_training || []).length > 0 && (
+                    <div>
+                      <small>FORMATIONS RECOMMANDÉES</small>
+                      <div className="inboundSolutionTags">
+                        {lead.scan_context.solution_context.recommended_training.map((training, index) => (
+                          <b key={(training.slug || training.id || training.title || "training") + index}>
+                            {training.title || training.id || training.slug}
+                          </b>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="inboundAttribution">
