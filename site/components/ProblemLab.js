@@ -78,8 +78,26 @@ function Meeting({ demo }) {
 function Rag({ demo }) {
   const [query,setQuery]=useState("Quelle règle s’applique à ce cas ?");
   const [run,setRun]=useState(false);
-  return <Shell demo={demo} side={<><textarea rows="3" value={query} onChange={(e)=>{setQuery(e.target.value);setRun(false);}}/><button type="button" onClick={()=>setRun(true)}>Rechercher dans les sources</button></>}>
-    {run ? <div className="problemAnswer"><span>RÉPONSE SOURCÉE</span><h4>{query}</h4><p>La simulation retrouve les passages utiles avant de préparer la réponse. Les zones non couvertes restent signalées.</p><button type="button">[1] Procédure interne · p. 12</button><button type="button">[2] Guide métier · p. 4</button></div> : <div className="problemEmpty">La réponse reste vide tant que la recherche n’est pas lancée.</div>}
+  const [source,setSource]=useState(0);
+  const sources=[
+    {name:"Procédure interne",page:"p. 12",score:94,excerpt:"La validation du responsable est requise avant toute modification du dossier."},
+    {name:"Guide métier",page:"p. 4",score:88,excerpt:"Les pièces manquantes doivent être signalées sans déduire une information absente."},
+    {name:"FAQ équipe",page:"§ 8",score:71,excerpt:"En cas d’ambiguïté, le dossier est transmis à la file de contrôle humain."}
+  ];
+  const current=sources[source];
+  return <Shell demo={demo} side={<><textarea rows="3" value={query} onChange={(e)=>{setQuery(e.target.value);setRun(false);}}/><button type="button" onClick={()=>{setRun(true);setSource(0);}}>Rechercher dans les sources</button></>}>
+    {run ? <div className="problemRagWorkspace">
+      <div className="problemAnswer">
+        <span>RÉPONSE SOURCÉE</span>
+        <h4>{query}</h4>
+        <p>La règle applicable est retrouvée dans le corpus autorisé. La validation du responsable reste requise avant l’action sensible.</p>
+        <div className="problemCoverage"><b>Couverture documentaire</b><span>89 %</span><div><i style={{width:"89%"}}/></div></div>
+      </div>
+      <div className="problemSourceRail">
+        {sources.map((item,index)=><button type="button" className={source===index?"active":""} key={item.name} onClick={()=>setSource(index)}><span>[{index+1}] {item.name}</span><strong>{item.page}</strong><em>{item.score}%</em></button>)}
+      </div>
+      <article className="problemSourcePreview"><span>PASSAGE RETROUVÉ · {current.name} · {current.page}</span><p>{current.excerpt}</p><small>Source fictive pour démonstration · accès et habilitations configurables.</small></article>
+    </div> : <div className="problemEmpty">Posez une question puis lancez la recherche dans le corpus fictif.</div>}
   </Shell>;
 }
 
@@ -116,8 +134,23 @@ function Router({ demo }) {
 
 function Extract({ demo }) {
   const [run,setRun]=useState(false);
+  const [field,setField]=useState("montant");
+  const fields={
+    reference:["RÉFÉRENCE","2026-0842","96 %"],
+    date:["DATE","23/09/2026","98 %"],
+    montant:["MONTANT","2 480 €","94 %"],
+    client:["CLIENT","Société Exemple","91 %"]
+  };
   return <Shell demo={demo} side={<><div className="problemDocument"><b>DOCUMENT_FICTIF.pdf</b><span>3 pages · 1,2 Mo</span></div><button type="button" onClick={()=>setRun(true)}>Extraire et structurer</button></>}>
-    {run ? <div className="problemResultGrid"><article><span>RÉFÉRENCE</span><strong>2026-0842</strong></article><article><span>DATE</span><strong>23/09/2026</strong></article><article><span>MONTANT</span><strong>2 480 €</strong></article><article><span>CONFIANCE</span><strong>94 %</strong></article></div> : <div className="problemEmpty">Le document reste une pièce jointe tant que l’extraction n’est pas lancée.</div>}
+    {run ? <div className="problemExtractWorkspace">
+      <div className="problemDocCanvas">
+        <div className="problemDocPaper"><b>FACTURE</b><i/><i className="short"/><i/><i/><mark className={"mark reference "+(field==="reference"?"active":"")}>REF 2026-0842</mark><mark className={"mark date "+(field==="date"?"active":"")}>23/09/2026</mark><mark className={"mark amount "+(field==="montant"?"active":"")}>2 480 €</mark><mark className={"mark client "+(field==="client"?"active":"")}>Société Exemple</mark></div>
+        <span>PAGE 1 / 3 · ZONES DÉTECTÉES</span>
+      </div>
+      <div className="problemFieldList">
+        {Object.entries(fields).map(([key,value])=><button type="button" key={key} className={field===key?"active":""} onClick={()=>setField(key)}><span>{value[0]}</span><strong>{value[1]}</strong><em>{value[2]}</em></button>)}
+      </div>
+    </div> : <div className="problemEmpty">Le document reste une pièce jointe tant que l’extraction n’est pas lancée.</div>}
   </Shell>;
 }
 
