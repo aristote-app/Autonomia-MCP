@@ -83,6 +83,21 @@ npm run build
 
 mkdir -p .runtime tmp
 printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
+
+TALENT_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-talent.mjs >> /home/dide4169/autonomia-cockpit-app/talent-refresh.log 2>&1'
+if command -v crontab >/dev/null 2>&1; then
+  TMP_CRON="$(mktemp)"
+  {
+    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' || true
+    echo "17 4 * * * $TALENT_CMD"
+  } > "$TMP_CRON"
+  crontab "$TMP_CRON"
+  rm -f "$TMP_CRON"
+  echo "Talent Intelligence cron installed: daily at 04:17 server time."
+else
+  echo "crontab unavailable; Talent Intelligence remains available through post-deploy refresh."
+fi
+
 touch tmp/restart.txt
 
 echo "Autonomia cockpit deployed and Passenger restart requested: $REMOTE_SHA"

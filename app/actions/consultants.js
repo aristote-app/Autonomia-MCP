@@ -62,8 +62,10 @@ export async function discoverConsultantsFromWeb(formData) {
 
   const result = await discoverTalentCandidates({
     query,
-    sources: ["malt", "freelance_com", "linkedin"],
-    countPerSource: 10
+    sources: ["malt", "freelance_com", "linkedin", "collective_work"],
+    countPerSource: 20,
+    maxPages: 2,
+    maxCandidates: 120
   });
 
   if (!result.available) {

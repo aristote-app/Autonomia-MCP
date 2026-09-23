@@ -39,6 +39,17 @@ const freelanceCom = parseTalentSearchResult({
 assert.equal(freelanceCom.source_platform, "freelance_com");
 assert.equal(freelanceCom.display_name, "Alex Smith");
 
+const collective = parseTalentSearchResult({
+  title: "Alice Martin - Consultante IA | Collective.work",
+  url: "https://www.collective.work/profile/alice-martin",
+  description: "Freelance Paris automatisation IA Make n8n 650 € / jour"
+}, "Automatisation IA n8n Make");
+
+assert.equal(collective.source_platform, "collective_work");
+assert.equal(collective.display_name, "Alice Martin");
+assert.equal(collective.tjm, 650);
+assert.equal(collective.skills.includes("n8n"), true);
+
 assert.equal(
   parseTalentSearchResult({
     title: "Mission AI Engineer",
@@ -76,9 +87,18 @@ global.fetch = async (url) => {
       url: "https://fr.linkedin.com/in/john-doe",
       description: "Freelance Python LangGraph RAG Paris remote"
     }];
+  } else if (q.includes("collective.work/profile")) {
+    results = [{
+      title: "Alice Martin - Consultante IA | Collective.work",
+      url: "https://www.collective.work/profile/alice-martin",
+      description: "Freelance Paris automatisation IA Make n8n 650 € / jour"
+    }];
   }
 
-  return new Response(JSON.stringify({ web: { results } }), {
+  return new Response(JSON.stringify({
+    query: { more_results_available: false },
+    web: { results }
+  }), {
     status: 200,
     headers: { "content-type": "application/json" }
   });
@@ -92,9 +112,9 @@ try {
   });
 
   assert.equal(first.available, true);
-  assert.equal(first.searches.length, 3);
-  assert.equal(first.candidates.length, 3);
-  assert.equal(calls.length, 3);
+  assert.equal(first.searches.length, 4);
+  assert.equal(first.candidates.length, 4);
+  assert.equal(calls.length, 4);
 
   const second = await discoverTalentCandidates({
     query: "AI Engineer LangGraph RAG Python",
@@ -102,9 +122,46 @@ try {
     countPerSource: 5
   });
 
-  assert.equal(second.candidates.length, 3);
-  assert.equal(calls.length, 3, "Repeated identical Talent Hunter searches must use Brave cache");
+  assert.equal(second.candidates.length, 4);
+  assert.equal(calls.length, 4, "Repeated identical Talent Hunter searches must use Brave cache");
   assert.equal(second.searches.every((search) => search.cache_hit === true), true);
+
+  clearBraveCacheForTests();
+  calls.length = 0;
+  global.fetch = async (url) => {
+    calls.push(String(url));
+    const parsed = new URL(String(url));
+    const offset = Number(parsed.searchParams.get("offset") || 0);
+    const result = {
+      title: offset === 0
+        ? "Jane Doe, AI Engineer LangGraph RAG - Malt"
+        : "Jane Smith, AI Engineer LangGraph RAG - Malt",
+      url: offset === 0
+        ? "https://www.malt.fr/profile/janedoe"
+        : "https://www.malt.fr/profile/janesmith",
+      description: "Freelance Paris Python LangGraph RAG"
+    };
+    return new Response(JSON.stringify({
+      query: { more_results_available: offset === 0 },
+      web: { results: [result] }
+    }), {
+      status: 200,
+      headers: { "content-type": "application/json" }
+    });
+  };
+
+  const paginated = await discoverTalentCandidates({
+    query: "AI Engineer LangGraph RAG Python",
+    apiKey: "test-key",
+    sources: ["malt"],
+    countPerSource: 20,
+    maxPages: 2
+  });
+
+  assert.equal(paginated.searches.length, 2);
+  assert.equal(paginated.candidates.length, 2);
+  assert.equal(calls.length, 2);
+  assert.equal(new URL(calls[1]).searchParams.get("offset"), "1");
 } finally {
   global.fetch = originalFetch;
   clearBraveCacheForTests();
