@@ -67,6 +67,8 @@ Les Wave 2 et Wave 3 restent indexables et prêtes techniquement, mais elles ser
 - `problem_hub_click` : entrée vers le hub depuis Home / Observatoire / autre surface.
 - `problem_lp_click` : clic vers une LP précise avec `problem_slug`, `problem_cluster`, `source_surface`.
 - `problem_lab_demo_open` : interaction avec une micro-app de la LP.
+- `problem_demo_cta_click` : clic vers la zone de démonstration depuis le hero.
+- `problem_cta_click` : clic vers le formulaire depuis le flux ou le CTA final.
 - `problem_lp_lead_submit` : tentative d’envoi du formulaire.
 - `generate_lead` : lead accepté, événement de conversion principal après consentement analytics.
 - Les UTM, `gclid`, `fbclid` et identifiants de campagne continuent d’être transmis au pipeline lead.

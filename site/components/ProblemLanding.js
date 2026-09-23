@@ -15,7 +15,7 @@ export default function ProblemLanding({ problem }) {
           <h1>{problem.headline}</h1>
           <p>{problem.intro}</p>
           <div className="problemHeroProof"><span>Prototype manipulable</span><span>Intégration à vos outils</span><span>Validation humaine configurable</span></div>
-          <a className="primaryButton" href="#demo">Tester la démo</a>
+          <ProblemLink className="primaryButton" href="#demo" problemSlug={problem.slug} problemCluster={problem.cluster} surface="problem_lp_hero" eventName="problem_demo_cta_click">Tester la démo</ProblemLink>
         </div>
         <aside className="problemLeadAside" id="diagnostic"><ProblemLeadForm problem={problem}/></aside>
       </section>
@@ -51,7 +51,7 @@ export default function ProblemLanding({ problem }) {
           <div className="problemHumanGate">
             <span>POINT DE CONTRÔLE HUMAIN</span>
             <strong>{sales.human}</strong>
-            <a href="#diagnostic">Voir le prototype sur mon flux →</a>
+            <ProblemLink href="#diagnostic" problemSlug={problem.slug} problemCluster={problem.cluster} surface="problem_lp_flow" eventName="problem_cta_click">Voir le prototype sur mon flux →</ProblemLink>
           </div>
         </section>
       )}
@@ -76,7 +76,7 @@ export default function ProblemLanding({ problem }) {
       <section className="problemFinalCta">
         <p className="eyebrow">PARTIR DU FLUX RÉEL</p>
         <h2>Montrez-nous où le temps se perd. Nous vous montrons ce qui peut devenir un outil.</h2>
-        <a className="primaryButton" href="#diagnostic">{problem.cta}</a>
+        <ProblemLink className="primaryButton" href="#diagnostic" problemSlug={problem.slug} problemCluster={problem.cluster} surface="problem_lp_footer_cta" eventName="problem_cta_click">{problem.cta}</ProblemLink>
         <ProblemLink href="/solutions-ia" surface="problem_lp_footer">Voir les autres problèmes traités</ProblemLink>
       </section>
     </main>
