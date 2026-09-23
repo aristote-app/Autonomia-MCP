@@ -1,6 +1,7 @@
 
 import assert from "node:assert/strict";
 import { buildAccountOutreachPlan } from "../lib/intelligence/outreach.js";
+import { buildAccountBattlecard } from "../lib/intelligence/battlecard.js";
 import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
 import {
   enrichKasprLinkedInProfile,
@@ -21,6 +22,23 @@ const plan = buildAccountOutreachPlan(account);
 assert.equal(plan.sequence.length, 4);
 assert.ok(plan.sequence[0].content.includes("Acme"));
 assert.ok(plan.sequence[1].content.includes("Déploiement Copilot"));
+
+const battlecard = buildAccountBattlecard({
+  name: "Acme",
+  recommended_offer: "Prestation / automatisation IA",
+  primary_decision_role: { label: "Head of AI / Data" },
+  playbook: { trigger: "Déploiement Copilot" },
+  timeline: [{
+    title: "Déploiement Copilot",
+    source_id: "linkedin",
+    source_url: "https://example.test/acme"
+  }]
+});
+
+assert.equal(battlecard.kind, "delivery");
+assert.equal(battlecard.target_role, "Head of AI / Data");
+assert.equal(battlecard.questions.length, 5);
+assert.ok(battlecard.evidence[0].source_url);
 
 const learning = buildSalesLearningSnapshot([
   {
