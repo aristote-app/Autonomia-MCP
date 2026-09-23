@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
+import SolutionFinder from "@/components/SolutionFinder";
 import AutonomiaMark from "@/components/AutonomiaMark";
 import { academyTrainings } from "@/content/academy-trainings";
 import { problemSolutions } from "@/content/problem-solutions";
@@ -35,7 +36,7 @@ const expertRoles = [
 export default function Home() {
   return (
     <main>
-      <section className="homeHero homeHeroClean" id="top">
+      <section className="homeHero homeHeroClean homeHeroDiagnostic" id="top">
         <div className="heroCopy">
           <p className="eyebrow">AUTONOMIA — AI EXECUTION PARTNER</p>
           <h1>
@@ -48,34 +49,14 @@ export default function Home() {
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/#diagnostic-ia">Faire le diagnostic IA</Link>
-            <Link className="secondaryButton" href="/experts">Voir les experts IA</Link>
+            <Link className="primaryButton" href="/experts">Voir les experts IA</Link>
+            <Link className="secondaryButton" href="/academy">Voir les formations IA</Link>
           </div>
         </div>
 
-        <div className="executionGrid homeExecutionSimple" aria-label="Méthode Autonomia">
-          <div className="gridHeader">
-            <span>DU BESOIN À L’AUTONOMIE</span>
-            <span>01—03</span>
-          </div>
-          <div className="gridFlow">
-            <div>
-              <small>01</small>
-              <strong>COMPRENDRE</strong>
-              <span>Le problème, le processus, le résultat attendu.</span>
-            </div>
-            <div>
-              <small>02</small>
-              <strong>EXÉCUTER</strong>
-              <span>Experts, automatisations, assistants, agents, solutions IA.</span>
-            </div>
-            <div>
-              <small>03</small>
-              <strong>TRANSFÉRER</strong>
-              <span>Former les équipes pour rendre la capacité durable.</span>
-            </div>
-          </div>
-        </div>
+        <aside className="heroDiagnostic" aria-label="Diagnostic IA Autonomia">
+          <SolutionFinder />
+        </aside>
       </section>
 
       <section className="audienceRail" aria-label="Publics Autonomia">
@@ -156,10 +137,10 @@ export default function Home() {
       </section>
 
       <section className="homeDiagnosticIntro" id="diagnostic-ia">
-        <p className="sectionIndex">04 — UN SEUL POINT D’ENTRÉE</p>
+        <p className="sectionIndex">04 — FICHE BESOIN</p>
         <div>
-          <p className="auditKicker">VOUS NE SAVEZ PAS ENCORE QUOI DEMANDER ?</p>
-          <h2>Faites le diagnostic IA Autonomia.</h2>
+          <p className="auditKicker">VOUS VOULEZ NOUS TRANSMETTRE PLUS DE CONTEXTE ?</p>
+          <h2>Structurez votre besoin avant l’échange.</h2>
           <p>
             En trois volets, vous nous indiquez où se situe le besoin, ce qui vous ralentit et le résultat recherché.
             Vous obtenez une fiche besoin structurée avant de nous l’envoyer.
