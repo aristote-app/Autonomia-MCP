@@ -4,8 +4,30 @@ import { useMemo, useState } from "react";
 import { trackEvent } from "@/lib/clientTracking";
 
 function Shell({ demo, children, side }) {
+  function trackClick(event) {
+    const button=event.target.closest?.("button");
+    if (!button) return;
+    trackEvent("problem_lab_interaction",{
+      problem_slug:demo.problemSlug,
+      problem_cluster:demo.problemCluster,
+      demo_name:demo.title,
+      action:(button.textContent || "button").trim().replace(/\s+/g," ").slice(0,90)
+    });
+  }
+
+  function trackChange(event) {
+    const target=event.target;
+    if (!target || (target.type !== "checkbox" && target.tagName !== "SELECT")) return;
+    trackEvent("problem_lab_control_change",{
+      problem_slug:demo.problemSlug,
+      problem_cluster:demo.problemCluster,
+      demo_name:demo.title,
+      control:target.name || target.type || target.tagName
+    });
+  }
+
   return (
-    <div className="problemWorkspace">
+    <div className="problemWorkspace" onClickCapture={trackClick} onChangeCapture={trackChange}>
       <aside className="problemControls">
         <p className="problemLabel">À MANIPULER</p>
         <h4>{demo.title}</h4>
@@ -22,13 +44,34 @@ function Shell({ demo, children, side }) {
 
 function Meeting({ demo }) {
   const [run,setRun]=useState(false);
-  return <Shell demo={demo} side={<button type="button" onClick={()=>setRun(true)}>Extraire décisions et actions</button>}>
+  const [view,setView]=useState("Actions");
+  const [followup,setFollowup]=useState(false);
+  return <Shell demo={demo} side={<>
+    <div className="problemToggle">
+      {["Actions","Direction"].map((item)=><button type="button" key={item} className={view===item?"active":""} onClick={()=>{setView(item);setFollowup(false);}}>{item}</button>)}
+    </div>
+    <button type="button" onClick={()=>{setRun(true);setFollowup(false);}}>Extraire décisions et actions</button>
+  </>}>
     <div className="problemTranscript">
       <p><b>01</b><span>On valide le pilote pour l’équipe support.</span></p>
       <p><b>02</b><span>Camille reprend le cadrage avant jeudi.</span></p>
       <p><b>03</b><span>Le budget doit encore être confirmé.</span></p>
     </div>
-    {run ? <div className="problemResultGrid"><article><span>DÉCISION</span><strong>Pilote validé</strong></article><article><span>ACTION</span><strong>Camille · jeudi</strong></article><article><span>À ARBITRER</span><strong>Budget</strong></article></div> : <div className="problemEmpty">Lancez l’extraction pour structurer le verbatim.</div>}
+    {run ? <>
+      {view==="Actions" ? <div className="problemActionBoard">
+        <article><span>DÉCISION</span><strong>Pilote support validé</strong><small>Preuve · ligne 01</small></article>
+        <article><span>ACTION</span><strong>Reprendre le cadrage</strong><small>Camille · jeudi · ligne 02</small></article>
+        <article className="warning"><span>À ARBITRER</span><strong>Budget non confirmé</strong><small>Validation requise · ligne 03</small></article>
+      </div> : <div className="problemExecutiveBrief">
+        <span>SYNTHÈSE DIRECTION</span>
+        <h4>1 décision prise · 1 action assignée · 1 point encore ouvert</h4>
+        <p>Le pilote support peut avancer. Le cadrage est repris par Camille avant jeudi. Le budget reste à confirmer avant lancement.</p>
+      </div>}
+      <div className="problemMeetingFooter">
+        <button type="button" onClick={()=>setFollowup(true)}>Préparer le suivi</button>
+        {followup&&<div><span>PRÊT À RELIRE</span><strong>E-mail + tâche projet + mise à jour CRM préparés</strong><small>Aucun envoi automatique dans cette démonstration.</small></div>}
+      </div>
+    </> : <div className="problemEmpty">Lancez l’extraction pour transformer le verbatim en éléments actionnables.</div>}
   </Shell>;
 }
 
@@ -177,7 +220,7 @@ export default function ProblemLab({ problem }) {
   const [active,setActive]=useState(0);
   const demo=problem.demos[active];
   const Engine=engines[demo[0]] || Dashboard;
-  const normalized={type:demo[0],title:demo[1],metric:demo[2],caption:demo[3]};
+  const normalized={type:demo[0],title:demo[1],metric:demo[2],caption:demo[3],problemSlug:problem.slug,problemCluster:problem.cluster};
 
   function open(index) {
     setActive(index);
