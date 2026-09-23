@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { aiRoles, getAiRole, getAiRoleStaticParams } from "@/content/ai-roles";
+import ConsultantLivePanel from "@/components/ConsultantLivePanel";
 
 export function generateStaticParams() {
   return getAiRoleStaticParams();
@@ -123,6 +124,8 @@ export default async function AiRolePage({ params }) {
         <a href="#competences">Compétences</a>
         <a href="#faq">FAQ</a>
       </nav>
+
+      <ConsultantLivePanel roleSlug={role.slug} roleTitle={role.title} />
 
       <article className="roleArticle">
         <section className="roleSectionLong" id="definition">
