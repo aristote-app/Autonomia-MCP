@@ -209,6 +209,21 @@ export default function HomeUseCaseLab() {
     });
   }
 
+  function selectUseCase(item) {
+    const detail = {
+      id: item.id,
+      title: item.title,
+      pain: item.pain,
+      symptoms: (answers[item.id] || []).map((index) => item.checks[index]).filter(Boolean)
+    };
+
+    try {
+      window.sessionStorage.setItem("autonomia_selected_usecase", JSON.stringify(detail));
+    } catch {}
+
+    window.dispatchEvent(new CustomEvent("autonomia-usecase-selected", { detail }));
+  }
+
   return (
     <section className="useCaseLab" id="cas-usage-test">
       <div className="useCaseLabIntro">
@@ -278,8 +293,8 @@ export default function HomeUseCaseLab() {
             </div>
           </div>
 
-          <a className="useCaseAuditLink" href="#audit-ia">
-            Inclure ce cas dans mon audit offert <span>↓</span>
+          <a className="useCaseAuditLink" href="#fiche-besoin" onClick={() => selectUseCase(active)}>
+            C’est exactement mon problème — préparer ma fiche <span>↓</span>
           </a>
         </div>
       </div>
