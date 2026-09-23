@@ -14008,7 +14008,8 @@ body:has(.territoryCampaignPage) .desktopNav {
     align-self: start;
   }
 }
-\n/* AI Match v2 — direct brief handoff + live-catalog result cards */
+
+/* AI Match v2 — direct brief handoff + live-catalog result cards */
 #solution-finder {
   scroll-margin-top: 92px;
 }
