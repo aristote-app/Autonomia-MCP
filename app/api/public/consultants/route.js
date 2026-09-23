@@ -89,6 +89,23 @@ function extractInitials(displayName) {
   return (first + last).toUpperCase().slice(0, 2) || "IA";
 }
 
+function resolveRawTjm(row) {
+  const candidates = [
+    row.tjm,
+    row.metadata?.tjm,
+    row.metadata?.daily_rate,
+    row.metadata?.day_rate,
+    row.metadata?.rate,
+    row.metadata?.pricing?.day_rate
+  ];
+
+  for (const value of candidates) {
+    const amount = Number(value);
+    if (Number.isFinite(amount) && amount > 0) return amount;
+  }
+  return null;
+}
+
 function formatAvailability(row) {
   const today = new Date().toISOString().slice(0, 10);
   const available = row.available_from ? String(row.available_from).slice(0, 10) : null;
@@ -131,7 +148,7 @@ function scoreConsultant(row, role) {
   }
   score += Math.min(Number(row.metadata?.relevance_score || 0) / 10, 10);
   if (row.status === "active") score += 25;
-  if (row.tjm != null) score += 6;
+  if (resolveRawTjm(row) != null) score += 28;
   if (row.available_from) score += 4;
   return score;
 }
@@ -158,8 +175,8 @@ function publicProfile(row) {
     bullets.push("Compétences clés : " + skills.slice(0, 5).join(" · "));
   }
 
-  const rawTjm = row.tjm == null ? null : Number(row.tjm);
-  const publicTjm = Number.isFinite(rawTjm) ? Math.round(rawTjm * 1.2) : null;
+  const rawTjm = resolveRawTjm(row);
+  const publicTjm = rawTjm == null ? null : Math.round(rawTjm * 1.2);
 
   return {
     id: row.id,
@@ -199,7 +216,7 @@ export async function GET(request) {
 
     const ranked = (data || [])
       .map((row) => ({ row, score: scoreConsultant(row, role) }))
-      .filter((item) => item.score > 0)
+      .filter((item) => item.score >= 40)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit)
       .map((item) => publicProfile(item.row));
