@@ -1,3 +1,4 @@
+import MiniModuleLab from "@/components/MiniModuleLab";
 import ObservatoryLeadForm from "@/components/ObservatoryLeadForm";
 
 export default function ObservatoryLanding({ topic }) {
@@ -9,59 +10,47 @@ export default function ObservatoryLanding({ topic }) {
           <h1>{topic.headline}</h1>
           <p>{topic.intro}</p>
           <div className="obsPromiseRow">
-            <span>6 transformations concrètes</span>
-            <span>Contrôle humain explicite</span>
-            <span>Cas d’usage cadrables rapidement</span>
+            <span>6 mini-outils à tester</span>
+            <span>Données fictives</span>
+            <span>Validation humaine conservée</span>
           </div>
+          <a className="primaryButton" href="#mini-modules">Tester les mini-modules</a>
         </div>
-        <aside className="obsLeadSticky">
+
+        <aside className="obsLeadSticky" id="diagnostic">
           <ObservatoryLeadForm topic={topic} compact />
         </aside>
       </section>
 
-      <section className="obsTransformations">
-        <p className="sectionIndex">01 — CE QUE L’ON PEUT TRANSFORMER</p>
-        <div className="obsTransformationGrid">
-          {topic.modules.map(([title, today, transform, result], index) => (
-            <article key={title}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h2>{title}</h2>
-              <div>
-                <p><b>Aujourd’hui</b>{today}</p>
-                <p><b>Avec Autonomia</b>{transform}</p>
-                <p><b>Résultat visé</b>{result}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+      <MiniModuleLab topic={topic} />
 
-      <section className="obsLandingBridge">
-        <div>
-          <p className="sectionIndex">02 — DE A À B</p>
-          <h2>On ne remplace pas l’équipe. On enlève ce qui l’use.</h2>
-        </div>
-        <div className="obsAB">
+      <section className="obsBuildBlock">
+        <p className="sectionIndex">02 — CE QU’AUTONOMIA PEUT CONSTRUIRE</p>
+        <div className="obsBuildGrid">
           <article>
-            <span>A</span>
-            <strong>Avant</strong>
-            <p>Informations dispersées, doubles saisies, contrôles manuels, relances et tâches qui s’accumulent.</p>
+            <span>01</span>
+            <strong>Un workflow</strong>
+            <p>Pour faire circuler une demande, une validation, un contrôle ou une relance entre vos outils.</p>
           </article>
           <article>
-            <span>B</span>
-            <strong>Après</strong>
-            <p>Préparation automatisée, exceptions visibles, validation humaine et temps rendu aux tâches à valeur.</p>
+            <span>02</span>
+            <strong>Un assistant métier</strong>
+            <p>Pour rechercher, préparer, synthétiser ou répondre à partir de vos sources et règles validées.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>Un mini-applicatif</strong>
+            <p>Pour donner à l’équipe une interface dédiée plutôt qu’une suite de prompts ou de copier-coller.</p>
           </article>
         </div>
-      </section>
 
-      <section className="obsLandingCta">
-        <div>
-          <p className="eyebrow">VOTRE CAS EST DIFFÉRENT ?</p>
-          <h2>Décrivez-le en langage naturel.</h2>
-          <p>Nous pouvons traduire votre irritant en cas d’usage, workflow ou mini-applicatif testable.</p>
+        <div className="obsBuildCta">
+          <div>
+            <h2>Votre cas ne ressemble pas exactement aux démos ?</h2>
+            <p>Décrivez le travail réel. Le diagnostic sert à traduire votre irritant en premier prototype testable.</p>
+          </div>
+          <a className="primaryButton" href="#diagnostic">Décrire mon besoin</a>
         </div>
-        <ObservatoryLeadForm topic={topic} />
       </section>
     </main>
   );
