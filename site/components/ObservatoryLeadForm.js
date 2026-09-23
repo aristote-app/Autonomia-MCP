@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
 
@@ -8,6 +8,8 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
   const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
+  const [labContext, setLabContext] = useState(null);
+  const formStarted = useRef(false);
 
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
 
@@ -15,15 +17,30 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
     function prefill(event) {
       const need = event.detail?.need;
       if (!need) return;
+      const moduleName = event.detail?.moduleName || null;
+      const moduleIndex = event.detail?.moduleIndex || null;
+      setLabContext({ moduleName, moduleIndex });
       setData((current) => current.need ? current : { ...current, need });
       trackEvent("observatory_lead_prefill", {
         landing_page_topic: topic.slug,
-        source_surface: "autonomia_lab"
+        source_surface: "autonomia_lab",
+        module_name: moduleName,
+        module_index: moduleIndex
       });
     }
     window.addEventListener("autonomia:prefill-observatory-lead", prefill);
     return () => window.removeEventListener("autonomia:prefill-observatory-lead", prefill);
   }, [topic.slug]);
+
+  function markFormStart() {
+    if (formStarted.current) return;
+    formStarted.current = true;
+    trackEvent("observatory_form_start", {
+      landing_page_topic: topic.slug,
+      module_name: labContext?.moduleName || null,
+      module_index: labContext?.moduleIndex || null
+    });
+  }
 
   async function submit(event) {
     event.preventDefault();
@@ -55,6 +72,9 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         "Besoin exprimé : " + (data.need || "À préciser")
       ].join("\n"),
       form_id: "observatoire-landing-" + topic.slug,
+      landing_page_topic: topic.slug,
+      lab_module_name: labContext?.moduleName || null,
+      lab_module_index: labContext?.moduleIndex || null,
       ...getClientAttribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
@@ -91,7 +111,7 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
   }
 
   return (
-    <form className={compact ? "obsLeadForm compact" : "obsLeadForm"} onSubmit={submit}>
+    <form className={compact ? "obsLeadForm compact" : "obsLeadForm"} onSubmit={submit} onFocusCapture={markFormStart}>
       <p className="eyebrow">PARLONS DE VOTRE CAS</p>
       <h2>Quel temps voulez-vous rendre à vos équipes ?</h2>
 
