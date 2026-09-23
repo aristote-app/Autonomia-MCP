@@ -93,6 +93,7 @@ const revenueActions = buildRevenueActions({
 });
 
 assert.equal(revenueActions[0].kind, "verify_contact");
+assert.equal(revenueActions[0].channel, "LinkedIn");
 assert.ok(revenueActions.some((item) => item.kind === "find_contact" && item.account_key === "acme"));
 
 const originalFetch = globalThis.fetch;
