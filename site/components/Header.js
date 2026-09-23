@@ -24,19 +24,19 @@ export default function Header() {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerScanLink" href="/#scan">
+          <Link className="headerScanLink" href="/#solution">
             <span className="headerPulse" aria-hidden="true" />
-            Scan IA
+            Trouver ma solution
           </Link>
-          <Link className="headerCta" href="/#scan">
-            <span>Lancer le Scan</span>
+          <Link className="headerCta" href="/#solution">
+            <span>Trouver ma solution</span>
             <b aria-hidden="true">↗</b>
           </Link>
         </div>
       </header>
 
       <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/#scan">Lancer le Scan</Link>
+        <Link href="/#solution">Trouver ma solution</Link>
         <Link href="/#contact">Parler à Autonomia</Link>
       </nav>
     </>
