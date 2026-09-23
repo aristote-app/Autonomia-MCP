@@ -3,7 +3,7 @@ import IntentPage from "@/components/IntentPage";
 import { getPage, getStaticSlugs } from "@/lib/pages";
 
 export function generateStaticParams() {
-  return getStaticSlugs();
+  return getStaticSlugs().filter(({ slug }) => !["experts", "academy"].includes(slug));
 }
 
 export async function generateMetadata({ params }) {
