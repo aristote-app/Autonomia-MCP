@@ -63,19 +63,33 @@ jobs:
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
           TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          HTTP_CODE="$(curl -sS \
-            -o /tmp/autonomia-self-deploy.json \
-            -w "%{http_code}" \
-            -X POST "$DEPLOY_URL" \
-            -H "Authorization: Bearer $OIDC_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data "{\"sha\":\"$TARGET_SHA\"}")"
+          HTTP_CODE=""
+          for attempt in $(seq 1 6); do
+            HTTP_CODE="$(curl -sS \
+              -o /tmp/autonomia-self-deploy.json \
+              -w "%{http_code}" \
+              -X POST "$DEPLOY_URL" \
+              -H "Authorization: Bearer $OIDC_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "{\"sha\":\"$TARGET_SHA\"}")"
+
+            if [ "$HTTP_CODE" = "202" ]; then
+              break
+            fi
+
+            echo "o2switch deploy trigger returned HTTP $HTTP_CODE (attempt $attempt/6)."
+            if [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ]; then
+              sleep 8
+              continue
+            fi
+            break
+          done
 
           cat /tmp/autonomia-self-deploy.json
           echo
 
           if [ "$HTTP_CODE" != "202" ]; then
-            echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE."
+            echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE after retries."
             exit 1
           fi
 
@@ -129,19 +143,33 @@ jobs:
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
           RETRY_TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
 
-          HTTP_CODE="$(curl -sS \
-            -o /tmp/autonomia-self-deploy-retry.json \
-            -w "%{http_code}" \
-            -X POST "$DEPLOY_URL" \
-            -H "Authorization: Bearer $RETRY_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data "{\"sha\":\"$TARGET_SHA\"}")"
+          HTTP_CODE=""
+          for attempt in $(seq 1 6); do
+            HTTP_CODE="$(curl -sS \
+              -o /tmp/autonomia-self-deploy-retry.json \
+              -w "%{http_code}" \
+              -X POST "$DEPLOY_URL" \
+              -H "Authorization: Bearer $RETRY_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "{\"sha\":\"$TARGET_SHA\"}")"
+
+            if [ "$HTTP_CODE" = "202" ]; then
+              break
+            fi
+
+            echo "o2switch retry trigger returned HTTP $HTTP_CODE (attempt $attempt/6)."
+            if [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ]; then
+              sleep 8
+              continue
+            fi
+            break
+          done
 
           cat /tmp/autonomia-self-deploy-retry.json
           echo
 
           if [ "$HTTP_CODE" != "202" ]; then
-            echo "::error::Retry self-deploy endpoint returned HTTP $HTTP_CODE."
+            echo "::error::Retry self-deploy endpoint returned HTTP $HTTP_CODE after retries."
             exit 1
           fi
 
@@ -162,18 +190,28 @@ jobs:
           BOOTSTRAP_URL: https://cockpit.build-autonomia.com/api/internal/talent-bootstrap
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
         run: |
-          HTTP_CODE="$(curl -sS \
-            -o /tmp/autonomia-talent-bootstrap.json \
-            -w "%{http_code}" \
-            -X POST "$BOOTSTRAP_URL" \
-            -H "Authorization: Bearer $OIDC_TOKEN")"
+          HTTP_CODE=""
+          for attempt in $(seq 1 6); do
+            HTTP_CODE="$(curl -sS \
+              -o /tmp/autonomia-talent-bootstrap.json \
+              -w "%{http_code}" \
+              -X POST "$BOOTSTRAP_URL" \
+              -H "Authorization: Bearer $OIDC_TOKEN")"
 
-          if [ "$HTTP_CODE" = "200" ]; then
-            cat /tmp/autonomia-talent-bootstrap.json
-            echo
-            echo "Talent Hunter bootstrap completed or was already seeded."
-            exit 0
-          fi
+            if [ "$HTTP_CODE" = "200" ]; then
+              cat /tmp/autonomia-talent-bootstrap.json
+              echo
+              echo "Talent Hunter bootstrap completed or was already seeded."
+              exit 0
+            fi
 
-          echo "::warning::Talent Hunter bootstrap returned HTTP $HTTP_CODE after a verified deployment."
+            echo "Talent bootstrap returned HTTP $HTTP_CODE (attempt $attempt/6)."
+            if [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ]; then
+              sleep 8
+              continue
+            fi
+            break
+          done
+
+          echo "::warning::Talent Hunter bootstrap returned HTTP $HTTP_CODE after retries."
           exit 0
