@@ -25,7 +25,8 @@ import {
 } from "../lib/intelligence/outreachGuard.js";
 import {
   inferOutreachTrack,
-  rankWaalaxyCampaigns
+  rankWaalaxyCampaigns,
+  rankWaalaxyLists
 } from "../lib/intelligence/campaignRouter.js";
 
 const account = {
@@ -299,6 +300,18 @@ const routedCampaigns = rankWaalaxyCampaigns({
 });
 assert.equal(routedCampaigns.recommended?._id, "c1");
 assert.ok(routedCampaigns.recommended.autonomia_score >= 3);
+
+const routedLists = rankWaalaxyLists({
+  account: {
+    recommended_offer: "Staffing / freelance IA",
+    primary_decision_role: { label: "Head of AI / Data" }
+  },
+  lists: [
+    { _id: "l1", name: "Autonomia Staffing IA" },
+    { _id: "l2", name: "Prospection générale" }
+  ]
+});
+assert.equal(routedLists.recommended?._id, "l1");
 
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {
