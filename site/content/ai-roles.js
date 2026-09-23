@@ -182,7 +182,7 @@ export const aiRoles = [
     boundaries: "Le RAG Engineer se distingue du LLM Engineer par son focus sur la chaîne de connaissance et de recherche. Il travaille souvent avec des Data Engineers pour l’ingestion à grande échelle, des LLM Engineers pour la génération et l’évaluation, et des MLOps/LLMOps Engineers pour le run. Il est particulièrement utile lorsque les utilisateurs se plaignent de réponses non sourcées, de documents non retrouvés, de connaissances obsolètes ou de permissions difficiles à gérer.",
     questions: ["Quelles sources sont réellement autoritatives ?", "Qui gère les versions ?", "Quels droits d’accès existent ?", "Quel niveau de citation est requis ?", "Quelle fraîcheur faut-il garantir ?", "Le corpus contient-il tableaux, scans ou images ?", "Quelle question doit produire un no-answer ?", "Comment mesurer le recall ?", "Quelle latence est acceptable ?", "Quelles suppressions doivent être propagées à l’index ?"],
     sources: [
-      ["Indeed — RAG Engineer", "https://fr.inde.com/q-rag-engineer-emplois.html"],
+      ["Indeed — RAG Engineer", "https://fr.indeed.com/q-rag-engineer-emplois.html"],
       ["France Travail — GenAI avancée, RAG et GraphRAG", "https://candidat.francetravail.fr/offres/recherche/detail/213XFZN"]
     ],
     faq: [
