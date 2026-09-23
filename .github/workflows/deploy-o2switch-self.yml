@@ -185,3 +185,37 @@ jobs:
 
           echo "::warning::Talent Hunter bootstrap returned HTTP $HTTP_CODE after a verified deployment."
           exit 0
+
+
+      - name: Refresh GitHub OIDC identity for SEO GEO diagnostic
+        if: steps.probe.outputs.ready == 'true'
+        id: seo_geo_oidc
+        env:
+          AUDIENCE: autonomia-o2switch
+        run: |
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GitHub OIDC token is empty."
+            exit 1
+          fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Verify cockpit SEO GEO connection
+        if: steps.probe.outputs.ready == 'true'
+        env:
+          SEO_GEO_URL: https://cockpit.build-autonomia.com/api/internal/seo-geo-refresh
+          OIDC_TOKEN: ${{ steps.seo_geo_oidc.outputs.token }}
+        run: |
+          STATUS="$(curl -fsS \
+            -H "Authorization: Bearer $OIDC_TOKEN" \
+            "$SEO_GEO_URL")"
+          printf '%s\n' "$STATUS"
+
+          OK="$(printf '%s' "$STATUS" | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())')"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Cockpit SEO/GEO connection is not healthy."
+            exit 1
+          fi
