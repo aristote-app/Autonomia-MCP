@@ -158,11 +158,13 @@ fi
 
 write_debug "build-complete" "validating static assets"
 
-if ! find .next/static -type f \( -name '*.css' -o -name '*.js' \) -size +0c | grep -q .; then
+STATIC_ASSET_SAMPLE="$(find .next/static -type f \( -name '*.css' -o -name '*.js' \) -size +0c -print -quit)"
+if [ -z "$STATIC_ASSET_SAMPLE" ]; then
   echo "Refusing deploy: Next static assets are missing after build." >&2
   write_debug "failed" "Next static assets missing after build"
   exit 1
 fi
+echo "Validated Next static asset: $STATIC_ASSET_SAMPLE"
 
 mkdir -p .runtime tmp
 printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
