@@ -270,10 +270,63 @@ function Compare({ demo }) {
 }
 
 function Builder({ demo }) {
-  const [channel,setChannel]=useState("E-mail");
+  const presets={
+    "reponse-appel-offres-ia":{
+      channels:["Mémoire","Matrice","E-mail"],
+      title:"Trame préparée depuis les exigences détectées",
+      body:"La structure reprend les exigences couvertes et laisse visibles les preuves manquantes. Aucune référence client ni capacité absente de la base validée n’est ajoutée.",
+      blocks:[["EXIGENCE","Méthodologie d’exécution"],["PREUVE","Contenu validé retrouvé"],["À COMPLÉTER","Référence projet requise"]]
+    },
+    "generer-decliner-contenus-marketing-ia":{
+      channels:["LinkedIn","E-mail","Landing"],
+      title:"Déclinaison prête pour contrôle de marque",
+      body:"Le message est adapté au format choisi tout en conservant la promesse source. Les claims sensibles restent signalés avant publication.",
+      blocks:[["SOURCE","Brief campagne"],["TON","Premium B2B"],["CONTRÔLE","1 claim à relire"]]
+    },
+    "synthese-comex-ia":{
+      channels:["Note COMEX","E-mail","Slide"],
+      title:"Synthèse exécutive prête à arbitrer",
+      body:"Les faits observés, décisions attendues et questions ouvertes sont séparés. Aucune causalité non démontrée n’est présentée comme un fait.",
+      blocks:[["FAIT","Écart KPI détecté"],["DÉCISION","Arbitrage attendu"],["QUESTION","Cause à investiguer"]]
+    },
+    "assistant-service-client-ia":{
+      channels:["E-mail","Ticket","CRM"],
+      title:"Réponse préparée depuis la procédure applicable",
+      body:"Le brouillon reprend le contexte client et la source documentaire autorisée. Le cas reste soumis à l’agent avant envoi.",
+      blocks:[["MOTIF","Demande qualifiée"],["SOURCE","Procédure SAV"],["ESCALADE","Non requise"]]
+    },
+    default:{
+      channels:["E-mail","CRM","Note"],
+      title:"Sortie préparée à partir des éléments validés",
+      body:"Le contenu est contextualisé, les informations sensibles restent à relire et aucune information absente des sources n’est inventée.",
+      blocks:[["SOURCE","Éléments validés"],["STATUT","Prêt à relire"],["GARDE-FOU","Validation humaine"]]
+    }
+  };
+  const preset=presets[demo.problemSlug] || (demo.problemCluster==="Marketing"?presets["generer-decliner-contenus-marketing-ia"]:demo.problemCluster==="Support"?presets["assistant-service-client-ia"]:presets.default);
+  const [channel,setChannel]=useState(preset.channels[0]);
   const [generated,setGenerated]=useState(false);
-  return <Shell demo={demo} side={<><div className="problemToggle">{["E-mail","CRM","Note"].map((x)=><button type="button" key={x} className={channel===x?"active":""} onClick={()=>{setChannel(x);setGenerated(false);}}>{x}</button>)}</div><button type="button" onClick={()=>setGenerated(true)}>Préparer la sortie</button></>}>
-    {generated ? <div className="problemDraft"><span>{channel.toUpperCase()} · BROUILLON</span><h4>Sortie préparée à partir des éléments validés</h4><p>Le contenu est contextualisé, les informations sensibles restent à relire et aucune référence absente n’est inventée.</p><div><b>✓ source reliée</b><b>✓ validation requise</b></div></div> : <div className="problemEmpty">Choisissez le canal puis générez une sortie de démonstration.</div>}
+  const [checked,setChecked]=useState(false);
+
+  return <Shell demo={demo} side={<>
+    <p className="problemHint">Choisissez la destination : la structure et les contrôles suivent le canal.</p>
+    <div className="problemToggle">{preset.channels.map((x)=><button type="button" key={x} className={channel===x?"active":""} onClick={()=>{setChannel(x);setGenerated(false);setChecked(false);}}>{x}</button>)}</div>
+    <button type="button" onClick={()=>{setGenerated(true);setChecked(false);}}>Préparer la sortie</button>
+  </>}>
+    {generated ? <div className="problemOutputWorkspace">
+      <div className="problemOutputToolbar"><span>{channel.toUpperCase()} · BROUILLON</span><b>{checked?"CONTRÔLÉ":"À RELIRE"}</b></div>
+      <div className="problemDraft">
+        <h4>{preset.title}</h4>
+        <p>{preset.body}</p>
+      </div>
+      <div className="problemOutputBlocks">{preset.blocks.map(([label,value])=><article key={label}><span>{label}</span><strong>{value}</strong></article>)}</div>
+      <div className="problemOutputChecks">
+        <span>✓ données fictives</span>
+        <span>✓ sources conservées</span>
+        <span>✓ aucune action automatique</span>
+      </div>
+      <button type="button" className={checked?"problemOutputReady active":"problemOutputReady"} onClick={()=>setChecked(true)}>{checked?"Prêt pour validation humaine":"Lancer le contrôle avant validation"}</button>
+      {checked&&<small className="problemOutputFoot">La démonstration s’arrête ici : l’écriture, l’envoi ou la publication restent à valider par une personne.</small>}
+    </div> : <div className="problemEmpty">Choisissez une destination puis préparez une sortie de démonstration.</div>}
   </Shell>;
 }
 
