@@ -1,0 +1,90 @@
+name: seo-production-smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: "Production site URL, e.g. https://autonomia.fr"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Crawl production SEO surfaces
+        env:
+          SITE_URL: ${{ inputs.site_url }}
+        run: |
+          node <<'NODE'
+          const base = process.env.SITE_URL.replace(/\/$/, "");
+
+          async function text(path) {
+            const response = await fetch(`${base}${path}`, {
+              redirect: "follow",
+              headers: { "user-agent": "Autonomia-SEO-Smoke/1.0" }
+            });
+            if (!response.ok) {
+              throw new Error(`${path} returned ${response.status}`);
+            }
+            return await response.text();
+          }
+
+          const robots = await text("/robots.txt");
+          if (!robots.includes("OAI-SearchBot")) {
+            throw new Error("robots.txt does not expose OAI-SearchBot rules.");
+          }
+          if (!robots.includes("sitemap.xml")) {
+            throw new Error("robots.txt does not declare sitemap.xml.");
+          }
+
+          const feed = await text("/feed.xml");
+          if (!feed.includes("<rss") || !feed.includes("<item>")) {
+            throw new Error("feed.xml is missing RSS items.");
+          }
+
+          const sitemap = await text("/sitemap.xml");
+          const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+
+          if (locs.length < 70) {
+            throw new Error(`Expected at least 70 indexable URLs, found ${locs.length}.`);
+          }
+
+          const forbidden = locs.filter((url) =>
+            /diagnostic-maturite-ia|diagnostic-competences-ia|diagnostic-projet-ia|audit-besoins-formation-ia|quel-profil-ia|diagnostic-copilot|quiz-ia-entreprise/.test(url)
+          );
+          if (forbidden.length) {
+            throw new Error(`Diagnostic Meta URLs found in sitemap: ${forbidden.join(", ")}`);
+          }
+
+          const required = [
+            "/a-propos",
+            "/methodologie/politique-editoriale",
+            "/methodologie/execution-matrix",
+            "/methodologie/learning-transfer",
+            "/observatoire-ia",
+            "/cas-usage-ia/support-client",
+            "/formation-ia/cas-usage/agents-ia",
+            "/cas-usage-ia/creer-un-assistant-support-qui-cite-les-procedures-internes",
+            "/formation-ia/cas-usage/apprendre-a-concevoir-un-agent-avec-validation-humaine"
+          ];
+
+          for (const path of required) {
+            const html = await text(path);
+            if (/noindex/i.test(html)) {
+              throw new Error(`${path} unexpectedly contains noindex.`);
+            }
+            if (!html.includes("<link rel=\"canonical\"")) {
+              throw new Error(`${path} is missing canonical markup.`);
+            }
+          }
+
+          console.log(JSON.stringify({
+            ok: true,
+            indexable_urls: locs.length,
+            checked_paths: required.length
+          }, null, 2));
+          NODE

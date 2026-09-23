@@ -1,0 +1,95 @@
+name: notify-indexnow
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "Optional comma/newline separated public URLs. Leave empty to compute from SHAs."
+        required: false
+        type: string
+      before_sha:
+        description: "Optional base SHA used to compute changed organic URLs"
+        required: false
+        type: string
+      after_sha:
+        description: "Optional head SHA; defaults to HEAD"
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      urls:
+        required: false
+        type: string
+      before_sha:
+        required: false
+        type: string
+      after_sha:
+        required: false
+        type: string
+    secrets:
+      AUTONOMIA_SITE_URL:
+        required: true
+      AUTONOMIA_INDEXING_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute changed organic URLs
+        id: changed
+        if: ${{ !inputs.urls && inputs.before_sha }}
+        env:
+          AUTONOMIA_SITE_URL: ${{ secrets.AUTONOMIA_SITE_URL }}
+          BEFORE_SHA: ${{ inputs.before_sha }}
+          AFTER_SHA: ${{ inputs.after_sha }}
+        run: |
+          node site/scripts/changed-organic-urls.mjs "$BEFORE_SHA" "${AFTER_SHA:-HEAD}"
+
+      - name: Submit changed URLs to Autonomia IndexNow bridge
+        env:
+          SITE_URL: ${{ secrets.AUTONOMIA_SITE_URL }}
+          INDEXING_TOKEN: ${{ secrets.AUTONOMIA_INDEXING_TOKEN }}
+          URLS: ${{ inputs.urls || steps.changed.outputs.urls }}
+        run: |
+          node <<'NODE'
+          const site = process.env.SITE_URL?.replace(/\/$/, "");
+          const token = process.env.INDEXING_TOKEN;
+          const urls = (process.env.URLS || "")
+            .split(/[\n,]+/)
+            .map((value) => value.trim())
+            .filter(Boolean);
+
+          if (!site || !token) {
+            throw new Error("AUTONOMIA_SITE_URL and AUTONOMIA_INDEXING_TOKEN are required.");
+          }
+
+          if (urls.length === 0) {
+            console.log("No materially changed organic URL to notify.");
+            process.exit(0);
+          }
+
+          const response = await fetch(`${site}/api/indexnow`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ urls })
+          });
+
+          const body = await response.text();
+          if (!response.ok) {
+            throw new Error(`IndexNow bridge failed (${response.status}): ${body}`);
+          }
+
+          console.log(body);
+          NODE
