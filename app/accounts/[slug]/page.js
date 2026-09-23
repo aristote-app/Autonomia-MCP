@@ -9,6 +9,8 @@ import { resolveFrenchCompanyRegistry } from "../../../lib/collectors/companyReg
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 import { buildAccountBattlecard } from "../../../lib/intelligence/battlecard.js";
 import { buildAccountOpportunityGraph } from "../../../lib/intelligence/accountGraph.js";
+import { listConsultantsWithSkills } from "../../../lib/db/consultants.js";
+import { rankConsultantsForAccount } from "../../../lib/intelligence/consultantAccounts.js";
 import { getCurrentWorkspaceMembership } from "../../../lib/auth/access.js";
 import { listSalesContacts } from "../../../lib/db/salesContacts.js";
 import {
@@ -62,7 +64,6 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const outreach = buildAccountOutreachPlan(account);
   const battlecard = buildAccountBattlecard(account);
-  const opportunityGraph = buildAccountOpportunityGraph(account);
   const companyRegistry = !account.intermediary_risk
     ? await resolveFrenchCompanyRegistry(account.name, { perPage: 5 }).catch(() => null)
     : null;
@@ -110,7 +111,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
     hasWorkspaceSession &&
     waalaxyConfigured;
 
-  const [decisionMakers, accountResearch, hiddenClientResolution, savedContacts, waalaxyOptions] = await Promise.all([
+  const [decisionMakers, accountResearch, hiddenClientResolution, savedContacts, consultantPool, waalaxyOptions] = await Promise.all([
     shouldDiscover && decisionDiscoveryEnabled
       ? discoverDecisionMakers({
           company: account.name,
@@ -154,6 +155,9 @@ export default async function AccountDetailPage({ params, searchParams }) {
           limit: 50
         }).catch(() => [])
       : Promise.resolve([]),
+    hasWorkspaceSession
+      ? listConsultantsWithSkills({ limit: 500 }).catch(() => [])
+      : Promise.resolve([]),
     shouldLoadWaalaxy
       ? Promise.all([
           getWaalaxyProspectLists(),
@@ -172,6 +176,16 @@ export default async function AccountDetailPage({ params, searchParams }) {
           }))
       : Promise.resolve(null)
   ]);
+
+  const consultantRanking = rankConsultantsForAccount({
+    account,
+    consultants: consultantPool,
+    limit: 5
+  });
+  const consultantMatches = consultantRanking.matches;
+  const opportunityGraph = buildAccountOpportunityGraph(account, {
+    consultantMatches
+  });
 
   const waalaxyRouting =
     waalaxyOptions?.available
@@ -501,8 +515,95 @@ export default async function AccountDetailPage({ params, searchParams }) {
               </article>
             ))}
           </div>
+
+          <div className="accountGraphArrow">→</div>
+
+          <div className="accountGraphColumn">
+            <span>RESSOURCES</span>
+            {opportunityGraph.nodes.filter((item) => item.type === "resource").length > 0 ? (
+              opportunityGraph.nodes.filter((item) => item.type === "resource").map((item) => (
+                <article key={item.id} className={item.suitable_for_proactive_outreach ? "recommended" : ""}>
+                  <strong>{item.label}</strong>
+                  <small>Matching {item.score}/100</small>
+                  {item.matched_skills?.length > 0 && (
+                    <small>{item.matched_skills.slice(0, 3).join(" · ")}</small>
+                  )}
+                </article>
+              ))
+            ) : (
+              <article>
+                <strong>Aucune ressource chargée</strong>
+                <small>Le matching apparaîtra ici dès que le pool consultant sera alimenté.</small>
+              </article>
+            )}
+          </div>
         </div>
       </section>
+
+      {hasWorkspaceSession && (
+        <section className="accountConsultantSection">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">OPPORTUNITY → CONSULTANT MATCHING</p>
+              <h2>Consultants compatibles avec ce compte.</h2>
+            </div>
+            <p>
+              Matching déterministe entre compétences déclarées et signaux sourcés. Le score n'est ni une probabilité de mission ni une probabilité de signature.
+            </p>
+          </div>
+
+          {consultantMatches.length > 0 ? (
+            <div className="accountConsultantList">
+              {consultantMatches.map((match) => (
+                <article key={match.consultant_id || match.consultant_name}>
+                  <div className="accountConsultantTop">
+                    <div>
+                      <strong>{match.consultant_name || "Consultant"}</strong>
+                      <p>{match.reason}</p>
+                    </div>
+                    <span>{match.score}/100</span>
+                  </div>
+
+                  <div className="accountConsultantFacts">
+                    <span>
+                      Compétences · {match.matched_skills.length ? match.matched_skills.join(", ") : "Aucune correspondance explicite"}
+                    </span>
+                    <span>
+                      Disponibilité · {match.available_from ? formatDate(match.available_from) : "Non renseignée"}
+                    </span>
+                    <span>
+                      Localisation · {match.locations?.length ? match.locations.join(", ") : match.remote ? "Remote" : "Non renseignée"}
+                    </span>
+                    <span>
+                      TJM · {match.tjm != null ? match.tjm + " " + match.currency : "Non renseigné"}
+                    </span>
+                    <span>
+                      Expérience · {match.years_experience != null ? match.years_experience + " ans" : "Non renseignée"}
+                    </span>
+                  </div>
+
+                  <div className="accountConsultantGaps">
+                    <strong>Gaps détectés</strong>
+                    <span>{match.gaps?.length ? match.gaps.join(" · ") : "Aucun gap de domaine détecté dans les compétences déclarées."}</span>
+                  </div>
+
+                  {match.proof_url && (
+                    <a href={match.proof_url} target="_blank" rel="noreferrer">
+                      Voir le signal qui justifie le matching ↗
+                    </a>
+                  )}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="emptyState">
+              {consultantPool.length
+                ? "Aucun consultant actif ne présente encore de convergence explicite avec les signaux de ce compte."
+                : "Le pool consultant est vide : importe les consultants pour activer le matching compte → ressource."}
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="accountDetailGrid">
         <div className="detailPanel">

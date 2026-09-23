@@ -933,7 +933,7 @@ h3 { margin: 0 0 8px; }
 
 
 .accountGraphSection { margin: 56px 0; }
-.accountGraph { display:grid; grid-template-columns:minmax(0,1.35fr) auto minmax(0,.8fr) auto minmax(0,1fr) auto minmax(0,1fr); gap:12px; align-items:stretch; }
+.accountGraph { display:grid; grid-template-columns:minmax(0,1.3fr) auto minmax(0,.8fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); gap:10px; align-items:stretch; }
 .accountGraphColumn { display:grid; align-content:start; gap:8px; min-width:0; }
 .accountGraphColumn > span { font-size:10px; font-weight:800; letter-spacing:.08em; color:#677068; }
 .accountGraphColumn article { display:grid; gap:5px; padding:13px; border:1px solid #d9ddd7; background:#fff; min-width:0; }
@@ -963,6 +963,26 @@ h3 { margin: 0 0 8px; }
   .consultantList > article { grid-template-columns:1fr; }
 }
 
+
+/* Account → consultant matching */
+.accountConsultantSection { margin:56px 0; }
+.accountConsultantList { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.accountConsultantList > article { display:grid; gap:12px; min-width:0; padding:18px; border:1px solid #d9ddd7; background:#fff; }
+.accountConsultantTop { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; }
+.accountConsultantTop > div { min-width:0; }
+.accountConsultantTop strong { font-size:17px; }
+.accountConsultantTop p { margin:5px 0 0; color:#677068; font-size:11px; line-height:1.45; }
+.accountConsultantTop > span { display:grid; place-items:center; min-width:62px; height:42px; border:1px solid #111; font-size:13px; font-weight:900; }
+.accountConsultantFacts { display:grid; gap:6px; padding-top:10px; border-top:1px solid #e8ebe7; }
+.accountConsultantFacts span { color:#4f5750; font-size:10px; line-height:1.4; }
+.accountConsultantGaps { display:grid; gap:4px; padding:10px 11px; background:#f1f3ef; }
+.accountConsultantGaps strong { font-size:9px; text-transform:uppercase; letter-spacing:.06em; }
+.accountConsultantGaps span { color:#677068; font-size:10px; line-height:1.45; }
+.accountConsultantList > article > a { width:max-content; max-width:100%; color:#111; font-size:10px; font-weight:800; text-decoration:none; }
+.accountConsultantList > article > a:hover { text-decoration:underline; text-underline-offset:3px; }
+@media (max-width:760px) {
+  .accountConsultantList { grid-template-columns:1fr; }
+}
 
 /* Account proactive watch */
 .accountWatchBar { display:flex; justify-content:space-between; gap:18px; align-items:center; margin:20px 0; padding:16px 18px; border:1px solid #111; background:#fff; }

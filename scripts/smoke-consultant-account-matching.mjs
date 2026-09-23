@@ -1,13 +1,20 @@
 import assert from "node:assert/strict";
 import {
   matchConsultantToAccount,
-  rankAccountsForConsultant
+  rankAccountsForConsultant,
+  rankConsultantsForAccount
 } from "../lib/intelligence/consultantAccounts.js";
 
 const consultant = {
   id: "c-1",
   display_name: "Consultant Agentic",
-  skills: ["LangGraph", "RAG", "Python"]
+  skills: ["LangGraph", "RAG", "Python"],
+  available_from: "2026-09-25",
+  tjm: 850,
+  currency: "EUR",
+  remote: true,
+  locations: ["Paris", "Remote"],
+  years_experience: 8
 };
 
 const hotAccount = {
@@ -65,6 +72,34 @@ assert.equal(direct.suitable_for_proactive_outreach, true);
 assert.ok(direct.matched_skills.includes("LangGraph"));
 assert.ok(direct.score >= 55);
 assert.equal(direct.proof_url, "https://example.test/acme");
+assert.equal(direct.available_from, "2026-09-25");
+assert.equal(direct.tjm, 850);
+assert.deepEqual(direct.locations, ["Paris", "Remote"]);
+assert.equal(direct.years_experience, 8);
+
+const trainer = {
+  id: "c-2",
+  display_name: "Formatrice Copilot",
+  skills: ["Formation IA", "Copilot adoption"],
+  available_from: "2026-10-01",
+  tjm: 700,
+  currency: "EUR",
+  remote: true,
+  locations: ["France"]
+};
+
+const accountToConsultants = rankConsultantsForAccount({
+  account: coldTrainingAccount,
+  consultants: [consultant, trainer],
+  limit: 5
+});
+assert.equal(accountToConsultants.matches[0].consultant_id, "c-2");
+assert.equal(accountToConsultants.matches[0].suitable_for_proactive_outreach, true);
+assert.ok(accountToConsultants.matches[0].matched_skills.length > 0);
+
+const dormantAccount = { ...hotAccount, dormant: true, heat_score: 45, recent_7d: 0, recent_30d: 0 };
+const dormantMatch = matchConsultantToAccount({ consultant, account: dormantAccount });
+assert.equal(dormantMatch.suitable_for_proactive_outreach, false);
 
 const ranked = rankAccountsForConsultant({
   consultant,

@@ -155,10 +155,29 @@ const graph = buildAccountOpportunityGraph({
       source_url: "https://example.test/signal-2"
     }
   ]
+}, {
+  consultantMatches: [
+    {
+      consultant_id: "c-1",
+      consultant_name: "Consultant Agentic",
+      score: 84,
+      matched_skills: ["LangGraph", "RAG"],
+      available_from: "2026-09-25",
+      tjm: 850,
+      currency: "EUR",
+      locations: ["Paris"],
+      gaps: ["Gouvernance / conformité IA"],
+      proof_url: "https://example.test/signal-1",
+      suitable_for_proactive_outreach: true
+    }
+  ]
 });
 
 assert.equal(graph.stats.signals, 2);
 assert.equal(graph.stats.needs, 2);
 assert.equal(graph.stats.decision_roles, 2);
 assert.equal(graph.stats.offers, 2);
+assert.equal(graph.stats.resources, 1);
+assert.ok(graph.nodes.some((node) => node.type === "resource" && node.label === "Consultant Agentic"));
 assert.ok(graph.edges.some((edge) => edge.relation === "oriente vers"));
+assert.ok(graph.edges.some((edge) => edge.relation === "peut être servi par"));
