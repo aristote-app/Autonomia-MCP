@@ -11934,6 +11934,163 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-style: normal;
   font-weight: 900;
 }
+.problemScoreList article.top {
+  border-color: rgba(255,209,106,.48);
+  background: rgba(255,209,106,.075);
+}
+.problemScoreList article > small {
+  grid-column: 2 / -1;
+  color: rgba(255,255,255,.58);
+  font-size: 14px;
+  line-height: 1.35;
+}
+.problemWeightNote,
+.problemScoreExplain {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemWeightNote > span,
+.problemScoreExplain > span,
+.problemExtractedSignals > span,
+.problemPreparedAction > span,
+.problemSourceStatus > span,
+.problemNarrative > span {
+  display: block;
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemWeightNote p,
+.problemScoreExplain p,
+.problemNarrative p {
+  margin: 7px 0 0;
+  color: rgba(255,255,255,.68);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.problemScoreExplain > strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 21px;
+}
+.problemRouteWorkspace {
+  display: grid;
+  gap: 10px;
+}
+.problemExtractedSignals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemExtractedSignals > span {
+  flex: 1 0 100%;
+}
+.problemExtractedSignals > b {
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.07);
+  font-size: 14px;
+}
+.problemRouteAction {
+  min-height: 46px;
+  border: 1px solid #ffd16a;
+  border-radius: 9px;
+  background: transparent;
+  color: #ffd16a;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.problemPreparedAction {
+  padding: 14px;
+  border-left: 3px solid #ffd16a;
+  background: rgba(255,209,106,.08);
+}
+.problemPreparedAction strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+}
+.problemPreparedAction small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,.62);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.problemSourceStatus {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemSourceStatus b {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: rgba(255,255,255,.76);
+  font-size: 14px;
+}
+.problemSourceStatus i {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #62d99b;
+}
+.problemSourceStatus i.warning {
+  background: #ffd16a;
+}
+.problemSignalList {
+  display: grid;
+  gap: 7px;
+  margin-top: 11px;
+}
+.problemSignalList button {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 4px 10px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.problemSignalList button.active {
+  border-color: #ffd16a;
+  background: rgba(255,209,106,.07);
+}
+.problemSignalList span {
+  font-size: 15px;
+  font-weight: 800;
+}
+.problemSignalList strong {
+  color: #ffd16a;
+  font-size: 17px;
+}
+.problemSignalList small {
+  grid-column: 1 / -1;
+  color: rgba(255,255,255,.58);
+  font-size: 14px;
+}
+.problemNarrative {
+  margin-top: 10px;
+  padding: 14px;
+  border-left: 3px solid #ffd16a;
+  background: rgba(255,209,106,.08);
+}
 .problemScoreList article > div,
 .problemCompare article > div,
 .problemQuality article > div,
@@ -12079,6 +12236,19 @@ body:has(.territoryCampaignPage) .desktopNav {
   min-height: 12px;
   border-radius: 5px 5px 0 0;
   background: linear-gradient(180deg,#ffd16a,rgba(255,209,106,.25));
+  transition: opacity .18s ease, transform .18s ease;
+}
+.problemBars i:not(.active) {
+  opacity: .58;
+}
+.problemBars i.active {
+  transform: translateY(-3px);
+}
+.problemKpis small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,.55);
+  font-size: 14px;
 }
 .problemSequence button {
   display: grid;
