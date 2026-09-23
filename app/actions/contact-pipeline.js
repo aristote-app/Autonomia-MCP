@@ -31,6 +31,10 @@ export async function updateContactPipelineStage(formData) {
   const contactId = clean(formData.get("contact_id"), 80);
   const status = clean(formData.get("status"), 30);
   const note = clean(formData.get("note"), 1000) || null;
+  const nextActionAtRaw = clean(formData.get("next_action_at"), 40) || null;
+  const nextActionAt = nextActionAtRaw
+    ? new Date(nextActionAtRaw).toISOString()
+    : null;
 
   if (!contactId || !status) {
     throw new Error("Contact and status are required");
@@ -41,7 +45,8 @@ export async function updateContactPipelineStage(formData) {
     actorUserId: context.claims.sub,
     contactId,
     status,
-    note
+    note,
+    nextActionAt
   });
 
   revalidatePath("/contacts");
