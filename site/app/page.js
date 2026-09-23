@@ -47,42 +47,27 @@ export default function Home() {
   return (
     <main>
 
-      <section className="homeHero" id="top">
+      <section className="homeHero homeHeroDiagnostic" id="top">
         <div className="heroCopy">
           <p className="eyebrow">AI EXECUTION PARTNER</p>
           <h1>
-            L’IA ne manque pas
-            <br />
-            de promesses.
-            <span>Elle manque d’exécution.</span>
+            Construire l’IA utile.
+            <span>Transmettre les compétences.</span>
           </h1>
           <p className="heroText">
-            Autonomia transforme un objectif IA en plan d’exécution : les compétences externes pour construire,
-            les compétences internes pour adopter et déployer.
+            Décrivez votre besoin en langage naturel. Autonomia vous oriente vers les bons experts IA,
+            les formations adaptées, ou une combinaison des deux.
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/#solution-finder">Décrire mon besoin</Link>
-            <Link className="secondaryButton" href="/#scan">Lancer Autonomia Scan</Link>
+            <Link className="primaryButton" href="/experts">Voir les experts IA</Link>
+            <Link className="secondaryButton" href="/academy">Voir les formations IA</Link>
           </div>
         </div>
 
-        <SolutionFinder />
-
-        <div className="executionGrid" aria-label="Système d’exécution Autonomia">
-          <div className="gridHeader">
-            <span>AUTONOMIA / EXECUTION GRID</span>
-            <span>01—05</span>
-          </div>
-          <div className="gridFlow">
-            <div><small>01</small><strong>AMBITION</strong><span>Besoin business</span></div>
-            <div><small>02</small><strong>EXPERTS</strong><span>Compétences externes</span></div>
-            <div><small>03</small><strong>BUILD</strong><span>Construction / delivery</span></div>
-            <div><small>04</small><strong>ACADEMY</strong><span>Compétences internes</span></div>
-            <div><small>05</small><strong>ADOPTION</strong><span>Capacité durable</span></div>
-          </div>
-          <div className="gridPulse" aria-hidden="true"><i /><i /><i /><i /><i /></div>
-        </div>
+        <aside className="heroDiagnostic" aria-label="Diagnostic IA Autonomia">
+          <SolutionFinder />
+        </aside>
       </section>
 
 
