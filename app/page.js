@@ -286,18 +286,22 @@ export default async function Home({ searchParams }) {
       : [[], [], [], []];
 
   const revenueActions =
-    live && hasWorkspaceSession
+    live
       ? buildRevenueActions({
           accounts: live.accounts || [],
-          contacts: privateContacts,
-          inboundLeads,
-          consultants,
-          accountWatchAlerts,
-          kasprReady: Boolean(
-            process.env.KASPR_API_KEY &&
-            String(process.env.KASPR_DATA_TO_GET || "").trim()
-          ),
-          waalaxyReady: Boolean(process.env.WAALAXY_API_KEY),
+          contacts: hasWorkspaceSession ? privateContacts : [],
+          inboundLeads: hasWorkspaceSession ? inboundLeads : [],
+          consultants: hasWorkspaceSession ? consultants : [],
+          accountWatchAlerts: hasWorkspaceSession ? accountWatchAlerts : [],
+          kasprReady:
+            hasWorkspaceSession &&
+            Boolean(
+              process.env.KASPR_API_KEY &&
+              String(process.env.KASPR_DATA_TO_GET || "").trim()
+            ),
+          waalaxyReady:
+            hasWorkspaceSession &&
+            Boolean(process.env.WAALAXY_API_KEY),
           limit: 8
         })
       : [];
@@ -354,7 +358,7 @@ export default async function Home({ searchParams }) {
                   <h2>Autonomia te dit quoi faire.</h2>
                 </div>
                 <p>
-                  Actions calculées à partir de l'état réel des comptes et contacts. Aucun envoi n'est automatique.
+                  Actions calculées à partir des signaux sourcés et, lorsqu'une session privée existe, de l'état réel des contacts. Aucun envoi n'est automatique.
                 </p>
               </div>
 
