@@ -253,11 +253,52 @@ function Dashboard({ demo }) {
 }
 
 function Sequence({ demo }) {
-  const [step,setStep]=useState(1);
-  const stages=[["J0","Première action"],["J+3","Relance contextuelle"],["J+8","Escalade ou pause"]];
-  return <Shell demo={demo} side={<p className="problemHint">Cliquez sur une étape pour voir la séquence évoluer.</p>}>
-    <div className="problemSequence">{stages.map(([day,label],i)=><button type="button" key={day} className={step===i?"active":step>i?"done":""} onClick={()=>setStep(i)}><b>{day}</b><span><strong>{label}</strong><small>{i===0?"Préparée":i===1?"Selon contexte":"Si aucune réponse"}</small></span><em>{step>i?"✓":step===i?"●":"○"}</em></button>)}</div>
-    <p className="problemInsight">Étape active : {stages[step][1]}. L’envoi peut rester soumis à validation.</p>
+  const presets={
+    "relances-commerciales-ia":[
+      ["J0","Relance préparée","Dernier échange relu"],
+      ["J+3","Relance contextuelle","Si aucun signal entrant"],
+      ["J+8","Escalade ou pause","Selon stade du deal"]
+    ],
+    "onboarding-salarie-ia":[
+      ["J-7","Accès & documents","RH + IT à confirmer"],
+      ["J0","Accueil manager","Agenda et contacts clés"],
+      ["J+7","Point d’intégration","Questions et blocages"],
+      ["J+30","Bilan onboarding","Validation manager/RH"]
+    ],
+    "reserves-chantier-ia":[
+      ["J0","Réserve affectée","Lot + entreprise"],
+      ["J+3","Relance entreprise","Si aucune preuve"],
+      ["J+7","Escalade chantier","Réserve toujours ouverte"],
+      ["LEVÉE","Contrôle avant clôture","Décision MOE / personne habilitée"]
+    ],
+    "planning-editorial-automatise":[
+      ["S1","Priorités validées","Backlog + capacité"],
+      ["S2","Production","Briefs affectés"],
+      ["S3","Contrôle","Claims + qualité"],
+      ["S4","Publication","Après validation"]
+    ],
+    "controler-dossiers-automatiquement":[
+      ["J0","Anomalie détectée","Pièce ou cohérence"],
+      ["J+2","Relance préparée","Demande de pièce"],
+      ["J+5","Relecture humaine","Si dossier toujours incomplet"]
+    ],
+    "automatiser-comptes-rendus-reunion":[
+      ["T+0","Décisions extraites","À confirmer"],
+      ["T+15","Actions assignées","Responsables + échéances"],
+      ["J+2","Suivi préparé","Actions sans mise à jour"]
+    ],
+    default:[
+      ["J0","Première action","Préparée"],
+      ["J+3","Relance contextuelle","Selon contexte"],
+      ["J+8","Escalade ou pause","Si aucune réponse"]
+    ]
+  };
+  const stages=presets[demo.problemSlug] || presets.default;
+  const [step,setStep]=useState(Math.min(1,stages.length-1));
+  const current=stages[step];
+  return <Shell demo={demo} side={<p className="problemHint">Cliquez sur une étape : la logique de suivi est adaptée au processus, pas à une séquence générique.</p>}>
+    <div className="problemSequence">{stages.map(([day,label,detail],i)=><button type="button" key={day+"-"+label} className={step===i?"active":step>i?"done":""} onClick={()=>setStep(i)}><b>{day}</b><span><strong>{label}</strong><small>{detail}</small></span><em>{step>i?"✓":step===i?"●":"○"}</em></button>)}</div>
+    <div className="problemSequenceDetail"><span>ÉTAPE ACTIVE</span><strong>{current[1]}</strong><p>{current[2]}. Toute notification, écriture ou clôture sensible peut rester soumise à validation.</p></div>
   </Shell>;
 }
 
