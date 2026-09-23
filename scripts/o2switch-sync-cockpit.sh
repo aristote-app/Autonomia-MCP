@@ -2,6 +2,7 @@
 set -eo pipefail
 
 APP_ROOT="/home/dide4169/autonomia-cockpit-app"
+PUBLIC_SITE_ROOT="$APP_ROOT/site"
 NODE_ENV_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate"
 BRANCH="main"
 FORCE_DEPLOY="${FORCE_DEPLOY:-0}"
@@ -83,8 +84,29 @@ fi
 export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 
-echo "Building Next.js..."
+echo "Building cockpit Next.js..."
 npm run build
+
+if [ -f "$PUBLIC_SITE_ROOT/package.json" ]; then
+  echo "Building public site for build-autonomia.com..."
+  cd "$PUBLIC_SITE_ROOT"
+
+  if [ -x node_modules/.bin/next ]; then
+    echo "Reusing public-site node_modules; skipping npm install."
+  else
+    echo "Public-site node_modules incomplete; installing dependencies."
+    npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+  fi
+
+  export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
+  npm run content:validate
+  npm run build
+  mkdir -p tmp
+  touch tmp/restart.txt
+  cd "$APP_ROOT"
+else
+  echo "Public site not present at $PUBLIC_SITE_ROOT; skipping public-site build."
+fi
 
 mkdir -p .runtime tmp
 
@@ -107,4 +129,4 @@ fi
 
 touch tmp/restart.txt
 
-echo "Autonomia cockpit deployed and Passenger restart requested: $REMOTE_SHA"
+echo "Autonomia cockpit + public site deployed and Passenger restarts requested: $REMOTE_SHA"
