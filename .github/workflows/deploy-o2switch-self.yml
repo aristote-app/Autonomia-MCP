@@ -203,6 +203,27 @@ jobs:
           fi
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
+      - name: Refresh territory market signals
+        if: always() && steps.probe.outputs.ready == 'true'
+        env:
+          TERRITORY_URL: https://cockpit.build-autonomia.com/api/internal/territory-signal-refresh
+          OIDC_TOKEN: ${{ steps.seo_geo_oidc.outputs.token }}
+        run: |
+          HTTP_CODE="$(curl -sS \
+            --max-time 120 \
+            -o /tmp/autonomia-territory-refresh.json \
+            -w "%{http_code}" \
+            -G "$TERRITORY_URL" \
+            --data-urlencode "limit=40" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+
+          cat /tmp/autonomia-territory-refresh.json
+          echo
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Territory signal refresh returned HTTP $HTTP_CODE."
+          fi
+
       - name: Verify cockpit SEO GEO connection
         if: always() && steps.probe.outputs.ready == 'true'
         env:
