@@ -1,359 +1,212 @@
 import Link from "next/link";
-import LeadForm from "@/components/LeadForm";
+import TerritoryLeadCard from "@/components/TerritoryLeadCard";
+import TerritoryDemoLab from "@/components/TerritoryDemoLab";
 
 export const metadata = {
-  title: "Autonomia Territoires — IA pour agents et entreprises du territoire",
+  title: "IA pour communautés de communes et agglomérations | Autonomia Territoires",
   description:
-    "Autonomia accompagne les communautés de communes et communautés d’agglomération pour former les agents, automatiser des processus et accélérer l’adoption de l’IA par les entreprises du territoire.",
+    "Autonomia aide les intercommunalités à réduire les tâches répétitives des agents, tester des applicatifs métiers et accompagner les entreprises du territoire.",
   alternates: { canonical: "/territoires" }
 };
 
-const doors = [
+const flagship = [
   {
     index: "01",
-    title: "IA pour les agents",
-    text:
-      "Identifier les tâches répétitives, sélectionner les cas d’usage réalistes et déployer quelques workflows utiles sans refondre tout le système d’information.",
-    bullets: [
-      "Diagnostic des tâches et irritants",
-      "3 à 5 cas d’usage prioritaires",
-      "Automatisations ou assistants ciblés",
-      "Règles de contrôle et validation humaine"
-    ]
+    title: "PV de conseil communautaire",
+    today: "Transcription, notes, décisions et projet de PV repris manuellement après chaque séance.",
+    transform: "Transcription structurée, décisions, actions et projet de PV préparés pour relecture.",
+    result: "L’agent relit et valide ; le travail après séance est fortement réduit."
   },
   {
     index: "02",
-    title: "Academy collectivités",
-    text:
-      "Former les agents et managers à des usages adaptés à leur quotidien : rédaction, recherche, réunions, documents, communication, reporting, gouvernance et bonnes pratiques.",
-    bullets: [
-      "Direction & managers",
-      "Services support et métiers",
-      "ChatGPT / Copilot / IA générative",
-      "Adoption, gouvernance et AI literacy"
-    ]
+    title: "Pré-instruction ADS",
+    today: "Pièces, délais, règles PLUi et servitudes contrôlés dossier par dossier.",
+    transform: "File classée par urgence, pré-contrôle des pièces et points de vigilance signalés.",
+    result: "L’instructeur garde la décision et la signature, avec une préparation plus rapide."
   },
   {
     index: "03",
-    title: "Accélérateur IA des entreprises du territoire",
-    text:
-      "Donner aux TPE et PME du territoire une méthode pour passer de l’intérêt pour l’IA à un workflow réellement utile dans leur activité.",
-    bullets: [
-      "Sensibilisation collective",
-      "Diagnostic court par entreprise",
-      "Ateliers par cas d’usage",
-      "Accompagnement vers un premier workflow opérationnel"
-    ]
+    title: "Inscriptions & plannings",
+    today: "Appels, contraintes familles, disponibilités professeurs et sites ajustés au fil de l’eau.",
+    transform: "Répartition sous contraintes, créneaux recommandés et réservation famille.",
+    result: "Moins de pics de charge et un planning plus explicable."
   }
 ];
 
-const contacts = [
-  "Direction générale / DGS",
-  "DSI / direction numérique",
-  "DRH / formation",
-  "Direction développement économique",
-  "Direction transformation / innovation",
-  "Communication / services métiers"
+const otherUses = [
+  ["Courrier & accueil", "Lire, classer, accuser réception et router vers le bon service."],
+  ["Déchets", "Qualifier réclamations, badges, incidents et préparer la bonne action."],
+  ["Petite enfance", "Préparer les dossiers et contrôles avant commission, sans automatiser la décision."],
+  ["Finances & RH", "Pré-rapprochements, contrôles documentaires, plannings et synthèses."],
+  ["Subventions", "Veille ciblée, préparation de dossiers et suivi des échéances."],
+  ["Tourisme", "Taxe de séjour, relances, contrôles et rapprochements de déclarations."]
 ];
 
-const valueLayers = [
-  {
-    index: "01",
-    title: "Mieux travailler en interne",
-    text: "Repérer les tâches répétitives, la recherche d’information, les documents, réunions ou reportings qui peuvent être simplifiés sans engager une refonte globale du SI."
-  },
-  {
-    index: "02",
-    title: "Faire monter les agents en compétence",
-    text: "Former par usages réels, avec des règles de confidentialité, de contrôle et de validation adaptées au contexte de la collectivité."
-  },
-  {
-    index: "03",
-    title: "Accélérer les entreprises du territoire",
-    text: "Créer un programme collectif pour aider les TPE/PME à identifier un cas d’usage, construire un premier workflow et gagner en autonomie."
-  }
+const offers = [
+  ["OFFERT", "Diagnostic flash", "Une demi-journée de cadrage + un atelier court pour identifier les irritants prioritaires.", "0 €"],
+  ["01", "Diagnostic approfondi", "Entretiens services, cartographie des tâches chronophages, 3 cas d’usage chiffrés et feuille de route.", "5 000 à 7 000 € HT"],
+  ["02", "Premier cas d’usage", "Cadrage, paramétrage, tests avec les agents, formation, documentation et accompagnement au démarrage.", "15 000 à 25 000 € HT"],
+  ["03", "Programme 2 à 3 usages", "Plusieurs cas d’usage, formation des référents et dispositif de fonctionnement/documentation.", "40 000 à 55 000 € HT"]
 ];
 
-const deliverables = [
-  "Cartographie des usages et irritants prioritaires",
-  "Plan d’action Agents / Academy / Entreprises",
-  "Ateliers et parcours conçus autour des métiers",
-  "Premier workflow ou démonstrateur lorsque le besoin s’y prête",
-  "Garde-fous, validation humaine et règles d’usage",
-  "Bilan de programme et prochaines étapes"
-];
-
-const faq = [
-  {
-    question: "À quels territoires s’adresse Autonomia Territoires ?",
-    answer: "L’offre est conçue pour les communautés de communes et les communautés d’agglomération, partout en France."
-  },
-  {
-    question: "Faut-il déjà avoir une stratégie IA ?",
-    answer: "Non. Le point de départ peut être un besoin très concret : gagner du temps sur certaines tâches, former des agents ou accompagner les entreprises locales. Le diagnostic sert justement à qualifier la bonne porte d’entrée."
-  },
-  {
-    question: "Peut-on commencer uniquement par de la formation ?",
-    answer: "Oui. Le programme peut commencer par une Academy agents ou managers, puis évoluer vers des workflows ciblés si des cas d’usage pertinents émergent."
-  },
-  {
-    question: "L’accélérateur entreprises est-il une formation standard ?",
-    answer: "Non. L’objectif est d’amener chaque entreprise à travailler sur une tâche réelle, à tester un workflow utile et à repartir avec une méthode transférable."
-  },
-  {
-    question: "Autonomia intervient-il sur les données sensibles ?",
-    answer: "Le cadrage inclut la nature des données, les outils autorisés, les droits d’accès et les validations humaines nécessaires. Une automatisation n’est proposée que si le contexte permet de la cadrer proprement."
-  }
-];
+const references = [];
 
 export default function TerritoriesPage() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
-  const url = `${base}/territoires`;
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Service",
-        name: "Autonomia Territoires",
-        provider: {
-          "@type": "Organization",
-          name: "Autonomia",
-          url: base
-        },
-        areaServed: {
-          "@type": "Country",
-          name: "France"
-        },
-        audience: {
-          "@type": "Audience",
-          audienceType: "Communautés de communes et communautés d’agglomération"
-        },
-        serviceType:
-          "Accompagnement IA, formation des agents, automatisation et programme d’accélération IA pour les entreprises du territoire",
-        url
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: faq.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer
-          }
-        }))
-      }
-    ]
-  };
-
   return (
-    <main className="territoryOfferPage">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-
-      <section className="territoryOfferHero" id="top">
-        <div>
-          <p className="eyebrow">AUTONOMIA TERRITOIRES</p>
-          <h1>
-            Faire de l’IA un outil concret
-            <span>pour les agents et les entreprises du territoire.</span>
-          </h1>
+    <main className="territoryAdsPage">
+      <section className="territoryAdsHero">
+        <div className="territoryAdsCopy">
+          <p className="eyebrow">AUTONOMIA TERRITOIRES · INTERCOMMUNALITÉS</p>
+          <h1>Moins de tâches répétitives. Plus de temps pour le service public.</h1>
           <p>
-            Une offre pensée pour les communautés de communes et communautés d’agglomération :
-            moderniser certains usages internes, faire monter les équipes en compétences et créer
-            des programmes IA utiles aux entreprises locales.
+            Nous partons des irritants réels des agents pour construire des outils simples, explicables et contrôlables :
+            l’outil prépare, l’agent décide.
           </p>
+
+          <div className="territoryGuarantees">
+            <span>Communautés de communes & agglomérations</span>
+            <span>Intervention partout en France</span>
+            <span>Données de démonstration fictives</span>
+          </div>
+
           <div className="heroActions">
-            <Link className="primaryButton" href="#territory-contact">Parler de votre territoire</Link>
-            <Link className="secondaryButton" href="#programmes">Voir les 3 programmes</Link>
+            <a className="primaryButton" href="#demos">Voir les démos</a>
+            <a className="secondaryButton" href="#offre">Voir l’offre</a>
           </div>
         </div>
 
-        <aside className="territoryOfferPanel">
-          <span>AUTONOMIA / TERRITOIRES</span>
-          <strong>3 portes d’entrée.</strong>
-          <ol>
-            <li><b>01</b><span>Agents</span></li>
-            <li><b>02</b><span>Academy collectivités</span></li>
-            <li><b>03</b><span>Entreprises du territoire</span></li>
-          </ol>
+        <aside className="territoryTopForm">
+          <TerritoryLeadCard />
         </aside>
       </section>
 
-      <section className="territoryOfferIntro">
-        <p className="sectionIndex">01 — LE PRINCIPE</p>
-        <div>
-          <h2>Ne pas vendre “de l’IA”. Partir du travail à améliorer.</h2>
-          <p>
-            Autonomia commence par les tâches, processus, publics et contraintes réels. L’objectif
-            est de déterminer où une assistance IA, une automatisation ou une montée en compétences
-            apporte quelque chose de concret — et où il vaut mieux ne rien automatiser.
-          </p>
-        </div>
-      </section>
-
-      <section className="territoryOfferDoors" id="programmes">
-        {doors.map((door) => (
-          <article key={door.index}>
-            <span>{door.index}</span>
-            <h2>{door.title}</h2>
-            <p>{door.text}</p>
-            <ul>
-              {door.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
-            </ul>
-          </article>
-        ))}
-      </section>
-
-      <section className="territoryValueLayers">
-        <div className="territoryValueIntro">
-          <p className="sectionIndex">02 — TROIS LEVIERS D’IMPACT</p>
+      <section className="territoryFlagship">
+        <div className="territorySectionIntro">
+          <p className="sectionIndex">01 — TROIS PROBLÈMES QUI SE VOIENT TOUT DE SUITE</p>
           <div>
-            <h2>Une seule relation peut activer trois niveaux de transformation.</h2>
+            <h2>Montrer ce que l’IA change avant de parler technologie.</h2>
             <p>
-              Autonomia Territoires n’est pas limité à une session de sensibilisation. Le programme peut
-              agir sur le fonctionnement interne de l’intercommunalité, sur les compétences des agents
-              et sur l’accompagnement économique des entreprises locales.
+              Nous privilégions des cas d’usage qui parlent immédiatement aux services et dont le résultat peut être montré
+              sur des données fictives avant tout déploiement.
             </p>
           </div>
         </div>
-        <div className="territoryValueGrid">
-          {valueLayers.map((item) => (
+
+        <div className="territoryFlagshipGrid">
+          {flagship.map((item) => (
             <article key={item.index}>
               <span>{item.index}</span>
               <h3>{item.title}</h3>
-              <p>{item.text}</p>
+              <p><b>Aujourd’hui</b>{item.today}</p>
+              <p><b>Avec l’outil</b>{item.transform}</p>
+              <small>{item.result}</small>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="territoryProgram">
-        <p className="sectionIndex">03 — PROGRAMME ENTREPRISES</p>
-        <div>
-          <h2>Un accélérateur IA territorial, sans transformer l’accompagnement en catalogue de formations.</h2>
-          <p>
-            Le programme peut être conçu comme une progression : sensibiliser, qualifier les besoins,
-            faire travailler les entreprises sur leurs propres cas d’usage, puis accompagner celles
-            qui sont prêtes vers un premier workflow reproductible.
-          </p>
+      <TerritoryDemoLab />
 
-          <ol className="territoryJourney">
-            <li><span>01</span><div><strong>Sensibiliser</strong><p>Une session commune centrée sur des usages métier concrets.</p></div></li>
-            <li><span>02</span><div><strong>Diagnostiquer</strong><p>Chaque entreprise identifie une tâche ou un processus à améliorer.</p></div></li>
-            <li><span>03</span><div><strong>Construire</strong><p>Atelier pratique pour transformer le besoin en workflow testable.</p></div></li>
-            <li><span>04</span><div><strong>Transférer</strong><p>L’entreprise repart avec une méthode qu’elle peut reprendre sur d’autres tâches.</p></div></li>
-          </ol>
-        </div>
-      </section>
-
-      <section className="territoryBuyers">
-        <p className="sectionIndex">04 — QUI MOBILISER</p>
-        <div>
-          <h2>Une offre qui peut être portée par plusieurs directions.</h2>
-          <div className="territoryBuyerGrid">
-            {contacts.map((contact, index) => (
-              <article key={contact}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{contact}</strong>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="territoryDiagnostic">
-        <p className="sectionIndex">05 — PORTE D’ENTRÉE</p>
-        <div>
-          <h2>Commencer petit : un diagnostic court pour sélectionner les priorités.</h2>
-          <p>
-            Le premier engagement peut rester simple : comprendre les tâches les plus consommatrices
-            de temps, les populations concernées, les outils déjà utilisés, les contraintes de données
-            et les décisions qui doivent rester humaines. À partir de là, Autonomia peut proposer un
-            plan Agents / Academy / Entreprises du territoire adapté au contexte.
-          </p>
-        </div>
-      </section>
-
-      <section className="territoryDeliverables">
-        <p className="sectionIndex">06 — LIVRABLES</p>
-        <div>
-          <h2>Un programme doit produire autre chose qu’une présentation sur l’IA.</h2>
-          <div className="territoryDeliverableGrid">
-            {deliverables.map((item, index) => (
-              <article key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{item}</strong>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      <section className="territoryResources">
-        <p className="sectionIndex">07 — RESSOURCES</p>
-        <div>
-          <h2>Approfondir selon votre point d’entrée.</h2>
-          <div className="territoryResourceGrid">
-            <Link href="/territoires/guides">
-              <span>BASE DE CONNAISSANCES</span>
-              <strong>Guides IA pour intercommunalités</strong>
-              <p>Feuille de route, agents, gouvernance, formation et développement économique : les contenus de fond pilotés par les besoins observés.</p>
-              <b>Explorer les guides →</b>
-            </Link>
-            <Link href="/territoires/ia-agents-collectivite">
-              <span>AGENTS</span>
-              <strong>IA pour les agents de collectivité</strong>
-              <p>12 cas d’usage, garde-fous, AI literacy et méthode pour choisir les premiers workflows.</p>
-              <b>Lire le guide →</b>
-            </Link>
-            <Link href="/territoires/academy-ia-collectivites">
-              <span>ACADEMY</span>
-              <strong>Formation IA pour agents, managers et directions</strong>
-              <p>Socle commun, parcours par rôle, AI literacy, gouvernance et ateliers sur les vrais processus.</p>
-              <b>Lire le guide →</b>
-            </Link>
-            <Link href="/territoires/accelerateur-ia-tpe-pme">
-              <span>ENTREPRISES</span>
-              <strong>Accélérateur IA territorial pour TPE/PME</strong>
-              <p>Une méthode de cohorte pour passer de la sensibilisation à un workflow testé et documenté.</p>
-              <b>Lire le guide →</b>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="territoryFaq">
-        <p className="sectionIndex">08 — QUESTIONS</p>
-        <div>
-          <h2>Questions fréquentes des intercommunalités.</h2>
-          <div className="faqList">
-            {faq.map((item) => (
-              <details key={item.question}>
-                <summary>{item.question}</summary>
-                <p>{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="territoryLeadSection" id="territory-contact">
-        <div className="territoryLeadIntro">
-          <p className="sectionIndex">09 — ÉCHANGE</p>
+      <section className="territoryOtherUses">
+        <div className="territorySectionIntro">
+          <p className="sectionIndex">03 — AUTRES SERVICES</p>
           <div>
-            <h2>Quel programme voulez-vous activer sur votre territoire ?</h2>
+            <h2>La même logique s’applique à beaucoup de métiers intercommunaux.</h2>
+            <p>On ne remplace pas le logiciel métier. On retire les ressaisies, recherches, contrôles et relances qui l’entourent.</p>
+          </div>
+        </div>
+
+        <div className="territoryOtherGrid">
+          {otherUses.map(([title, text], index) => (
+            <article key={title}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{title}</strong>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="territoryOfferLadder" id="offre">
+        <div className="territorySectionIntro">
+          <p className="sectionIndex">04 — UNE OFFRE PROGRESSIVE</p>
+          <div>
+            <h2>Commencer par une preuve, puis élargir seulement si elle est utile.</h2>
             <p>
-              Indiquez le point de départ. Le formulaire transmet directement le besoin au cockpit Autonomia.
+              Les montants ci-dessous sont des repères indicatifs à confirmer après cadrage. L’objectif est de conserver
+              des périmètres lisibles et compatibles avec les contraintes de la commande publique.
             </p>
           </div>
         </div>
-        <LeadForm
-          mode="territories"
-          formId="territories-main"
-          requestedService="autonomia-territoires"
-        />
+
+        <div className="territoryOfferGrid">
+          {offers.map(([index, title, text, price]) => (
+            <article key={title}>
+              <span>{index}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <strong>{price}</strong>
+            </article>
+          ))}
+        </div>
+
+        <p className="territoryLegalNote">
+          Depuis le 1er avril 2026, le seuil de dispense de publicité et de mise en concurrence préalables est de
+          60 000 € HT pour certains marchés publics de fournitures ou services. La valeur totale du besoin et les autres
+          règles de la commande publique restent à apprécier par l’acheteur.
+        </p>
+      </section>
+
+      <section className="territoryAcademyBlock">
+        <div>
+          <p className="sectionIndex">05 — PORTE D’ENTRÉE FORMATION</p>
+          <h2>Charte IA + formation : une première étape simple avant les applicatifs.</h2>
+          <p>
+            Pour les collectivités qui veulent commencer par les usages et les règles, nous pouvons construire une charte
+            adaptée, former les agents sur des cas métiers et préparer un kit de prompts ou méthodes validées.
+          </p>
+        </div>
+        <div className="territoryAcademyPrice">
+          <span>À PARTIR DE</span>
+          <strong>4 500 € HT</strong>
+          <p>Charte + une journée de formation sur site. Configuration exacte sur devis.</p>
+        </div>
+      </section>
+
+      <section className="territoryReferences">
+        <div className="territorySectionIntro">
+          <p className="sectionIndex">06 — RÉFÉRENCES DE L’ÉQUIPE</p>
+          <div>
+            <h2>Un espace prévu pour les références administratives.</h2>
+            <p>
+              Les références de Sylvain et de l’équipe seront publiées ici uniquement après validation de la formulation
+              et autorisation d’usage des logos. Aucun logo ou résultat ne sera inventé.
+            </p>
+          </div>
+        </div>
+
+        {references.length === 0 ? (
+          <div className="territoryReferencePlaceholder">
+            <span>RÉFÉRENCES EN COURS DE VALIDATION</span>
+            <p>Logos, mission menée et résultat concret seront ajoutés à réception des éléments autorisés.</p>
+          </div>
+        ) : null}
+      </section>
+
+      <section className="territoryAdsFooter">
+        <div>
+          <p className="eyebrow">VOTRE SERVICE A UN AUTRE IRRITANT ?</p>
+          <h2>Décrivez-le avec vos mots. Nous chercherons la première démo utile.</h2>
+          <p>Pas besoin de parler d’IA, de modèle ou d’architecture. Parlez-nous du travail qui use l’équipe.</p>
+        </div>
+        <TerritoryLeadCard variant="footer" title="Recevoir un diagnostic et une première piste de démo" />
+      </section>
+
+      <section className="territoryResourceLinks">
+        <Link href="/territoires/ia-agents-collectivite">IA pour les agents →</Link>
+        <Link href="/territoires/academy-ia-collectivites">Academy collectivités →</Link>
+        <Link href="/territoires/accelerateur-ia-tpe-pme">Accélérateur TPE/PME →</Link>
+        <Link href="/observatoire-ia/collectivites-intercommunalites">6 transformations Territoires →</Link>
       </section>
     </main>
   );
