@@ -165,6 +165,43 @@ assert.equal(inboundRevenueActions[0].account_name, "Inbound Acme");
 assert.equal(inboundRevenueActions[0].href, "/inbound");
 assert.ok(inboundRevenueActions[0].priority > inboundRevenueActions[1].priority);
 
+
+const consultantRevenueActions = buildRevenueActions({
+  accounts: [{
+    slug: "agentic-bank",
+    name: "Agentic Bank",
+    heat_score: 84,
+    recent_7d: 2,
+    recent_30d: 4,
+    intermediary_risk: false,
+    offers: ["Prestation / automatisation IA", "Staffing / freelance IA"],
+    recommended_offer: "Prestation / automatisation IA",
+    decision_roles: [{ label: "Head of AI / Data", reason: "Signal IA" }],
+    timeline: [{
+      title: "Industrialisation Agentic AI avec LangGraph",
+      kind: "freelance",
+      signal_keys: ["agentic_llm"],
+      tags: ["LangGraph", "RAG"],
+      source_url: "https://example.test/agentic-bank"
+    }]
+  }],
+  contacts: [],
+  inboundLeads: [],
+  consultants: [{
+    id: "consultant-agentic",
+    display_name: "Consultant Agentic",
+    status: "active",
+    available_from: "2020-01-01",
+    skills: ["LangGraph", "RAG", "Python"]
+  }]
+});
+
+assert.equal(consultantRevenueActions[0].kind, "consultant_to_account");
+assert.equal(consultantRevenueActions[0].account_key, "agentic-bank");
+assert.equal(consultantRevenueActions[0].contact_name, "Consultant Agentic");
+assert.ok(consultantRevenueActions[0].staffing_match_score >= 60);
+assert.ok(consultantRevenueActions[0].matched_skills.includes("LangGraph"));
+
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {
     linkedinUrl: "https://fr.linkedin.com/in/jane-doe-ai/",

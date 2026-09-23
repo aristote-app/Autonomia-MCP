@@ -14,6 +14,7 @@ import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
 import { getCurrentWorkspaceMembership } from "../lib/auth/access.js";
 import { listWorkspaceSalesContacts } from "../lib/db/salesContacts.js";
 import { listInboundLeads } from "../lib/db/inboundLeads.js";
+import { listConsultantsWithSkills } from "../lib/db/consultants.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 import {
   claimWorkItem,
@@ -265,7 +266,7 @@ export default async function Home({ searchParams }) {
   const hasWorkspaceSession = Boolean(
     privateContext?.claims?.sub && privateContext?.membership?.workspace_id
   );
-  const [privateContacts, inboundLeads] =
+  const [privateContacts, inboundLeads, consultants] =
     live && hasWorkspaceSession
       ? await Promise.all([
           listWorkspaceSalesContacts({
@@ -275,9 +276,10 @@ export default async function Home({ searchParams }) {
           listInboundLeads({
             workspaceId: privateContext.membership.workspace_id,
             limit: 200
-          }).catch(() => [])
+          }).catch(() => []),
+          listConsultantsWithSkills({ limit: 500 }).catch(() => [])
         ])
-      : [[], []];
+      : [[], [], []];
 
   const revenueActions =
     live && hasWorkspaceSession
@@ -285,6 +287,7 @@ export default async function Home({ searchParams }) {
           accounts: live.accounts || [],
           contacts: privateContacts,
           inboundLeads,
+          consultants,
           kasprReady: Boolean(
             process.env.KASPR_API_KEY &&
             String(process.env.KASPR_DATA_TO_GET || "").trim()
