@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "node server.cjs",
     "content:validate": "node scripts/validate-content.mjs",
     "organic:report": "node scripts/organic-report.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
