@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { getMiniDemoBlueprints } from "@/content/mini-demo-blueprints";
+import { SpecializedExperience } from "@/components/SpecializedMiniExperiences";
 
 const contexts = {
   "ressources-humaines": {
@@ -383,16 +384,23 @@ const meetingTypes = new Set(["meeting","timeline","executive","report"]);
 const plannerTypes = new Set(["learning","calendar","site"]);
 const controlTypes = new Set(["control","classify","cluster"]);
 
-function Experience({ type, ...props }) {
-  if (rankingTypes.has(type)) return <RankingExperience {...props} />;
-  if (queueTypes.has(type)) return <QueueExperience {...props} />;
-  if (knowledgeTypes.has(type)) return <KnowledgeExperience {...props} />;
-  if (contentTypes.has(type)) return <ContentExperience {...props} />;
-  if (dataTypes.has(type)) return <DataExperience {...props} />;
-  if (meetingTypes.has(type)) return <MeetingExperience {...props} />;
-  if (plannerTypes.has(type)) return <PlannerExperience {...props} />;
-  if (controlTypes.has(type)) return <ControlExperience {...props} />;
-  return <QueueExperience {...props} />;
+function Experience({ type, topic, ...props }) {
+  const specialized = <SpecializedExperience type={type} topic={topic} context={ctx(topic)} {...props} />;
+  if (specialized.type !== SpecializedExperience || specialized.props.type) {
+    const specialTypes = new Set(["account","seo","campaign","reconcile","timeline","cluster","maintenance","compare","stock","site","tender","learning","calendar","brand","collect","executive","table","report","variance","sequence","routing","workflow","invoice","extract","classify","brief","catalog"]);
+    if (specialTypes.has(type)) return specialized;
+  }
+
+  const allProps = { topic, ...props };
+  if (rankingTypes.has(type)) return <RankingExperience {...allProps} />;
+  if (queueTypes.has(type)) return <QueueExperience {...allProps} />;
+  if (knowledgeTypes.has(type)) return <KnowledgeExperience {...allProps} />;
+  if (contentTypes.has(type)) return <ContentExperience {...allProps} />;
+  if (dataTypes.has(type)) return <DataExperience {...allProps} />;
+  if (meetingTypes.has(type)) return <MeetingExperience {...allProps} />;
+  if (plannerTypes.has(type)) return <PlannerExperience {...allProps} />;
+  if (controlTypes.has(type)) return <ControlExperience {...allProps} />;
+  return <QueueExperience {...allProps} />;
 }
 
 export default function MiniModuleLab({ topic }) {
