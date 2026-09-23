@@ -3087,7 +3087,7 @@ button {
 .diagnosticTeaser > p:not(.formKicker) {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -4448,7 +4448,7 @@ button {
 .useCaseTab > span {
   grid-row: span 2;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
 }
 
@@ -5097,7 +5097,7 @@ button {
   border-radius: 8px;
   background: transparent;
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
 }
 
@@ -6627,7 +6627,7 @@ button {
 .consultantCvBullets li {
   margin: 0 0 8px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.45;
 }
 
@@ -11185,9 +11185,11 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemHeroCopy h1 {
   max-width: 930px;
   margin: 14px 0 20px;
-  font-size: clamp(43px, 8.5vw, 78px);
+  font-size: clamp(38px, 10.5vw, 78px);
   line-height: .95;
   letter-spacing: -.055em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .problemHeroCopy > p:not(.eyebrow) {
   max-width: 780px;
@@ -11386,7 +11388,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemProductTop > span,
 .problemProductTop > b {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
 }
 .problemProductTop > span {
@@ -11430,7 +11432,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemMaintenance > span {
   margin: 0;
   color: #ffd16a;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: .05em;
 }
@@ -11525,6 +11527,74 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemTranscript b {
   color: #ffd16a;
+}
+.problemActionBoard {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+}
+.problemActionBoard article,
+.problemExecutiveBrief,
+.problemMeetingFooter > div {
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.045);
+}
+.problemActionBoard article.warning {
+  border-color: rgba(255,209,106,.42);
+  box-shadow: inset 3px 0 0 #ffd16a;
+}
+.problemActionBoard span,
+.problemExecutiveBrief > span,
+.problemMeetingFooter > div > span {
+  display: block;
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemActionBoard strong,
+.problemMeetingFooter > div > strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  line-height: 1.25;
+}
+.problemActionBoard small,
+.problemMeetingFooter > div > small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255,255,255,.62);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.problemExecutiveBrief h4 {
+  margin: 8px 0 9px;
+  font-size: 24px;
+  line-height: 1.08;
+}
+.problemExecutiveBrief p {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.problemMeetingFooter {
+  display: grid;
+  gap: 9px;
+  margin-top: 10px;
+}
+.problemMeetingFooter > button {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #ffd16a;
+  border-radius: 9px;
+  background: transparent;
+  color: #ffd16a;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
 }
 .problemResultGrid,
 .problemKpis,
@@ -12075,6 +12145,39 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemHubGroup a > b {
   font-size: 15px;
+}
+
+@media (max-width: 759px) {
+  .problemHero {
+    padding-top: 42px;
+  }
+  .problemHeroCopy h1 {
+    max-width: 100%;
+  }
+  .problemHeroProof {
+    gap: 7px;
+    margin-top: 20px;
+  }
+  .problemHeroProof span {
+    border-radius: 8px;
+  }
+  .problemLeadForm,
+  .problemLeadSuccess {
+    padding: 19px 16px;
+  }
+  .problemProductBody {
+    padding: 10px;
+  }
+  .problemControls,
+  .problemApp {
+    padding: 15px;
+  }
+  .problemSequence button {
+    grid-template-columns: 48px minmax(0,1fr) auto;
+  }
+  .problemRouteCard > div {
+    align-items: flex-start;
+  }
 }
 
 @media (min-width: 760px) {
