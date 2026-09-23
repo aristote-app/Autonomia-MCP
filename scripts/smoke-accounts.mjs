@@ -106,6 +106,22 @@ assert.equal(knownMarketplace?.intermediary_risk, true);
 assert.equal(knownMarketplace?.account_type, "intermediary");
 assert.ok(knownMarketplace?.heat_score <= 58);
 
+const staleSignals = Array.from({ length: 8 }, (_, index) => ({
+  id: "stale-" + index,
+  source_id: index % 2 ? "linkedin" : "indeed",
+  title: "Ancien programme IA " + index,
+  company_name: "Old Corp",
+  location: "Paris",
+  source_url: "https://example.test/old/" + index,
+  published_at: iso(95 + index),
+  signal_keys: ["ai_product", "agentic_llm"]
+}));
+const stale = buildAccountIntelligence({ jobSignals: staleSignals })[0];
+assert.equal(stale?.dormant, true);
+assert.equal(stale?.heat_label, "Dormant");
+assert.ok(stale?.heat_score <= 45);
+assert.ok(stale?.why_now.some((reason) => reason.includes("Dernier signal exploitable")));
+
 assert.equal(direct?.account_type, "end_client_candidate");
 assert.ok(direct?.recommended_offer);
 assert.ok(direct?.playbook?.target_role);
