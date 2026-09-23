@@ -76,6 +76,11 @@ export default async function SeoGeoPage() {
   const topQueries = [...searchRows]
     .sort((a, b) => Number(b.impressions || 0) - Number(a.impressions || 0))
     .slice(0, 15);
+  const sitemapCounts = (google?.contents || []).reduce((acc, item) => {
+    acc.submitted += Number(item.submitted) || 0;
+    acc.indexed += Number(item.indexed) || 0;
+    return acc;
+  }, { submitted: 0, indexed: 0 });
   const draftQueue = snapshot?.draftQueue || [];
   const site = siteConfig().base;
 
@@ -163,6 +168,14 @@ export default async function SeoGeoPage() {
           <div className={styles.statusItem}>
             <strong>Dernier sitemap connu</strong>
             <span>{google?.last_submitted ? new Date(google.last_submitted).toLocaleString("fr-FR") : "—"}</span>
+          </div>
+          <div className={styles.statusItem}>
+            <strong>URLs soumises à Google</strong>
+            <span>{sitemapCounts.submitted ? number(sitemapCounts.submitted) : number(manifest?.indexable?.total)}</span>
+          </div>
+          <div className={styles.statusItem}>
+            <strong>URLs indexées · API</strong>
+            <span>{google?.configured ? number(sitemapCounts.indexed) : "Connexion API requise"}</span>
           </div>
           <div className={styles.statusItem}>
             <strong>Dernière veille automatique</strong>
