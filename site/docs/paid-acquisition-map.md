@@ -33,6 +33,44 @@ La promesse commune est :
 | formation agents IA | /formation-agents-ia | Comprendre, concevoir et superviser des agents | Cadrer la formation | lead_training |
 | formation prompt engineering | /formation-prompt-engineering | Transformer les prompts en méthodes réutilisables | Construire le parcours | lead_training |
 
+## Google Ads — problèmes précis
+
+Les pages `/solutions-ia/[slug]` visent une intention différente des LP “consultant / formation” : le visiteur connaît déjà **la tâche ou le processus qu’il veut transformer**, sans nécessairement connaître le profil IA à acheter.
+
+### Wave 1 — à utiliser en premier pour les tests Search
+
+| Groupe d’annonces | Landing page | Intention exprimée | Démo dominante | CTA / conversion |
+|---|---|---|---|---|
+| compte rendu réunion | /solutions-ia/automatiser-comptes-rendus-reunion | automatiser CR / PV / actions après réunion | transcription → décisions → actions | problem_lp_lead_submit → generate_lead |
+| assistant documentaire / RAG | /solutions-ia/assistant-documentaire-ia-rag | retrouver une réponse dans des documents internes | question → réponse sourcée | problem_lp_lead_submit → generate_lead |
+| qualification leads | /solutions-ia/qualification-automatique-leads | scorer / enrichir / router des leads | critères → score → routage | problem_lp_lead_submit → generate_lead |
+| tri e-mails | /solutions-ia/trier-router-emails-ia | classer / prioriser / affecter une boîte entrante | mail → catégorie → service | problem_lp_lead_submit → generate_lead |
+| extraction documents | /solutions-ia/extraction-donnees-documents | extraire des données depuis PDF / dossiers | document → champs → contrôle | problem_lp_lead_submit → generate_lead |
+| contrôle dossiers | /solutions-ia/controler-dossiers-automatiquement | vérifier complétude et cohérence | checklist → anomalies → relance | problem_lp_lead_submit → generate_lead |
+| reporting automatisé | /solutions-ia/automatiser-reporting | automatiser collecte / consolidation / commentaire | sources → KPI → anomalies | problem_lp_lead_submit → generate_lead |
+| contrôle factures | /solutions-ia/controle-factures-ia | lire / rapprocher / contrôler les factures | facture → champs → écarts | problem_lp_lead_submit → generate_lead |
+| réponse appel d’offres | /solutions-ia/reponse-appel-offres-ia | analyser DCE / préparer mémoire / conformité | DCE → exigences → preuves → trame | problem_lp_lead_submit → generate_lead |
+| saisie CRM | /solutions-ia/automatiser-saisie-crm | automatiser compte rendu et champs CRM | notes → champs → next steps | problem_lp_lead_submit → generate_lead |
+
+### Architecture de campagne
+
+Ne pas mélanger les 10 problèmes dans un même groupe d’annonces. Le contrat est :
+
+**1 problème précis → 1 groupe d’intention → 1 LP dédiée → 1 événement de conversion**
+
+Les mots-clés doivent reprendre le vocabulaire de la tâche, puis l’annonce doit réutiliser la même formulation dans le titre et la description. La LP ne doit pas rediriger vers un catalogue avant d’avoir montré le flux correspondant.
+
+Les Wave 2 et Wave 3 restent indexables et prêtes techniquement, mais elles servent d’abord à observer la demande organique et les clics internes avant activation média.
+
+### Événements spécifiques aux LP problème
+
+- `problem_hub_click` : entrée vers le hub depuis Home / Observatoire / autre surface.
+- `problem_lp_click` : clic vers une LP précise avec `problem_slug`, `problem_cluster`, `source_surface`.
+- `problem_lab_demo_open` : interaction avec une micro-app de la LP.
+- `problem_lp_lead_submit` : tentative d’envoi du formulaire.
+- `generate_lead` : lead accepté, événement de conversion principal après consentement analytics.
+- Les UTM, `gclid`, `fbclid` et identifiants de campagne continuent d’être transmis au pipeline lead.
+
 ### Règle Google
 
 Une campagne ne doit pas envoyer vers la home si une LP dédiée existe.
@@ -160,6 +198,12 @@ La puissance perçue doit venir de la clarté du système Autonomia et non de pr
 - autonomia_scan_cta
 - form_start
 - form_step
+- problem_hub_click
+- problem_lp_click
+- problem_lab_demo_open
+- problem_lp_lead_submit
+- autonomia_lab_module_open
+- observatory_lead_submit
 - generate_lead
 
 Attribution conservée :
