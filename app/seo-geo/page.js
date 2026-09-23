@@ -52,6 +52,30 @@ export default async function SeoGeoPage() {
     : snapshot?.google?.ok
       ? snapshot.google.data
       : null;
+  const searchDemand = data.searchDemand?.ok
+    ? data.searchDemand.data
+    : snapshot?.searchDemand?.ok
+      ? snapshot.searchDemand.data
+      : null;
+  const searchRows = searchDemand?.rows || [];
+  const searchTotals = searchRows.reduce((acc, row) => {
+    acc.clicks += Number(row.clicks) || 0;
+    acc.impressions += Number(row.impressions) || 0;
+    return acc;
+  }, { clicks: 0, impressions: 0 });
+  const weightedPosition = searchRows.reduce(
+    (sum, row) => sum + (Number(row.position) || 0) * (Number(row.impressions) || 0),
+    0
+  );
+  const avgPosition = searchTotals.impressions
+    ? weightedPosition / searchTotals.impressions
+    : 0;
+  const ctr = searchTotals.impressions
+    ? searchTotals.clicks / searchTotals.impressions
+    : 0;
+  const topQueries = [...searchRows]
+    .sort((a, b) => Number(b.impressions || 0) - Number(a.impressions || 0))
+    .slice(0, 15);
   const draftQueue = snapshot?.draftQueue || [];
   const site = siteConfig().base;
 
@@ -144,6 +168,73 @@ export default async function SeoGeoPage() {
             <strong>Dernière veille automatique</strong>
             <span>{snapshot?.generatedAt ? new Date(snapshot.generatedAt).toLocaleString("fr-FR") : "Pas encore exécutée"}</span>
           </div>
+        </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <p className={styles.eyebrow}>GOOGLE SEARCH CONSOLE</p>
+            <h2>Visibilité organique réelle</h2>
+            <p>Mesures issues des requêtes observées sur les 28 derniers jours. Elles commencent à se remplir après les premiers crawls et impressions Google.</p>
+          </div>
+        </div>
+
+        <div className={styles.grid}>
+          <article className={styles.card}>
+            <span>Impressions · 28 j</span>
+            <strong>{number(searchTotals.impressions)}</strong>
+            <small>Nombre d’affichages observés dans Google Search.</small>
+          </article>
+          <article className={styles.card}>
+            <span>Clics · 28 j</span>
+            <strong>{number(searchTotals.clicks)}</strong>
+            <small>Trafic organique reçu depuis Google Search.</small>
+          </article>
+          <article className={styles.card}>
+            <span>CTR moyen</span>
+            <strong>{searchTotals.impressions ? `${(ctr * 100).toFixed(1)} %` : "—"}</strong>
+            <small>Clics / impressions sur les requêtes remontées.</small>
+          </article>
+          <article className={styles.card}>
+            <span>Position moyenne pondérée</span>
+            <strong>{searchTotals.impressions ? avgPosition.toFixed(1) : "—"}</strong>
+            <small>Pondérée par le nombre d’impressions.</small>
+          </article>
+        </div>
+
+        <div className={styles.tableWrap} style={{ marginTop: 18 }}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Requête Google</th>
+                <th>Impressions</th>
+                <th>Clics</th>
+                <th>CTR</th>
+                <th>Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topQueries.map((row) => (
+                <tr key={row.query}>
+                  <td><strong>{row.query}</strong></td>
+                  <td>{number(row.impressions)}</td>
+                  <td>{number(row.clicks)}</td>
+                  <td>{`${((Number(row.ctr) || 0) * 100).toFixed(1)} %`}</td>
+                  <td>{Number(row.position || 0).toFixed(1)}</td>
+                </tr>
+              ))}
+              {!topQueries.length && (
+                <tr>
+                  <td colSpan="5">
+                    {searchDemand?.configured === false
+                      ? "Search Console API n’est pas encore connectée."
+                      : "Aucune requête remontée pour le moment — normal juste après la mise en ligne."}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </section>
 
