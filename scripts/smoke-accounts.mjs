@@ -1,3 +1,4 @@
+import { buildAccountOpportunityGraph } from "../lib/intelligence/accountGraph.js";
 import assert from "node:assert/strict";
 import { buildAccountIntelligence, findAccountBySlug } from "../lib/intelligence/accounts.js";
 
@@ -111,3 +112,37 @@ assert.ok(direct?.playbook?.target_role);
 assert.ok(direct?.playbook?.trigger);
 
 console.log("account intelligence smoke ok");
+
+
+const graph = buildAccountOpportunityGraph({
+  slug: "acme",
+  name: "Acme",
+  recommended_offer: "Prestation / automatisation IA",
+  offers: ["Prestation / automatisation IA", "Formation & adoption IA"],
+  decision_roles: [
+    { label: "Head of AI / Data", reason: "Signal IA détecté." },
+    { label: "Responsable formation / L&D", reason: "Adoption détectée." }
+  ],
+  timeline: [
+    {
+      id: "signal-1",
+      kind: "private",
+      title: "Déploiement Agentic AI",
+      source_id: "linkedin",
+      source_url: "https://example.test/signal-1"
+    },
+    {
+      id: "signal-2",
+      kind: "training",
+      title: "Programme Copilot",
+      source_id: "indeed",
+      source_url: "https://example.test/signal-2"
+    }
+  ]
+});
+
+assert.equal(graph.stats.signals, 2);
+assert.equal(graph.stats.needs, 2);
+assert.equal(graph.stats.decision_roles, 2);
+assert.equal(graph.stats.offers, 2);
+assert.ok(graph.edges.some((edge) => edge.relation === "oriente vers"));
