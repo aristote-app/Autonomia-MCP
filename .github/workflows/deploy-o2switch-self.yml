@@ -188,7 +188,7 @@ jobs:
 
 
       - name: Refresh GitHub OIDC identity for SEO GEO diagnostic
-        if: steps.probe.outputs.ready == 'true'
+        if: always() && steps.probe.outputs.ready == 'true'
         id: seo_geo_oidc
         env:
           AUDIENCE: autonomia-o2switch
@@ -204,7 +204,7 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Verify cockpit SEO GEO connection
-        if: steps.probe.outputs.ready == 'true'
+        if: always() && steps.probe.outputs.ready == 'true'
         env:
           SEO_GEO_URL: https://cockpit.build-autonomia.com/api/internal/seo-geo-refresh
           OIDC_TOKEN: ${{ steps.seo_geo_oidc.outputs.token }}
