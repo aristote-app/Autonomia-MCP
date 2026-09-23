@@ -4,6 +4,7 @@ import LiveJobSignals from "@/components/LiveJobSignals";
 import HomeUseCaseLab from "@/components/HomeUseCaseLab";
 import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
 import AutonomiaMark from "@/components/AutonomiaMark";
+import { academyTrainings } from "@/content/academy-trainings";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -23,20 +24,8 @@ const expertRoles = [
   { label: "Automatisation", slug: "automation-engineer" }
 ];
 
-const trainingTopics = [
-  "IA générative",
-  "ChatGPT en entreprise",
-  "Microsoft Copilot",
-  "Prompt engineering",
-  "Agents IA",
-  "Automatisation",
-  "IA pour managers",
-  "Fonctions métier",
-  "Gouvernance IA",
-  "AI Act",
-  "Adoption",
-  "Sur mesure"
-];
+const trainingTopics = academyTrainings;
+
 
 export default function Home() {
   const latestGuides = [
@@ -286,10 +275,10 @@ export default function Home() {
         </div>
 
         <div className="topicGrid">
-          {trainingTopics.map((topic, index) => (
-            <Link href="/academy" key={topic}>
+          {trainingTopics.map((training, index) => (
+            <Link href={"/formation-ia/" + training.slug} key={training.slug}>
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{topic}</strong>
+              <strong>{training.homeTitle}</strong>
               <b>↗</b>
             </Link>
           ))}
