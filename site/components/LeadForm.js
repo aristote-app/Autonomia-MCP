@@ -88,8 +88,8 @@ function scanMessage(scanContext) {
   ].filter(Boolean).join(" · ");
 }
 
-export default function LeadForm({ mode = "experts", formId = "site-main", requestedService, scanContext = null }) {
-  const [step, setStep] = useState(scanContext ? 3 : 1);
+export default function LeadForm({ mode = "experts", formId = "site-main", requestedService, scanContext = null, solutionContext = null }) {
+  const [step, setStep] = useState(scanContext || solutionContext ? 3 : 1);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [data, setData] = useState({
@@ -150,10 +150,21 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       phone: data.phone || null,
       company_name: data.company,
       requested_service: requestedService || mode,
-      message: scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
+      message: solutionContext?.original_query || scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
       desired_timeline: mode === "experts" ? data.qualifier : null,
       company_size: mode === "academy" ? data.qualifier : null,
       form_id: formId,
+      solution_context: solutionContext
+        ? {
+            source: solutionContext.source || "solution_finder",
+            original_query: solutionContext.original_query || null,
+            summary: solutionContext.summary || null,
+            route: solutionContext.route || null,
+            recommended_roles: solutionContext.roles || [],
+            recommended_training: solutionContext.trainings || [],
+            completed_at: solutionContext.created_at || null
+          }
+        : null,
       scan_context: scanContext
         ? {
             version: scanContext.scan_version || null,
@@ -213,7 +224,13 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
 
   return (
     <form className="leadForm" onSubmit={submit}>
-      {scanContext && (
+      {solutionContext && (
+        <div className="scanContextSummary">
+          <span>BRIEF AI MATCH REPRIS</span>
+          <strong>{solutionContext.summary || solutionContext.original_query}</strong>
+        </div>
+      )}
+      {!solutionContext && scanContext && (
         <div className="scanContextSummary">
           <span>PLAN D’EXÉCUTION REPRIS</span>
           <strong>{scanMessage(scanContext)}</strong>
@@ -288,8 +305,10 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
 
           {error && <p className="formError" role="alert">{error}</p>}
 
-          <div className="formActions">
-            <button className="formBack" type="button" onClick={() => setStep(2)}>Retour</button>
+          <div className={scanContext || solutionContext ? "formActions single" : "formActions"}>
+            {!(scanContext || solutionContext) && (
+              <button className="formBack" type="button" onClick={() => setStep(2)}>Retour</button>
+            )}
             <button className="formNext" type="submit" disabled={status === "sending"}>
               {status === "sending" ? "Envoi…" : "Envoyer ma demande"}
             </button>
