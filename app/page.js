@@ -349,6 +349,9 @@ export default async function Home({ searchParams }) {
                       <strong>{action.contact_name || action.account_name}</strong>
                       {action.trigger && <p>Signal : {action.trigger}</p>}
                       <small>{action.action}</small>
+                      {action.message && (
+                        <p className="revenueActionMessage">{action.message}</p>
+                      )}
                     </div>
                     <div className="revenueActionOpen">
                       {action.account_key && (
