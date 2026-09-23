@@ -2,6 +2,7 @@ import { getAllPages } from "@/lib/pages";
 import { aiRoles } from "@/content/ai-roles";
 import { academyTrainings } from "@/content/academy-trainings";
 import { observatoryTopics } from "@/content/observatory-solutions";
+import { problemSolutions } from "@/content/problem-solutions";
 import {
   executionPillars,
   trainingPillars
@@ -33,6 +34,7 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/territoires/urbanisme`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/territoires/conservatoire`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-23" },
+    { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-23" },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
 
@@ -70,6 +72,14 @@ export function getIndexableUrlRecords(base) {
       changeFrequency: "monthly",
       lastModified: "2026-09-23"
     }));
+
+  const problemLandingPages = problemSolutions.map((problem) => ({
+    url: `${base}/solutions-ia/${problem.slug}`,
+    kind: "problem-solution-landing",
+    priority: problem.wave === 1 ? 0.9 : problem.wave === 2 ? 0.86 : 0.82,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-23"
+  }));
 
   const executionPillarPages = executionPillars.map((pillar) => ({
     url: `${base}/cas-usage-ia/${pillar.slug}`,
@@ -125,6 +135,7 @@ export function getIndexableUrlRecords(base) {
     ...aiRolePages,
     ...academyTrainingPages,
     ...observatoryLandingPages,
+    ...problemLandingPages,
     ...executionPillarPages,
     ...trainingPillarPages,
     ...territoryPillarPages,
