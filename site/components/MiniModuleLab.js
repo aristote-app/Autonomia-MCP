@@ -519,6 +519,14 @@ export default function MiniModuleLab({ topic }) {
           <Experience type={blueprint.type} topic={topic} module={module} blueprint={blueprint} />
           <ValueStrip blueprint={blueprint} />
           <ImpactSimulator />
+          <div className="wowLabBridge">
+            <div>
+              <span>PASSER DE LA DÉMO AU CAS RÉEL</span>
+              <strong>Ce module ressemble à un irritant de votre équipe ?</strong>
+              <p>Décrivez le flux actuel : Autonomia pourra repartir de vos outils, règles et données autorisées.</p>
+            </div>
+            <a href="#diagnostic" onClick={()=>trackEvent("autonomia_lab_cta_click",{topic:topic.slug,module_name:module[0],module_index:active+1})}>Décrire mon flux réel →</a>
+          </div>
           <p className="wowDemoDisclosure">Données fictives · résultats illustratifs · aucune performance n’est garantie · les décisions sensibles restent humaines.</p>
         </div>
       </div>
