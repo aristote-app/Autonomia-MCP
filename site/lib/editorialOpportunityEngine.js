@@ -179,6 +179,18 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
         0
       );
 
+      const territorySpecificity =
+        topic.type === "territory-use-case"
+          ? Math.max(
+              0,
+              ...matches.map((match) =>
+                territoryLexicalAffinity(topic.title, match.signal.query)
+              )
+            )
+          : 0;
+      const specificityBonus =
+        topic.type === "territory-use-case" ? territorySpecificity * 1.5 : 0;
+
       const closest = closestPublished(topic);
       const overlap = closest?.similarity || 0;
       const clusterCoverage = publishedClusterCount(topic);
@@ -187,7 +199,12 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
       const overlapPenalty = overlap >= 0.72 ? 5 : overlap >= 0.52 ? 2 : 0;
       const noEvidencePenalty = matches.length === 0 ? 1.5 : 0;
 
-      const score = evidenceScore + diversityBonus - overlapPenalty - noEvidencePenalty;
+      const score =
+        evidenceScore +
+        specificityBonus +
+        diversityBonus -
+        overlapPenalty -
+        noEvidencePenalty;
 
       const evidence = {
         search_impressions: matches.reduce((sum, match) => sum + match.signal.search_impressions, 0),
@@ -234,6 +251,7 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
     rules: {
       evidence_first: true,
       cluster_diversity_bonus: true,
+      territory_specificity_bonus: true,
       cannibalization_penalty: true,
       no_signal_auto_publish: false,
       output_is_recommendation_not_publication: true
