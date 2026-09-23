@@ -11162,3 +11162,1020 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 14px;
   line-height: 1.5;
 }
+
+
+/* Precise problem LP engine */
+.problemLanding,
+.problemHub {
+  background: var(--paper);
+  color: var(--ink);
+}
+.problemHero {
+  display: grid;
+  gap: 28px;
+  padding: 54px 18px 48px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(66,99,216,.13), transparent 34%),
+    var(--paper);
+}
+.problemHeroCopy {
+  align-self: center;
+}
+.problemHeroCopy h1 {
+  max-width: 930px;
+  margin: 14px 0 20px;
+  font-size: clamp(43px, 8.5vw, 78px);
+  line-height: .95;
+  letter-spacing: -.055em;
+}
+.problemHeroCopy > p:not(.eyebrow) {
+  max-width: 780px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.55;
+}
+.problemHeroProof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 26px 0 24px;
+}
+.problemHeroProof span {
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.66);
+  font-size: 14px;
+  font-weight: 800;
+}
+.problemLeadAside {
+  align-self: start;
+}
+.problemLeadForm,
+.problemLeadSuccess {
+  display: grid;
+  gap: 13px;
+  padding: 22px;
+  border: 1px solid rgba(23,32,51,.15);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(23,32,51,.1);
+}
+.problemLeadForm h2 {
+  margin: 0 0 4px;
+  font-size: 27px;
+  line-height: 1.04;
+  letter-spacing: -.035em;
+}
+.problemLeadForm label {
+  display: grid;
+  gap: 6px;
+}
+.problemLeadForm label > span,
+.problemLeadForm > small,
+.problemLeadSuccess p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.problemLeadForm label > span {
+  color: var(--ink);
+  font-weight: 800;
+}
+.problemLeadForm input,
+.problemLeadForm textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.problemLeadForm textarea {
+  resize: vertical;
+}
+.problemLeadForm button,
+.problemControls > button {
+  min-height: 48px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--signal);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.problemLeadForm button:disabled {
+  opacity: .58;
+  cursor: wait;
+}
+.problemLeadSuccess strong {
+  font-size: 24px;
+}
+.problemLab,
+.problemBuild,
+.problemFaq {
+  padding: 56px 18px 62px;
+  border-bottom: 1px solid var(--line);
+}
+.problemLab {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(66,99,216,.08), transparent 32%),
+    var(--paper);
+}
+.problemSectionIntro {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+.problemSectionIntro h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(36px, 6vw, 58px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.problemSectionIntro > p:not(.sectionIndex) {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.problemDemoTabs {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  margin: 0 -18px 12px 0;
+  padding: 2px 18px 11px 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.problemDemoTabs button {
+  flex: 0 0 min(82vw, 320px);
+  display: grid;
+  grid-template-columns: 38px minmax(0,1fr);
+  grid-template-areas: "num title" "num metric";
+  gap: 3px 10px;
+  min-height: 78px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+.problemDemoTabs button.active {
+  border-color: var(--ink);
+  box-shadow: inset 4px 0 0 #ffd16a, 0 8px 24px rgba(23,32,51,.07);
+}
+.problemDemoTabs button > span {
+  grid-area: num;
+  color: #9b6a00;
+  font-size: 14px;
+  font-weight: 900;
+}
+.problemDemoTabs button > strong {
+  grid-area: title;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.problemDemoTabs button > small {
+  grid-area: metric;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.25;
+}
+.problemProduct {
+  overflow: hidden;
+  border: 1px solid rgba(23,32,51,.16);
+  border-radius: 17px;
+  background: #0f1728;
+  box-shadow: 0 28px 90px rgba(23,32,51,.14);
+}
+.problemProductTop {
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr);
+  gap: 8px 12px;
+  align-items: center;
+  min-height: 58px;
+  padding: 9px 15px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  background: #0b1220;
+  color: #fff;
+}
+.problemProductTop > div {
+  display: flex;
+  gap: 6px;
+}
+.problemProductTop i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.35);
+}
+.problemProductTop i:nth-child(2) {
+  background: #ffd16a;
+}
+.problemProductTop > span,
+.problemProductTop > b {
+  font-size: 13px;
+  font-weight: 850;
+}
+.problemProductTop > span {
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(255,255,255,.65);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.problemProductTop > b {
+  grid-column: 2;
+  color: #ffd16a;
+  letter-spacing: .04em;
+}
+.problemProductBody {
+  padding: 14px;
+  color: #fff;
+}
+.problemWorkspace {
+  display: grid;
+  gap: 11px;
+}
+.problemControls,
+.problemApp {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 12px;
+  background: #141f34;
+}
+.problemControls {
+  background: #101a2d;
+}
+.problemLabel,
+.problemAppHeader > span,
+.problemAnswer > span,
+.problemRouteCard > span,
+.problemDocument + span,
+.problemDraft > span,
+.problemReserve span,
+.problemMaintenance > span {
+  margin: 0;
+  color: #ffd16a;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .05em;
+}
+.problemControls h4 {
+  margin: 8px 0 8px;
+  font-size: 25px;
+  line-height: 1.05;
+}
+.problemControls > p:not(.problemLabel),
+.problemHint,
+.problemInsight {
+  color: rgba(255,255,255,.67);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.problemControls textarea,
+.problemControls input:not([type="range"]),
+.problemControls select {
+  width: 100%;
+  margin: 9px 0 5px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.problemControls label {
+  display: grid;
+  gap: 7px;
+  margin-top: 13px;
+}
+.problemControls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: rgba(255,255,255,.78);
+  font-size: 14px;
+  font-weight: 800;
+}
+.problemControls input[type="range"] {
+  width: 100%;
+  accent-color: #ffd16a;
+}
+.problemControls > button {
+  width: 100%;
+  margin-top: 13px;
+  background: #ffd16a;
+  color: var(--ink);
+}
+.problemAppHeader {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+.problemAppHeader > strong {
+  color: #fff;
+  font-size: 16px;
+}
+.problemEmpty {
+  min-height: 180px;
+  display: grid;
+  place-content: center;
+  padding: 20px;
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: 10px;
+  color: rgba(255,255,255,.62);
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+}
+.problemTranscript,
+.problemQueue,
+.problemChecklist,
+.problemSequence,
+.problemCompare,
+.problemQuality,
+.problemTender {
+  display: grid;
+  gap: 8px;
+}
+.problemTranscript p {
+  display: grid;
+  grid-template-columns: 36px minmax(0,1fr);
+  gap: 9px;
+  margin: 0;
+  padding: 11px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  font-size: 15px;
+}
+.problemTranscript b {
+  color: #ffd16a;
+}
+.problemResultGrid,
+.problemKpis,
+.problemSeo {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.problemResultGrid article,
+.problemKpis article,
+.problemSeo article {
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemResultGrid span,
+.problemKpis span,
+.problemSeo span,
+.problemControlPanel span {
+  display: block;
+  color: rgba(255,255,255,.58);
+  font-size: 13px;
+  font-weight: 850;
+}
+.problemResultGrid strong,
+.problemKpis strong,
+.problemSeo strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 21px;
+}
+.problemAnswer {
+  display: grid;
+  gap: 9px;
+}
+.problemAnswer h4,
+.problemDraft h4 {
+  margin: 0;
+  font-size: 23px;
+}
+.problemAnswer p,
+.problemDraft p,
+.problemRouteCard p,
+.problemReserve p,
+.problemMaintenance p {
+  margin: 0;
+  color: rgba(255,255,255,.68);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.problemAnswer button {
+  padding: 11px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+}
+.problemScoreList {
+  display: grid;
+  gap: 8px;
+}
+.problemScoreList article {
+  display: grid;
+  grid-template-columns: 34px minmax(0,1fr) 44px;
+  gap: 9px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemScoreList article > b,
+.problemScoreList article > em {
+  color: #ffd16a;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 900;
+}
+.problemScoreList article > div,
+.problemCompare article > div,
+.problemQuality article > div,
+.problemMaintenance > div {
+  grid-column: 1 / -1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+}
+.problemScoreList i,
+.problemCompare i,
+.problemQuality i,
+.problemMaintenance i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #ffd16a;
+}
+.problemQueue button {
+  display: grid;
+  gap: 3px;
+  padding: 11px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.problemQueue button.active {
+  border-color: #ffd16a;
+  background: rgba(255,209,106,.08);
+}
+.problemQueue button span {
+  color: #ffd16a;
+  font-size: 13px;
+  font-weight: 900;
+}
+.problemQueue button strong {
+  font-size: 15px;
+}
+.problemRouteCard {
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.problemRouteCard > strong {
+  display: block;
+  margin: 7px 0 14px;
+  font-size: 26px;
+}
+.problemRouteCard > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: 14px;
+}
+.problemRouteCard em {
+  color: #ffd16a;
+  font-style: normal;
+}
+.problemDocument {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0;
+  padding: 20px 12px;
+  border: 1px dashed rgba(255,255,255,.25);
+  border-radius: 9px;
+  text-align: center;
+}
+.problemDocument span {
+  color: rgba(255,255,255,.58);
+  font-size: 14px;
+}
+.problemChecklist label {
+  display: flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,.035);
+}
+.problemChecklist label > span {
+  display: block;
+  font-size: 14px;
+}
+.problemControlPanel {
+  display: grid;
+  gap: 8px;
+}
+.problemControlPanel > div {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemControlPanel strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+.problemToggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 10px 0;
+}
+.problemToggle button {
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.problemToggle button.active {
+  border-color: #ffd16a;
+  background: #ffd16a;
+  color: var(--ink);
+}
+.problemBars {
+  display: flex;
+  align-items: end;
+  gap: 7px;
+  height: 150px;
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.03);
+}
+.problemBars i {
+  flex: 1;
+  min-height: 12px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg,#ffd16a,rgba(255,209,106,.25));
+}
+.problemSequence button {
+  display: grid;
+  grid-template-columns: 54px minmax(0,1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.problemSequence button.active {
+  border-color: #ffd16a;
+}
+.problemSequence button.done {
+  opacity: .68;
+}
+.problemSequence button > span {
+  display: grid;
+  gap: 3px;
+}
+.problemSequence small {
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+}
+.problemCompare article,
+.problemQuality article {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto 42px;
+  gap: 8px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemCompare article > span,
+.problemQuality article > span {
+  color: rgba(255,255,255,.58);
+  font-size: 14px;
+}
+.problemCompare article > b,
+.problemQuality article > b {
+  color: #ffd16a;
+  font-size: 18px;
+}
+.problemQuality article.warning {
+  box-shadow: inset 3px 0 0 #ffd16a;
+}
+.problemQuality small {
+  grid-column: 1 / -1;
+  color: #ffd16a;
+  font-size: 13px;
+}
+.problemDraft {
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.problemDraft > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+.problemDraft > div b {
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: rgba(255,209,106,.1);
+  color: #ffd16a;
+  font-size: 13px;
+}
+.problemTender article {
+  display: grid;
+  grid-template-columns: 34px minmax(0,1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+}
+.problemTender span {
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+}
+.problemSeo {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+.problemReserve {
+  display: grid;
+  gap: 10px;
+}
+.problemReserve > div,
+.problemReserve article {
+  min-height: 160px;
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.problemReserve > div {
+  text-align: center;
+  background: linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+}
+.problemReserve strong {
+  font-size: 23px;
+}
+.problemStock {
+  display: grid;
+  gap: 8px;
+}
+.problemStock article {
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.problemStock article.warning { box-shadow: inset 0 3px 0 #ffd16a; }
+.problemStock article.danger { box-shadow: inset 0 3px 0 #ff7a7a; }
+.problemStock article span,
+.problemStock article small {
+  display: block;
+  margin-top: 7px;
+  color: rgba(255,255,255,.6);
+  font-size: 14px;
+}
+.problemStock article b {
+  display: block;
+  margin-top: 5px;
+  color: #ffd16a;
+  font-size: 28px;
+}
+.problemMaintenance {
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.problemMaintenance > strong {
+  display: block;
+  margin: 8px 0 13px;
+  font-size: 40px;
+}
+.problemDisclosure {
+  margin: 14px 2px 0;
+  color: rgba(255,255,255,.66);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.problemBuild {
+  background: #fff;
+}
+.problemDeliverables {
+  display: grid;
+  gap: 9px;
+}
+.problemDeliverables article {
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 84px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.problemDeliverables span {
+  color: #9b6a00;
+  font-size: 14px;
+  font-weight: 900;
+}
+.problemDeliverables strong {
+  font-size: 18px;
+}
+.problemGuardrails {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+  padding: 24px;
+  border-radius: 13px;
+  background: var(--ink);
+  color: #fff;
+}
+.problemGuardrails h3 {
+  max-width: 720px;
+  margin: 8px 0 0;
+  font-size: clamp(28px,4vw,42px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+.problemGuardrails > p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.problemFaq {
+  background: var(--paper);
+}
+.problemFaq > div {
+  margin-top: 20px;
+}
+.problemFaq details {
+  border-top: 1px solid var(--line);
+}
+.problemFaq details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.problemFaq summary {
+  padding: 18px 0;
+  font-size: 18px;
+  font-weight: 850;
+  cursor: pointer;
+}
+.problemFaq details p {
+  max-width: 820px;
+  margin: -4px 0 20px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.problemFinalCta {
+  display: grid;
+  gap: 20px;
+  padding: 58px 18px 88px;
+  background: var(--ink);
+  color: #fff;
+}
+.problemFinalCta h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(36px,6vw,62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.problemFinalCta > a:not(.primaryButton) {
+  width: fit-content;
+  color: rgba(255,255,255,.72);
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.problemHubHero {
+  padding: 66px 18px 46px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 80% 0%,rgba(66,99,216,.12),transparent 30%),
+    var(--paper);
+}
+.problemHubHero h1 {
+  max-width: 950px;
+  margin: 14px 0 18px;
+  font-size: clamp(46px,8vw,82px);
+  line-height: .94;
+  letter-spacing: -.055em;
+}
+.problemHubHero > p:not(.eyebrow) {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+}
+.problemHubGroups {
+  padding: 36px 18px 70px;
+}
+.problemHubGroup {
+  display: grid;
+  gap: 18px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--line);
+}
+.problemHubGroup > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+.problemHubGroup > div:first-child span {
+  font-size: 22px;
+  font-weight: 900;
+}
+.problemHubGroup > div:first-child strong {
+  color: var(--muted);
+  font-size: 14px;
+}
+.problemHubGroup > div:last-child {
+  display: grid;
+  gap: 9px;
+}
+.problemHubGroup a {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--ink);
+}
+.problemHubGroup a small {
+  color: #9b6a00;
+  font-size: 13px;
+  font-weight: 900;
+}
+.problemHubGroup a > strong {
+  font-size: 21px;
+}
+.problemHubGroup a > span {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.problemHubGroup a > b {
+  font-size: 15px;
+}
+
+@media (min-width: 760px) {
+  .problemHero,
+  .problemLab,
+  .problemBuild,
+  .problemFaq,
+  .problemFinalCta,
+  .problemHubHero,
+  .problemHubGroups {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .problemHero {
+    grid-template-columns: minmax(0,1.2fr) minmax(320px,.8fr);
+    align-items: start;
+  }
+  .problemLeadAside {
+    position: sticky;
+    top: 94px;
+  }
+  .problemDemoTabs {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    overflow: visible;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  .problemDemoTabs button {
+    min-width: 0;
+    width: auto;
+  }
+  .problemWorkspace {
+    grid-template-columns: minmax(250px,.72fr) minmax(0,1.28fr);
+  }
+  .problemResultGrid,
+  .problemKpis,
+  .problemControlPanel {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .problemResultGrid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .problemReserve {
+    grid-template-columns: minmax(180px,.75fr) minmax(0,1.25fr);
+  }
+  .problemStock {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .problemDeliverables {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .problemGuardrails {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    align-items: end;
+  }
+  .problemHubGroup {
+    grid-template-columns: minmax(180px,.3fr) minmax(0,1.7fr);
+  }
+  .problemHubGroup > div:first-child {
+    display: grid;
+    align-content: start;
+    justify-content: initial;
+  }
+  .problemHubGroup > div:last-child {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+@media (min-width: 1180px) {
+  .problemHero,
+  .problemLab,
+  .problemBuild,
+  .problemFaq,
+  .problemFinalCta,
+  .problemHubHero,
+  .problemHubGroups {
+    padding-left: max(34px,calc((100vw - var(--max))/2));
+    padding-right: max(34px,calc((100vw - var(--max))/2));
+  }
+  .problemHero {
+    padding-top: 78px;
+    padding-bottom: 64px;
+    grid-template-columns: minmax(0,1.35fr) minmax(360px,.65fr);
+    gap: 56px;
+  }
+  .problemLab,
+  .problemBuild,
+  .problemFaq {
+    padding-top: 76px;
+    padding-bottom: 82px;
+  }
+  .problemDemoTabs {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+  .problemProductBody {
+    padding: 20px;
+  }
+  .problemDeliverables {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+  .problemHubGroup > div:last-child {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
