@@ -87,3 +87,31 @@ jobs:
 
           echo "::error::Public site did not switch to target SHA."
           exit 1
+
+
+      - name: Refresh GitHub OIDC identity for SEO diagnostic
+        id: seo_oidc
+        env:
+          AUDIENCE: autonomia-public-o2switch
+        run: |
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Search Console connection
+        env:
+          STATUS_URL: https://build-autonomia.com/api/internal/search-console-status
+          OIDC_TOKEN: ${{ steps.seo_oidc.outputs.token }}
+        run: |
+          STATUS="$(curl -fsS \
+            -H "Authorization: Bearer $OIDC_TOKEN" \
+            "$STATUS_URL")"
+          printf '%s\n' "$STATUS"
+
+          OK="$(printf '%s' "$STATUS" | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())')"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Search Console server connection is not healthy."
+            exit 1
+          fi
