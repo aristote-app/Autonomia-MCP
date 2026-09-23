@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { editorialCounts, executionPillars, trainingPillars } from "@/content/editorial-backlog";
-import { publishedExecutionArticles, publishedTrainingArticles } from "@/content/published-articles";
+import { publishedExecutionArticles, publishedTrainingArticles, publishedTerritoryArticles } from "@/content/published-articles";
 import { territoryEditorialCounts, territoryPillars } from "@/content/territory-editorial";
 import { getIndexableUrlRecords } from "@/lib/organicUrls";
 
@@ -28,9 +28,10 @@ export async function GET(request) {
       pillars_execution: executionPillars.length,
       pillars_training: trainingPillars.length,
       pillars_territory: territoryPillars.length,
-      published_articles_total: publishedExecutionArticles.length + publishedTrainingArticles.length,
+      published_articles_total: publishedExecutionArticles.length + publishedTrainingArticles.length + publishedTerritoryArticles.length,
       published_execution: publishedExecutionArticles.length,
-      published_training: publishedTrainingArticles.length
+      published_training: publishedTrainingArticles.length,
+      published_territory: publishedTerritoryArticles.length
     },
     indexable: {
       total: urls.length,

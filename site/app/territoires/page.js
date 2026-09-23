@@ -296,6 +296,12 @@ export default function TerritoriesPage() {
         <div>
           <h2>Approfondir selon votre point d’entrée.</h2>
           <div className="territoryResourceGrid">
+            <Link href="/territoires/guides">
+              <span>BASE DE CONNAISSANCES</span>
+              <strong>Guides IA pour intercommunalités</strong>
+              <p>Feuille de route, agents, gouvernance, formation et développement économique : les contenus de fond pilotés par les besoins observés.</p>
+              <b>Explorer les guides →</b>
+            </Link>
             <Link href="/territoires/ia-agents-collectivite">
               <span>AGENTS</span>
               <strong>IA pour les agents de collectivité</strong>
