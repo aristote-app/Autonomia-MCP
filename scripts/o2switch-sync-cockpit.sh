@@ -126,6 +126,11 @@ if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; th
   export NEXT_TELEMETRY_DISABLED=1
   export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
 
+  echo "Forcing Next SWC WebAssembly for o2switch legacy glibc..."
+  rm -rf node_modules/@next/swc-linux-x64-gnu node_modules/@next/swc-linux-x64-musl || true
+  rm -rf "$HOME/.cache/next-swc" || true
+  export NODE_OPTIONS="--no-addons"
+
   echo "Cleaning previous public Next build..."
   rm -rf .next
   npm run content:validate
