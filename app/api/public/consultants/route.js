@@ -58,6 +58,17 @@ function lower(value) {
   return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
+function redactSourceNames(value) {
+  return String(value || "")
+    .replace(/malt(?:\.fr)?/gi, "")
+    .replace(/freelance\.com/gi, "")
+    .replace(/linkedin/gi, "")
+    .replace(/collective\.work/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,;:|/-])/g, "$1")
+    .trim();
+}
+
 function extractInitials(displayName) {
   const cleaned = String(displayName || "")
     .replace(/^Découvrez le profil freelance de\s+/i, "")
@@ -127,11 +138,11 @@ function scoreConsultant(row, role) {
 
 function publicProfile(row) {
   const skills = unique([
-    ...(row.consultant_skills || []).map((item) => item.skills?.name),
-    ...(row.metadata?.discovered_skills || [])
+    ...(row.consultant_skills || []).map((item) => redactSourceNames(item.skills?.name)),
+    ...(row.metadata?.discovered_skills || []).map(redactSourceNames)
   ]);
 
-  const headline = String(row.metadata?.headline || row.notes || "Consultant IA").trim();
+  const headline = redactSourceNames(row.metadata?.headline || row.notes || "Consultant IA") || "Consultant IA";
   const availability = formatAvailability(row);
   const bullets = [];
 
