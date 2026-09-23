@@ -238,7 +238,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
             </small>
           </div>
           {(account.intermediary_risk ? hiddenClientResolverEnabled : accountResearchEnabled && decisionDiscoveryEnabled) ? (
-            <Link href={`/accounts/${account.slug}?prepare=1#account-research`}>
+            <Link href={`/accounts/${account.slug}?prepare=1#${account.intermediary_risk ? "hidden-client-resolver" : "account-research"}`}>
               {shouldPrepare ? "Brief préparé · actualiser" : "Préparer ce compte →"}
             </Link>
           ) : (
