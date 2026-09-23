@@ -11,7 +11,8 @@
     "organic:report": "node scripts/organic-report.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "seo:engine-test": "node scripts/test-organic-decision-engine.mjs",
-    "seo:opportunity-test": "node scripts/test-editorial-opportunity-engine.mjs"
+    "seo:opportunity-test": "node scripts/test-editorial-opportunity-engine.mjs",
+    "ads:problem-export": "node scripts/export-problem-google-ads.mjs"
   },
   "engines": {
     "node": "22.x"
