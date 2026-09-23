@@ -10990,3 +10990,167 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 
 /* LP asset safety marker: validated CSS must be served as text/css before deploy is accepted. */
+
+
+/* Micro-app UX readability pass */
+.miniModuleLab .miniModuleIntro > p {
+  font-size: 17px;
+}
+.miniModuleLab .wowModuleTabs button > span,
+.miniModuleLab .wowModuleTabs button > small {
+  font-size: 13px;
+}
+.miniModuleLab .wowModuleTabs button > strong {
+  font-size: 16px;
+}
+.miniModuleLab .wowProductTopbar > span,
+.miniModuleLab .wowProductTopbar > b {
+  font-size: 12px;
+}
+.miniModuleLab .wowScenario > p:not(.eyebrow) {
+  font-size: 16px;
+}
+.miniModuleLab .wowPaneLabel,
+.miniModuleLab .wowAppHeader > span,
+.miniModuleLab .wowInsight > span,
+.miniModuleLab .wowTicketMeta > span,
+.miniModuleLab .wowResultCard span,
+.miniModuleLab .wowAnswer > span,
+.miniModuleLab .wowCanvasTop > span,
+.miniModuleLab .wowRawDoc > span,
+.miniModuleLab .wowDecisionBoard article > span,
+.miniModuleLab .wowPlannerScore > span,
+.miniModuleLab .wowValueStrip span,
+.miniModuleLab .wowImpactIntro > span,
+.miniModuleLab .wowImpactResult > span,
+.miniModuleLab .wowAccountHero span,
+.miniModuleLab .wowCampaignMock > span,
+.miniModuleLab .wowBrandPreview > span,
+.miniModuleLab .wowMaintenanceGauge > span,
+.miniModuleLab .wowCalendarGrid article > span {
+  font-size: 13px;
+}
+.miniModuleLab .wowAppHeader > strong,
+.miniModuleLab .wowControlPane label > span,
+.miniModuleLab .wowNote,
+.miniModuleLab .wowMiniCopy,
+.miniModuleLab .wowInsight p,
+.miniModuleLab .wowQueue strong,
+.miniModuleLab .wowResultCard strong,
+.miniModuleLab .wowSources span,
+.miniModuleLab .wowChecks span,
+.miniModuleLab .wowAnswer > p,
+.miniModuleLab .wowCanvas > p,
+.miniModuleLab .wowRawDoc p,
+.miniModuleLab .wowDataGrid span,
+.miniModuleLab .wowDataGrid strong,
+.miniModuleLab .wowTranscript p,
+.miniModuleLab .wowStatus span,
+.miniModuleLab .wowValueStrip strong,
+.miniModuleLab .wowAccountGrid span,
+.miniModuleLab .wowControlScore span,
+.miniModuleLab .wowKpiGrid span,
+.miniModuleLab .wowStockGrid span,
+.miniModuleLab .wowLearningPath span,
+.miniModuleLab .wowTimeline em,
+.miniModuleLab .wowPhotoPlaceholder span,
+.miniModuleLab .wowCalendarGrid b,
+.miniModuleLab .wowImpactControls label > span,
+.miniModuleLab .wowSkillCloud i,
+.miniModuleLab .wowDecisionMatrix article > div:not(.wowBar) span,
+.miniModuleLab .wowPipelineBoard article > div,
+.miniModuleLab .wowPipelineBoard article > p,
+.miniModuleLab .wowSignalFeed article > span,
+.miniModuleLab .wowQualityList article > span {
+  font-size: 14px;
+}
+.miniModuleLab .wowAction,
+.miniModuleLab .wowToggleRow button,
+.miniModuleLab .wowClusterBtn,
+.miniModuleLab .wowLotBtn,
+.miniModuleLab .wowTalentFoot button,
+.miniModuleLab .wowPipelineBoard article > button,
+.miniModuleLab .wowCampaignMock button,
+.miniModuleLab .wowTimeline button,
+.miniModuleLab .wowSequence button {
+  min-height: 44px;
+  font-size: 15px;
+}
+.miniModuleLab textarea,
+.miniModuleLab select,
+.miniModuleLab input {
+  font-size: 16px;
+}
+.miniModuleLab .wowControlPane,
+.miniModuleLab .wowAppPane {
+  padding: 18px;
+}
+.miniModuleLab .wowInsight {
+  padding: 14px;
+}
+.miniModuleLab .wowValueStrip strong {
+  font-size: 15px;
+}
+
+@media (max-width: 759px) {
+  .miniModuleLab {
+    padding: 46px 14px 54px;
+  }
+  .miniModuleIntro h2 {
+    font-size: clamp(34px, 10vw, 42px);
+    line-height: 1;
+  }
+  .wowModuleTabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-right: -14px;
+    padding: 2px 14px 10px 0;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+  .wowModuleTabs button {
+    flex: 0 0 min(82vw, 300px);
+    min-height: 72px;
+    scroll-snap-align: start;
+  }
+  .wowProductTopbar {
+    grid-template-columns: auto minmax(0,1fr);
+    min-height: 58px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .wowProductTopbar > b {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .wowProductBody {
+    padding: 14px;
+  }
+  .wowAppHeader {
+    display: grid;
+    gap: 6px;
+    align-items: start;
+  }
+  .wowDataGrid,
+  .wowBrandChecks,
+  .wowCalendarGrid {
+    grid-template-columns: 1fr;
+  }
+  .wowSignalFeed article {
+    grid-template-columns: 10px minmax(0,1fr) auto;
+  }
+  .wowSignalFeed article > b {
+    grid-column: 2 / -1;
+    text-align: left;
+  }
+  .wowQualityList article {
+    grid-template-columns: minmax(0,1fr) auto;
+  }
+  .wowQualityList article > b {
+    grid-column: 2;
+  }
+  .wowQualityList article > span {
+    grid-column: 1;
+  }
+}
