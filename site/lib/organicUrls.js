@@ -1,5 +1,6 @@
 import { getAllPages } from "@/lib/pages";
 import { aiRoles } from "@/content/ai-roles";
+import { academyTrainings } from "@/content/academy-trainings";
 import {
   executionPillars,
   trainingPillars
@@ -45,6 +46,14 @@ export function getIndexableUrlRecords(base) {
     url: `${base}/metiers-ia/${role.slug}`,
     kind: "ai-role-guide",
     priority: 0.86,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-23"
+  }));
+
+  const academyTrainingPages = academyTrainings.map((training) => ({
+    url: `${base}/formation-ia/${training.slug}`,
+    kind: "academy-training-program",
+    priority: 0.87,
     changeFrequency: "monthly",
     lastModified: "2026-09-23"
   }));
@@ -101,6 +110,7 @@ export function getIndexableUrlRecords(base) {
     ...staticPages,
     ...commercialPages,
     ...aiRolePages,
+    ...academyTrainingPages,
     ...executionPillarPages,
     ...trainingPillarPages,
     ...territoryPillarPages,
