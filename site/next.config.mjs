@@ -5,7 +5,7 @@ const nextConfig = {
     // Keep static generation essentially serial and use worker threads so
     // Next does not spawn/kill dozens of child processes during prerendering.
     cpus: 1,
-    workerThreads: true
+    workerThreads: false
   }
 };
 
