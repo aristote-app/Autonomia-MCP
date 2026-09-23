@@ -208,7 +208,7 @@ export default function NeedBriefQuestionnaire() {
       email: data.email,
       phone: data.phone || null,
       company_name: data.company,
-      requested_service: "audit_ia_offert",
+      requested_service: "diagnostic_ia",
       message,
       desired_timeline: data.timeline || null,
       company_size: data.companySize || null,
@@ -232,8 +232,8 @@ export default function NeedBriefQuestionnaire() {
       setStatus("sent");
       trackLeadConversion({
         form_id: "home-need-brief",
-        mode: "audit",
-        requested_service: "audit_ia_offert"
+        mode: "diagnostic",
+        requested_service: "diagnostic_ia"
       });
     } catch {
       setStatus("error");
@@ -258,17 +258,6 @@ export default function NeedBriefQuestionnaire() {
 
   return (
     <section className="needBriefSection" id="fiche-besoin">
-      <div className="needBriefIntro">
-        <p className="sectionIndex">04 — PRÉCISER VOTRE BESOIN</p>
-        <div>
-          <h2>Construisons votre fiche besoin en trois volets.</h2>
-          <p>
-            Pas besoin de cahier des charges. Cochez ce qui vous ressemble, ajoutez ce qui manque,
-            puis vérifiez la fiche avant de nous l’envoyer.
-          </p>
-        </div>
-      </div>
-
       <form className="needBriefForm" onSubmit={submit}>
         <div className="needBriefProgress" aria-label={`Étape ${step} sur 3`}>
           {[1, 2, 3].map((item) => (
