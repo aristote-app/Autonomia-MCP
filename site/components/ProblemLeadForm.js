@@ -22,7 +22,7 @@ function attribution() {
 }
 
 export default function ProblemLeadForm({ problem }) {
-  const [data, setData] = useState({ name: "", company: "", email: "", need: "" });
+  const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
@@ -58,7 +58,11 @@ export default function ProblemLeadForm({ problem }) {
       form_id: formId,
       problem_slug: problem.slug,
       problem_cluster: problem.cluster,
-      ...attribution()
+      ...attribution(),
+      marketing_consent: Boolean(data.marketingConsent),
+      consent_timestamp: new Date().toISOString(),
+      privacy_notice_version: "2026-09-20-v1",
+      consent_source: formId
     };
 
     try {
@@ -93,6 +97,12 @@ export default function ProblemLeadForm({ problem }) {
       <label><span>Organisation *</span><input value={data.company} onChange={(e)=>set("company",e.target.value)} /></label>
       <label><span>E-mail professionnel *</span><input type="email" value={data.email} onChange={(e)=>set("email",e.target.value)} /></label>
       <label><span>Votre irritant</span><textarea rows="3" placeholder={problem.prompt} value={data.need} onChange={(e)=>set("need",e.target.value)} /></label>
+      <label className="consentLine">
+        <input type="checkbox" checked={data.marketingConsent} onChange={(e)=>set("marketingConsent",e.target.checked)} />
+        <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
+      </label>
+      <p className="privacyNote">Les informations envoyées sont utilisées pour répondre à votre demande. Le consentement marketing est facultatif.</p>
+
       {error && <p className="formError">{error}</p>}
       <button type="submit" disabled={status==="sending"}>{status==="sending"?"Envoi…":"Voir ce qu’on peut construire"}</button>
       <small>Pas besoin de cahier des charges. Quelques phrases suffisent pour commencer.</small>
