@@ -13,12 +13,21 @@ function base64url(value) {
 
 function serviceAccountJson() {
   const raw = String(process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_JSON || "").trim();
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
+  const b64 = String(process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_B64 || "").trim();
+
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch {}
   }
+
+  if (b64) {
+    try {
+      return JSON.parse(Buffer.from(b64, "base64").toString("utf8"));
+    } catch {}
+  }
+
+  return null;
 }
 
 function credentials() {
