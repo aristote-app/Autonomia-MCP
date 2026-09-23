@@ -87,16 +87,13 @@ export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
 
-echo "Preparing Next SWC WebAssembly fallback for o2switch legacy glibc..."
-npm install --no-save --ignore-scripts --no-audit --no-fund @next/swc-wasm-nodejs@16.3.5 @next/swc-wasm-web@16.3.5
-rm -rf node_modules/@next/swc-linux-x64-gnu node_modules/@next/swc-linux-x64-musl || true
-rm -rf "$HOME/.cache/next-swc" || true
+echo "Using Next 15.5.18 Webpack build for o2switch legacy glibc compatibility..."
 unset NODE_OPTIONS || true
 
 echo "Validating editorial content..."
 npm run content:validate
 
-echo "Building public site Next.js with SWC WASM..."
+echo "Building public site Next.js 15.5.18 with Webpack..."
 npm run build
 
 mkdir -p .runtime tmp
