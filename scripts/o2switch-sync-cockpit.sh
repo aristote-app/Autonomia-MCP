@@ -6,11 +6,33 @@ NODE_ENV_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate
 BRANCH="main"
 FORCE_DEPLOY="${FORCE_DEPLOY:-0}"
 TARGET_SHA="${AUTONOMIA_DEPLOY_SHA:-}"
+WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
+
+mkdir -p "$APP_ROOT/.runtime"
+
+# Passenger accepts the HTTP request quickly, but long children launched by a web
+# worker can be interrupted by the hosting process lifecycle. Re-parent the real
+# deployment once, then let the HTTP-triggered shell exit immediately.
+if [ "${AUTONOMIA_DEPLOY_DAEMONIZED:-0}" != "1" ]; then
+  echo "Launching detached o2switch deploy worker..."
+  AUTONOMIA_DEPLOY_DAEMONIZED=1 \
+  FORCE_DEPLOY="$FORCE_DEPLOY" \
+  AUTONOMIA_DEPLOY_SHA="$TARGET_SHA" \
+  nohup bash "$0" >> "$WORKER_LOG" 2>&1 </dev/null &
+  echo "Detached deploy worker pid=$! log=$WORKER_LOG"
+  exit 0
+fi
+
+echo
+echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+echo "target_sha=${TARGET_SHA:-main}"
 
 source "$NODE_ENV_ACTIVATE"
 set -u
 cd "$APP_ROOT"
 
+echo "node=$(node -v) npm=$(npm -v)"
+echo "Fetching origin/$BRANCH..."
 git fetch --depth=200 origin "$BRANCH"
 MAIN_SHA="$(git rev-parse "origin/$BRANCH")"
 
@@ -36,19 +58,31 @@ fi
 
 LOCAL_SHA="$(git rev-parse HEAD 2>/dev/null || true)"
 
-if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ]; then
-  echo "Autonomia cockpit already up to date: $LOCAL_SHA"
+if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ] && [ -f .runtime/deployed-sha ] && [ "$(cat .runtime/deployed-sha 2>/dev/null || true)" = "$REMOTE_SHA" ]; then
+  echo "Autonomia cockpit already deployed: $LOCAL_SHA"
   exit 0
 fi
 
 echo "Deploying validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "$REMOTE_SHA"
 
-npm install --no-audit --no-fund --package-lock=false
+# Recent cockpit changes did not add runtime dependencies. Reuse the installed
+# Node tree when Next is present; fall back to npm install only if it is missing.
+if [ -x node_modules/.bin/next ]; then
+  echo "Reusing existing node_modules; skipping npm install."
+else
+  echo "node_modules incomplete; installing dependencies."
+  npm install --no-audit --no-fund --package-lock=false
+fi
+
+export NODE_ENV=production
+export NEXT_TELEMETRY_DISABLED=1
+
+echo "Building Next.js..."
 npm run build
 
 mkdir -p .runtime tmp
 printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
 touch tmp/restart.txt
 
-echo "Autonomia cockpit deployed: $REMOTE_SHA"
+echo "Autonomia cockpit deployed and Passenger restart requested: $REMOTE_SHA"

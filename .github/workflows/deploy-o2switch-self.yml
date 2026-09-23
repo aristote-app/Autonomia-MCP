@@ -110,11 +110,11 @@ jobs:
           }
 
           echo "Waiting for background build + Passenger restart..."
-          for attempt in $(seq 1 18); do
+          for attempt in $(seq 1 6); do
             if verify_target; then
               exit 0
             fi
-            echo "Target not live yet (attempt $attempt/18)."
+            echo "Target not live yet (attempt $attempt/6)."
             sleep 10
           done
 
@@ -141,11 +141,11 @@ jobs:
             exit 1
           fi
 
-          for attempt in $(seq 1 24); do
+          for attempt in $(seq 1 36); do
             if verify_target; then
               exit 0
             fi
-            echo "Target still not live after retry (attempt $attempt/24)."
+            echo "Target still not live after retry (attempt $attempt/36)."
             sleep 10
           done
 
