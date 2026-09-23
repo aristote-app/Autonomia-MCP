@@ -101,3 +101,53 @@ printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
 touch tmp/restart.txt
 
 echo "Autonomia public site deployed and Passenger restart requested: $REMOTE_SHA"
+
+
+# Keep the cockpit synchronized too. The public-site worker survives o2switch
+# Passenger reliably, so it can bootstrap cockpit releases when the cockpit's
+# own detached worker is reaped by the hosting lifecycle.
+COCKPIT_ROOT="/home/dide4169/autonomia-cockpit-app"
+COCKPIT_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate"
+COCKPIT_BRANCH="main"
+
+if [ -d "$COCKPIT_ROOT/.git" ] && [ -f "$COCKPIT_ROOT/package.json" ]; then
+  echo "Checking cockpit synchronization..."
+  set +u
+  source "$COCKPIT_ACTIVATE"
+  set -u
+  cd "$COCKPIT_ROOT"
+
+  git fetch --depth=200 origin "$COCKPIT_BRANCH"
+  COCKPIT_SHA="$(git rev-parse "origin/$COCKPIT_BRANCH")"
+  COCKPIT_LOCAL_SHA="$(git rev-parse HEAD 2>/dev/null || true)"
+
+  if [ "$COCKPIT_LOCAL_SHA" != "$COCKPIT_SHA" ]; then
+    echo "Syncing cockpit: $COCKPIT_LOCAL_SHA -> $COCKPIT_SHA"
+    git reset --hard "$COCKPIT_SHA"
+
+    if [ -x node_modules/.bin/next ]; then
+      echo "Reusing installed cockpit dependencies."
+    else
+      echo "Cockpit node_modules incomplete; installing dependencies."
+      npm install --no-audit --no-fund --package-lock=false
+    fi
+
+    export NODE_ENV=production
+    export NEXT_TELEMETRY_DISABLED=1
+    export UV_THREADPOOL_SIZE=1
+    unset NEXT_PUBLIC_SITE_URL || true
+
+    rm -rf .next
+    echo "Building cockpit with constrained o2switch worker settings..."
+    npm run build
+
+    mkdir -p .runtime tmp
+    printf '%s\n' "$COCKPIT_SHA" > .runtime/deployed-sha
+    touch tmp/restart.txt
+    echo "Cockpit synchronized and Passenger restart requested: $COCKPIT_SHA"
+  else
+    echo "Cockpit already at origin/$COCKPIT_BRANCH: $COCKPIT_SHA"
+  fi
+else
+  echo "Cockpit repo unavailable at $COCKPIT_ROOT; skipping cockpit sync."
+fi
