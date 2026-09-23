@@ -7063,3 +7063,88 @@ button {
     grid-template-columns: repeat(3, minmax(0,1fr));
   }
 }
+
+
+/* Role page calibration v2 */
+.roleResponsibilities {
+  display: grid;
+  gap: 24px;
+}
+.roleResponsibilitiesBody { min-width: 0; }
+.roleResponsibilitiesBody > .roleReading {
+  max-width: 980px;
+  margin-bottom: 28px;
+}
+.roleResponsibilityList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.roleResponsibilityList li {
+  display: grid;
+  grid-template-columns: 48px minmax(0,1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.roleResponsibilityList li > span {
+  color: #9b6a00;
+  font-size: 13px;
+  font-weight: 900;
+}
+.roleResponsibilityList li p {
+  margin: 0;
+  max-width: 980px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.roleDeliverablesCompact {
+  margin-top: 34px;
+  padding: 26px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+}
+.roleDeliverablesIntro {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.roleDeliverablesIntro .roleMicroTitle { color: var(--signal); }
+.roleDeliverablesIntro h3 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.04;
+  letter-spacing: -.035em;
+}
+.roleDeliverableGrid {
+  display: grid;
+  gap: 10px;
+}
+.roleDeliverableGrid article {
+  min-height: 0;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background: rgba(255,255,255,.045);
+}
+.roleDeliverableGrid article > span {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--signal);
+  font-size: 12px;
+  font-weight: 900;
+}
+.roleDeliverableGrid h4 {
+  margin: 0 0 9px;
+  font-size: 20px;
+  line-height: 1.12;
+}
+.roleDeliverableGrid p {
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: 14px;
+  line-height: 1.5;
+}
