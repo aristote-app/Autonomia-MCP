@@ -2,9 +2,11 @@ import ProblemLink from "@/components/ProblemLink";
 import ProblemLeadForm from "@/components/ProblemLeadForm";
 import ProblemLab from "@/components/ProblemLab";
 import { getProblemFaq } from "@/content/problem-solutions";
+import { getProblemSalesCopy } from "@/content/problem-sales-copy";
 
 export default function ProblemLanding({ problem }) {
   const faq=getProblemFaq(problem);
+  const sales=getProblemSalesCopy(problem.slug);
   return (
     <main className="problemLanding">
       <section className="problemHero">
@@ -20,9 +22,43 @@ export default function ProblemLanding({ problem }) {
 
       <ProblemLab problem={problem}/>
 
+      {sales && (
+        <section className="problemFlowFit">
+          <div className="problemSectionIntro">
+            <p className="sectionIndex">02 — BRANCHEZ LE VRAI FLUX</p>
+            <h2>Ce qui entre. Ce qui sort. Ce qui reste sous contrôle.</h2>
+            <p>{sales.trigger}</p>
+          </div>
+
+          <div className="problemFlowFitGrid">
+            <article>
+              <span>ENTRÉES</span>
+              <strong>Ce que l’outil reçoit</strong>
+              <ul>{sales.inputs.map((item)=><li key={item}>{item}</li>)}</ul>
+            </article>
+            <article>
+              <span>SORTIES</span>
+              <strong>Ce que l’équipe récupère</strong>
+              <ul>{sales.outputs.map((item)=><li key={item}>{item}</li>)}</ul>
+            </article>
+            <article>
+              <span>OUTILS</span>
+              <strong>À intégrer selon votre SI</strong>
+              <ul>{sales.systems.map((item)=><li key={item}>{item}</li>)}</ul>
+            </article>
+          </div>
+
+          <div className="problemHumanGate">
+            <span>POINT DE CONTRÔLE HUMAIN</span>
+            <strong>{sales.human}</strong>
+            <a href="#diagnostic">Voir le prototype sur mon flux →</a>
+          </div>
+        </section>
+      )}
+
       <section className="problemBuild">
         <div className="problemSectionIntro">
-          <p className="sectionIndex">02 — CE QUI DEVIENT UN VRAI PROJET</p>
+          <p className="sectionIndex">03 — CE QUI DEVIENT UN VRAI PROJET</p>
           <h2>La démo montre l’expérience. Le projet relie vos données, vos règles et vos outils.</h2>
         </div>
         <div className="problemDeliverables">{problem.deliverables.map((item,index)=><article key={item}><span>{String(index+1).padStart(2,"0")}</span><strong>{item}</strong></article>)}</div>
@@ -33,7 +69,7 @@ export default function ProblemLanding({ problem }) {
       </section>
 
       <section className="problemFaq">
-        <p className="sectionIndex">03 — QUESTIONS DE CADRAGE</p>
+        <p className="sectionIndex">04 — QUESTIONS DE CADRAGE</p>
         <div>{faq.map((item)=><details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>
       </section>
 
