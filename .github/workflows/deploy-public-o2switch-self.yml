@@ -206,15 +206,24 @@ jobs:
           SUBMIT_URL: https://build-autonomia.com/api/internal/search-console-submit
           OIDC_TOKEN: ${{ steps.seo_oidc.outputs.token }}
         run: |
-          STATUS="$(curl -fsS -X POST \
+          HTTP_CODE="$(curl -sS -X POST \
+            -o /tmp/search-console-submit.json \
+            -w "%{http_code}" \
             -H "Authorization: Bearer $OIDC_TOKEN" \
-            "$SUBMIT_URL")"
+            "$SUBMIT_URL" || true)"
+
+          STATUS="$(cat /tmp/search-console-submit.json 2>/dev/null || true)"
           printf '%s\n' "$STATUS"
 
-          OK="$(printf '%s' "$STATUS" | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())')"
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Search Console sitemap resubmission returned HTTP $HTTP_CODE; public deployment remains valid."
+            exit 0
+          fi
+
+          OK="$(printf '%s' "$STATUS" | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())' 2>/dev/null || true)"
           if [ "$OK" != "true" ]; then
-            echo "::error::Search Console sitemap resubmission failed."
-            exit 1
+            echo "::warning::Search Console sitemap resubmission did not confirm ok=true; public deployment remains valid."
+            exit 0
           fi
 
       - name: Verify Search Console connection
