@@ -67,8 +67,12 @@ git reset --hard "$REMOTE_SHA"
 
 cd "$APP_ROOT"
 
-echo "Synchronizing public-site dependencies..."
-npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+if [ -x node_modules/.bin/next ]; then
+  echo "Reusing installed public-site dependencies."
+else
+  echo "node_modules incomplete; installing dependencies."
+  npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+fi
 
 export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
