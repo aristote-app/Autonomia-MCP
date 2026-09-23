@@ -64,29 +64,12 @@ export default async function LearningPage() {
 
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
 
-  if (!hasSession) {
-    return (
-      <main>
-        <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
-        <header className="integrationHero">
-          <p className="eyebrow">AUTONOMIA · LEARNING LOOP</p>
-          <h1>Apprentissage commercial</h1>
-          <p className="lede">
-            Les statistiques de conversion restent privées et ne sont visibles qu'après connexion au workspace.
-          </p>
-        </header>
-        <div className="lockedContactState">
-          <strong>Moteur d'apprentissage prêt</strong>
-          <span>Il commencera à apprendre à partir des vrais résultats commerciaux, pas d'hypothèses.</span>
-        </div>
-      </main>
-    );
-  }
-
-  const contacts = await listWorkspaceSalesContacts({
-    workspaceId: context.membership.workspace_id,
-    limit: 500
-  }).catch(() => []);
+  const contacts = hasSession
+    ? await listWorkspaceSalesContacts({
+        workspaceId: context.membership.workspace_id,
+        limit: 500
+      }).catch(() => [])
+    : [];
 
   const snapshot = buildSalesLearningSnapshot(contacts);
   const funnel = snapshot.funnel;
