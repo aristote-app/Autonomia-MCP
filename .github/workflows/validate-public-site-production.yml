@@ -1,0 +1,52 @@
+name: validate-public-site-production
+
+on:
+  push:
+    branches:
+      - public-site-production
+    paths:
+      - "site/**"
+      - ".github/workflows/validate-public-site-production.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Validate editorial content
+        run: npm run content:validate
+
+      - name: Organic Engine report
+        run: npm run organic:report
+
+      - name: SEO static audit
+        run: npm run seo:audit
+
+      - name: Organic decision engine tests
+        run: npm run seo:engine-test
+
+      - name: Editorial opportunity engine tests
+        run: npm run seo:opportunity-test
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://build-autonomia.com
+          NEXT_TELEMETRY_DISABLED: "1"
