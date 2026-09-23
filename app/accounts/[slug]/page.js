@@ -403,8 +403,15 @@ export default async function AccountDetailPage({ params, searchParams }) {
                       <a href={contact.linkedin_url} target="_blank" rel="noreferrer">
                         LinkedIn ↗
                       </a>
-                      {contact.email_b2b && <span>Email pro : {contact.email_b2b}</span>}
-                      {contact.phone && <span>Téléphone : {contact.phone}</span>}
+                      {contact.email_b2b && (
+                        <a href={"mailto:" + contact.email_b2b}>Email pro ↗</a>
+                      )}
+                      {contact.email_direct && !contact.email_b2b && (
+                        <a href={"mailto:" + contact.email_direct}>Email ↗</a>
+                      )}
+                      {contact.phone && (
+                        <a href={"tel:" + contact.phone}>Téléphone ↗</a>
+                      )}
                       <span>Kaspr : {contact.enrichment_status}</span>
                       <span>Waalaxy : {contact.outreach_status}</span>
                     </div>
