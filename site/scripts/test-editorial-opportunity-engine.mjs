@@ -96,3 +96,30 @@ console.log(
     2
   )
 );
+
+
+const concreteTerritoryTraining = prioritizeEditorialBacklog(
+  [
+    {
+      query: "Mise en place de formation aux métiers de la data et de l'intelligence artificielle sur le territoire",
+      cluster: "Collectivités & territoires",
+      family: "territory-use-case",
+      public_procurement_mentions: 1,
+      territory_mentions: 5
+    }
+  ],
+  { max_results: 100 }
+);
+
+const planTraining = concreteTerritoryTraining.recommendations.find(
+  (item) => item.slug === "construire-un-plan-de-formation-ia-pour-les-agents-d-une-communaute-de-communes"
+);
+const managersTraining = concreteTerritoryTraining.recommendations.find(
+  (item) => item.slug === "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia"
+);
+
+if (!planTraining || !managersTraining || planTraining.score <= managersTraining.score) {
+  throw new Error(
+    "Concrete territory training evidence must rank the direct training-plan topic above cluster-only manager topics."
+  );
+}
