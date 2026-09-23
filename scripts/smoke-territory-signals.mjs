@@ -70,6 +70,7 @@ const directTerritorySignals = buildSeoGeoSignals({
       signal_source: "boamp",
       title: "Formation des agents à l'IA générative",
       importance: 5,
+      detected_at: new Date().toISOString(),
       evidence_url: "https://example.test/territory-ai",
       territory_name: "Communauté de communes Exemple",
       territory_type: "CC",
