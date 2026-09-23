@@ -637,7 +637,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
                               </label>
                               {waalaxyRouting?.campaigns?.recommended && (
                                 <small className="waalaxyRecommendation">
-                                  Campagne recommandée : {waalaxyRouting.recommended.name} · {waalaxyRouting.campaigns.track.label}.
+                                  Campagne recommandée : {waalaxyRouting.campaigns.recommended.name} · {waalaxyRouting.campaigns.track.label}.
                                   Validation obligatoire avant envoi.
                                 </small>
                               )}
