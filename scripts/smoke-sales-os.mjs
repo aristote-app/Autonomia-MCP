@@ -23,6 +23,10 @@ import {
   evaluateKasprGuard,
   evaluateWaalaxyGuard
 } from "../lib/intelligence/outreachGuard.js";
+import {
+  inferOutreachTrack,
+  rankWaalaxyCampaigns
+} from "../lib/intelligence/campaignRouter.js";
 
 const account = {
   name: "Acme",
@@ -272,6 +276,29 @@ const kasprFresh = evaluateKasprGuard({
   }
 });
 assert.equal(kasprFresh.allowed, true);
+
+
+const trainingTrack = inferOutreachTrack({
+  recommended_offer: "Formation & adoption IA",
+  primary_decision_role: { label: "Responsable formation / L&D" },
+  playbook: { trigger: "Déploiement Copilot" }
+});
+assert.equal(trainingTrack.id, "training");
+
+const routedCampaigns = rankWaalaxyCampaigns({
+  account: {
+    recommended_offer: "Formation & adoption IA",
+    primary_decision_role: { label: "Responsable formation / L&D" },
+    playbook: { trigger: "Déploiement Copilot" }
+  },
+  campaigns: [
+    { _id: "c1", name: "Waalaxy Formation IA" },
+    { _id: "c2", name: "Prospection générale" },
+    { _id: "c3", name: "Staffing freelance" }
+  ]
+});
+assert.equal(routedCampaigns.recommended?._id, "c1");
+assert.ok(routedCampaigns.recommended.autonomia_score >= 3);
 
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {
