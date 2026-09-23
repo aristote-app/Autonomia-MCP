@@ -156,6 +156,14 @@ jobs:
           echo "::error::o2switch accepted the deploy twice but production never switched to the target version."
           exit 1
 
+      - name: Dump cockpit o2switch worker log on failure
+        if: failure()
+        run: |
+          echo "===== COCKPIT O2SWITCH WORKER LOG ====="
+          curl -fsS "https://cockpit.build-autonomia.com/__autonomia_cockpit_deploy_debug.txt" || echo "Diagnostic log not reachable yet."
+          echo
+          echo "===== END COCKPIT O2SWITCH WORKER LOG ====="
+
       - name: Bootstrap consultant candidates once
         if: steps.probe.outputs.ready == 'true'
         env:
