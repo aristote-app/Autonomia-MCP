@@ -9215,3 +9215,140 @@ body:has(.territoryCampaignPage) .desktopNav {
     padding-right: max(34px, calc((100vw - var(--max))/2));
   }
 }
+
+
+/* Territories LP v3 concentration */
+.territoryAdsPageV2 .territoryAdsHero {
+  min-height: auto;
+  padding-top: 72px;
+  padding-bottom: 46px;
+}
+.territoryAdsPageV2 .territoryAdsCopy h1 {
+  max-width: 920px;
+  font-size: clamp(46px, 6.2vw, 80px);
+}
+.territoryAdsPageV2 .territoryDemoLab {
+  padding-top: 48px;
+  padding-bottom: 52px;
+}
+.territoryAdsPageV2 .territoryDemoIntro {
+  margin-bottom: 10px;
+}
+.territoryUseStrip {
+  display: grid;
+  gap: 22px;
+  padding: 42px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.territoryUseStrip h2 {
+  max-width: 700px;
+  margin: 8px 0 0;
+  font-size: clamp(34px, 4.5vw, 52px);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+.territoryUseChips {
+  display: grid;
+  gap: 8px;
+}
+.territoryUseChips article {
+  display: grid;
+  gap: 3px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--paper);
+}
+.territoryUseChips strong {
+  font-size: 15px;
+}
+.territoryUseChips span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.territoryStart {
+  padding: 54px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.territoryStartGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+.territoryStartGrid article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+}
+.territoryStartGrid article > span {
+  color: #9b6a00;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+.territoryStartGrid h3 {
+  margin: 18px 0 10px;
+  font-size: 24px;
+  line-height: 1.05;
+}
+.territoryStartGrid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.territoryStartGrid article > strong {
+  display: block;
+  margin-top: 18px;
+  font-size: 20px;
+}
+.territoryFinalConversion {
+  display: grid;
+  gap: 20px;
+  align-items: end;
+  padding: 52px 18px;
+  background: var(--academy);
+  color: #fff;
+}
+.territoryFinalConversion h2 {
+  max-width: 760px;
+  margin: 8px 0 10px;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.territoryFinalConversion p:not(.eyebrow) {
+  max-width: 680px;
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  line-height: 1.5;
+}
+.territoryFinalConversion .primaryButton {
+  background: #fff;
+  color: var(--academy);
+  border-color: #fff;
+}
+@media (min-width: 760px) {
+  .territoryUseStrip {
+    grid-template-columns: minmax(260px,.7fr) minmax(0,1.3fr);
+  }
+  .territoryUseChips {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .territoryStartGrid {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .territoryFinalConversion {
+    grid-template-columns: minmax(0,1fr) auto;
+  }
+}
+@media (min-width: 1180px) {
+  .territoryUseStrip,
+  .territoryStart,
+  .territoryFinalConversion {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+}
