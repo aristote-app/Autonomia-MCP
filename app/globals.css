@@ -782,3 +782,34 @@ h3 { margin: 0 0 8px; }
   color:#fff !important;
   font-weight:800;
 }
+
+
+/* Account meeting battlecard */
+.accountBattlecardSection { margin:54px 0; }
+.battlecardGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.battlecardGrid > article { min-width:0; padding:19px; border:1px solid #d9ddd7; background:#fff; }
+.battlecardGrid > article > span { display:block; margin-bottom:10px; color:#677068; font-size:9px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.battlecardLead > strong { display:block; font-size:18px; line-height:1.35; }
+.battlecardLead > p { margin:10px 0 16px; color:#4f5750; font-size:12px; line-height:1.55; }
+.battlecardLead dl { margin:0; }
+.battlecardLead dl div { display:flex; justify-content:space-between; gap:18px; padding:8px 0; border-top:1px solid #e8ebe7; }
+.battlecardLead dt { color:#677068; font-size:10px; }
+.battlecardLead dd { margin:0; max-width:70%; text-align:right; font-size:10px; font-weight:800; }
+.battlecardGrid ol { margin:0; padding-left:20px; }
+.battlecardGrid li { margin:8px 0; font-size:12px; line-height:1.45; }
+.battlecardObjections { display:grid; gap:9px; }
+.battlecardObjections > div { padding:10px 0; border-top:1px solid #e8ebe7; }
+.battlecardObjections > div:first-child { border-top:0; padding-top:0; }
+.battlecardObjections strong { font-size:12px; }
+.battlecardObjections p { margin:4px 0 0; color:#677068; font-size:11px; line-height:1.45; }
+.battlecardEvidence { display:grid; gap:8px; }
+.battlecardEvidence > div { display:grid; gap:4px; padding:9px 0; border-top:1px solid #e8ebe7; }
+.battlecardEvidence > div:first-child { border-top:0; padding-top:0; }
+.battlecardEvidence strong { font-size:11px; line-height:1.35; }
+.battlecardEvidence small { color:#677068; font-size:9px; }
+.battlecardEvidence a { width:max-content; color:#111; font-size:10px; font-weight:800; text-decoration:none; }
+.battlecardEvidence a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+@media (max-width:760px) {
+  .battlecardGrid { grid-template-columns:1fr; }
+}
