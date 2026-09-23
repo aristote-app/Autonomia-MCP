@@ -14304,3 +14304,126 @@ body:has(.territoryCampaignPage) .desktopNav {
     grid-column: 2;
   }
 }
+
+
+/* Responsive main navigation repair */
+.siteHeader {
+  overflow: visible;
+}
+
+.headerActions {
+  position: relative;
+}
+
+.mobileMenu {
+  position: relative;
+  display: block;
+}
+
+.mobileMenu summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid rgba(247,245,240,.24);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: var(--paper);
+  cursor: pointer;
+  list-style: none;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.mobileMenu summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobileMenu summary b {
+  font-size: 17px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.mobileMenu[open] summary {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+.mobileMenuPanel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  z-index: 100;
+  display: grid;
+  width: min(360px, calc(100vw - 20px));
+  overflow: hidden;
+  border: 1px solid rgba(247,245,240,.16);
+  border-radius: 12px;
+  background: rgba(23,32,51,.995);
+  box-shadow: 0 24px 70px rgba(0,0,0,.32);
+}
+
+.mobileMenuPanel > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 52px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(247,245,240,.1);
+  color: rgba(247,245,240,.86);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mobileMenuPanel > a:hover {
+  color: var(--paper);
+  background: rgba(255,255,255,.05);
+}
+
+.mobileMenuPanel > a span {
+  color: var(--signal);
+  font-weight: 500;
+}
+
+.mobileMenuPanel > .mobileMenuPrimary {
+  border-bottom: 0;
+  background: var(--signal);
+  color: var(--signal-ink);
+}
+
+@media (max-width: 759px) {
+  .siteHeader {
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 68px;
+  }
+
+  .brandLockup small {
+    display: none;
+  }
+
+  .mobileMenu summary span {
+    display: none;
+  }
+
+  .mobileMenu summary {
+    width: 44px;
+    min-height: 42px;
+    padding: 0;
+  }
+}
+
+@media (min-width: 980px) {
+  .siteHeader .desktopNav {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: none;
+  }
+}
