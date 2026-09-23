@@ -121,7 +121,13 @@ if [ -d "$COCKPIT_ROOT/.git" ] && [ -f "$COCKPIT_ROOT/package.json" ]; then
   COCKPIT_SHA="$(git rev-parse "origin/$COCKPIT_BRANCH")"
   COCKPIT_LOCAL_SHA="$(git rev-parse HEAD 2>/dev/null || true)"
 
-  if [ "$COCKPIT_LOCAL_SHA" != "$COCKPIT_SHA" ]; then
+  COCKPIT_STAMP_FILE="$COCKPIT_ROOT/lib/runtime/buildStamp.generated.js"
+  COCKPIT_STAMP_OK="0"
+  if [ -f "$COCKPIT_STAMP_FILE" ] && grep -Fq "$COCKPIT_SHA" "$COCKPIT_STAMP_FILE"; then
+    COCKPIT_STAMP_OK="1"
+  fi
+
+  if [ "$COCKPIT_LOCAL_SHA" != "$COCKPIT_SHA" ] || [ "$COCKPIT_STAMP_OK" != "1" ]; then
     echo "Syncing cockpit: $COCKPIT_LOCAL_SHA -> $COCKPIT_SHA"
     git reset --hard "$COCKPIT_SHA"
 
@@ -135,6 +141,8 @@ if [ -d "$COCKPIT_ROOT/.git" ] && [ -f "$COCKPIT_ROOT/package.json" ]; then
     export NODE_ENV=production
     export NEXT_TELEMETRY_DISABLED=1
     export UV_THREADPOOL_SIZE=1
+    export AUTONOMIA_DEPLOY_SHA="$COCKPIT_SHA"
+    unset GITHUB_SHA || true
     unset NEXT_PUBLIC_SITE_URL || true
 
     rm -rf .next
