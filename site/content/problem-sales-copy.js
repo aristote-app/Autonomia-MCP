@@ -68,6 +68,125 @@ export const problemSalesCopy = {
     outputs: ["Résumé de l’échange", "Champs proposés", "Next steps", "Rappels / tâches"],
     systems: ["HubSpot / Salesforce / Pipedrive", "Outlook / Gmail", "Agenda", "Visio / prise de notes"],
     human: "Le commercial voit les changements proposés et valide les écritures avant mise à jour des champs sensibles."
+  },
+  "relances-commerciales-ia": {
+    trigger: "Les opportunités se refroidissent parce que la prochaine relance dépend encore d’un rappel manuel ou d’une séquence trop générique.",
+    inputs: ["Stade du deal", "Derniers échanges", "Historique CRM", "Règles de relance"],
+    outputs: ["Relance proposée", "Canal recommandé", "Timing contextualisé", "Cas à mettre en pause"],
+    systems: ["HubSpot / Salesforce / Pipedrive", "Outlook / Gmail", "Agenda", "Outils de séquence"],
+    human: "L’équipe commerciale garde le contrôle du message, du canal et de l’envoi."
+  },
+  "preparation-rendez-vous-commercial-ia": {
+    trigger: "Avant un rendez-vous, les informations utiles sont dispersées entre CRM, e-mails, notes et signaux récents.",
+    inputs: ["Historique CRM", "E-mails", "Notes de rendez-vous", "Sources externes autorisées"],
+    outputs: ["Brief compte", "Enjeux et signaux", "Questions à poser", "Points de vigilance"],
+    systems: ["CRM", "Messagerie", "Agenda", "Sources de veille autorisées"],
+    human: "Le brief prépare l’échange ; le commercial décide des hypothèses et questions réellement pertinentes."
+  },
+  "synthese-comex-ia": {
+    trigger: "Les comités reçoivent trop d’informations et passent du temps à retrouver les écarts réellement décisionnels.",
+    inputs: ["KPI", "Commentaires métiers", "Plans d’action", "Seuils de matérialité"],
+    outputs: ["Synthèse exécutive", "Écarts majeurs", "Décisions attendues", "Questions ouvertes"],
+    systems: ["Power BI / Looker", "Excel / Sheets", "ERP / CRM", "PowerPoint / Docs"],
+    human: "Les faits et hypothèses restent distingués ; les arbitrages appartiennent au comité."
+  },
+  "veille-concurrentielle-ia": {
+    trigger: "La veille accumule des liens alors que la valeur vient des changements détectés et des signaux réellement importants.",
+    inputs: ["Sites concurrents", "Pages offres", "Sources presse", "Critères de signal"],
+    outputs: ["Changements détectés", "Score d’importance", "Comparatif avant/après", "Brief d’impact"],
+    systems: ["Sites web", "Flux RSS", "Newsletters", "CRM / outil de veille"],
+    human: "Le système signale et synthétise ; l’interprétation stratégique reste validée par l’équipe."
+  },
+  "assistant-service-client-ia": {
+    trigger: "L’agent doit relire l’historique et rechercher la procédure avant même de pouvoir préparer une réponse.",
+    inputs: ["Ticket entrant", "Historique client", "Base de connaissance", "Règles d’escalade"],
+    outputs: ["Motif et priorité", "Réponse sourcée", "Résumé de contexte", "Escalade proposée"],
+    systems: ["Zendesk / Freshdesk / Intercom", "CRM", "Base de connaissance", "E-mail / chat"],
+    human: "Les cas sensibles, ambigus ou à fort impact restent soumis à l’agent avant réponse."
+  },
+  "controle-qualite-service-client-ia": {
+    trigger: "Un échantillonnage aléatoire laisse passer des conversations à risque et mobilise du temps sur des cas sans enjeu.",
+    inputs: ["Conversations", "Grille qualité", "Règles obligatoires", "Critères de risque"],
+    outputs: ["Scores par dimension", "Cas prioritaires", "Motifs récurrents", "Points de coaching"],
+    systems: ["Ticketing", "Téléphonie", "CRM", "Outil qualité"],
+    human: "Le score sert à prioriser la relecture, pas à sanctionner automatiquement un collaborateur."
+  },
+  "onboarding-salarie-ia": {
+    trigger: "Chaque arrivée recrée la même coordination entre RH, manager, IT, documents et questions récurrentes.",
+    inputs: ["Profil du salarié", "Checklist d’arrivée", "Documents RH", "Règles par rôle"],
+    outputs: ["Parcours J-7 à J+30", "Tâches assignées", "Réponses sourcées", "Alertes de blocage"],
+    systems: ["SIRH", "Teams / Slack", "Drive / SharePoint", "Ticketing IT"],
+    human: "RH et manager valident les étapes sensibles et gardent la responsabilité de l’intégration."
+  },
+  "analyser-comparer-cv-ia": {
+    trigger: "La comparaison devient incohérente quand chaque CV est lu différemment ou quand les mots-clés remplacent les preuves d’expérience.",
+    inputs: ["CV", "Fiche de poste", "Critères obligatoires", "Pondérations explicites"],
+    outputs: ["Compétences structurées", "Écarts au besoin", "Éléments de preuve", "Questions d’entretien"],
+    systems: ["ATS", "SIRH", "Dossier candidat", "Fiche de poste"],
+    human: "L’outil structure et compare ; il ne prend pas la décision de recrutement."
+  },
+  "assistant-rh-interne-ia": {
+    trigger: "Les mêmes questions sur congés, procédures ou avantages interrompent l’équipe RH tout au long de la journée.",
+    inputs: ["Accords", "Procédures RH", "FAQ internes", "Droits d’accès"],
+    outputs: ["Réponse sourcée", "Document de référence", "Escalade RH", "Questions récurrentes"],
+    systems: ["SharePoint / Drive", "SIRH", "Teams / Slack", "Portail collaborateur"],
+    human: "Les situations individuelles ou sensibles sont redirigées vers la personne RH compétente."
+  },
+  "rapprochement-factures-paiements-ia": {
+    trigger: "Le temps se perd à rechercher manuellement quelle transaction correspond à quelle facture et pourquoi certaines restent ouvertes.",
+    inputs: ["Factures", "Transactions bancaires", "Dates et montants", "Références comptables"],
+    outputs: ["Correspondances proposées", "Score de confiance", "Exceptions", "Reste à rapprocher"],
+    systems: ["ERP comptable", "Banque / exports", "GED", "Outil de trésorerie"],
+    human: "Les rapprochements incertains restent en attente de validation comptable."
+  },
+  "generer-decliner-contenus-marketing-ia": {
+    trigger: "Une campagne est validée une fois, puis chaque canal exige encore une nouvelle adaptation manuelle.",
+    inputs: ["Brief campagne", "Sources validées", "Charte éditoriale", "Formats attendus"],
+    outputs: ["Déclinaisons multicanales", "Variantes de messages", "Claims signalés", "Workflow de validation"],
+    systems: ["CMS", "HubSpot / Brevo", "LinkedIn", "Outils social media"],
+    human: "L’équipe marketing valide le ton, les claims, les visuels et la publication."
+  },
+  "planning-editorial-automatise": {
+    trigger: "Le backlog éditorial grossit sans lien clair entre demande, priorité, capacité et calendrier.",
+    inputs: ["Backlog sujets", "Calendrier campagne", "Capacité équipe", "Signaux SEO/GEO"],
+    outputs: ["Priorités", "Calendrier proposé", "Briefs", "Charge visible"],
+    systems: ["Notion / Airtable", "CMS", "Search Console", "Outil social media"],
+    human: "Le planning est une proposition opérationnelle qui reste arbitrée par l’équipe."
+  },
+  "audit-seo-geo-ia": {
+    trigger: "Les audits séparent encore technique, contenu, schema et visibilité dans les moteurs de réponse alors qu’ils doivent être priorisés ensemble.",
+    inputs: ["URLs", "Données Search Console", "Contenus", "Schema et signaux GEO"],
+    outputs: ["Diagnostic par page", "Écarts à l’intention", "Backlog impact/effort", "Suivi des corrections"],
+    systems: ["Search Console", "CMS", "Crawler", "Analytics"],
+    human: "Les recommandations sont priorisées et validées avant modification du site."
+  },
+  "reserves-chantier-ia": {
+    trigger: "Les réserves vivent entre photos, comptes rendus, e-mails et tableaux jusqu’à ce qu’une relance ou une preuve se perde.",
+    inputs: ["Photo", "Lot / localisation", "Entreprise", "Échéance"],
+    outputs: ["Réserve structurée", "Affectation", "Relance", "Historique de preuve"],
+    systems: ["GED / Drive", "E-mail", "Outil chantier", "Tableau de suivi"],
+    human: "La levée de réserve et l’acceptation de la preuve restent décidées par la personne habilitée."
+  },
+  "pre-instruction-documentaire-ia": {
+    trigger: "L’instructeur passe encore du temps à identifier les pièces et à reconstruire la complétude avant de commencer l’analyse métier.",
+    inputs: ["Dossier", "Référentiel de pièces", "Règles de complétude", "Courriers types"],
+    outputs: ["Pièces reconnues", "Champs utiles", "Niveau de complétude", "Projet de courrier"],
+    systems: ["Portail usager", "GED", "Outil métier", "Messagerie"],
+    human: "L’outil prépare le dossier ; l’instruction et la décision restent entièrement humaines."
+  },
+  "gestion-stocks-ia": {
+    trigger: "Les ruptures et surstocks apparaissent trop tard quand les seuils ne tiennent pas compte du rythme réel de sortie et des délais.",
+    inputs: ["Stocks", "Ventes / consommations", "Délais fournisseurs", "Seuils métier"],
+    outputs: ["Couverture projetée", "Risque de rupture", "Priorité SKU", "Commande proposée"],
+    systems: ["ERP", "WMS", "POS", "Outil achats"],
+    human: "L’acheteur ou responsable approvisionnement valide toute commande et toute modification de seuil."
+  },
+  "maintenance-predictive-assistant-ia": {
+    trigger: "Les signaux faibles restent noyés dans les capteurs et historiques alors que le technicien a surtout besoin d’un contexte exploitable.",
+    inputs: ["Capteurs", "Historique incidents", "Ordres de travail", "Documentation technique"],
+    outputs: ["Dérives détectées", "Contexte équipement", "Procédures retrouvées", "Contrôles proposés"],
+    systems: ["GMAO", "IoT / SCADA", "GED technique", "Historique maintenance"],
+    human: "Le diagnostic et l’intervention restent au technicien ; le système prépare la priorité et les éléments utiles."
   }
 };
 
