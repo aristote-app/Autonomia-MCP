@@ -403,7 +403,18 @@ export default function ProblemLab({ problem }) {
       <div className="problemDemoTabs">{problem.demos.map((item,index)=><button type="button" key={item[1]} className={active===index?"active":""} onClick={()=>open(index)}><span>{String(index+1).padStart(2,"0")}</span><strong>{item[1]}</strong><small>{item[2]}</small></button>)}</div>
       <div className="problemProduct">
         <div className="problemProductTop"><div><i/><i/><i/></div><span>AUTONOMIA LAB · {problem.title}</span><b>DÉMO FICTIVE</b></div>
-        <div className="problemProductBody"><Engine demo={normalized}/><p className="problemDisclosure">Données fictives · résultats illustratifs · aucune performance n’est garantie · les décisions sensibles restent humaines.</p></div>
+        <div className="problemProductBody">
+          <Engine demo={normalized}/>
+          <div className="problemLabBridge">
+            <div>
+              <span>VOTRE FLUX RÉEL</span>
+              <strong>Vous reconnaissez ce processus ?</strong>
+              <p>On repart de vos outils, de vos règles et de vos points de validation pour construire le prototype.</p>
+            </div>
+            <a href="#diagnostic" onClick={()=>trackEvent("problem_cta_click",{problem_slug:problem.slug,problem_cluster:problem.cluster,source_surface:"problem_lab",demo_name:demo[1],demo_index:active+1})}>Adapter ce flux à mon entreprise →</a>
+          </div>
+          <p className="problemDisclosure">Données fictives · résultats illustratifs · aucune performance n’est garantie · les décisions sensibles restent humaines.</p>
+        </div>
       </div>
     </section>
   );
