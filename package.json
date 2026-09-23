@@ -36,7 +36,8 @@
     "smoke:account-watch": "node scripts/smoke-account-watch.mjs",
     "smoke:company-registry": "node scripts/smoke-company-registry.mjs",
     "smoke:deploy-oidc": "node scripts/smoke-deploy-oidc.mjs",
-    "smoke:runtime-settings": "node scripts/smoke-runtime-settings.mjs"
+    "smoke:runtime-settings": "node scripts/smoke-runtime-settings.mjs",
+    "smoke:talent-hunter": "node scripts/smoke-talent-hunter.mjs"
   },
   "engines": {
     "node": ">=22"
