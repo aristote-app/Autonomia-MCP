@@ -5,6 +5,7 @@ import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
 import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../../../lib/collectors/accountResearch.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
+import { buildAccountBattlecard } from "../../../lib/intelligence/battlecard.js";
 import { getCurrentWorkspaceMembership } from "../../../lib/auth/access.js";
 import { listSalesContacts } from "../../../lib/db/salesContacts.js";
 import {
@@ -44,6 +45,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
   if (!account) notFound();
 
   const outreach = buildAccountOutreachPlan(account);
+  const battlecard = buildAccountBattlecard(account);
   const workspaceContext = await getCurrentWorkspaceMembership().catch(() => ({
     configured: false,
     claims: null,
@@ -535,6 +537,70 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
         <div className="outreachGuardrails">
           {outreach.guardrails.map((rule) => <span key={rule}>{rule}</span>)}
+        </div>
+      </section>
+
+      <section className="accountBattlecardSection">
+        <div className="sectionTitle">
+          <div>
+            <p className="eyebrow">RDV / CALL PREP</p>
+            <h2>Battlecard commerciale.</h2>
+          </div>
+          <p>
+            Préparation déterministe à partir du compte, du signal et de l'offre. Les inconnues restent des questions.
+          </p>
+        </div>
+
+        <div className="battlecardGrid">
+          <article className="battlecardLead">
+            <span>OBJECTIF</span>
+            <strong>{battlecard.objective}</strong>
+            <p>{battlecard.opener}</p>
+            <dl>
+              <div><dt>Cible</dt><dd>{battlecard.target_role}</dd></div>
+              <div><dt>Offre</dt><dd>{battlecard.offer}</dd></div>
+            </dl>
+          </article>
+
+          <article>
+            <span>5 QUESTIONS À POSER</span>
+            <ol>
+              {battlecard.questions.map((question) => <li key={question}>{question}</li>)}
+            </ol>
+          </article>
+
+          <article>
+            <span>OBJECTIONS À PRÉPARER</span>
+            <div className="battlecardObjections">
+              {battlecard.objections.map((item) => (
+                <div key={item.objection}>
+                  <strong>{item.objection}</strong>
+                  <p>{item.response}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article>
+            <span>PREUVES À GARDER SOUS LA MAIN</span>
+            <div className="battlecardEvidence">
+              {battlecard.evidence.length ? battlecard.evidence.map((item) => (
+                <div key={(item.source_url || "") + ":" + item.title}>
+                  <strong>{item.title}</strong>
+                  <small>{item.source_id || "source"}</small>
+                  {item.source_url && (
+                    <a href={item.source_url} target="_blank" rel="noreferrer">Source ↗</a>
+                  )}
+                </div>
+              )) : (
+                <p>Aucune preuve source disponible.</p>
+              )}
+            </div>
+          </article>
+        </div>
+
+        <div className="outreachGuardrails">
+          {battlecard.guardrails.map((rule) => <span key={rule}>{rule}</span>)}
         </div>
       </section>
 
