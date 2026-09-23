@@ -2,10 +2,16 @@ import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
   listConsultantsWithSkills,
-  getConsultantPoolSummary
+  getConsultantPoolSummary,
+  listConsultantCandidates,
+  getConsultantDiscoverySummary
 } from "../../lib/db/consultants.js";
 import { consultantImportTemplate } from "../../lib/consultants/import.js";
-import { importConsultantsFromText } from "../actions/consultants.js";
+import {
+  importConsultantsFromText,
+  discoverConsultantsFromWeb,
+  reviewConsultantCandidate
+} from "../actions/consultants.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { rankAccountsForConsultant } from "../../lib/intelligence/consultantAccounts.js";
 
@@ -40,6 +46,18 @@ export default async function ConsultantsPage({ searchParams }) {
   const params = await searchParams;
   const importedCount = Number(params?.imported || 0);
   const importedSkillLinks = Number(params?.skills || 0);
+  const discoveredCount = Number(params?.discovered || 0);
+  const updatedCount = Number(params?.updated || 0);
+  const foundCount = Number(params?.found || 0);
+  const reviewed = String(params?.reviewed || "");
+  const lastQuery = String(params?.query || "");
+  const discoverySummary = await getConsultantDiscoverySummary().catch(() => ({
+    candidates: 0,
+    rejected: 0,
+    malt: 0,
+    freelance_com: 0,
+    linkedin: 0
+  }));
 
   if (!hasSession) {
     return (
@@ -55,13 +73,17 @@ export default async function ConsultantsPage({ searchParams }) {
         <div className="lockedContactState">
           <strong>Pool privé prêt</strong>
           <span>Visible uniquement après authentification du workspace.</span>
+          <span>
+            Talent Hunter : {discoverySummary.candidates} candidat{discoverySummary.candidates > 1 ? "s" : ""} en attente de validation.
+          </span>
         </div>
       </main>
     );
   }
 
-  const [consultants, summary, accountResult] = await Promise.all([
+  const [consultants, candidates, summary, accountResult] = await Promise.all([
     listConsultantsWithSkills({ limit: 500 }).catch(() => []),
+    listConsultantCandidates({ limit: 120 }).catch(() => []),
     getConsultantPoolSummary().catch(() => ({
       total: 0, active: 0, available_now: 0, remote: 0, tjm_known: 0
     })),
@@ -100,6 +122,60 @@ export default async function ConsultantsPage({ searchParams }) {
         </div>
       )}
 
+      {(foundCount > 0 || discoveredCount > 0 || updatedCount > 0) && (
+        <div className="adminFlash">
+          <strong>Talent Hunter : {foundCount} profil{foundCount > 1 ? "s" : ""} pertinent{foundCount > 1 ? "s" : ""} trouvé{foundCount > 1 ? "s" : ""}</strong>
+          <span>
+            {discoveredCount} nouveau{discoveredCount > 1 ? "x" : ""} candidat{discoveredCount > 1 ? "s" : ""} · {updatedCount} déjà connu{updatedCount > 1 ? "s" : ""} actualisé{updatedCount > 1 ? "s" : ""}.
+          </span>
+        </div>
+      )}
+
+      {reviewed && (
+        <div className="adminFlash">
+          <strong>{reviewed === "active" ? "Consultant validé dans le pool actif." : "Candidat rejeté."}</strong>
+        </div>
+      )}
+
+      {canImport && (
+        <section className="talentHunterPanel">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">TALENT HUNTER · MALT + FREELANCE.COM + LINKEDIN</p>
+              <h2>Chercher les profils dont Autonomia a besoin.</h2>
+            </div>
+            <p>
+              Trois recherches web ciblées maximum par déclenchement, mises en cache 12 h. Les résultats restent candidats jusqu'à validation humaine.
+            </p>
+          </div>
+          <form action={discoverConsultantsFromWeb} className="talentHunterForm">
+            <label>
+              <span>Compétences / type de profil</span>
+              <input
+                type="text"
+                name="query"
+                required
+                minLength={3}
+                maxLength={180}
+                defaultValue={lastQuery || "AI Engineer LangGraph RAG Python"}
+                placeholder="Ex. Formateur IA Copilot adoption"
+              />
+            </label>
+            <button type="submit">Chercher sur 3 sources</button>
+          </form>
+          <div className="talentHunterPresets">
+            <span>Exemples :</span>
+            <strong>AI Engineer LangGraph RAG</strong>
+            <strong>Formateur IA Copilot adoption</strong>
+            <strong>Automatisation IA n8n Make</strong>
+            <strong>AI Product / Project Manager</strong>
+          </div>
+          <small>
+            Aucun profil n'est contacté automatiquement. Aucun crédit Kaspr n'est consommé. Le profil source reste lié au candidat.
+          </small>
+        </section>
+      )}
+
       {canImport && (
         <section className="detailPanel" style={{ marginBottom: 24 }}>
           <p className="eyebrow">IMPORT CONSULTANTS</p>
@@ -130,9 +206,68 @@ export default async function ConsultantsPage({ searchParams }) {
       <section className="consultantMetrics">
         <article><strong>{summary.active}</strong><span>Actifs</span></article>
         <article><strong>{summary.available_now}</strong><span>Disponibles maintenant</span></article>
-        <article><strong>{summary.remote}</strong><span>Remote</span></article>
+        <article><strong>{discoverySummary.candidates}</strong><span>Candidats à vérifier</span></article>
         <article><strong>{summary.tjm_known}</strong><span>TJM connus</span></article>
       </section>
+
+      {canImport && candidates.length > 0 && (
+        <section className="talentCandidateSection">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">CANDIDATS DÉCOUVERTS</p>
+              <h2>Vérifier avant d'activer.</h2>
+            </div>
+            <p>
+              Les noms, compétences, TJM et localisations ci-dessous proviennent uniquement des éléments publics trouvés dans l'index web. Les champs absents restent non renseignés.
+            </p>
+          </div>
+
+          <div className="talentCandidateList">
+            {candidates.map((candidate) => (
+              <article key={candidate.id}>
+                <div className="talentCandidateHead">
+                  <div>
+                    <span>{candidate.metadata?.source_label || candidate.metadata?.source_platform || "Web"}</span>
+                    <h3>{candidate.display_name}</h3>
+                    {candidate.metadata?.headline && <p>{candidate.metadata.headline}</p>}
+                  </div>
+                  <strong>{candidate.metadata?.relevance_score || 0}/100</strong>
+                </div>
+
+                <div className="consultantFacts">
+                  <span>{money(candidate.tjm, candidate.currency)}</span>
+                  <span>{candidate.locations?.length ? candidate.locations.join(", ") : "Localisation non renseignée"}</span>
+                  <span>{candidate.remote ? "Remote / hybride mentionné" : "Remote non renseigné"}</span>
+                </div>
+
+                {(candidate.skills || []).length > 0 && (
+                  <div className="chips">
+                    {candidate.skills.slice(0, 14).map((skill) => <span key={skill}>{skill}</span>)}
+                  </div>
+                )}
+
+                <div className="talentCandidateActions">
+                  {candidate.metadata?.profile_url && (
+                    <a href={candidate.metadata.profile_url} target="_blank" rel="noreferrer">
+                      Vérifier le profil source ↗
+                    </a>
+                  )}
+                  <form action={reviewConsultantCandidate}>
+                    <input type="hidden" name="consultant_id" value={candidate.id} />
+                    <input type="hidden" name="decision" value="approve" />
+                    <button type="submit">Valider dans le pool</button>
+                  </form>
+                  <form action={reviewConsultantCandidate}>
+                    <input type="hidden" name="consultant_id" value={candidate.id} />
+                    <input type="hidden" name="decision" value="reject" />
+                    <button type="submit" className="secondary">Rejeter</button>
+                  </form>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {consultants.length ? (
         <section className="consultantList">

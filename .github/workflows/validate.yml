@@ -90,3 +90,5 @@ jobs:
         run: npm run smoke:deploy-oidc
       - name: Smoke test runtime integration settings allowlist
         run: npm run smoke:runtime-settings
+      - name: Smoke test Talent Hunter
+        run: npm run smoke:talent-hunter
