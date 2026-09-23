@@ -4,6 +4,7 @@ import AutonomiaMark from "@/components/AutonomiaMark";
 import { academyTrainings } from "@/content/academy-trainings";
 import { problemSolutions } from "@/content/problem-solutions";
 import ProblemLink from "@/components/ProblemLink";
+import SolutionFinder from "@/components/SolutionFinder";
 
 const homeProblemSlugs = [
   "automatiser-comptes-rendus-reunion",
@@ -43,15 +44,17 @@ export default function Home() {
             <span>Transmettre les compétences.</span>
           </h1>
           <p className="heroText">
-            Autonomia part d’un besoin métier réel pour concevoir, déployer et faire adopter l’IA.
-            Nos experts accélèrent l’exécution. Autonomia Academy rend les équipes capables de reprendre la main.
+            Décrivez votre besoin en langage naturel. Autonomia vous oriente vers les métiers IA pertinents,
+            les consultants disponibles et les formations Academy adaptées.
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/#diagnostic-ia">Faire le diagnostic IA</Link>
-            <Link className="secondaryButton" href="/experts">Voir les experts IA</Link>
+            <Link className="primaryButton" href="#solution-finder">Décrire mon besoin</Link>
+            <Link className="secondaryButton" href="/#diagnostic-ia">Faire le diagnostic détaillé</Link>
           </div>
         </div>
+
+        <SolutionFinder />
 
         <div className="executionGrid homeExecutionSimple" aria-label="Méthode Autonomia">
           <div className="gridHeader">
