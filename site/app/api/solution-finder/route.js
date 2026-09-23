@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { aiRoles } from "@/content/ai-roles";
+import { academyTrainings } from "@/content/academy-trainings";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,114 +10,133 @@ const Input = z.object({
   query: z.string().trim().min(8).max(2500)
 });
 
-const ROLE_CATALOG = {
+const ROLE_HINTS = {
   "ai-project-manager": {
-    label: "AI Project Manager",
-    slug: "ai-project-manager",
-    role: "ai-project-manager",
-    why: "Piloter le cadrage, les arbitrages, les dépendances et le passage à l’exécution.",
-    keywords: ["projet", "roadmap", "piloter", "coordination", "prioriser", "cadrage", "direction", "déploiement"]
+    why: "Cadrer le besoin, coordonner les parties prenantes et piloter le passage de l’idée au déploiement.",
+    keywords: ["projet", "cadrage", "roadmap", "piloter", "prioriser", "coordination", "déploiement", "transformation"]
   },
   "genai-engineer": {
-    label: "GenAI / LLM Engineer",
-    slug: "genai-engineer",
-    role: "genai-engineer",
-    why: "Concevoir et intégrer des fonctionnalités fondées sur les modèles génératifs.",
-    keywords: ["llm", "genai", "generative", "chatbot", "assistant", "openai", "anthropic", "modèle", "ia générative"]
+    why: "Concevoir et intégrer des fonctionnalités fondées sur l’IA générative dans les outils et processus métier.",
+    keywords: ["genai", "ia générative", "assistant", "chatbot", "llm", "génération", "openai", "claude", "gemini"]
+  },
+  "llm-engineer": {
+    why: "Fiabiliser le comportement des modèles : contexte, évaluation, prompting système, tool use et qualité.",
+    keywords: ["llm", "évaluation", "hallucination", "prompt système", "qualité modèle", "context", "fine tuning"]
   },
   "rag-engineer": {
-    label: "RAG Engineer",
-    slug: "rag-engineer",
-    role: "rag-engineer",
-    why: "Structurer l’ingestion documentaire, le retrieval, les citations et l’évaluation des réponses.",
-    keywords: ["rag", "document", "documents", "base documentaire", "connaissance", "recherche", "retrieval", "pdf", "intranet", "assistant documentaire"]
+    why: "Construire une recherche documentaire fiable : ingestion, retrieval, citations, reranking et évaluation.",
+    keywords: ["rag", "document", "documents", "pdf", "base documentaire", "recherche interne", "retrieval", "connaissance", "intranet"]
   },
   "ai-agent-engineer": {
-    label: "AI Agent Engineer",
-    slug: "ai-agent-engineer",
-    role: "ai-agent-engineer",
-    why: "Construire des workflows agentiques avec outils, permissions, contrôles et supervision humaine.",
-    keywords: ["agent", "agentique", "workflow", "orchestration", "tool", "mcp", "autonome", "actions"]
-  },
-  "automation-engineer": {
-    label: "Automation / AI Engineer",
-    slug: "automation-engineer",
-    role: "automation-engineer",
-    why: "Automatiser des processus entre outils, API, messagerie, CRM et applications métier.",
-    keywords: ["automatiser", "automatisation", "n8n", "make", "zapier", "power automate", "crm", "reporting", "compte rendu", "relance", "email", "mail"]
-  },
-  "ai-product-manager": {
-    label: "AI Product Manager",
-    slug: "ai-product-manager",
-    role: "ai-product-manager",
-    why: "Transformer un besoin utilisateur en produit IA priorisé, testable et mesurable.",
-    keywords: ["produit", "product", "fonctionnalité", "utilisateur", "discovery", "mvp", "roadmap produit"]
-  },
-  "ai-governance": {
-    label: "AI Governance Consultant",
-    slug: "ai-governance",
-    role: "ai-governance",
-    why: "Cadrer les règles d’usage, les risques, les responsabilités et l’AI Act.",
-    keywords: ["ai act", "gouvernance", "conformité", "risque", "responsable", "charte", "juridique", "sécurité"]
+    why: "Concevoir des agents capables d’utiliser des outils et d’exécuter un workflow sous contrôle.",
+    keywords: ["agent", "agentique", "orchestration", "tool calling", "mcp", "autonome", "workflow agent"]
   },
   "data-scientist": {
-    label: "Data Scientist",
-    slug: "data-scientist",
-    role: "data-scientist",
-    why: "Modéliser, expérimenter et exploiter les données pour des cas d’usage prédictifs ou analytiques.",
-    keywords: ["data science", "prédire", "prediction", "scoring", "forecast", "prévision", "statistique"]
+    why: "Analyser les données et construire des modèles prédictifs, scores ou expérimentations quantitatives.",
+    keywords: ["data science", "prédire", "prévision", "scoring", "statistique", "modèle prédictif", "forecast"]
+  },
+  "ml-engineer": {
+    why: "Transformer un modèle ML en composant logiciel intégré, performant et maintenable.",
+    keywords: ["machine learning", "ml engineer", "modèle ml", "serving", "inférence", "pytorch", "tensorflow"]
   },
   "mlops-llmops-engineer": {
-    label: "MLOps / LLMOps Engineer",
-    slug: "mlops-llmops-engineer",
-    role: "mlops-llmops-engineer",
     why: "Industrialiser, observer et maintenir les modèles et applications IA en production.",
-    keywords: ["mlops", "llmops", "production", "industrialiser", "observabilité", "monitoring", "kubernetes", "mlflow"]
+    keywords: ["mlops", "llmops", "industrialiser", "production", "monitoring", "observabilité", "mlflow", "kubernetes"]
+  },
+  "ai-product-manager": {
+    why: "Transformer un problème utilisateur en produit IA priorisé, testable et mesurable.",
+    keywords: ["produit", "product", "fonctionnalité", "mvp", "discovery", "parcours utilisateur", "priorisation"]
+  },
+  "ai-governance": {
+    why: "Définir les règles d’usage, les responsabilités, les risques et le cadre AI Act.",
+    keywords: ["ai act", "gouvernance", "conformité", "risque", "charte", "juridique", "responsible ai", "sécurité"]
+  },
+  "automation-engineer": {
+    why: "Automatiser des tâches et processus entre outils, API, messagerie, CRM et logiciels métier.",
+    keywords: ["automatiser", "automatisation", "workflow", "n8n", "make", "zapier", "power automate", "crm", "reporting", "compte rendu", "relance", "email", "e-mail", "copier-coller"]
   }
 };
 
-const TRAINING_CATALOG = {
-  "ia-entreprise": {
-    title: "Formation IA en entreprise",
-    slug: "ia-generative-entreprise",
-    why: "Construire un socle de compétences adapté aux populations, usages et règles de l’organisation.",
-    keywords: ["formation", "former", "équipes", "collaborateurs", "compétences", "acculturation", "adoption"]
+const TRAINING_HINTS = {
+  "ia-generative-entreprise": {
+    why: "Donner aux équipes un socle commun pour utiliser l’IA générative avec méthode et contrôle.",
+    keywords: ["ia générative", "genai", "collaborateurs", "acculturation", "adoption", "formation ia"]
   },
-  "chatgpt": {
-    title: "ChatGPT en entreprise",
-    slug: "chatgpt-entreprise",
-    why: "Transformer l’usage spontané de ChatGPT en méthodes de travail vérifiables et réutilisables.",
-    keywords: ["chatgpt", "prompt", "rédaction", "synthèse", "assistant"]
+  "chatgpt-entreprise": {
+    why: "Transformer ChatGPT en méthode de travail réutilisable pour rédiger, synthétiser, analyser et rechercher.",
+    keywords: ["chatgpt", "rédaction", "synthèse", "assistant", "prompts chatgpt"]
   },
-  "copilot": {
-    title: "Microsoft Copilot",
-    slug: "microsoft-copilot-365-ia",
-    why: "Faire adopter Copilot sur les tâches réelles dans l’environnement Microsoft 365.",
-    keywords: ["copilot", "microsoft 365", "teams", "outlook", "excel", "word", "powerpoint"]
+  "microsoft-copilot-365-ia": {
+    why: "Faire adopter Copilot sur les tâches réelles dans Word, Excel, PowerPoint, Outlook et Teams.",
+    keywords: ["copilot", "microsoft 365", "teams", "outlook", "word", "excel", "powerpoint"]
   },
-  "ia-generative": {
-    title: "IA générative",
-    slug: "ia-generative-entreprise",
-    why: "Donner un cadre opérationnel commun pour utiliser les modèles génératifs dans les métiers.",
-    keywords: ["ia générative", "genai", "llm", "générative", "generative"]
+  "prompt-engineering-ia": {
+    why: "Passer de prompts improvisés à des instructions structurées, testables et partageables.",
+    keywords: ["prompt", "prompt engineering", "instruction", "structured output"]
   },
-  "ai-act": {
-    title: "AI Act & gouvernance IA",
-    slug: "gouvernance-ia-ai-act",
-    why: "Rendre les règles, responsabilités et pratiques de gouvernance compréhensibles et actionnables.",
-    keywords: ["ai act", "gouvernance", "conformité", "risque", "réglementation", "responsable"]
+  "agents-ia-entreprise": {
+    why: "Apprendre à cadrer, concevoir et superviser des agents IA avec les bons garde-fous.",
+    keywords: ["agent ia", "agents ia", "agentique", "tool calling", "supervision agent"]
   },
-  "agents-ia": {
-    title: "Agents IA",
-    slug: "agents-ia-entreprise",
-    why: "Comprendre, concevoir et superviser des workflows agentiques avec des garde-fous.",
-    keywords: ["agent", "agentique", "automatisation", "workflow", "supervision"]
+  "automatisation-ia": {
+    why: "Rendre les équipes capables d’identifier et construire des automatisations IA utiles.",
+    keywords: ["automatiser", "automatisation", "workflow", "n8n", "make", "tâche répétitive"]
   },
-  "prompt-engineering": {
-    title: "Prompt engineering",
-    slug: "prompt-engineering-ia",
-    why: "Structurer les demandes, les formats et les critères de qualité pour rendre les usages reproductibles.",
-    keywords: ["prompt", "instruction", "chatgpt", "méthode", "réutilisable"]
+  "ia-dirigeants-managers": {
+    why: "Donner aux dirigeants et managers les repères pour décider, prioriser et encadrer les usages IA.",
+    keywords: ["dirigeant", "direction", "manager", "comex", "management"]
+  },
+  "ia-chefs-projet": {
+    why: "Apprendre à cadrer et piloter un projet IA de l’opportunité au déploiement.",
+    keywords: ["chef de projet", "project manager", "piloter projet", "cadrage projet"]
+  },
+  "ia-marketing-communication": {
+    why: "Appliquer l’IA aux workflows marketing et communication avec contrôle de la qualité.",
+    keywords: ["marketing", "communication", "contenu", "campagne", "seo", "réseaux sociaux"]
+  },
+  "ia-commerciaux-b2b": {
+    why: "Appliquer l’IA à la prospection, la qualification, la préparation et le suivi commercial.",
+    keywords: ["commercial", "vente", "prospection", "lead", "leads", "crm", "qualification"]
+  },
+  "ia-ressources-humaines": {
+    why: "Appliquer l’IA aux processus RH en gardant la validation humaine et le cadre de confidentialité.",
+    keywords: ["rh", "ressources humaines", "recrutement", "onboarding", "formation rh"]
+  },
+  "ia-finance-comptabilite": {
+    why: "Utiliser l’IA pour analyser, documenter et accélérer les tâches finance/comptabilité.",
+    keywords: ["finance", "comptabilité", "comptable", "facture", "budget"]
+  },
+  "ia-relation-client-support": {
+    why: "Structurer l’usage de l’IA pour répondre, router et assister les équipes de support.",
+    keywords: ["support", "relation client", "service client", "ticket", "questions récurrentes"]
+  },
+  "creation-contenu-ia": {
+    why: "Créer et contrôler des contenus multimodaux avec une méthode de production réutilisable.",
+    keywords: ["création contenu", "image", "vidéo", "audio", "contenu"]
+  },
+  "analyse-donnees-reporting-ia": {
+    why: "Accélérer l’analyse, la consolidation et le commentaire de données et reportings.",
+    keywords: ["reporting", "tableau", "données", "analyse données", "kpi", "consolidation"]
+  },
+  "gouvernance-ia-ai-act": {
+    why: "Transformer l’AI Act et la gouvernance en règles opérationnelles compréhensibles par les équipes.",
+    keywords: ["ai act", "gouvernance", "conformité", "responsable", "risque ia"]
+  },
+  "ia-responsable-securite": {
+    why: "Cadrer les risques de sécurité, données et accès liés aux usages d’IA.",
+    keywords: ["sécurité", "rssI", "cybersécurité", "données sensibles", "permissions"]
+  },
+  "llm-rag-agents-ia": {
+    why: "Approfondir l’architecture LLM, RAG et agents pour des profils techniques.",
+    keywords: ["llm", "rag", "agents", "langchain", "langgraph", "architecture ia"]
+  },
+  "rag-recherche-documentaire-ia": {
+    why: "Comprendre et construire des assistants documentaires fondés sur le RAG et la recherche.",
+    keywords: ["rag", "recherche documentaire", "assistant documentaire", "documents internes", "base documentaire"]
+  },
+  "product-management-ia": {
+    why: "Apprendre à concevoir, prioriser et évaluer des fonctionnalités IA du point de vue produit.",
+    keywords: ["product", "produit ia", "product manager", "mvp", "discovery"]
   }
 };
 
@@ -126,48 +147,74 @@ function normalize(value) {
     .toLowerCase();
 }
 
-function scoreCatalog(query, catalog) {
+function scoreHints(query, hints) {
   const haystack = normalize(query);
-  return Object.entries(catalog)
+  return Object.entries(hints)
     .map(([id, item]) => {
-      const score = item.keywords.reduce((total, keyword) => (
-        haystack.includes(normalize(keyword)) ? total + Math.max(1, normalize(keyword).split(" ").length) : total
-      ), 0);
+      const score = item.keywords.reduce((total, keyword) => {
+        const token = normalize(keyword);
+        if (!haystack.includes(token)) return total;
+        return total + Math.max(1, token.split(/\s+/).length);
+      }, 0);
       return { id, score };
     })
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score);
 }
 
+function existsRole(id) {
+  return aiRoles.some((role) => role.slug === id) && Boolean(ROLE_HINTS[id]);
+}
+
+function existsTraining(id) {
+  return academyTrainings.some((training) => training.slug === id) && Boolean(TRAINING_HINTS[id]);
+}
+
 function fallbackClassification(query) {
-  const roleScores = scoreCatalog(query, ROLE_CATALOG);
-  const trainingScores = scoreCatalog(query, TRAINING_CATALOG);
-  const normalized = normalize(query);
+  const roleScores = scoreHints(query, ROLE_HINTS);
+  const trainingScores = scoreHints(query, TRAINING_HINTS);
+  const text = normalize(query);
 
   const trainingIntent = [
-    "formation", "former", "monter en competence", "collaborateur", "equipe", "manager",
-    "adoption", "sensibilis", "academy"
-  ].some((term) => normalized.includes(term));
+    "former", "formation", "monter en competence", "montee en competence", "apprendre",
+    "equipes", "collaborateurs", "managers", "adoption", "sensibiliser"
+  ].some((token) => text.includes(token));
+
+  const executionIntent = [
+    "automatis", "construire", "creer", "developper", "integrer", "deployer", "assistant",
+    "agent", "workflow", "rag", "reporting", "qualification", "processus"
+  ].some((token) => text.includes(token));
 
   const roleIds = (roleScores.length ? roleScores : [{ id: "ai-project-manager", score: 1 }])
     .slice(0, 3)
-    .map((item) => item.id);
+    .map((item) => item.id)
+    .filter(existsRole);
 
-  let trainingIds = trainingScores.slice(0, 3).map((item) => item.id);
-  if (trainingIntent && !trainingIds.length) trainingIds = ["ia-entreprise"];
+  let trainingIds = trainingScores.slice(0, 3).map((item) => item.id).filter(existsTraining);
+  if (trainingIntent && !trainingIds.length) trainingIds = ["ia-generative-entreprise"];
 
-  const route = trainingIntent
-    ? (roleScores.length ? "hybrid" : "academy")
-    : "experts";
+  let route = "experts";
+  if (trainingIntent && !executionIntent) route = "academy";
+  else if (trainingIds.length && roleIds.length) route = "hybrid";
 
-  const firstRole = ROLE_CATALOG[roleIds[0]];
-  const summary = route === "academy"
-    ? "Votre demande relève principalement d’une montée en compétences à relier aux tâches et aux usages réels de vos équipes."
-    : route === "hybrid"
+  if (route === "academy") {
+    return {
+      summary: "Votre demande relève principalement d’une montée en compétences à relier aux tâches, outils et règles réelles de vos équipes.",
+      route,
+      role_ids: [],
+      training_ids: trainingIds.length ? trainingIds : ["ia-generative-entreprise"]
+    };
+  }
+
+  const firstRole = aiRoles.find((role) => role.slug === roleIds[0]);
+  return {
+    summary: route === "hybrid"
       ? "Votre besoin combine une capacité d’exécution immédiate et des compétences à transférer durablement dans l’organisation."
-      : `Votre demande peut être traduite en mission opérationnelle, avec ${firstRole?.label || "une expertise IA ciblée"} comme premier rôle à examiner.`;
-
-  return { summary, route, role_ids: roleIds, training_ids: trainingIds };
+      : `Votre demande peut être traduite en mission opérationnelle, avec ${firstRole?.title || "une expertise IA ciblée"} comme premier métier à examiner.`,
+    route,
+    role_ids: roleIds,
+    training_ids: trainingIds
+  };
 }
 
 function extractResponseText(payload) {
@@ -184,22 +231,25 @@ async function classifyWithOpenAI(query) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
 
-  const roleIds = Object.keys(ROLE_CATALOG);
-  const trainingIds = Object.keys(TRAINING_CATALOG);
+  const allowedRoles = aiRoles.map((role) => role.slug).filter(existsRole);
+  const allowedTrainings = academyTrainings.map((training) => training.slug).filter(existsTraining);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
 
   const instructions = [
-    "You route B2B AI needs for Autonomia, an AI execution partner.",
-    "Return ONLY valid JSON, no markdown.",
-    "Never invent an offer. Select only IDs from the provided catalogs.",
-    "Choose experts, Academy, or hybrid according to the need.",
-    "Use 0 to 3 role_ids and 0 to 3 training_ids.",
-    "If the request is ambiguous, include ai-project-manager rather than inventing a role.",
-    "Write summary in French, concise and operational.",
-    `Allowed role_ids: ${roleIds.join(", ")}.`,
-    `Allowed training_ids: ${trainingIds.join(", ")}.`,
-    'JSON shape: {"summary":"...","route":"experts|academy|hybrid","role_ids":["..."],"training_ids":["..."]}'
+    "Tu es le routeur commercial d'Autonomia, AI Execution Partner B2B.",
+    "Analyse le problème exprimé, sans inventer d'offre ni de profil.",
+    "Choisis uniquement des identifiants présents dans les catalogues autorisés.",
+    "Experts = besoin d'exécution, build, cadrage, expertise ou delivery.",
+    "Academy = besoin de montée en compétences, adoption ou transfert.",
+    "Hybrid = les deux sont utiles.",
+    "Retourne UNIQUEMENT du JSON valide, sans markdown.",
+    "0 à 3 role_ids et 0 à 3 training_ids.",
+    "Si le besoin expert est ambigu, utilise ai-project-manager plutôt que d'inventer un métier.",
+    "Le summary doit être en français, concret, en 1 à 3 phrases, sans promesse de résultat.",
+    `role_ids autorisés: ${allowedRoles.join(", ")}`,
+    `training_ids autorisés: ${allowedTrainings.join(", ")}`,
+    'Format JSON: {"summary":"...","route":"experts|academy|hybrid","role_ids":["..."],"training_ids":["..."]}'
   ].join("\n");
 
   try {
@@ -220,24 +270,30 @@ async function classifyWithOpenAI(query) {
 
     if (!response.ok) return null;
     const payload = await response.json();
-    const raw = extractResponseText(payload).trim().replace(/^\`\`\`json\s*/i, "").replace(/\`\`\`$/i, "").trim();
-    const parsed = JSON.parse(raw);
+    const rawText = extractResponseText(payload)
+      .trim()
+      .replace(/^\`\`\`json\s*/i, "")
+      .replace(/\`\`\`$/i, "")
+      .trim();
+    const parsed = JSON.parse(rawText);
 
-    const role_ids = Array.isArray(parsed.role_ids)
-      ? parsed.role_ids.filter((id) => ROLE_CATALOG[id]).slice(0, 3)
+    const roleIds = Array.isArray(parsed.role_ids)
+      ? parsed.role_ids.filter(existsRole).slice(0, 3)
       : [];
-    const training_ids = Array.isArray(parsed.training_ids)
-      ? parsed.training_ids.filter((id) => TRAINING_CATALOG[id]).slice(0, 3)
+    const trainingIds = Array.isArray(parsed.training_ids)
+      ? parsed.training_ids.filter(existsTraining).slice(0, 3)
       : [];
-    const route = ["experts", "academy", "hybrid"].includes(parsed.route) ? parsed.route : "hybrid";
+    const route = ["experts", "academy", "hybrid"].includes(parsed.route)
+      ? parsed.route
+      : (roleIds.length && trainingIds.length ? "hybrid" : trainingIds.length ? "academy" : "experts");
 
-    if (!role_ids.length && !training_ids.length) return null;
+    if (!roleIds.length && !trainingIds.length) return null;
 
     return {
-      summary: String(parsed.summary || "").trim().slice(0, 700) || fallbackClassification(query).summary,
+      summary: String(parsed.summary || "").trim().slice(0, 800) || fallbackClassification(query).summary,
       route,
-      role_ids,
-      training_ids
+      role_ids: roleIds,
+      training_ids: trainingIds
     };
   } catch {
     return null;
@@ -246,17 +302,24 @@ async function classifyWithOpenAI(query) {
   }
 }
 
-async function loadExperts(role) {
-  const base = (process.env.AUTONOMIA_COCKPIT_PUBLIC_URL || "https://cockpit.build-autonomia.com").replace(/\/$/, "");
+async function loadExperts(roleSlug) {
+  const base =
+    process.env.AUTONOMIA_CONSULTANTS_URL ||
+    "https://cockpit.build-autonomia.com/api/public/consultants";
 
   try {
-    const response = await fetch(
-      `${base}/api/public/consultants?role=${encodeURIComponent(role)}&limit=3`,
-      { cache: "no-store" }
-    );
+    const endpoint = new URL(base);
+    endpoint.searchParams.set("role", roleSlug);
+    endpoint.searchParams.set("limit", "3");
+
+    const response = await fetch(endpoint, {
+      cache: "no-store",
+      headers: { accept: "application/json" }
+    });
     if (!response.ok) return [];
-    const data = await response.json();
-    return Array.isArray(data.profiles) ? data.profiles.slice(0, 3) : [];
+
+    const payload = await response.json();
+    return Array.isArray(payload?.profiles) ? payload.profiles.slice(0, 3) : [];
   } catch {
     return [];
   }
@@ -276,27 +339,37 @@ export async function POST(request) {
   }
 
   const query = parsed.data.query;
-  const ai = await classifyWithOpenAI(query);
-  const classification = ai || fallbackClassification(query);
+  const aiClassification = await classifyWithOpenAI(query);
+  const classification = aiClassification || fallbackClassification(query);
 
   const roles = await Promise.all(
     classification.role_ids.map(async (id) => {
-      const item = ROLE_CATALOG[id];
+      const role = aiRoles.find((item) => item.slug === id);
+      const hint = ROLE_HINTS[id];
       return {
         id,
-        label: item.label,
-        slug: item.slug,
-        role: item.role,
-        why: item.why,
-        experts: await loadExperts(item.role)
+        label: role?.title || id,
+        french_title: role?.frenchTitle || null,
+        slug: id,
+        why: hint.why,
+        experts: await loadExperts(id)
       };
     })
   );
 
   const trainings = classification.training_ids
     .map((id) => {
-      const item = TRAINING_CATALOG[id];
-      return item ? { id, title: item.title, slug: item.slug, why: item.why } : null;
+      const training = academyTrainings.find((item) => item.slug === id);
+      const hint = TRAINING_HINTS[id];
+      if (!training || !hint) return null;
+      return {
+        id,
+        slug: training.slug,
+        title: training.title,
+        subtitle: training.subtitle,
+        why: hint.why,
+        standard_days: training.standardDays || null
+      };
     })
     .filter(Boolean);
 
@@ -308,7 +381,7 @@ export async function POST(request) {
       route: classification.route,
       roles,
       trainings,
-      engine: ai ? "openai" : "catalog",
+      engine: aiClassification ? "openai" : "catalog",
       generated_at: new Date().toISOString()
     },
     { headers: { "cache-control": "no-store" } }
