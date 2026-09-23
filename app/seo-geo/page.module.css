@@ -1,0 +1,255 @@
+.page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f5f7fb;
+  color: #14213d;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  color: #5b6b8c;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: .98;
+}
+
+.lede {
+  max-width: 760px;
+  margin: 14px 0 0;
+  color: #52617d;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.back {
+  text-decoration: none;
+  color: #14213d;
+  font-weight: 800;
+  background: white;
+  border: 1px solid #dce3ef;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.card, .panel {
+  background: white;
+  border: 1px solid #dfe5ef;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(23, 37, 61, .05);
+}
+
+.card {
+  padding: 18px;
+}
+
+.card span {
+  display: block;
+  color: #6d7890;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.card small {
+  display: block;
+  margin-top: 6px;
+  color: #7d8799;
+  line-height: 1.45;
+}
+
+.panel {
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.panelHeader h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.panelHeader p {
+  margin: 6px 0 0;
+  color: #6b768c;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button, .secondaryButton {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.button {
+  border: 0;
+  background: #172554;
+  color: white;
+}
+
+.button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  border: 1px solid #d8dfeb;
+  background: white;
+  color: #172554;
+  text-decoration: none;
+}
+
+.statusList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.statusItem {
+  padding: 14px;
+  border-radius: 14px;
+  background: #f7f9fc;
+  border: 1px solid #e8edf5;
+}
+
+.statusItem strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.ok {
+  color: #0f766e;
+}
+
+.warn {
+  color: #b45309;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #edf1f6;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th {
+  font-size: 12px;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.score {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.targetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.target {
+  border: 1px solid #e6ebf3;
+  background: #fbfcfe;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.target strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.target p {
+  margin: 0;
+  color: #68758c;
+  line-height: 1.5;
+}
+
+.clusters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notice {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff8e6;
+  color: #8a5a00;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1000px) {
+  .grid, .statusList, .targetGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page { padding: 20px; }
+  .header { flex-direction: column; }
+  .grid, .statusList, .targetGrid { grid-template-columns: 1fr; }
+}
