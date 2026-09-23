@@ -93,6 +93,8 @@ unset NODE_OPTIONS || true
 echo "Validating editorial content..."
 npm run content:validate
 
+# Atomic asset note: keep prior hashed assets available until Passenger has
+# fully switched workers, preventing transient unstyled HTML during rolling deploys.
 PREVIOUS_STATIC="$APP_ROOT/.runtime/previous-next-static"
 rm -rf "$PREVIOUS_STATIC"
 if [ -d .next/static ]; then
