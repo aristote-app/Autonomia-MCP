@@ -150,12 +150,12 @@ export default function TerritoryDemoLab({ initialTab = "conservatoire" }) {
   return (
     <section className="territoryDemoLab" id="demos">
       <div className="territoryDemoIntro">
-        <p className="sectionIndex">02 — VOIR AVANT DE CROIRE</p>
+        <p className="sectionIndex">01 — TESTEZ</p>
         <div>
-          <h2>Des démos qui montrent le travail transformé.</h2>
+          <h2>Trois mini-applicatifs. À manipuler maintenant.</h2>
           <p>
-            Pas une animation décorative : une file de dossiers, un planning ou un tableau de contrôle manipulable,
-            avec des données fictives et une règle constante — l’outil prépare, l’agent décide.
+            Conservatoire, pré-instruction ADS ou votre propre irritant. Les données sont fictives :
+            l’objectif est de montrer l’interface et la logique avant tout projet.
           </p>
         </div>
       </div>
