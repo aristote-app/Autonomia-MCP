@@ -861,3 +861,66 @@ h3 { margin: 0 0 8px; }
   font-size:10px !important;
   line-height:1.5 !important;
 }
+
+
+/* Inbound acquisition inbox */
+.inboundFilters {
+  display:grid;
+  grid-template-columns:repeat(9,minmax(0,1fr));
+  margin:28px 0 16px;
+  border:1px solid #d9ddd7;
+  background:#fff;
+}
+.inboundFilters a {
+  display:grid;
+  gap:4px;
+  min-width:0;
+  padding:13px 10px;
+  border-right:1px solid #d9ddd7;
+  color:#111;
+  text-decoration:none;
+}
+.inboundFilters a:last-child { border-right:0; }
+.inboundFilters a.active { background:#111; color:#fff; }
+.inboundFilters strong { font-size:20px; line-height:1; }
+.inboundFilters span { font-size:8px; text-transform:uppercase; letter-spacing:.05em; }
+
+.inboundList { display:grid; gap:10px; margin-bottom:60px; }
+.inboundList > article {
+  display:grid;
+  grid-template-columns:1fr 1.3fr .9fr 1.15fr;
+  gap:18px;
+  align-items:start;
+  padding:18px;
+  border:1px solid #d9ddd7;
+  background:#fff;
+}
+.inboundIdentity h3 { margin:0 0 7px; font-size:16px; }
+.inboundChannels { display:flex; flex-wrap:wrap; gap:6px 10px; }
+.inboundChannels a { color:#111; font-size:10px; font-weight:800; text-decoration:none; }
+
+.inboundNeed { display:grid; gap:7px; min-width:0; }
+.inboundNeed > strong { font-size:13px; line-height:1.4; }
+.inboundNeed p { margin:0; color:#677068; font-size:11px; line-height:1.5; }
+
+.inboundAttribution { display:grid; gap:5px; min-width:0; }
+.inboundAttribution > span,
+.inboundAttribution small { color:#677068; font-size:9px; line-height:1.4; }
+.inboundAttribution strong { font-size:11px; line-height:1.4; overflow-wrap:anywhere; }
+
+.inboundAction { display:grid; gap:6px; min-width:0; }
+.inboundAction > span { color:#677068; font-size:8px; font-weight:900; letter-spacing:.07em; }
+.inboundAction > strong { font-size:11px; line-height:1.45; }
+.inboundAction form { display:grid; grid-template-columns:1fr auto; gap:6px; margin-top:6px; }
+.inboundAction select { min-height:34px; border:1px solid #cfd4ce; background:#fff; padding:6px 7px; font:inherit; font-size:10px; }
+.inboundAction button { min-height:34px; border:1px solid #111; background:#111; color:#fff; padding:7px 9px; font:inherit; font-size:9px; font-weight:800; cursor:pointer; }
+
+@media (max-width:980px) {
+  .inboundFilters { grid-template-columns:repeat(3,1fr); }
+  .inboundFilters a { border-bottom:1px solid #d9ddd7; }
+  .inboundList > article { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px) {
+  .inboundFilters { grid-template-columns:1fr 1fr; }
+  .inboundList > article { grid-template-columns:1fr; }
+}
