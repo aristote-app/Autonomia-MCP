@@ -200,6 +200,23 @@ jobs:
           TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
+      - name: Resubmit Search Console sitemap
+        if: steps.target.outputs.should_deploy == 'true'
+        env:
+          SUBMIT_URL: https://build-autonomia.com/api/internal/search-console-submit
+          OIDC_TOKEN: ${{ steps.seo_oidc.outputs.token }}
+        run: |
+          STATUS="$(curl -fsS -X POST \
+            -H "Authorization: Bearer $OIDC_TOKEN" \
+            "$SUBMIT_URL")"
+          printf '%s\n' "$STATUS"
+
+          OK="$(printf '%s' "$STATUS" | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())')"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Search Console sitemap resubmission failed."
+            exit 1
+          fi
+
       - name: Verify Search Console connection
         if: steps.target.outputs.should_deploy == 'true'
         env:
