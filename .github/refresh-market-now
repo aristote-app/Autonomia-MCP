@@ -1,10 +1,1 @@
-bootstrap=2026-09-22T12:00:00Z
-purpose=seed-freework-and-job-signals
-retry=explicit-vercel-token
-retry=vercel-env-pull
-retry=create-cron-secret
-retry=vercel-rest-api-cron-secret
-retry=secure-derived-github-scheduler
-retry=github-oidc-auth
-retry=verified-job-signal-fallback
-retry=territory-signals-v1
+refresh 2026-09-23T10:15:49.019Z
