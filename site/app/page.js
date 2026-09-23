@@ -49,8 +49,8 @@ export default function Home() {
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="#solution-finder">Décrire mon besoin</Link>
-            <Link className="secondaryButton" href="/#diagnostic-ia">Faire le diagnostic détaillé</Link>
+            <Link className="primaryButton" href="/experts">Voir les experts IA</Link>
+            <Link className="secondaryButton" href="/academy">Voir les formations IA</Link>
           </div>
         </div>
 
