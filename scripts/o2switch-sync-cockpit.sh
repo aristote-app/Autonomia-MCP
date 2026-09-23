@@ -84,6 +84,9 @@ fi
 export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 
+echo "Ensuring shared inbound lead token..."
+node scripts/ensure-inbound-token.mjs
+
 echo "Building cockpit Next.js..."
 npm run build
 

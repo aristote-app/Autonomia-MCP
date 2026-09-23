@@ -34,6 +34,10 @@ jobs:
         run: npm run seo:engine-test
       - name: Editorial opportunity engine tests
         run: npm run seo:opportunity-test
+      - name: Check public server bridge
+        run: node --check server.cjs
+      - name: Check inbound token provisioner
+        run: node --check ../scripts/ensure-inbound-token.mjs
       - name: Build public site
         run: npm run build
         env:
