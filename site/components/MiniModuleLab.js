@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { trackEvent } from "@/lib/clientTracking";
 import { getMiniDemoBlueprints } from "@/content/mini-demo-blueprints";
 import { SpecializedExperience } from "@/components/SpecializedMiniExperiences";
 
@@ -471,7 +472,7 @@ export default function MiniModuleLab({ topic }) {
 
       <div className="wowModuleTabs">
         {topic.modules.map(([name],index)=>(
-          <button type="button" key={name} className={active===index?"active":""} onClick={()=>setActive(index)}>
+          <button type="button" key={name} className={active===index?"active":""} onClick={()=>{setActive(index);trackEvent("autonomia_lab_module_open",{topic:topic.slug,module_name:name,module_index:index+1});}}>
             <span>{String(index+1).padStart(2,"0")}</span>
             <strong>{name}</strong>
             <small>{blueprints[index]?.metric}</small>
@@ -496,6 +497,7 @@ export default function MiniModuleLab({ topic }) {
           <Experience type={blueprint.type} topic={topic} module={module} blueprint={blueprint} />
           <ValueStrip blueprint={blueprint} />
           <ImpactSimulator />
+          <p className="wowDemoDisclosure">Données fictives · résultats illustratifs · aucune performance n’est garantie · les décisions sensibles restent humaines.</p>
         </div>
       </div>
     </section>
