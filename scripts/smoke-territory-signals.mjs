@@ -4,9 +4,12 @@ import {
   normalizeTerritoryMarketSignal,
   TERRITORY_SIGNAL_QUERIES
 } from "../lib/signals/territory.js";
+import { buildSeoGeoSignals, summarizeSeoGeoSignals } from "../lib/seo-geo/demandSignals.js";
 
 assert.ok(TERRITORY_SIGNAL_QUERIES.includes("intelligence artificielle"));
 assert.ok(TERRITORY_SIGNAL_QUERIES.includes("TPE PME numérique"));
+assert.ok(TERRITORY_SIGNAL_QUERIES.includes("communauté de communes intelligence artificielle"));
+assert.ok(TERRITORY_SIGNAL_QUERIES.includes("communauté d'agglomération intelligence artificielle"));
 
 const training = classifyTerritoryMarketSignal({
   title: "Formation des agents à l'intelligence artificielle générative"
@@ -54,3 +57,32 @@ assert.equal(normalized.payload.source_record_id, "24-TEST");
 assert.equal(normalized.evidenceUrl, "https://example.test/notice");
 
 console.log("territory signal smoke ok");
+
+
+const directTerritorySignals = buildSeoGeoSignals({
+  territorySignals: [
+    {
+      signal_type: "territory_ai_training",
+      signal_source: "boamp",
+      title: "Formation des agents à l'IA générative",
+      importance: 5,
+      evidence_url: "https://example.test/territory-ai",
+      territory_name: "Communauté de communes Exemple",
+      territory_type: "CC",
+      payload: {
+        buyer_name: "Communauté de communes Exemple",
+        query: "formation intelligence artificielle"
+      }
+    }
+  ]
+});
+
+assert.equal(directTerritorySignals.length, 1);
+assert.equal(directTerritorySignals[0].family, "territory-use-case");
+assert.equal(directTerritorySignals[0].cluster, "Collectivités & territoires");
+assert.equal(directTerritorySignals[0].public_procurement_mentions, 1);
+assert.equal(directTerritorySignals[0].territory_mentions, 5);
+
+const summary = summarizeSeoGeoSignals(directTerritorySignals);
+assert.equal(summary.territory, 1);
+assert.equal(summary.procurement, 1);
