@@ -12,7 +12,10 @@ import {
   saveDecisionMakerCandidate,
   verifyDecisionMaker
 } from "../../actions/sales-contacts.js";
-import { sendVerifiedContactToWaalaxy } from "../../actions/sales-outreach.js";
+import {
+  sendVerifiedContactToWaalaxy,
+  enrichVerifiedContactWithKaspr
+} from "../../actions/sales-outreach.js";
 import {
   getWaalaxyProspectLists,
   getWaalaxyCampaigns
@@ -68,6 +71,10 @@ export default async function AccountDetailPage({ params, searchParams }) {
     process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
+  const kasprEnrichmentConfigured = Boolean(
+    process.env.KASPR_API_KEY &&
+    String(process.env.KASPR_DATA_TO_GET || "").trim()
+  );
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
 
   const shouldLoadWaalaxy =
@@ -432,6 +439,28 @@ export default async function AccountDetailPage({ params, searchParams }) {
                         </form>
                       </div>
                     )}
+
+                    {canWriteContacts &&
+                      contact.verification_status === "verified" &&
+                      !contact.do_not_contact &&
+                      contact.enrichment_status !== "enriched" && (
+                        <div className="kasprContactAction">
+                          {kasprEnrichmentConfigured ? (
+                            <form action={enrichVerifiedContactWithKaspr}>
+                              <input type="hidden" name="contact_id" value={contact.id} />
+                              <input type="hidden" name="account_key" value={account.slug} />
+                              <button type="submit">Enrichir avec Kaspr</button>
+                              <small>
+                                Action manuelle · uniquement les champs autorisés · consommation de crédits possible.
+                              </small>
+                            </form>
+                          ) : (
+                            <small>
+                              Kaspr détecté mais enrichissement verrouillé tant que les champs payants autorisés ne sont pas configurés.
+                            </small>
+                          )}
+                        </div>
+                      )}
 
                     {canWriteContacts &&
                       contact.verification_status === "verified" &&
