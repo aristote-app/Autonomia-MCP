@@ -1111,3 +1111,18 @@ h3 { margin: 0 0 8px; }
   font-size:9px;
   line-height:1.2;
 }
+
+.inboundSolutionTags a {
+  padding:4px 6px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+  font-size:9px;
+  font-weight:800;
+  line-height:1.2;
+  text-decoration:none;
+}
+.inboundSolutionTags a:hover {
+  background:#fff;
+  color:#111;
+}
