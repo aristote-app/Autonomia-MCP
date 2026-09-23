@@ -86,3 +86,27 @@ assert.equal(directTerritorySignals[0].territory_mentions, 5);
 const summary = summarizeSeoGeoSignals(directTerritorySignals);
 assert.equal(summary.territory, 1);
 assert.equal(summary.procurement, 1);
+
+
+const directoryMatchedSignals = buildSeoGeoSignals({
+  opportunities: [
+    {
+      title: "Déploiement d'un assistant IA documentaire",
+      buyer_name: "CA Grand Test",
+      estimated_value_eur: 120000
+    }
+  ],
+  territoryDirectory: [
+    {
+      id: "territory-ca",
+      siren: "987654321",
+      name: "CA Grand Test",
+      territory_type: "CA"
+    }
+  ]
+});
+
+assert.equal(directoryMatchedSignals.length, 1);
+assert.equal(directoryMatchedSignals[0].family, "territory-use-case");
+assert.equal(directoryMatchedSignals[0].territory_mentions, 1);
+assert.equal(directoryMatchedSignals[0].territory_name, "CA Grand Test");
