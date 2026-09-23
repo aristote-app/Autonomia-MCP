@@ -20,7 +20,7 @@ export default function Header() {
           <Link href="/academy">Academy</Link>
           <Link href="/territoires">Territoires</Link>
           <Link href="/cas-usage-ia">Cas d’usage</Link>
-          <Link href="/observatoire-ia">Observatoire</Link>
+          <Link href="/observatoire-ia">Explorer les besoins IA</Link>
           <Link href="/#methode">Méthode</Link>
         </nav>
 
