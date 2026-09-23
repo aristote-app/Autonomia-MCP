@@ -11,8 +11,37 @@ function base64url(value) {
     .replace(/\//g, "_");
 }
 
+function serviceAccountJson() {
+  const raw = String(process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_JSON || "").trim();
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function credentials() {
+  const json = serviceAccountJson();
+  return {
+    email:
+      json?.client_email ||
+      process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_EMAIL ||
+      "",
+    privateKeyId:
+      json?.private_key_id ||
+      process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY_ID ||
+      "",
+    privateKey: String(
+      json?.private_key ||
+      process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY ||
+      ""
+    ).replace(/\\n/g, "\n")
+  };
+}
+
 function privateKey() {
-  return String(process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY || "").replace(/\\n/g, "\n");
+  return credentials().privateKey;
 }
 
 export function getSearchConsoleConfig() {
@@ -20,19 +49,21 @@ export function getSearchConsoleConfig() {
   const sitemapUrl =
     process.env.GOOGLE_SEARCH_CONSOLE_SITEMAP_URL ||
     `${String(process.env.NEXT_PUBLIC_SITE_URL || "").replace(/\/$/, "")}/sitemap.xml`;
+  const auth = credentials();
 
   const configured = Boolean(
     siteUrl &&
     sitemapUrl &&
-    process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_EMAIL &&
-    privateKey()
+    auth.email &&
+    auth.privateKey
   );
 
   return {
     configured,
     siteUrl,
     sitemapUrl,
-    serviceAccountEmail: process.env.GOOGLE_SEARCH_CONSOLE_SERVICE_ACCOUNT_EMAIL || ""
+    serviceAccountEmail: auth.email,
+    privateKeyId: auth.privateKeyId
   };
 }
 
@@ -46,9 +77,7 @@ async function accessToken() {
   const header = {
     alg: "RS256",
     typ: "JWT",
-    ...(process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY_ID
-      ? { kid: process.env.GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY_ID }
-      : {})
+    ...(config.privateKeyId ? { kid: config.privateKeyId } : {})
   };
   const claims = {
     iss: config.serviceAccountEmail,
