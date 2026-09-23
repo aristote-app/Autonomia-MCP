@@ -222,6 +222,13 @@ export async function getSearchConsoleSitemapStatus() {
     is_pending: body?.isPending ?? null,
     is_sitemaps_index: body?.isSitemapsIndex ?? null,
     errors: body?.errors ?? null,
-    warnings: body?.warnings ?? null
+    warnings: body?.warnings ?? null,
+    contents: Array.isArray(body?.contents)
+      ? body.contents.map((item) => ({
+          type: item?.type || null,
+          submitted: Number(item?.submitted) || 0,
+          indexed: Number(item?.indexed) || 0
+        }))
+      : []
   };
 }
