@@ -1,0 +1,41 @@
+name: validate-seo-geo-v3
+
+on:
+  push:
+    branches:
+      - feat/seo-geo-site-v3
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-seo-geo-v3
+  cancel-in-progress: true
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Validate content
+        run: npm run content:validate
+      - name: Organic report
+        run: npm run organic:report
+      - name: SEO audit
+        run: npm run seo:audit
+      - name: Organic decision tests
+        run: npm run seo:engine-test
+      - name: Editorial opportunity tests
+        run: npm run seo:opportunity-test
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
