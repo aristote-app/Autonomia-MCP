@@ -30,6 +30,15 @@ assert.equal(linkedin.display_name, "John Doe");
 assert.equal(linkedin.tjm, null, "LinkedIn snippets must not be treated as reliable TJM evidence");
 assert.equal(linkedin.remote, true);
 
+const freelanceCom = parseTalentSearchResult({
+  title: "Alex Smith - Consultant IA",
+  url: "https://plateforme.freelance.com/freelance/alex-smith",
+  description: "Consultant freelance Python RAG LangGraph"
+}, "AI Engineer LangGraph RAG Python");
+
+assert.equal(freelanceCom.source_platform, "freelance_com");
+assert.equal(freelanceCom.display_name, "Alex Smith");
+
 assert.equal(
   parseTalentSearchResult({
     title: "Mission AI Engineer",
