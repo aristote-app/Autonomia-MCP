@@ -4,7 +4,7 @@ const ISSUER = "https://token.actions.githubusercontent.com";
 const JWKS_URL = ISSUER + "/.well-known/jwks";
 const AUDIENCE = "autonomia-public-o2switch";
 const REPOSITORY = "aristote-app/Autonomia-MCP";
-const REF = "refs/heads/public-site-production";
+const REF = "refs/heads/main";
 const WORKFLOW_PREFIX =
   REPOSITORY + "/.github/workflows/deploy-public-o2switch-self.yml@";
 const JWKS_CACHE = Symbol.for("autonomia.public.github.oidc.jwks");
