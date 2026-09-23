@@ -2,7 +2,7 @@ import Link from "next/link";
 import HomeLeadSwitch from "@/components/HomeLeadSwitch";
 import AutonomiaScan from "@/components/AutonomiaScan";
 import QualiopiProof from "@/components/QualiopiProof";
-import LiveJobSignals from "@/components/LiveJobSignals";
+import LiveJobSignals from "@/components/LiveJobSignals";\nimport SolutionFinder from "@/components/SolutionFinder";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
