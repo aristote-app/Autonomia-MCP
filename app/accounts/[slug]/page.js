@@ -21,6 +21,7 @@ import {
   getWaalaxyProspectLists,
   getWaalaxyCampaigns
 } from "../../../lib/integrations/waalaxy.js";
+import { rankWaalaxyCampaigns } from "../../../lib/intelligence/campaignRouter.js";
 
 export const dynamic = "force-dynamic";
 
@@ -134,6 +135,14 @@ export default async function AccountDetailPage({ params, searchParams }) {
           }))
       : Promise.resolve(null)
   ]);
+
+  const waalaxyRouting =
+    waalaxyOptions?.available
+      ? rankWaalaxyCampaigns({
+          account,
+          campaigns: waalaxyOptions.campaigns
+        })
+      : null;
 
   return (
     <main>
@@ -550,15 +559,25 @@ export default async function AccountDetailPage({ params, searchParams }) {
                               </label>
                               <label>
                                 <span>Campagne (optionnel)</span>
-                                <select name="campaign_id" defaultValue="">
+                                <select
+                                  name="campaign_id"
+                                  defaultValue={waalaxyRouting?.recommended?._id || ""}
+                                >
                                   <option value="">Liste uniquement</option>
-                                  {waalaxyOptions.campaigns.map((campaign) => (
+                                  {(waalaxyRouting?.ranked || waalaxyOptions.campaigns).map((campaign) => (
                                     <option key={campaign._id} value={campaign._id}>
                                       {campaign.name || campaign._id}
+                                      {campaign._id === waalaxyRouting?.recommended?._id ? " · recommandée" : ""}
                                     </option>
                                   ))}
                                 </select>
                               </label>
+                              {waalaxyRouting?.recommended && (
+                                <small className="waalaxyRecommendation">
+                                  Campagne recommandée : {waalaxyRouting.recommended.name} · {waalaxyRouting.track.label}.
+                                  Validation obligatoire avant envoi.
+                                </small>
+                              )}
                               <button type="submit">Envoyer vers Waalaxy</button>
                             </form>
                           ) : (
