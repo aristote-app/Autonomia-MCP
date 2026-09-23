@@ -77,7 +77,21 @@ jobs:
               printf '%s' "$SITEMAP" | grep -Fq "/territoires/guides/"
               printf '%s' "$FEED" | grep -Fq "/territoires/guides/"
               curl -fsS https://build-autonomia.com/territoires >/dev/null
-              echo "Sitemap + RSS + Territoires smoke checks passed."
+
+              OBS_HTML="$(curl -fsS https://build-autonomia.com/observatoire-ia)"
+              CSS_PATH="$(printf '%s' "$OBS_HTML" | python -c 'import re,sys; html=sys.stdin.read(); m=re.search(r"""href=["\x27]([^"\x27]+\.css(?:\?[^"\x27]*)?)["\x27]""", html); print(m.group(1) if m else "")')"
+              if [ -z "$CSS_PATH" ]; then
+                echo "::error::Observatoire HTML does not reference a CSS asset."
+                exit 1
+              fi
+              case "$CSS_PATH" in
+                http://*|https://*) CSS_URL="$CSS_PATH" ;;
+                *) CSS_URL="https://build-autonomia.com$CSS_PATH" ;;
+              esac
+              curl -fsS "$CSS_URL" >/dev/null
+              echo "Verified live stylesheet: $CSS_URL"
+
+              echo "Sitemap + RSS + Territoires + CSS smoke checks passed."
               exit 0
             fi
 
