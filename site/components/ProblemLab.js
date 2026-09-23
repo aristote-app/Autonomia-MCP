@@ -262,10 +262,79 @@ function Sequence({ demo }) {
 }
 
 function Compare({ demo }) {
-  const [criterion,setCriterion]=useState("Couverture");
-  const rows={Couverture:[88,74,61],Risque:[72,91,80],Effort:[64,78,92]};
-  return <Shell demo={demo} side={<div className="problemToggle">{Object.keys(rows).map((x)=><button type="button" key={x} className={criterion===x?"active":""} onClick={()=>setCriterion(x)}>{x}</button>)}</div>}>
-    <div className="problemCompare">{["Option A","Option B","Option C"].map((x,i)=><article key={x}><strong>{x}</strong><span>{criterion}</span><b>{rows[criterion][i]}</b><div><i style={{width:rows[criterion][i]+"%"}}/></div></article>)}</div>
+  const presets={
+    "controle-factures-ia":{
+      criteria:{Correspondance:[96,68,41],"Référence":[100,74,22],"Montant":[98,83,55]},
+      items:[
+        ["PO-4482","Montant et référence cohérents"],
+        ["PO-4479","Montant proche · référence différente"],
+        ["Sans commande","Aucune preuve de rapprochement"]
+      ],
+      label:"MATCH PROPOSÉ"
+    },
+    "rapprochement-factures-paiements-ia":{
+      criteria:{Montant:[99,82,61],Date:[94,88,72],Libellé:[91,66,54]},
+      items:[
+        ["Virement · 2 480 €","Candidat principal"],
+        ["Virement · 2 472 €","Écart de montant"],
+        ["Carte · 2 480 €","Canal incohérent"]
+      ],
+      label:"CORRESPONDANCE"
+    },
+    "analyser-comparer-cv-ia":{
+      criteria:{Compétences:[93,84,72],"Séniorité":[88,70,96],Disponibilité:[74,98,62]},
+      items:[
+        ["A.M. · 6 ans","RAG · Python · Azure"],
+        ["N.K. · 4 ans","Python · FastAPI · GCP"],
+        ["L.R. · 8 ans","RAG · MLOps · AWS"]
+      ],
+      label:"PROFIL À EXAMINER"
+    },
+    "reponse-appel-offres-ia":{
+      criteria:{Couverture:[92,78,54],Preuves:[86,91,47],Vigilance:[82,63,95]},
+      items:[
+        ["Méthodologie","Contenu validé disponible"],
+        ["Références","3 preuves requises"],
+        ["Sous-traitance","Clause sensible détectée"]
+      ],
+      label:"MATRICE DE CONFORMITÉ"
+    },
+    "gestion-stocks-ia":{
+      criteria:{Couverture:[91,78,64],"Coût maîtrisé":[72,88,95],"Risque rupture":[94,79,52]},
+      items:[
+        ["Commande 120 u.","Couverture forte"],
+        ["Commande 80 u.","Compromis coût / couverture"],
+        ["Commande 40 u.","Risque de rupture élevé"]
+      ],
+      label:"SCÉNARIO D’APPRO"
+    },
+    "veille-concurrentielle-ia":{
+      criteria:{Impact:[92,74,61],Nouveauté:[86,95,69],Confiance:[94,78,83]},
+      items:[
+        ["Nouvelle offre","Page tarifaire modifiée"],
+        ["Recrutement IA","3 offres publiées"],
+        ["Prise de parole","Annonce dirigeant"]
+      ],
+      label:"SIGNAL À ANALYSER"
+    },
+    default:{
+      criteria:{Couverture:[88,74,61],"Maîtrise du risque":[72,91,80],Effort:[64,78,92]},
+      items:[["Option A","Couverture élevée"],["Option B","Compromis équilibré"],["Option C","Effort plus faible"]],
+      label:"COMPARAISON"
+    }
+  };
+  const preset=presets[demo.problemSlug] || presets.default;
+  const criteria=Object.keys(preset.criteria);
+  const [criterion,setCriterion]=useState(criteria[0]);
+  const values=preset.criteria[criterion];
+  const bestIndex=values.indexOf(Math.max(...values));
+  return <Shell demo={demo} side={<>
+    <p className="problemHint">Changez le critère : le résultat et le point de vigilance évoluent.</p>
+    <div className="problemToggle">{criteria.map((x)=><button type="button" key={x} className={criterion===x?"active":""} onClick={()=>setCriterion(x)}>{x}</button>)}</div>
+  </>}>
+    <div className="problemCompareHeader"><span>{preset.label}</span><strong>{criterion}</strong></div>
+    <div className="problemCompare">{preset.items.map(([name,note],i)=><article key={name} className={bestIndex===i?"top":""}><strong>{name}</strong><span>{note}</span><b>{values[i]}</b><div><i style={{width:values[i]+"%"}}/></div>{bestIndex===i&&<small>Prioritaire sur ce critère</small>}</article>)}</div>
+    <div className="problemCompareExplain"><span>LECTURE</span><p><b>{preset.items[bestIndex][0]}</b> ressort sur « {criterion} ». Ce classement est illustratif : les poids et règles doivent être définis avec le métier.</p></div>
   </Shell>;
 }
 
