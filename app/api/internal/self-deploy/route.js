@@ -18,7 +18,7 @@ function legacyEnabled() {
   return process.env.AUTONOMIA_SELF_DEPLOY_ENABLED === "true";
 }
 
-async function authorizePost(request) {
+async function authorizeDeploy(request) {
   const authorization = request.headers.get("authorization") || "";
   if (/^Bearer\s+/i.test(authorization)) {
     const token = authorization.replace(/^Bearer\s+/i, "").trim();
@@ -67,7 +67,7 @@ async function tailLog(maxBytes = 12000) {
 }
 
 export async function POST(request) {
-  const auth = await authorizePost(request);
+  const auth = await authorizeDeploy(request);
   if (!auth.ok) return auth.response;
 
   const payload = await request.json().catch(() => ({}));
@@ -115,6 +115,61 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const url = new URL(request.url);
+  const action = url.searchParams.get("action");
+
+  if (action === "deploy") {
+    const auth = await authorizeDeploy(request);
+    if (!auth.ok) return auth.response;
+
+    const targetSha = String(url.searchParams.get("sha") || "").trim();
+    if (!validDeploySha(targetSha)) {
+      return Response.json(
+        { error: "A validated 40-character Git commit SHA is required" },
+        { status: 400 }
+      );
+    }
+
+    await mkdir(RUNTIME_DIR, { recursive: true });
+    const handle = await open(LOG_FILE, "a");
+    const timestamp = new Date().toISOString();
+    await handle.appendFile(
+      "\n=== SELF DEPLOY " + timestamp + " · " + targetSha + " · " + auth.mode + " · GET ===\n"
+    );
+
+    const child = spawn("bash", [SCRIPT], {
+      cwd: process.cwd(),
+      detached: true,
+      env: {
+        ...process.env,
+        FORCE_DEPLOY: "0",
+        AUTONOMIA_DEPLOY_SHA: targetSha
+      },
+      stdio: ["ignore", handle.fd, handle.fd]
+    });
+
+    child.unref();
+    await handle.close();
+
+    return Response.json(
+      {
+        accepted: true,
+        pid: child.pid,
+        target_sha: targetSha,
+        auth_mode: auth.mode,
+        started_at: timestamp,
+        transport: "get_oidc",
+        note: "Deployment runs in the background and is pinned to the validated commit SHA."
+      },
+      {
+        status: 202,
+        headers: {
+          "cache-control": "no-store, no-cache, must-revalidate"
+        }
+      }
+    );
+  }
+
   const auth = requireInternalToken(request);
   if (!auth.ok) return auth.response;
 
@@ -122,5 +177,9 @@ export async function GET(request) {
     oidc_enabled: true,
     legacy_enabled: legacyEnabled(),
     log_tail: await tailLog()
+  }, {
+    headers: {
+      "cache-control": "no-store, no-cache, must-revalidate"
+    }
   });
 }
