@@ -38,9 +38,11 @@ The system must remain explainable, source-grounded and economical. It must not 
 - no automated outreach is exposed until cockpit authentication is active.
 
 ### Kaspr
-- integration readiness flag only in V1;
+- official-profile REST adapter prepared for the documented `POST /profile/linkedin` endpoint;
+- accepts standard LinkedIn profile URLs only;
+- live enrichment remains deliberately gated until the exact provider `dataToGet` field identifiers are configured;
 - enrichment must occur only after a person and role have been verified;
-- do not enrich entire account lists by default because Kaspr uses credits per requested data type/successful call.
+- do not enrich entire account lists by default because Kaspr consumes credits according to requested data and successful calls.
 
 ## Scheduled collection budget
 
@@ -104,3 +106,27 @@ When connected, enrichment must remain a deliberate action on a verified contact
 The database can now record reply / meeting / proposal / won / lost events.
 Do not modify ranking weights from outcomes until enough real history exists to avoid overfitting
 to a tiny sample.
+
+
+## Revenue agent layer
+
+The remote MCP is the agent interface for Autonomia. It now exposes:
+
+- Account Intelligence list and Account 360 lookup;
+- deterministic account next-best actions;
+- guarded public account research;
+- guarded decision-maker discovery;
+- the existing market, staffing, scoring and public-procurement intelligence tools.
+
+This lets an authorized AI client operate over the Autonomia intelligence layer without buying a
+separate orchestration platform. Private contact PII stays in the authenticated cockpit.
+
+## Proactive follow-up engine
+
+Verified contacts can now carry `next_action_at`. Due actions:
+
+- appear in the `Relances dues` contact filter;
+- are elevated to the top of Next Best Action;
+- remain linked to the account, trigger and commercial event ledger.
+
+No automatic message is sent just because a date is due.
