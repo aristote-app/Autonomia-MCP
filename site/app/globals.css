@@ -10066,3 +10066,173 @@ body:has(.territoryCampaignPage) .desktopNav {
     grid-template-columns: repeat(6,minmax(0,1fr));
   }
 }
+
+
+/* Territories WOW demos */
+.territoryDemoPanelWow {
+  box-shadow: 0 24px 70px rgba(23,32,51,.18);
+}
+.territoryWowWorkspace {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+.territoryConstraintPanel {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 10px;
+  background: #101a2d;
+}
+.territoryConstraintPanel label {
+  display: grid;
+  gap: 6px;
+  margin-top: 13px;
+}
+.territoryConstraintPanel label span {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+}
+.territoryConstraintPanel input[type="range"] {
+  width: 100%;
+  accent-color: #ffd16a;
+}
+.territoryOptimizationScore {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255,209,106,.09);
+}
+.territoryOptimizationScore span {
+  display: block;
+  color: #ffd16a;
+  font-size: 9px;
+  font-weight: 900;
+}
+.territoryOptimizationScore strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 28px;
+}
+.adsDetailWow {
+  display: grid;
+  align-content: start;
+}
+.adsDossierHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.adsDossierHead > b {
+  color: #b3261e;
+}
+.adsPieceGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+.adsPieceGrid span {
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: #edf7f0;
+  color: #15633a;
+  font-size: 11px;
+  font-weight: 800;
+}
+.adsPieceGrid span.missing {
+  background: #fff0ec;
+  color: #a33322;
+}
+.adsRule {
+  display: grid;
+  gap: 4px;
+  padding: 11px;
+  border-radius: 8px;
+  background: var(--paper);
+}
+.adsRule span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 900;
+}
+.adsPrecheck {
+  display: grid;
+  gap: 7px;
+  margin-top: 12px;
+}
+.adsPrecheck > div {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.adsPrecheck span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 900;
+}
+.adsPrecheck strong {
+  font-size: 13px;
+}
+.territoryConfiguratorWow {
+  box-shadow: 0 24px 70px rgba(23,32,51,.18);
+}
+.generatedDemoWow {
+  display: grid;
+  gap: 12px;
+}
+.generatedDemoHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+.generatedDemoHead > span {
+  color: #ffd16a;
+  font-size: 9px;
+  font-weight: 900;
+}
+.generatedDemoHead > b {
+  font-size: 11px;
+  color: rgba(255,255,255,.58);
+}
+.generatedDashboard {
+  display: grid;
+  gap: 7px;
+}
+.generatedDashboard article {
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+}
+.generatedDashboard span {
+  display: block;
+  color: rgba(255,255,255,.48);
+  font-size: 9px;
+  font-weight: 900;
+}
+.generatedDashboard strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 22px;
+}
+.generatedGuardrail {
+  padding: 10px;
+  border-left: 3px solid #ffd16a;
+  background: rgba(255,209,106,.08);
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+}
+@media (min-width: 840px) {
+  .territoryWowWorkspace {
+    grid-template-columns: minmax(260px,.72fr) minmax(0,1.28fr);
+  }
+  .adsPrecheck,
+  .generatedDashboard {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
