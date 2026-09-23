@@ -7696,3 +7696,171 @@ button {
     padding-right: max(34px, calc((100vw - var(--max))/2));
   }
 }
+
+
+/* Pillar pages cleanup v2 */
+.pillarPage .pillarHero {
+  padding-top: 74px;
+  padding-bottom: 58px;
+}
+
+.pillarPage .pillarHeroCopy h1 {
+  max-width: 1040px;
+  font-size: clamp(48px, 6.7vw, 88px);
+  line-height: .94;
+}
+
+.pillarPage .pillarHeroCopy > p:not(.eyebrow) {
+  max-width: 840px;
+  font-size: clamp(18px, 1.9vw, 23px);
+}
+
+.pillarStatementCompact,
+.pillarProcessCompact,
+.pillarPage .pillarDirectory,
+.pillarFinalCtaCompact {
+  padding-top: 54px;
+  padding-bottom: 54px;
+}
+
+.pillarStatementCompact h2,
+.pillarProcessCompact .pillarSectionIntro h2,
+.pillarPage .pillarDirectory .pillarSectionIntro h2,
+.pillarFinalCtaCompact h2 {
+  max-width: 900px;
+  font-size: clamp(36px, 4.7vw, 58px);
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.pillarStatementCompact > div > p,
+.pillarProcessCompact .pillarSectionIntro > div > p,
+.pillarPage .pillarDirectory .pillarSectionIntro > div > p {
+  max-width: 780px;
+}
+
+.pillarStrengthGridFour {
+  padding-top: 0;
+  padding-bottom: 54px;
+}
+
+.pillarStrengthGridFour article {
+  min-height: 220px;
+}
+
+.pillarStrengthGridFour h3 {
+  margin-top: 34px;
+  font-size: 24px;
+}
+
+.pillarProcessCompact .pillarSectionIntro {
+  margin-bottom: 24px;
+}
+
+.pillarProcessCompact ol {
+  max-width: 1000px;
+}
+
+.pillarProcessCompact li {
+  grid-template-columns: 48px minmax(0,1fr);
+  padding: 18px 0;
+}
+
+.pillarProcessCompact li strong {
+  font-size: 20px;
+}
+
+.pillarFactBar {
+  display: grid;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.pillarFactBar > span {
+  color: #9b6a00;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.pillarFactBar strong {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.pillarFactBar p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.academyFactBar {
+  background: rgba(255,209,106,.12);
+}
+
+.pillarDirectoryGrid a {
+  min-height: 90px;
+}
+
+.pillarDirectoryGrid strong {
+  font-size: 18px;
+}
+
+.pillarFinalCtaCompact {
+  align-items: center;
+}
+
+@media (min-width: 760px) {
+  .pillarPage .pillarHero,
+  .pillarStatementCompact,
+  .pillarProcessCompact .pillarSectionIntro,
+  .pillarPage .pillarDirectory .pillarSectionIntro,
+  .pillarFinalCtaCompact {
+    grid-template-columns: 150px minmax(0,1fr);
+    gap: 34px;
+  }
+
+  .pillarStatementCompact,
+  .pillarProcessCompact,
+  .pillarPage .pillarDirectory,
+  .pillarFinalCtaCompact {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .pillarFactBar {
+    grid-template-columns: 120px minmax(220px, 360px) minmax(0,1fr);
+    align-items: start;
+    gap: 18px;
+  }
+}
+
+@media (min-width: 980px) {
+  .pillarStrengthGridFour {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .pillarStatementCompact,
+  .pillarProcessCompact,
+  .pillarPage .pillarDirectory,
+  .pillarFinalCtaCompact {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+
+  .pillarPage .pillarHero,
+  .pillarStatementCompact,
+  .pillarProcessCompact .pillarSectionIntro,
+  .pillarPage .pillarDirectory .pillarSectionIntro,
+  .pillarFinalCtaCompact {
+    grid-template-columns: 170px minmax(0,1fr);
+  }
+}
