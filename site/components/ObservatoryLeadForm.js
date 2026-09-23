@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
 
@@ -10,6 +10,20 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
   const [error, setError] = useState("");
 
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
+
+  useEffect(() => {
+    function prefill(event) {
+      const need = event.detail?.need;
+      if (!need) return;
+      setData((current) => current.need ? current : { ...current, need });
+      trackEvent("observatory_lead_prefill", {
+        landing_page_topic: topic.slug,
+        source_surface: "autonomia_lab"
+      });
+    }
+    window.addEventListener("autonomia:prefill-observatory-lead", prefill);
+    return () => window.removeEventListener("autonomia:prefill-observatory-lead", prefill);
+  }, [topic.slug]);
 
   async function submit(event) {
     event.preventDefault();
