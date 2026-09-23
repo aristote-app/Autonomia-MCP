@@ -139,8 +139,8 @@ function GeneratedDemo({ service, need }) {
   );
 }
 
-export default function TerritoryDemoLab() {
-  const [tab, setTab] = useState("conservatoire");
+export default function TerritoryDemoLab({ initialTab = "conservatoire" }) {
+  const [tab, setTab] = useState(initialTab);
   const [collectivity, setCollectivity] = useState("Communauté de communes");
   const [size, setSize] = useState("50 à 150 agents");
   const [service, setService] = useState("Courrier / accueil");
