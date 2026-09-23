@@ -143,19 +143,33 @@ jobs:
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
           RETRY_TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
 
-          HTTP_CODE="$(curl -sS \
-            -o /tmp/autonomia-self-deploy-retry.json \
-            -w "%{http_code}" \
-            -X POST "$DEPLOY_URL" \
-            -H "Authorization: Bearer $RETRY_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data "{\"sha\":\"$TARGET_SHA\"}")"
+          HTTP_CODE=""
+          for attempt in $(seq 1 6); do
+            HTTP_CODE="$(curl -sS \
+              -o /tmp/autonomia-self-deploy-retry.json \
+              -w "%{http_code}" \
+              -X POST "$DEPLOY_URL" \
+              -H "Authorization: Bearer $RETRY_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "{\"sha\":\"$TARGET_SHA\"}")"
+
+            if [ "$HTTP_CODE" = "202" ]; then
+              break
+            fi
+
+            echo "o2switch retry trigger returned HTTP $HTTP_CODE (attempt $attempt/6)."
+            if [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ]; then
+              sleep 8
+              continue
+            fi
+            break
+          done
 
           cat /tmp/autonomia-self-deploy-retry.json
           echo
 
           if [ "$HTTP_CODE" != "202" ]; then
-            echo "::error::Retry self-deploy endpoint returned HTTP $HTTP_CODE."
+            echo "::error::Retry self-deploy endpoint returned HTTP $HTTP_CODE after retries."
             exit 1
           fi
 
