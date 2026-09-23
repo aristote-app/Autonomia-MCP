@@ -18,6 +18,10 @@ export default function IntegrationsPage() {
       process.env.FRANCE_TRAVAIL_CLIENT_SECRET
     ),
     kaspr: Boolean(process.env.KASPR_API_KEY),
+    kasprEnrichment: Boolean(
+      process.env.KASPR_API_KEY &&
+      String(process.env.KASPR_DATA_TO_GET || "").trim()
+    ),
     waalaxy: Boolean(process.env.WAALAXY_API_KEY),
     waalaxyReply: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
     decisionDiscovery:
@@ -67,10 +71,11 @@ export default function IntegrationsPage() {
         </article>
 
         <article>
-          <State ready={states.kaspr} label="Kaspr" />
+          <State ready={states.kasprEnrichment} label="Kaspr" />
           <h2>Enrichissement sélectif</h2>
           <p>
-            Réservé aux meilleurs décideurs après qualification. Pas d'enrichissement de masse par défaut.
+            La clé seule ne suffit pas : Autonomia exige aussi une liste explicite des champs payants autorisés.
+            L'enrichissement reste manuel, réservé aux contacts vérifiés et ne se lance jamais en masse.
           </p>
         </article>
 
