@@ -214,10 +214,111 @@ function DocumentAI({ context, module, blueprint, type }) {
     </Shell>;
 }
 
-const SPECIAL = new Set(["account","seo","campaign","reconcile","timeline","cluster","maintenance","compare","stock","site","tender","learning","calendar","brand","collect","executive","table","report","variance","sequence","routing","workflow","invoice","extract","classify","brief","catalog"]);
+
+function CandidateMatcher({ module, blueprint }) {
+  const [mustHave, setMustHave] = useState(["RAG","Python"]);
+  const [seniority, setSeniority] = useState(5);
+  const candidates = [
+    { id:"A", initials:"A.M.", years:6, skills:["RAG","Python","LangChain","Azure"], avail:"2 sem.", rate:"960 €", base:91 },
+    { id:"B", initials:"N.K.", years:4, skills:["Python","FastAPI","OpenAI","GCP"], avail:"Immédiat", rate:"840 €", base:82 },
+    { id:"C", initials:"L.R.", years:8, skills:["RAG","Python","MLOps","AWS"], avail:"3 sem.", rate:"1 080 €", base:88 }
+  ].map((item)=>{
+    const skillScore = mustHave.length ? mustHave.filter((s)=>item.skills.includes(s)).length / mustHave.length : 1;
+    const seniorityScore = Math.min(1, item.years / seniority);
+    return {...item, score: Math.round((item.base*.55)+(skillScore*30)+(seniorityScore*15))};
+  }).sort((a,b)=>b.score-a.score);
+
+  const allSkills=["RAG","Python","LangChain","MLOps"];
+  return <Shell label="TALENT MATCHER" metric={blueprint.metric}
+    side={<>
+      <p className="wowPaneLabel">CRITÈRES MISSION</p>
+      <div className="wowToggleRow">{allSkills.map((skill)=><button type="button" key={skill} className={mustHave.includes(skill)?"active":""} onClick={()=>setMustHave((cur)=>cur.includes(skill)?cur.filter(x=>x!==skill):[...cur,skill])}>{skill}</button>)}</div>
+      <label><span>Expérience cible <b>{seniority}+ ans</b></span><input type="range" min="2" max="10" value={seniority} onChange={(e)=>setSeniority(Number(e.target.value))}/></label>
+      <div className="wowNote"><b>Brief</b><span>{module[1]}</span></div>
+    </>}>
+      <div className="wowTalentGrid">
+        {candidates.map((person,index)=><article key={person.id} className={index===0?"top":""}>
+          <div className="wowTalentHead"><span>{person.initials}</span><div><strong>Consultant #{person.id}</strong><small>{person.years} ans · dispo {person.avail}</small></div><b>{person.score}%</b></div>
+          <div className="wowSkillCloud">{person.skills.map((skill)=><i key={skill} className={mustHave.includes(skill)?"hit":""}>{skill}</i>)}</div>
+          <div className="wowTalentFoot"><span>TJM démo</span><strong>{person.rate}</strong><button type="button">Voir le matching</button></div>
+        </article>)}
+      </div>
+      <div className="wowInsight"><span>QUESTION D’ENTRETIEN GÉNÉRÉE</span><p>« Décrivez un RAG que vous avez industrialisé : stratégie de retrieval, évaluation et monitoring. »</p></div>
+    </Shell>;
+}
+
+function DecisionCockpit({ module, blueprint }) {
+  const [weights, setWeights] = useState({impact:45,speed:30,risk:25});
+  const options=[
+    {name:"Pilote ciblé",impact:88,speed:92,risk:76},
+    {name:"Déploiement large",impact:96,speed:51,risk:48},
+    {name:"Attendre",impact:34,speed:100,risk:92}
+  ];
+  const score=(o)=>Math.round((o.impact*weights.impact+o.speed*weights.speed+o.risk*weights.risk)/100);
+  return <Shell label="DECISION COCKPIT" metric={blueprint.metric}
+    side={<>
+      <p className="wowPaneLabel">PONDÉRATION</p>
+      {Object.entries(weights).map(([key,val])=><label key={key}><span>{key==="impact"?"Impact":key==="speed"?"Vitesse":"Maîtrise du risque"} <b>{val}%</b></span><input type="range" min="0" max="100" value={val} onChange={(e)=>setWeights((cur)=>({...cur,[key]:Number(e.target.value)}))}/></label>)}
+      <div className="wowNote"><b>Question</b><span>{module[1]}</span></div>
+    </>}>
+      <div className="wowDecisionMatrix">{options.map((o)=><article key={o.name}><strong>{o.name}</strong><div><span>Impact {o.impact}</span><span>Vitesse {o.speed}</span><span>Risque {o.risk}</span></div><b>{score(o)}</b><div className="wowBar"><i style={{width:score(o)+"%"}} /></div></article>)}</div>
+      <div className="wowInsight"><span>RECOMMANDATION À DISCUTER</span><p>Le pilote ciblé maximise actuellement le compromis valeur / vitesse / risque. {module[2]}</p></div>
+    </Shell>;
+}
+
+function PipelineCockpit({ context, module, blueprint }) {
+  const [riskMode,setRiskMode]=useState(true);
+  const deals=[
+    {name:context.entities[0],stage:"Proposition",value:"42 k€",risk:18,signal:"+"},
+    {name:context.entities[1],stage:"Découverte",value:"26 k€",risk:37,signal:"="},
+    {name:context.entities[2],stage:"Négociation",value:"58 k€",risk:69,signal:"!"}
+  ].sort((a,b)=>riskMode?b.risk-a.risk:a.stage.localeCompare(b.stage));
+  return <Shell label="PIPELINE INTELLIGENCE" metric={blueprint.metric}
+    side={<><p className="wowPaneLabel">VUE</p><div className="wowToggleRow"><button type="button" className={riskMode?"active":""} onClick={()=>setRiskMode(true)}>Risque</button><button type="button" className={!riskMode?"active":""} onClick={()=>setRiskMode(false)}>Étape</button></div><div className="wowNote"><b>Objectif</b><span>{module[1]}</span></div></>}>
+      <div className="wowPipelineBoard">{deals.map((deal)=><article key={deal.name} className={deal.risk>60?"danger":deal.risk>30?"warning":""}><div><span>{deal.stage}</span><b>{deal.signal}</b></div><strong>{deal.name}</strong><small>{deal.value}</small><p>Risque {deal.risk}%</p><button type="button">{deal.risk>60?"Préparer relance":"Voir prochain jalon"}</button></article>)}</div>
+      <div className="wowInsight"><span>SIGNAL</span><p>1 opportunité nécessite une action cette semaine. {module[2]}</p></div>
+    </Shell>;
+}
+
+function SignalRadar({ module, blueprint }) {
+  const [threshold,setThreshold]=useState(55);
+  const signals=[
+    ["Recrutement IA",92,"Fort","Il y a 2 h"],
+    ["Nouvelle offre concurrente",81,"Fort","Il y a 5 h"],
+    ["Hausse trafic marque",68,"Moyen","Hier"],
+    ["Post dirigeant",54,"Faible","Hier"],
+    ["Nouvel appel d’offres",87,"Fort","Il y a 3 h"]
+  ].filter(([,score])=>score>=threshold);
+  return <Shell label="SIGNAL RADAR" metric={blueprint.metric}
+    side={<><p className="wowPaneLabel">SEUIL DE PERTINENCE</p><label><span>Score minimum <b>{threshold}</b></span><input type="range" min="30" max="90" value={threshold} onChange={(e)=>setThreshold(Number(e.target.value))}/></label><p className="wowMiniCopy">{module[1]}</p></>}>
+      <div className="wowSignalFeed">{signals.map(([title,score,level,time])=><article key={title}><i className={level==="Fort"?"hot":level==="Moyen"?"warm":""}/><div><strong>{title}</strong><small>{time}</small></div><span>{level}</span><b>{score}</b></article>)}</div>
+      <div className="wowInsight"><span>À RETENIR</span><p>{signals.length} signal(s) dépassent le seuil. {module[2]}</p></div>
+    </Shell>;
+}
+
+function QualityConsole({ module, blueprint }) {
+  const [dimension,setDimension]=useState("Conformité");
+  const rows={
+    "Conformité":[["Ticket #8421",96],["Ticket #8427",72],["Ticket #8433",88]],
+    "Empathie":[["Ticket #8421",82],["Ticket #8427",91],["Ticket #8433",76]],
+    "Résolution":[["Ticket #8421",94],["Ticket #8427",61],["Ticket #8433",86]]
+  };
+  return <Shell label="QUALITY CONSOLE" metric={blueprint.metric}
+    side={<><p className="wowPaneLabel">DIMENSION</p><div className="wowToggleRow">{Object.keys(rows).map((x)=><button type="button" key={x} className={dimension===x?"active":""} onClick={()=>setDimension(x)}>{x}</button>)}</div><div className="wowNote"><b>Objectif</b><span>{module[1]}</span></div></>}>
+      <div className="wowQualityList">{rows[dimension].map(([name,score])=><article key={name} className={score<75?"warning":""}><strong>{name}</strong><span>{dimension}</span><b>{score}</b><div className="wowBar"><i style={{width:score+"%"}} /></div>{score<75&&<small>À relire en priorité</small>}</article>)}</div>
+      <div className="wowInsight"><span>ÉCHANTILLONNAGE INTELLIGENT</span><p>Le contrôle humain se concentre sur les interactions à risque au lieu d’un tirage aléatoire. {module[2]}</p></div>
+    </Shell>;
+}
+
+const SPECIAL = new Set(["candidate","decision","pipeline","radar","quality","account","seo","campaign","reconcile","timeline","cluster","maintenance","compare","stock","site","tender","learning","calendar","brand","collect","executive","table","report","variance","sequence","routing","workflow","invoice","extract","classify","brief","catalog"]);
 
 export function SpecializedExperience({ type, context, topic, module, blueprint }) {
   if (!SPECIAL.has(type)) return null;
+  if (type==="candidate") return <CandidateMatcher module={module} blueprint={blueprint} />;
+  if (type==="decision") return <DecisionCockpit module={module} blueprint={blueprint} />;
+  if (type==="pipeline") return <PipelineCockpit context={context} module={module} blueprint={blueprint} />;
+  if (type==="radar") return <SignalRadar module={module} blueprint={blueprint} />;
+  if (type==="quality") return <QualityConsole module={module} blueprint={blueprint} />;
   if (type==="account") return <Account360 context={context} module={module} blueprint={blueprint} />;
   if (type==="seo") return <SeoRadar module={module} blueprint={blueprint} />;
   if (type==="campaign") return <CampaignLab context={context} module={module} blueprint={blueprint} />;
