@@ -5,7 +5,8 @@ import {
 import { territoryBacklog } from "../content/territory-editorial.js";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "../content/published-articles.js";
 
 const STOPWORDS = new Set([
@@ -102,6 +103,7 @@ function signalValue(signal) {
 function publishedFor(topic) {
   if (topic.type === "execution-use-case") return publishedExecutionArticles;
   if (topic.type === "training-use-case") return publishedTrainingArticles;
+  if (topic.type === "territory-use-case") return publishedTerritoryArticles;
   return [];
 }
 
@@ -132,7 +134,8 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
 
   const publishedSlugs = new Set([
     ...publishedExecutionArticles.map((article) => article.slug),
-    ...publishedTrainingArticles.map((article) => article.slug)
+    ...publishedTrainingArticles.map((article) => article.slug),
+    ...publishedTerritoryArticles.map((article) => article.slug)
   ]);
 
   const candidates = backlog
