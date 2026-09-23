@@ -441,6 +441,21 @@ try {
   assert.ok(research.searches.length === 2);
   assert.ok(research.evidence.length >= 1);
 
+  const braveCallsBeforeCacheReplay = calls.filter((call) =>
+    call.url.includes("api.search.brave.com")
+  ).length;
+  const researchCached = await researchAccountPublicContext({
+    company: "Acme",
+    apiKey: "test-brave",
+    countPerQuery: 5
+  });
+  const braveCallsAfterCacheReplay = calls.filter((call) =>
+    call.url.includes("api.search.brave.com")
+  ).length;
+  assert.equal(researchCached.available, true);
+  assert.equal(braveCallsAfterCacheReplay, braveCallsBeforeCacheReplay);
+  assert.ok(researchCached.searches.every((item) => item.cache_hit === true));
+
   const dm = await discoverDecisionMakers({
     company: "Acme",
     roles: [{ label: "Head of AI" }],
