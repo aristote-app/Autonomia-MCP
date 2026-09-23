@@ -92,8 +92,18 @@ function datetimeLocal(value) {
   if (!value) return "";
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) return "";
-  const offset = parsed.getTimezoneOffset() * 60000;
-  return new Date(parsed.getTime() - offset).toISOString().slice(0, 16);
+
+  const formatter = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: process.env.AUTONOMIA_TIMEZONE || "Europe/Paris",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+
+  return formatter.format(parsed).replace(" ", "T");
 }
 
 function stageOf(contact) {
