@@ -442,50 +442,165 @@ function Builder({ demo }) {
 
 function Quality({ demo }) {
   const [dimension,setDimension]=useState("Conformité");
-  const sets={Conformité:[96,72,88],Clarté:[83,91,76],Résolution:[94,61,86]};
-  return <Shell demo={demo} side={<div className="problemToggle">{Object.keys(sets).map((x)=><button type="button" key={x} className={dimension===x?"active":""} onClick={()=>setDimension(x)}>{x}</button>)}</div>}>
-    <div className="problemQuality">{sets[dimension].map((score,i)=><article key={i} className={score<75?"warning":""}><strong>Cas #{8421+i*6}</strong><span>{dimension}</span><b>{score}</b><div><i style={{width:score+"%"}}/></div>{score<75&&<small>À relire en priorité</small>}</article>)}</div>
+  const [selected,setSelected]=useState(1);
+  const cases={
+    Conformité:[
+      {id:"#8421",score:96,label:"Réponse alignée",reason:"Procédure citée et mentions présentes"},
+      {id:"#8427",score:72,label:"À relire",reason:"Engagement non relié à une source"},
+      {id:"#8433",score:88,label:"Bon niveau",reason:"Réponse complète, formulation à simplifier"}
+    ],
+    Clarté:[
+      {id:"#8421",score:83,label:"Lisible",reason:"Réponse structurée, une phrase trop dense"},
+      {id:"#8427",score:91,label:"Très clair",reason:"Action et prochaine étape explicites"},
+      {id:"#8433",score:76,label:"À simplifier",reason:"Trop de contexte avant la réponse"}
+    ],
+    Résolution:[
+      {id:"#8421",score:94,label:"Résolu",reason:"Demande traitée avec prochaine étape"},
+      {id:"#8427",score:61,label:"Risque",reason:"Question principale partiellement couverte"},
+      {id:"#8433",score:86,label:"Résolu",reason:"Réponse exploitable sans relance"}
+    ]
+  };
+  const rows=cases[dimension];
+  const current=rows[selected] || rows[0];
+  return <Shell demo={demo} side={<>
+    <div className="problemToggle">{Object.keys(cases).map((x)=><button type="button" key={x} className={dimension===x?"active":""} onClick={()=>{setDimension(x);setSelected(1);}}>{x}</button>)}</div>
+    <p className="problemHint">Sélectionnez un cas pour voir pourquoi il remonte en relecture.</p>
+  </>}>
+    <div className="problemQualityConsole">
+      <div className="problemQuality">{rows.map((item,i)=><button type="button" key={item.id} className={(item.score<75?"warning ":"")+(selected===i?"active":"")} onClick={()=>setSelected(i)}><strong>Cas {item.id}</strong><span>{item.label}</span><b>{item.score}</b><div><i style={{width:item.score+"%"}}/></div></button>)}</div>
+      <article className="problemReviewCard">
+        <span>REVUE PRIORITAIRE · {dimension.toUpperCase()}</span>
+        <strong>Cas {current.id} · {current.score}/100</strong>
+        <p>{current.reason}</p>
+        <div><b>Contrôle humain</b><em>{current.score<75?"Relecture requise":"Échantillon de contrôle"}</em></div>
+        <div><b>Action</b><em>{current.score<75?"Vérifier avant clôture":"Conserver comme référence"}</em></div>
+      </article>
+    </div>
   </Shell>;
 }
 
 function Tender({ demo }) {
   const [tab,setTab]=useState("Exigences");
-  const data={Exigences:[["Mémoire","Obligatoire"],["Références","3 minimum"],["SLA","À chiffrer"]],Échéances:[["Questions","J-12"],["Dépôt","J-0"],["Audition","J+14"]],Vigilance:[["RC","Sous-traitance"],["CCTP","Pénalités"],["AE","Délais"]]};
-  return <Shell demo={demo} side={<div className="problemToggle">{Object.keys(data).map((x)=><button type="button" key={x} className={tab===x?"active":""} onClick={()=>setTab(x)}>{x}</button>)}</div>}>
-    <div className="problemTender">{data[tab].map(([a,b],i)=><article key={a}><span>0{i+1}</span><strong>{a}</strong><b>{b}</b></article>)}</div>
+  const [selected,setSelected]=useState(0);
+  const data={
+    Exigences:[
+      {name:"Mémoire technique",value:"Obligatoire",source:"RC · art. 5.2",status:"Couvert à 68 %",action:"Compléter méthode projet"},
+      {name:"Références",value:"3 minimum",source:"RC · art. 4.1",status:"2 preuves prêtes",action:"Ajouter une référence autorisée"},
+      {name:"SLA",value:"À chiffrer",source:"CCTP · p. 18",status:"À produire",action:"Faire valider l’engagement"}
+    ],
+    Échéances:[
+      {name:"Questions",value:"J-12",source:"RC · art. 2.4",status:"Fenêtre ouverte",action:"Regrouper les questions"},
+      {name:"Dépôt",value:"J-0",source:"RC · art. 7",status:"Pièces à contrôler",action:"Préparer checklist finale"},
+      {name:"Audition",value:"J+14",source:"RC · annexe",status:"Prévisionnel",action:"Préparer trame d’audition"}
+    ],
+    Vigilance:[
+      {name:"Sous-traitance",value:"Déclaration requise",source:"RC · art. 6.3",status:"À confirmer",action:"Vérifier formulaire dédié"},
+      {name:"Pénalités",value:"Plafond contractuel",source:"CCAP · p. 11",status:"Signalé",action:"Faire relire au juridique"},
+      {name:"Délais",value:"Démarrage sous 15 j",source:"AE · p. 3",status:"À valider",action:"Confirmer capacité planning"}
+    ]
+  };
+  const rows=data[tab];
+  const current=rows[selected] || rows[0];
+  return <Shell demo={demo} side={<>
+    <div className="problemToggle">{Object.keys(data).map((x)=><button type="button" key={x} className={tab===x?"active":""} onClick={()=>{setTab(x);setSelected(0);}}>{x}</button>)}</div>
+    <div className="problemDocument"><b>DCE_FICTIF.zip</b><span>RC · CCTP · CCAP · AE · annexes</span></div>
+  </>}>
+    <div className="problemTenderWorkspace">
+      <div className="problemTender">{rows.map((item,i)=><button type="button" key={item.name} className={selected===i?"active":""} onClick={()=>setSelected(i)}><span>0{i+1}</span><strong>{item.name}</strong><b>{item.value}</b><small>{item.status}</small></button>)}</div>
+      <article className="problemTenderDetail">
+        <span>EXIGENCE RETROUVÉE</span>
+        <strong>{current.name}</strong>
+        <p>{current.source}</p>
+        <div><b>État</b><em>{current.status}</em></div>
+        <div><b>Prochaine action</b><em>{current.action}</em></div>
+        <small>Source fictive · aucune référence ou capacité absente n’est inventée.</small>
+      </article>
+    </div>
   </Shell>;
 }
 
 function Seo({ demo }) {
   const [url,setUrl]=useState("https://exemple.fr");
   const [run,setRun]=useState(false);
-  return <Shell demo={demo} side={<><input value={url} onChange={(e)=>{setUrl(e.target.value);setRun(false);}}/><button type="button" onClick={()=>setRun(true)}>Lancer le scan fictif</button></>}>
-    {run ? <div className="problemSeo"><article><span>TECHNIQUE</span><strong>78</strong></article><article><span>CONTENU</span><strong>64</strong></article><article><span>SCHEMA</span><strong>52</strong></article><article><span>GEO</span><strong>61</strong></article></div> : <div className="problemEmpty">Saisissez une URL puis lancez la simulation.</div>}
+  const [focus,setFocus]=useState("Priorité");
+  const backlog=[
+    {area:"Schema",issue:"FAQ et Service non reliés",impact:"Fort",effort:"Faible",score:92},
+    {area:"Contenu",issue:"Intention métier insuffisamment couverte",impact:"Fort",effort:"Moyen",score:86},
+    {area:"GEO",issue:"Entités et preuves peu explicites",impact:"Moyen",effort:"Faible",score:79},
+    {area:"Technique",issue:"Maillage interne trop faible",impact:"Moyen",effort:"Moyen",score:71}
+  ];
+  const rows=focus==="Priorité"?backlog:[...backlog].sort((a,b)=>a.area.localeCompare(b.area));
+  return <Shell demo={demo} side={<>
+    <input value={url} onChange={(e)=>{setUrl(e.target.value);setRun(false);}}/>
+    <button type="button" onClick={()=>setRun(true)}>Lancer le scan fictif</button>
+    {run&&<div className="problemToggle">{["Priorité","Pilier"].map((x)=><button type="button" key={x} className={focus===x?"active":""} onClick={()=>setFocus(x)}>{x}</button>)}</div>}
+  </>}>
+    {run ? <div className="problemSeoWorkspace">
+      <div className="problemSeo"><article><span>TECHNIQUE</span><strong>78</strong></article><article><span>CONTENU</span><strong>64</strong></article><article><span>SCHEMA</span><strong>52</strong></article><article><span>GEO</span><strong>61</strong></article></div>
+      <div className="problemSeoBacklog">{rows.map((item,i)=><article key={item.area}><span>0{i+1} · {item.area}</span><strong>{item.issue}</strong><div><b>Impact {item.impact}</b><b>Effort {item.effort}</b><em>{item.score}</em></div></article>)}</div>
+      <p className="problemInsight">Le score sert ici à prioriser le backlog fictif. Il ne représente pas une note Google ni une garantie de visibilité.</p>
+    </div> : <div className="problemEmpty">Saisissez une URL puis lancez la simulation.</div>}
   </Shell>;
 }
 
 function Site({ demo }) {
   const [lot,setLot]=useState(0);
-  const lots=["Façade","Menuiserie","Électricité"];
-  return <Shell demo={demo} side={<div className="problemQueue">{lots.map((x,i)=><button type="button" key={x} className={lot===i?"active":""} onClick={()=>setLot(i)}><span>LOT {String(i+1).padStart(2,"0")}</span><strong>{x}</strong></button>)}</div>}>
-    <div className="problemReserve"><div><span>PHOTO FICTIVE</span><strong>Réserve #{804+lot}</strong></div><article><span>STATUT</span><strong>{lot===0?"Critique":lot===1?"À lever":"Suivi"}</strong><p>Entreprise affectée · preuve avant/après attendue</p></article></div>
+  const [proof,setProof]=useState(false);
+  const lots=[
+    {name:"Façade",status:"Critique",place:"Bât. B · niveau 2",owner:"Lot façade",due:"J+2"},
+    {name:"Menuiserie",status:"À lever",place:"Hall A · porte 03",owner:"Lot menuiserie",due:"J+5"},
+    {name:"Électricité",status:"Suivi",place:"Palier 4 · zone Est",owner:"Lot électricité",due:"J+7"}
+  ];
+  const item=lots[lot];
+  return <Shell demo={demo} side={<div className="problemQueue">{lots.map((x,i)=><button type="button" key={x.name} className={lot===i?"active":""} onClick={()=>{setLot(i);setProof(false);}}><span>LOT {String(i+1).padStart(2,"0")}</span><strong>{x.name}</strong><small>{x.status}</small></button>)}</div>}>
+    <div className="problemSiteWorkspace">
+      <div className="problemSitePhoto"><span>PHOTO FICTIVE · AVANT</span><strong>Réserve #{804+lot}</strong><i/><i/><b>{item.place}</b></div>
+      <article className="problemSiteCard">
+        <span>STATUT</span><strong>{item.status}</strong>
+        <div><b>Affectation</b><em>{item.owner}</em></div>
+        <div><b>Échéance</b><em>{item.due}</em></div>
+        <div><b>Preuve attendue</b><em>Photo après + commentaire</em></div>
+        <button type="button" onClick={()=>setProof(true)}>{proof?"Preuve reçue · à valider":"Simuler la réception d’une preuve"}</button>
+        {proof&&<small>La levée reste une décision humaine. La preuve est seulement rattachée à la réserve.</small>}
+      </article>
+    </div>
   </Shell>;
 }
 
 function Stock({ demo }) {
   const [days,setDays]=useState(14);
-  const items=[["SKU-8842",18,4],["SKU-1194",64,2],["SKU-7812",33,1]];
-  return <Shell demo={demo} side={<label><span>Horizon <b>{days} jours</b></span><input type="range" min="7" max="30" value={days} onChange={(e)=>setDays(Number(e.target.value))}/></label>}>
-    <div className="problemStock">{items.map(([name,stock,burn])=>{const left=stock-burn*days;return <article key={name} className={left<0?"danger":left<10?"warning":""}><strong>{name}</strong><span>Stock projeté</span><b>{Math.max(0,left)}</b><small>{left<0?"Rupture projetée":left<10?"Sous seuil":"Stable"}</small></article>})}</div>
+  const [safety,setSafety]=useState(8);
+  const items=[["SKU-8842",48,4,7],["SKU-1194",64,2,5],["SKU-7812",33,1,9]];
+  return <Shell demo={demo} side={<>
+    <label><span>Horizon <b>{days} jours</b></span><input type="range" min="7" max="30" value={days} onChange={(e)=>setDays(Number(e.target.value))}/></label>
+    <label><span>Stock de sécurité <b>{safety}</b></span><input type="range" min="0" max="25" value={safety} onChange={(e)=>setSafety(Number(e.target.value))}/></label>
+  </>}>
+    <div className="problemStockConsole">
+      <div className="problemStock">{items.map(([name,stock,burn,lead])=>{const left=stock-burn*days;const reorder=Math.max(0,burn*(days+lead)+safety-stock);const state=left<=0?"Rupture":left<safety?"Sous seuil":"Stable";return <article key={name} className={state==="Rupture"?"danger":state==="Sous seuil"?"warning":""}><div><strong>{name}</strong><span>Délai {lead} j</span></div><b>{Math.max(0,left)}</b><small>{state}</small><div className="problemStockMeter"><i style={{width:Math.max(6,Math.min(100,(Math.max(0,left)/(stock||1))*100))+"%"}}/></div><p>{reorder>0?`Proposition fictive : commander ${reorder} u.`:"Aucune commande proposée."}</p></article>})}</div>
+      <p className="problemInsight">La proposition évolue avec l’horizon, la consommation, le délai et le stock de sécurité. Toute commande reste à valider.</p>
+    </div>
   </Shell>;
 }
 
 function Maintenance({ demo }) {
   const [vibration,setVibration]=useState(62);
   const [temperature,setTemperature]=useState(71);
+  const [tab,setTab]=useState("Diagnostic");
   const risk=Math.min(99,Math.round((vibration*.55)+(temperature*.45)));
-  return <Shell demo={demo} side={<><label><span>Vibration <b>{vibration}</b></span><input type="range" min="20" max="100" value={vibration} onChange={(e)=>setVibration(Number(e.target.value))}/></label><label><span>Température <b>{temperature}</b></span><input type="range" min="20" max="100" value={temperature} onChange={(e)=>setTemperature(Number(e.target.value))}/></label></>}>
-    <div className="problemMaintenance"><span>INDICE DE DÉRIVE FICTIF</span><strong>{risk}%</strong><div><i style={{width:risk+"%"}}/></div><p>{risk>75?"Contrôle prioritaire proposé":"Surveillance renforcée"} · le diagnostic reste au technicien.</p></div>
+  const causes=[
+    ["Roulement / usure",Math.min(96,Math.round(risk*.92))],
+    ["Désalignement",Math.max(18,Math.round(risk*.68))],
+    ["Capteur / mesure",Math.max(12,Math.round(risk*.41))]
+  ];
+  return <Shell demo={demo} side={<>
+    <label><span>Vibration <b>{vibration}</b></span><input type="range" min="20" max="100" value={vibration} onChange={(e)=>setVibration(Number(e.target.value))}/></label>
+    <label><span>Température <b>{temperature}</b></span><input type="range" min="20" max="100" value={temperature} onChange={(e)=>setTemperature(Number(e.target.value))}/></label>
+    <div className="problemToggle">{["Diagnostic","Procédure"].map((x)=><button type="button" key={x} className={tab===x?"active":""} onClick={()=>setTab(x)}>{x}</button>)}</div>
+  </>}>
+    <div className="problemMaintenanceConsole">
+      <div className="problemMaintenance"><span>INDICE DE DÉRIVE FICTIF</span><strong>{risk}%</strong><div><i style={{width:risk+"%"}}/></div><p>{risk>75?"Contrôle prioritaire proposé":"Surveillance renforcée"} · le diagnostic reste au technicien.</p></div>
+      {tab==="Diagnostic"?<div className="problemCauseList">{causes.map(([name,score],i)=><article key={name}><span>0{i+1}</span><strong>{name}</strong><b>{score}%</b><div><i style={{width:score+"%"}}/></div></article>)}</div>:<article className="problemProcedureCard"><span>PROCÉDURE RETROUVÉE · GMAO FICTIVE</span><strong>Contrôle vibration anormale · Q-14</strong><ol><li>Vérifier le capteur et le serrage.</li><li>Comparer au dernier relevé stable.</li><li>Contrôler roulement et alignement si la dérive persiste.</li></ol><small>Le système propose les contrôles ; le technicien réalise le diagnostic.</small></article>}
+    </div>
   </Shell>;
 }
 
