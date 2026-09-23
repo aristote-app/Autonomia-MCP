@@ -1,3 +1,4 @@
+import { territoryArticlesWave1 } from "./article-packs/territory-wave-1.js";
 import { marketDemandExecutionArticles, marketDemandTrainingArticles } from "./article-packs/market-demand-wave-1.js";
 import { marketDemandExecutionArticlesWave2, marketDemandTrainingArticlesWave2 } from "./article-packs/market-demand-wave-2.js";
 import { marketDemandExecutionArticlesWave3, marketDemandTrainingArticlesWave3 } from "./article-packs/market-demand-wave-3.js";
@@ -350,4 +351,10 @@ export function getPublishedExecutionArticle(slug) {
 
 export function getPublishedTrainingArticle(slug) {
   return publishedTrainingArticles.find((article) => article.slug === slug) || null;
+}
+
+export const publishedTerritoryArticles = [...territoryArticlesWave1];
+
+export function getPublishedTerritoryArticle(slug) {
+  return publishedTerritoryArticles.find((article) => article.slug === slug) || null;
 }
