@@ -646,15 +646,23 @@ h3 { margin: 0 0 8px; }
 
 
 /* Commercial outcome controls */
-.contactStageForm { display:grid; grid-template-columns:minmax(120px,1fr) auto; gap:6px; margin-top:7px; }
-.contactStageForm select { min-height:32px; width:100%; border:1px solid #cfd4ce; background:#fff; padding:6px 7px; font:inherit; font-size:10px; }
+.contactStageForm { display:grid; grid-template-columns:minmax(120px,.8fr) minmax(150px,1fr) minmax(190px,1.2fr) auto; gap:6px; margin-top:7px; align-items:end; }
+.contactStageForm label { display:grid; gap:4px; min-width:0; }
+.contactStageForm label > span { color:#677068; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; }
+.contactStageForm select,
+.contactStageForm input { min-height:32px; width:100%; border:1px solid #cfd4ce; background:#fff; padding:6px 7px; font:inherit; font-size:10px; }
 .contactStageForm button,
 .contactOptOutForm button { min-height:32px; border:1px solid #111; background:#111; color:#fff; padding:6px 8px; font:inherit; font-size:9px; font-weight:800; cursor:pointer; }
 .contactOptOutForm { margin-top:2px; }
 .contactOptOutForm button { background:#fff; color:#111; border-style:dashed; width:100%; }
 
+@media (max-width:900px) {
+  .contactStageForm { grid-template-columns:1fr 1fr; }
+  .contactStageNote { grid-column:1 / -1; }
+}
 @media (max-width:560px) {
   .contactStageForm { grid-template-columns:1fr; }
+  .contactStageNote { grid-column:auto; }
 }
 
 
