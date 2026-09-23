@@ -1,14 +1,8 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { BUILD_SHA } from "../../../lib/runtime/buildStamp.generated.js";
 
 export async function GET() {
-  const deployedSha = await readFile(
-    join(process.cwd(), ".runtime", "deployed-sha"),
-    "utf8"
-  ).then((value) => value.trim()).catch(() => null);
-
   return Response.json({
-    deployedSha,
+    deployedSha: BUILD_SHA === "development" ? null : BUILD_SHA,
     ok: true,
     service: "autonomia-market-intelligence",
     version: "0.1.0",

@@ -66,6 +66,11 @@ fi
 echo "Deploying validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "$REMOTE_SHA"
 
+cat > lib/runtime/buildStamp.generated.js <<EOF
+// Generated during o2switch deployment. Do not edit on the server.
+export const BUILD_SHA = "$REMOTE_SHA";
+EOF
+
 # Recent cockpit changes did not add runtime dependencies. Reuse the installed
 # Node tree when Next is present; fall back to npm install only if it is missing.
 if [ -x node_modules/.bin/next ]; then
@@ -82,7 +87,6 @@ echo "Building Next.js..."
 npm run build
 
 mkdir -p .runtime tmp
-printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
 
 TALENT_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-talent.mjs >> /home/dide4169/autonomia-cockpit-app/talent-refresh.log 2>&1'
 if command -v crontab >/dev/null 2>&1; then

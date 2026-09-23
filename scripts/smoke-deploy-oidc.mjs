@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import {
   GITHUB_DEPLOY_AUDIENCE,
   validDeploySha,
@@ -38,5 +39,30 @@ assert.equal(
 );
 assert.equal(validDeploySha("a".repeat(40)), true);
 assert.equal(validDeploySha("main"), false);
+
+const healthRoute = await readFile(
+  new URL("../app/api/health/route.js", import.meta.url),
+  "utf8"
+);
+const deployScript = await readFile(
+  new URL("./o2switch-sync-cockpit.sh", import.meta.url),
+  "utf8"
+);
+
+assert.equal(
+  healthRoute.includes('buildStamp.generated.js'),
+  true,
+  "Health must report the SHA embedded in the running build"
+);
+assert.equal(
+  deployScript.includes('export const BUILD_SHA = "$REMOTE_SHA";'),
+  true,
+  "o2switch deployment must embed the target SHA before build"
+);
+assert.equal(
+  deployScript.includes('> .runtime/deployed-sha'),
+  false,
+  "A mutable runtime file must not masquerade as the running build SHA"
+);
 
 console.log("github oidc deploy smoke ok");
