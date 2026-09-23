@@ -367,6 +367,24 @@ for (const requiredPath of ["/methodologie/execution-matrix", "/methodologie/lea
   }
 }
 
+for (const requiredPattern of [
+  'import { problemSolutions } from "@/content/problem-solutions"',
+  'const problemLandingPages = problemSolutions.map',
+  '/solutions-ia/${problem.slug}',
+  '...problemLandingPages'
+]) {
+  if (!organicUrlsSource.includes(requiredPattern)) {
+    errors.push(`Organic URL manifest is missing problem-LP sitemap marker: ${requiredPattern}.`);
+  }
+}
+
+const sitemapSource = readFileSync(resolve(siteRoot, "app/sitemap.js"), "utf8");
+for (const requiredPattern of ["getIndexableUrlRecords", "lastModified", "changeFrequency", "priority"]) {
+  if (!sitemapSource.includes(requiredPattern)) {
+    errors.push(`sitemap.js is missing metadata marker: ${requiredPattern}.`);
+  }
+}
+
 const intentSource = readFileSync(resolve(siteRoot, "components/IntentPage.js"), "utf8");
 for (const requiredPattern of ["captureLead", "requestedService={page.slug}", "scanSecondaryLink"]) {
   if (!intentSource.includes(requiredPattern)) {
