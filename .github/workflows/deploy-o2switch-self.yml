@@ -30,11 +30,7 @@ jobs:
           echo "Production health before deploy:"
           HEALTH="$(curl -fsS "https://cockpit.build-autonomia.com/api/health" || true)"
           printf '%s\n' "$HEALTH"
-          MODE="$(printf '%s' "$HEALTH" | python -c 'import json,sys
-try:
-    print(json.load(sys.stdin).get("selfDeployAuthMode", ""))
-except Exception:
-    print("")')"
+          MODE="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("selfDeployAuthMode", ""))' 2>/dev/null || true)"
           if [ "$MODE" = "github_oidc" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
             echo "GitHub OIDC self-deploy is active in production."
