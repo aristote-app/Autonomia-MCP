@@ -12623,6 +12623,55 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 14px;
   line-height: 1.5;
 }
+.problemLabBridge,
+.wowLabBridge {
+  display: grid;
+  gap: 14px;
+  align-items: end;
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255,209,106,.24);
+  border-radius: 12px;
+  background: linear-gradient(135deg,rgba(255,209,106,.11),rgba(255,255,255,.035));
+}
+.problemLabBridge > div,
+.wowLabBridge > div {
+  display: grid;
+  gap: 6px;
+}
+.problemLabBridge span,
+.wowLabBridge span {
+  color: #ffd16a;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .05em;
+}
+.problemLabBridge strong,
+.wowLabBridge strong {
+  font-size: 20px;
+  line-height: 1.15;
+}
+.problemLabBridge p,
+.wowLabBridge p {
+  margin: 0;
+  color: rgba(255,255,255,.7);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.problemLabBridge > a,
+.wowLabBridge > a {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 9px;
+  background: #ffd16a;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 900;
+}
 .problemBuild {
   background: #fff;
 }
@@ -12867,6 +12916,10 @@ body:has(.territoryCampaignPage) .desktopNav {
   }
   .problemReserve {
     grid-template-columns: minmax(180px,.75fr) minmax(0,1.25fr);
+  }
+  .problemLabBridge,
+  .wowLabBridge {
+    grid-template-columns: minmax(0,1fr) auto;
   }
   .problemExtractWorkspace {
     grid-template-columns: minmax(220px,.9fr) minmax(0,1.1fr);
