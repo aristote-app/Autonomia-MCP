@@ -114,6 +114,24 @@ export default function IntegrationsPage() {
             restent invisibles sans session de workspace.
           </p>
         </article>
+
+        <article>
+          <State ready={true} label="MCP Revenue Agent" />
+          <h2>Agent sans plateforme supplémentaire</h2>
+          <p>
+            Le MCP expose les comptes 360°, les prochaines actions, la recherche compte et la
+            découverte de décideurs à un client IA autorisé, derrière le token interne Autonomia.
+          </p>
+        </article>
+
+        <article>
+          <State ready={true} label="Follow-up Engine" />
+          <h2>Relances proactives</h2>
+          <p>
+            Les contacts peuvent porter une prochaine action datée. Les relances dues remontent
+            dans le pipeline et dans le moteur Next Best Action.
+          </p>
+        </article>
       </section>
     </main>
   );
