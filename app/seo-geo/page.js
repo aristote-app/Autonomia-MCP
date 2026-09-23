@@ -169,6 +169,10 @@ export default async function SeoGeoPage() {
             <span>{number(data.signalSummary.territory)}</span>
           </div>
           <div className={styles.statusItem}>
+            <strong>Leads entrants / besoins exprimés</strong>
+            <span>{number(data.signalSummary.inbound)}</span>
+          </div>
+          <div className={styles.statusItem}>
             <strong>Requêtes Google · 28 j</strong>
             <span>{number(data.signalSummary.searchQueries)}</span>
           </div>
