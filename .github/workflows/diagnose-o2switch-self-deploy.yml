@@ -31,15 +31,7 @@ jobs:
             HTTP_CODE="$(curl -sS -o /tmp/self-deploy-log.json -w "%{http_code}" "$LOG_URL" -H "x-autonomia-token: $TOKEN")"
             echo "$VAR -> HTTP $HTTP_CODE"
             if [ "$HTTP_CODE" = "200" ]; then
-              python - <<'PY'
-import json
-p='/tmp/self-deploy-log.json'
-data=json.load(open(p))
-print('oidc_enabled:', data.get('oidc_enabled'))
-print('legacy_enabled:', data.get('legacy_enabled'))
-print('--- self-deploy.log tail ---')
-print(data.get('log_tail',''))
-PY
+              python -c "import json; d=json.load(open('/tmp/self-deploy-log.json')); print('oidc_enabled:', d.get('oidc_enabled')); print('legacy_enabled:', d.get('legacy_enabled')); print('--- self-deploy.log tail ---'); print(d.get('log_tail',''))"
               SUCCESS=1
               break
             else
