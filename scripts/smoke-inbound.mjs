@@ -23,7 +23,23 @@ const base = {
   utm_campaign: "automation-ia"
 };
 
-const lead = normalizeInboundLead(base);
+const lead = normalizeInboundLead({
+  ...base,
+  solution_context: {
+    source: "solution_finder",
+    original_query: "Nous voulons automatiser les comptes rendus et former les managers.",
+    summary: "Le besoin combine exécution et transfert de compétences.",
+    route: "hybrid",
+    recommended_roles: [
+      { id: "automation-engineer", label: "Automation / AI Engineer", slug: "automation-engineer" }
+    ],
+    recommended_training: [
+      { id: "ia-dirigeants-managers", title: "Formation IA pour dirigeants et managers", slug: "ia-dirigeants-managers" }
+    ],
+    engine: "openai",
+    generated_at: "2026-09-23T05:00:30Z"
+  }
+});
 
 assert.equal(lead.email, "alice@example.com");
 assert.equal(lead.marketing_consent, false);
@@ -31,6 +47,10 @@ assert.equal(lead.scan_context.classification, "automation");
 assert.ok(lead.scan_context.next_action.includes("processus"));
 assert.equal(lead.attribution.utm_source, "google");
 assert.equal(lead.external_lead_id, "lead-001");
+assert.equal(lead.scan_context.solution_context.route, "hybrid");
+assert.equal(lead.scan_context.solution_context.recommended_roles[0].slug, "automation-engineer");
+assert.equal(lead.scan_context.solution_context.recommended_training[0].slug, "ia-dirigeants-managers");
+assert.equal(lead.scan_context.solution_context.original_query, "Nous voulons automatiser les comptes rendus et former les managers.");
 assert.ok(/^[a-f0-9]{64}$/.test(lead.event_hash));
 assert.ok(/^[a-f0-9]{64}$/.test(lead.dedupe_key));
 
