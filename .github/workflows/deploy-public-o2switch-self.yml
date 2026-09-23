@@ -1,0 +1,85 @@
+name: deploy-public-o2switch-self
+
+on:
+  workflow_run:
+    workflows:
+      - validate-public-site-production
+    types:
+      - completed
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: autonomia-public-o2switch-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'public-site-production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Request GitHub OIDC deployment identity
+        id: oidc
+        env:
+          AUDIENCE: autonomia-public-o2switch
+        run: |
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GitHub OIDC token is empty."
+            exit 1
+          fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger public-site o2switch deploy
+        env:
+          DEPLOY_URL: https://build-autonomia.com/api/internal/self-deploy
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          HTTP_CODE="$(curl -sS \
+            -o /tmp/autonomia-public-self-deploy.json \
+            -w "%{http_code}" \
+            -G "$DEPLOY_URL" \
+            --data-urlencode "action=deploy" \
+            --data-urlencode "sha=$TARGET_SHA" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+
+          cat /tmp/autonomia-public-self-deploy.json
+          echo
+
+          if [ "$HTTP_CODE" != "202" ]; then
+            echo "::error::Public self-deploy endpoint returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
+      - name: Verify public production
+        env:
+          HEALTH_URL: https://build-autonomia.com/api/health
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          for attempt in $(seq 1 48); do
+            HEALTH="$(curl -fsS "$HEALTH_URL" || true)"
+            DEPLOYED_SHA="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha", ""))' 2>/dev/null || true)"
+
+            if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
+              echo "Public production confirms target SHA: $TARGET_SHA"
+              curl -fsS https://build-autonomia.com/sitemap.xml >/dev/null
+              curl -fsS https://build-autonomia.com/territoires >/dev/null
+              exit 0
+            fi
+
+            echo "Public site not switched yet (attempt $attempt/48)."
+            sleep 10
+          done
+
+          echo "::error::Public site did not switch to target SHA."
+          exit 1
