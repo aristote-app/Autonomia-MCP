@@ -1,6 +1,7 @@
 import { getAllPages } from "@/lib/pages";
 import { aiRoles } from "@/content/ai-roles";
 import { academyTrainings } from "@/content/academy-trainings";
+import { observatoryTopics } from "@/content/observatory-solutions";
 import {
   executionPillars,
   trainingPillars
@@ -29,7 +30,9 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/territoires/ia-agents-collectivite`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/territoires/academy-ia-collectivites`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/territoires/accelerateur-ia-tpe-pme`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
-    { url: `${base}/observatoire-ia`, kind: "original-dataset", priority: 0.9, changeFrequency: "weekly", lastModified: ORGANIC_RELEASE_DATE },
+    { url: `${base}/territoires/urbanisme`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
+    { url: `${base}/territoires/conservatoire`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
+    { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-23" },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
 
@@ -57,6 +60,16 @@ export function getIndexableUrlRecords(base) {
     changeFrequency: "monthly",
     lastModified: "2026-09-23"
   }));
+
+  const observatoryLandingPages = observatoryTopics
+    .filter((topic) => !topic.href)
+    .map((topic) => ({
+      url: `${base}/observatoire-ia/${topic.slug}`,
+      kind: "ai-needs-landing",
+      priority: 0.82,
+      changeFrequency: "monthly",
+      lastModified: "2026-09-23"
+    }));
 
   const executionPillarPages = executionPillars.map((pillar) => ({
     url: `${base}/cas-usage-ia/${pillar.slug}`,
@@ -111,6 +124,7 @@ export function getIndexableUrlRecords(base) {
     ...commercialPages,
     ...aiRolePages,
     ...academyTrainingPages,
+    ...observatoryLandingPages,
     ...executionPillarPages,
     ...trainingPillarPages,
     ...territoryPillarPages,
