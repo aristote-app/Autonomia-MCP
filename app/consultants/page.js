@@ -246,10 +246,6 @@ export default async function ConsultantsPage({ searchParams }) {
                   </div>
                 )}
 
-                {candidate.metadata?.snippet && (
-                  <p className="talentCandidateSnippet">{candidate.metadata.snippet}</p>
-                )}
-
                 <div className="talentCandidateActions">
                   {candidate.metadata?.profile_url && (
                     <a href={candidate.metadata.profile_url} target="_blank" rel="noreferrer">
