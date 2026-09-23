@@ -1,116 +1,10 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
-import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
-import { searchRankedOpportunities } from "../../lib/db/intelligence.js";
-import { searchJobSignals } from "../../lib/db/jobSignals.js";
-import { buildSeoGeoSignals, summarizeSeoGeoSignals } from "../../lib/seo-geo/demandSignals.js";
+import { loadSeoGeoData, organicFetch, siteConfig } from "../../lib/seo-geo/refresh.js";
+import { readSeoGeoSnapshot, writeSeoGeoSnapshot } from "../../lib/seo-geo/snapshot.js";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
-
-const DEFAULT_PUBLIC_SITE = "https://build-autonomia.com";
-
-function siteConfig() {
-  return {
-    base: String(process.env.AUTONOMIA_PUBLIC_SITE_URL || DEFAULT_PUBLIC_SITE).replace(/\/$/, ""),
-    token: process.env.AUTONOMIA_ORGANIC_TOKEN || ""
-  };
-}
-
-async function organicFetch(path, options = {}) {
-  const { base, token } = siteConfig();
-  if (!token) return { ok: false, error: "organic_token_missing" };
-
-  try {
-    const response = await fetch(`${base}${path}`, {
-      ...options,
-      cache: "no-store",
-      headers: {
-        ...(options.headers || {}),
-        authorization: `Bearer ${token}`,
-        "content-type": "application/json"
-      }
-    });
-
-    const body = await response.json().catch(() => null);
-    return response.ok
-      ? { ok: true, data: body }
-      : { ok: false, status: response.status, error: body?.error || "request_failed", data: body };
-  } catch (error) {
-    return { ok: false, error: error?.message || "network_error" };
-  }
-}
-
-async function loadMarketSignals() {
-  if (!hasAutonomiaDatabase()) return { opportunities: [], jobs: [] };
-
-  try {
-    const [opportunities, jobs] = await Promise.all([
-      searchRankedOpportunities({
-        actionability: "active",
-        aiRelatedOnly: true,
-        minFitScore: 0,
-        limit: 250
-      }),
-      searchJobSignals({
-        sources: ["france_travail_jobs", "linkedin", "indeed", "freework", "freelancerepublik", "lehibou"],
-        limit: 350
-      })
-    ]);
-
-    return {
-      opportunities: opportunities?.items || [],
-      jobs: jobs?.items || []
-    };
-  } catch (error) {
-    console.error("SEO/GEO market signals error", error);
-    return { opportunities: [], jobs: [] };
-  }
-}
-
-async function loadSeoGeo() {
-  const market = await loadMarketSignals();
-  const signals = buildSeoGeoSignals(market);
-  const signalSummary = summarizeSeoGeoSignals(signals);
-
-  const [manifest, backlog, google, searchDemand] = await Promise.all([
-    organicFetch("/api/organic/manifest"),
-    organicFetch("/api/organic/backlog"),
-    organicFetch("/api/organic/google/sitemap"),
-    organicFetch("/api/organic/google/search-demand?days=28&limit=500")
-  ]);
-
-  const searchSignals = searchDemand.ok
-    ? (searchDemand.data?.rows || []).map((row) => ({
-        query: row.query,
-        search_impressions: Number(row.impressions) || 0,
-        search_clicks: Number(row.clicks) || 0,
-        search_position: Number(row.position) || 0,
-        source: "google_search_console"
-      }))
-    : [];
-
-  const allSignals = [...signals, ...searchSignals];
-  const recommendations = await organicFetch("/api/organic/editorial-opportunities", {
-    method: "POST",
-    body: JSON.stringify({ signals: allSignals, max_results: 25 })
-  });
-
-  return {
-    market,
-    signals: allSignals,
-    signalSummary: {
-      ...signalSummary,
-      searchQueries: searchSignals.length,
-      total: signalSummary.total + searchSignals.length
-    },
-    manifest,
-    backlog,
-    recommendations,
-    google,
-    searchDemand
-  };
-}
 
 async function submitSitemapAction() {
   "use server";
@@ -121,18 +15,44 @@ async function submitSitemapAction() {
   revalidatePath("/seo-geo");
 }
 
+async function refreshRadarAction() {
+  "use server";
+  const data = await loadSeoGeoData({ prepareBriefs: true, maxBriefs: 5 });
+  await writeSeoGeoSnapshot(data);
+  revalidatePath("/seo-geo");
+}
+
 function number(value) {
   return new Intl.NumberFormat("fr-FR").format(Number(value) || 0);
 }
 
 export default async function SeoGeoPage() {
-  const data = await loadSeoGeo();
-  const manifest = data.manifest.ok ? data.manifest.data : null;
-  const backlog = data.backlog.ok ? data.backlog.data : null;
+  const [data, snapshot] = await Promise.all([
+    loadSeoGeoData(),
+    readSeoGeoSnapshot()
+  ]);
+
+  const manifest = data.manifest.ok
+    ? data.manifest.data
+    : snapshot?.manifest?.ok
+      ? snapshot.manifest.data
+      : null;
+  const backlog = data.backlog.ok
+    ? data.backlog.data
+    : snapshot?.backlog?.ok
+      ? snapshot.backlog.data
+      : null;
   const recommendations = data.recommendations.ok
     ? data.recommendations.data?.recommendations || []
-    : [];
-  const google = data.google.ok ? data.google.data : null;
+    : snapshot?.recommendations?.ok
+      ? snapshot.recommendations.data?.recommendations || []
+      : [];
+  const google = data.google.ok
+    ? data.google.data
+    : snapshot?.google?.ok
+      ? snapshot.google.data
+      : null;
+  const draftQueue = snapshot?.draftQueue || [];
   const site = siteConfig().base;
 
   return (
@@ -187,6 +107,11 @@ export default async function SeoGeoPage() {
             <p>Le sitemap reste automatique ; ce contrôle permet aussi de le soumettre à Search Console.</p>
           </div>
           <div className={styles.actions}>
+            <form action={refreshRadarAction}>
+              <button className={styles.secondaryButton} type="submit">
+                Actualiser + préparer 5 briefs
+              </button>
+            </form>
             <a className={styles.secondaryButton} href={`${site}/sitemap.xml`} target="_blank" rel="noreferrer">
               Voir sitemap ↗
             </a>
@@ -214,6 +139,10 @@ export default async function SeoGeoPage() {
           <div className={styles.statusItem}>
             <strong>Dernier sitemap connu</strong>
             <span>{google?.last_submitted ? new Date(google.last_submitted).toLocaleString("fr-FR") : "—"}</span>
+          </div>
+          <div className={styles.statusItem}>
+            <strong>Dernière veille automatique</strong>
+            <span>{snapshot?.generatedAt ? new Date(snapshot.generatedAt).toLocaleString("fr-FR") : "Pas encore exécutée"}</span>
           </div>
         </div>
       </section>
@@ -288,6 +217,46 @@ export default async function SeoGeoPage() {
               {!recommendations.length && (
                 <tr>
                   <td colSpan="5">Aucune recommandation disponible tant que le moteur du site public n'est pas relié.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <p className={styles.eyebrow}>FILE DE PRODUCTION</p>
+            <h2>Briefs préparés automatiquement</h2>
+            <p>
+              La veille automatique prépare les 5 sujets les mieux étayés. Ils restent à valider avant
+              génération finale et publication.
+            </p>
+          </div>
+        </div>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Score</th>
+                <th>Sujet</th>
+                <th>Famille</th>
+                <th>Brief</th>
+              </tr>
+            </thead>
+            <tbody>
+              {draftQueue.map((item) => (
+                <tr key={`${item.family}:${item.slug}`}>
+                  <td className={styles.score}>{item.score}</td>
+                  <td><strong>{item.title}</strong><br/><small>{item.cluster}</small></td>
+                  <td><span className={styles.pill}>{item.family}</span></td>
+                  <td>{item.brief ? "Prêt pour rédaction" : `Erreur : ${item.brief_error || "inconnue"}`}</td>
+                </tr>
+              ))}
+              {!draftQueue.length && (
+                <tr>
+                  <td colSpan="4">La première veille automatique remplira cette file dès que le moteur du site public sera relié.</td>
                 </tr>
               )}
             </tbody>
