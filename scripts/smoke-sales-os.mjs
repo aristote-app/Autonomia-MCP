@@ -20,6 +20,7 @@ import {
   scoreDecisionMakerCandidate
 } from "../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
+import { resolveHiddenEndClient } from "../lib/collectors/endClientResolver.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 import {
@@ -356,15 +357,31 @@ globalThis.fetch = async (url, options = {}) => {
   calls.push({ url: String(url), options });
 
   if (String(url).includes("api.search.brave.com")) {
+    const parsed = new URL(String(url));
+    const q = parsed.searchParams.get("q") || "";
+    const hiddenClientSearch = q.includes("Industrialisation Agentic AI LangGraph");
     return new Response(JSON.stringify({
       web: {
-        results: [
-          {
-            title: "Jane Doe - Head of AI chez Acme | LinkedIn",
-            url: "https://www.linkedin.com/in/jane-doe-ai",
-            description: "Head of AI chez Acme, Paris, France"
-          }
-        ]
+        results: hiddenClientSearch
+          ? [
+              {
+                title: "Industrialisation Agentic AI LangGraph - Banque Exemple",
+                url: "https://careers.banque-exemple.test/agentic-ai",
+                description: "Banque Exemple recherche une expertise pour industrialiser Agentic AI avec LangGraph."
+              },
+              {
+                title: "Même mission sur Collective",
+                url: "https://collective.work/mission/123",
+                description: "Industrialisation Agentic AI LangGraph"
+              }
+            ]
+          : [
+              {
+                title: "Jane Doe - Head of AI chez Acme | LinkedIn",
+                url: "https://www.linkedin.com/in/jane-doe-ai",
+                description: "Head of AI chez Acme, Paris, France"
+              }
+            ]
       }
     }), {
       status: 200,
@@ -397,6 +414,24 @@ globalThis.fetch = async (url, options = {}) => {
 };
 
 try {
+  const hiddenClient = await resolveHiddenEndClient({
+    account: {
+      name: "Collective.work",
+      intermediary_risk: true,
+      timeline: [{
+        title: "Industrialisation Agentic AI LangGraph - Freelance (H/F)",
+        source_url: "https://candidat.francetravail.fr/offres/recherche/detail/test"
+      }]
+    },
+    apiKey: "test-brave",
+    maxSignals: 1,
+    countPerQuery: 5
+  });
+  assert.equal(hiddenClient.available, true);
+  assert.equal(hiddenClient.candidates.length, 1);
+  assert.equal(hiddenClient.candidates[0].candidate_domain, "careers.banque-exemple.test");
+  assert.ok(hiddenClient.candidates[0].similarity_score >= 45);
+
   const research = await researchAccountPublicContext({
     company: "Acme",
     apiKey: "test-brave",

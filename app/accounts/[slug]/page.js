@@ -4,6 +4,7 @@ import { loadAccountBySlug } from "../../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
 import { discoverDecisionMakers } from "../../../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../../../lib/collectors/accountResearch.js";
+import { resolveHiddenEndClient } from "../../../lib/collectors/endClientResolver.js";
 import { buildAccountOutreachPlan } from "../../../lib/intelligence/outreach.js";
 import { buildAccountBattlecard } from "../../../lib/intelligence/battlecard.js";
 import { buildAccountOpportunityGraph } from "../../../lib/intelligence/accountGraph.js";
@@ -74,11 +75,16 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const shouldDiscover = query?.discover === "1";
   const shouldResearch = query?.research === "1";
+  const shouldResolveClient = query?.resolveClient === "1";
   const decisionDiscoveryEnabled =
     hasWorkspaceSession &&
     process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const accountResearchEnabled =
+    hasWorkspaceSession &&
+    process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
+    Boolean(process.env.BRAVE_SEARCH_API_KEY);
+  const hiddenClientResolverEnabled =
     hasWorkspaceSession &&
     process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
@@ -100,7 +106,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
     hasWorkspaceSession &&
     waalaxyConfigured;
 
-  const [decisionMakers, accountResearch, savedContacts, waalaxyOptions] = await Promise.all([
+  const [decisionMakers, accountResearch, hiddenClientResolution, savedContacts, waalaxyOptions] = await Promise.all([
     shouldDiscover && decisionDiscoveryEnabled
       ? discoverDecisionMakers({
           company: account.name,
@@ -122,6 +128,18 @@ export default async function AccountDetailPage({ params, searchParams }) {
           available: false,
           reason: error instanceof Error ? error.message : String(error),
           evidence: [],
+          searches: []
+        }))
+      : Promise.resolve(null),
+    shouldResolveClient && hiddenClientResolverEnabled && account.intermediary_risk
+      ? resolveHiddenEndClient({
+          account,
+          maxSignals: 2,
+          countPerQuery: 8
+        }).catch((error) => ({
+          available: false,
+          reason: error instanceof Error ? error.message : String(error),
+          candidates: [],
           searches: []
         }))
       : Promise.resolve(null),
@@ -252,6 +270,74 @@ export default async function AccountDetailPage({ params, searchParams }) {
           )}
         </div>
       </section>
+
+      {account.intermediary_risk && (
+        <section className="accountResearchPanel" id="hidden-client-resolver">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">HIDDEN CLIENT RESOLVER</p>
+              <h2>Chercher le client final sans l'inventer.</h2>
+            </div>
+            <p>
+              Autonomia cherche des traces publiques indépendantes du même besoin. Un résultat reste
+              un candidat à vérifier, jamais une identité client affirmée automatiquement.
+            </p>
+          </div>
+
+          {!hiddenClientResolution && (
+            <div className="accountResearchAction">
+              {hiddenClientResolverEnabled ? (
+                <Link href={`/accounts/${account.slug}?resolveClient=1#hidden-client-resolver`}>
+                  Chercher des traces du client final →
+                </Link>
+              ) : (
+                <span>
+                  Resolver prêt · activation après sécurisation du cockpit
+                </span>
+              )}
+              <small>2 recherches Brave maximum · aucun crédit Kaspr.</small>
+            </div>
+          )}
+
+          {hiddenClientResolution?.available && hiddenClientResolution.candidates.length > 0 && (
+            <div className="accountResearchGrid">
+              {hiddenClientResolution.candidates.map((candidate) => (
+                <article key={candidate.candidate_url}>
+                  <div className="attentionLine">
+                    <span className="attentionBucket">TRACE POSSIBLE</span>
+                    <span>{candidate.candidate_domain}</span>
+                    <span>Similarité {candidate.similarity_score}/100</span>
+                  </div>
+                  <strong>{candidate.title || candidate.candidate_domain}</strong>
+                  {candidate.snippet && <p>{candidate.snippet}</p>}
+                  <small>Besoin d'origine : {candidate.source_signal_title}</small>
+                  <a href={candidate.candidate_url} target="_blank" rel="noreferrer">
+                    Vérifier cette trace ↗
+                  </a>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {hiddenClientResolution?.available && hiddenClientResolution.candidates.length === 0 && (
+            <div className="emptyState">
+              Aucune trace indépendante suffisamment similaire. Autonomia ne devine pas le client final.
+            </div>
+          )}
+
+          {shouldResolveClient && !hiddenClientResolverEnabled && (
+            <div className="emptyState">
+              Resolver désactivé tant que le cockpit n'est pas sécurisé.
+            </div>
+          )}
+
+          {hiddenClientResolution && !hiddenClientResolution.available && (
+            <div className="emptyState">
+              Resolver indisponible : {hiddenClientResolution.reason || "configuration manquante"}.
+            </div>
+          )}
+        </section>
+      )}
 
       {!account.intermediary_risk && (
         <section className="accountResearchPanel" id="account-research">
