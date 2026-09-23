@@ -10,37 +10,65 @@ WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
 
 mkdir -p "$APP_ROOT/.runtime"
 
-# The /api/internal/self-deploy route already launches this script detached.
-# Do not daemonize a second time: on shared hosting Passenger may reap that
-# grandchild before it can acquire the lock or write deployment logs.
-
+# The /api/internal/self-deploy route launches this script detached. Keep this
+# worker single-layered: Passenger already owns the HTTP lifecycle.
 DEBUG_FILE="$APP_ROOT/public/__autonomia_deploy_debug.txt"
+LOCK_TIMEOUT_SECONDS="${AUTONOMIA_PUBLIC_DEPLOY_LOCK_TIMEOUT_SECONDS:-180}"
 mkdir -p "$APP_ROOT/public"
-: > "$DEBUG_FILE"
+touch "$WORKER_LOG"
 
-# Server-side serialization: GitHub jobs can overlap or be cancelled after the
-# detached worker has already started. Lock the shared checkout/build directory
-# so only one public deploy can reset/build/restart Passenger at a time.
-PUBLIC_DEPLOY_LOCK="$APP_ROOT/.runtime/public-deploy.lock"
-exec 9>"$PUBLIC_DEPLOY_LOCK"
-if command -v flock >/dev/null 2>&1; then
-  echo "Waiting for public deploy lock..."
-  flock 9
-  echo "Public deploy lock acquired."
-else
-  PUBLIC_DEPLOY_LOCK_DIR="$PUBLIC_DEPLOY_LOCK.d"
-  echo "flock unavailable; waiting on mkdir deploy lock..."
-  while ! mkdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null; do
-    sleep 3
-  done
-  trap 'rmdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null || true' EXIT
-  echo "Fallback public deploy lock acquired."
-fi
+write_debug() {
+  local state="$1"
+  local detail="${2:-}"
+  {
+    printf 'timestamp=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf 'state=%s\n' "$state"
+    printf 'target_sha=%s\n' "${TARGET_SHA:-public-site-production}"
+    if [ -n "$detail" ]; then
+      printf 'detail=%s\n' "$detail"
+    fi
+  } > "$DEBUG_FILE"
+}
+
+write_debug "starting"
+
 if [ -t 1 ]; then
   echo "Interactive terminal detected; keeping deployment output on screen."
 else
   exec >> "$WORKER_LOG" 2>&1
 fi
+
+# Server-side serialization is a safety net in addition to the GitHub Actions
+# queue. A bounded wait prevents an orphaned worker from hiding the real cause
+# of a blocked deployment for an unlimited amount of time.
+PUBLIC_DEPLOY_LOCK="$APP_ROOT/.runtime/public-deploy.lock"
+exec 9>"$PUBLIC_DEPLOY_LOCK"
+if command -v flock >/dev/null 2>&1; then
+  echo "Waiting for public deploy lock (max ${LOCK_TIMEOUT_SECONDS}s)..."
+  write_debug "waiting-for-lock" "timeout=${LOCK_TIMEOUT_SECONDS}s"
+  if ! flock -w "$LOCK_TIMEOUT_SECONDS" 9; then
+    echo "Timed out waiting for public deploy lock." >&2
+    write_debug "lock-timeout" "another public worker still owns the build lock"
+    exit 75
+  fi
+  echo "Public deploy lock acquired."
+else
+  PUBLIC_DEPLOY_LOCK_DIR="$PUBLIC_DEPLOY_LOCK.d"
+  echo "flock unavailable; waiting on mkdir deploy lock (max ${LOCK_TIMEOUT_SECONDS}s)..."
+  write_debug "waiting-for-lock" "fallback=mkdir timeout=${LOCK_TIMEOUT_SECONDS}s"
+  LOCK_WAIT_STARTED="$SECONDS"
+  while ! mkdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null; do
+    if [ $((SECONDS - LOCK_WAIT_STARTED)) -ge "$LOCK_TIMEOUT_SECONDS" ]; then
+      echo "Timed out waiting for fallback public deploy lock." >&2
+      write_debug "lock-timeout" "fallback mkdir lock remained owned"
+      exit 75
+    fi
+    sleep 3
+  done
+  trap 'rmdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null || true' EXIT
+  echo "Fallback public deploy lock acquired."
+fi
+write_debug "lock-acquired"
 
 echo
 echo "=== PUBLIC DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
@@ -116,6 +144,7 @@ if [ -d .next/static ]; then
 fi
 
 echo "Building public site Next.js 15.5.18 with Webpack..."
+write_debug "building" "webpack production build"
 npm run build
 
 # During Passenger rolling restarts, an old worker can briefly keep serving old
@@ -127,71 +156,18 @@ if [ -d "$PREVIOUS_STATIC" ]; then
   cp -a "$PREVIOUS_STATIC"/. .next/static/
 fi
 
+write_debug "build-complete" "validating static assets"
+
 if ! find .next/static -type f \( -name '*.css' -o -name '*.js' \) -size +0c | grep -q .; then
   echo "Refusing deploy: Next static assets are missing after build." >&2
+  write_debug "failed" "Next static assets missing after build"
   exit 1
 fi
 
 mkdir -p .runtime tmp
 printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
 touch tmp/restart.txt
+write_debug "completed" "Passenger restart requested for $REMOTE_SHA"
 
 echo "Autonomia public site deployed and Passenger restart requested: $REMOTE_SHA"
 
-
-# Keep the cockpit synchronized too. The public-site worker survives o2switch
-# Passenger reliably, so it can bootstrap cockpit releases when the cockpit's
-# own detached worker is reaped by the hosting lifecycle.
-COCKPIT_ROOT="/home/dide4169/autonomia-cockpit-app"
-COCKPIT_ACTIVATE="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/activate"
-COCKPIT_BRANCH="main"
-
-if [ -d "$COCKPIT_ROOT/.git" ] && [ -f "$COCKPIT_ROOT/package.json" ]; then
-  echo "Checking cockpit synchronization..."
-  set +u
-  source "$COCKPIT_ACTIVATE"
-  set -u
-  cd "$COCKPIT_ROOT"
-
-  git fetch --depth=200 origin "$COCKPIT_BRANCH"
-  COCKPIT_SHA="$(git rev-parse "origin/$COCKPIT_BRANCH")"
-  COCKPIT_LOCAL_SHA="$(git rev-parse HEAD 2>/dev/null || true)"
-
-  COCKPIT_STAMP_FILE="$COCKPIT_ROOT/lib/runtime/buildStamp.generated.js"
-  COCKPIT_STAMP_OK="0"
-  if [ -f "$COCKPIT_STAMP_FILE" ] && grep -Fq "$COCKPIT_SHA" "$COCKPIT_STAMP_FILE"; then
-    COCKPIT_STAMP_OK="1"
-  fi
-
-  if [ "$COCKPIT_LOCAL_SHA" != "$COCKPIT_SHA" ] || [ "$COCKPIT_STAMP_OK" != "1" ]; then
-    echo "Syncing cockpit: $COCKPIT_LOCAL_SHA -> $COCKPIT_SHA"
-    git reset --hard "$COCKPIT_SHA"
-
-    if [ -x node_modules/.bin/next ]; then
-      echo "Reusing installed cockpit dependencies."
-    else
-      echo "Cockpit node_modules incomplete; installing dependencies."
-      npm install --no-audit --no-fund --package-lock=false
-    fi
-
-    export NODE_ENV=production
-    export NEXT_TELEMETRY_DISABLED=1
-    export UV_THREADPOOL_SIZE=1
-    export AUTONOMIA_DEPLOY_SHA="$COCKPIT_SHA"
-    unset GITHUB_SHA || true
-    unset NEXT_PUBLIC_SITE_URL || true
-
-    rm -rf .next
-    echo "Building cockpit with constrained o2switch worker settings..."
-    npm run build
-
-    mkdir -p .runtime tmp
-    printf '%s\n' "$COCKPIT_SHA" > .runtime/deployed-sha
-    touch tmp/restart.txt
-    echo "Cockpit synchronized and Passenger restart requested: $COCKPIT_SHA"
-  else
-    echo "Cockpit already at origin/$COCKPIT_BRANCH: $COCKPIT_SHA"
-  fi
-else
-  echo "Cockpit repo unavailable at $COCKPIT_ROOT; skipping cockpit sync."
-fi
