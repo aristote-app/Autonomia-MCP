@@ -47,7 +47,8 @@ git reset --hard "$REMOTE_SHA"
 npm install --no-audit --no-fund --package-lock=false
 npm run build
 
-mkdir -p tmp
+mkdir -p .runtime tmp
+printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
 touch tmp/restart.txt
 
 echo "Autonomia cockpit deployed: $REMOTE_SHA"
