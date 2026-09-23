@@ -88,6 +88,8 @@ jobs:
         run: npm run smoke:mcp
       - name: Smoke test GitHub OIDC deploy policy
         run: npm run smoke:deploy-oidc
+      - name: Validate o2switch deploy shell
+        run: bash -n scripts/o2switch-sync-cockpit.sh
       - name: Smoke test runtime integration settings allowlist
         run: npm run smoke:runtime-settings
       - name: Smoke test Talent Hunter
