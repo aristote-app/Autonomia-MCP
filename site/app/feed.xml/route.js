@@ -1,6 +1,7 @@
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "@/content/published-articles";
 
 function escapeXml(value = "") {
@@ -13,14 +14,14 @@ function escapeXml(value = "") {
 }
 
 function href(article, base) {
-  return article.type === "training"
-    ? `${base}/formation-ia/cas-usage/${article.slug}`
-    : `${base}/cas-usage-ia/${article.slug}`;
+  if (article.type === "training") return `${base}/formation-ia/cas-usage/${article.slug}`;
+  if (article.type === "territory") return `${base}/territoires/guides/${article.slug}`;
+  return `${base}/cas-usage-ia/${article.slug}`;
 }
 
 export async function GET() {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr").replace(/\/$/, "");
-  const articles = [...publishedExecutionArticles, ...publishedTrainingArticles]
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com").replace(/\/$/, "");
+  const articles = [...publishedExecutionArticles, ...publishedTrainingArticles, ...publishedTerritoryArticles]
     .sort((a, b) => String(b.publishedAt).localeCompare(String(a.publishedAt)));
 
   const latest = articles
@@ -45,9 +46,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0">
       <channel>
-        <title>Autonomia — Cas d’usage IA et formation</title>
+        <title>Autonomia — IA, formation et territoires</title>
         <link>${escapeXml(base)}</link>
-        <description>Guides Autonomia sur l’exécution IA, l’automatisation, les agents, le knowledge management et la montée en compétences.</description>
+        <description>Guides Autonomia sur l’exécution IA, l’automatisation, les agents, la formation et les usages IA des collectivités et territoires.</description>
         <language>fr-fr</language>
         <lastBuildDate>${latest ? new Date(latest).toUTCString() : new Date().toUTCString()}</lastBuildDate>
         ${items}
