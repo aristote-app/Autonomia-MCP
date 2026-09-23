@@ -129,3 +129,25 @@ if (charterTopic && managersTraining.score <= charterTopic.score) {
     "When a generic territory topic remains in the shortlist, a direct manager-training match must rank above it."
   );
 }
+
+
+const waterNetworkTerritory = prioritizeEditorialBacklog(
+  [
+    {
+      query: "Fourniture d'un outil d'optimisation de la performance des réseaux d'eau potable à l'aide de l'intelligence artificielle",
+      cluster: "Collectivités & territoires",
+      family: "territory-use-case",
+      public_procurement_mentions: 1,
+      territory_mentions: 5
+    }
+  ],
+  { max_results: 100 }
+);
+
+const waterTopic = waterNetworkTerritory.recommendations.find(
+  (item) => item.slug === "ia-pour-optimiser-un-reseau-d-eau-potable-cas-d-usage-donnees-et-garde-fous"
+);
+
+if (!waterTopic || waterTopic.evidence.matched_signals <= 0) {
+  throw new Error("A concrete water-network AI signal must produce an evidence-backed technical territory topic.");
+}
