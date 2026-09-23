@@ -85,6 +85,7 @@ export default function NeedBriefQuestionnaire() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [briefReady, setBriefReady] = useState(false);
+  const [solutionContext, setSolutionContext] = useState(null);
   const [data, setData] = useState({
     areas: [],
     companySize: "",
@@ -127,8 +128,33 @@ export default function NeedBriefQuestionnaire() {
       applyUseCase(event.detail);
     }
 
+    function onSolution(event) {
+      const detail = event.detail;
+      if (!detail?.original_query) return;
+
+      const roles = (detail.roles || []).map((item) => item.label).filter(Boolean);
+      const trainings = (detail.trainings || []).map((item) => item.title).filter(Boolean);
+
+      setSolutionContext(detail);
+      setData((current) => ({
+        ...current,
+        processToday: current.processToday || detail.original_query,
+        desiredResult: current.desiredResult || detail.summary || "",
+        constraints: current.constraints || [
+          roles.length ? `Métiers proposés : ${roles.join(", ")}` : null,
+          trainings.length ? `Formations proposées : ${trainings.join(", ")}` : null
+        ].filter(Boolean).join("\n")
+      }));
+      setStep(3);
+      setBriefReady(true);
+    }
+
     window.addEventListener("autonomia-usecase-selected", onUseCase);
-    return () => window.removeEventListener("autonomia-usecase-selected", onUseCase);
+    window.addEventListener("autonomia-solution-complete", onSolution);
+    return () => {
+      window.removeEventListener("autonomia-usecase-selected", onUseCase);
+      window.removeEventListener("autonomia-solution-complete", onSolution);
+    };
   }, []);
 
   const brief = useMemo(() => ({
@@ -208,12 +234,23 @@ export default function NeedBriefQuestionnaire() {
       email: data.email,
       phone: data.phone || null,
       company_name: data.company,
-      requested_service: "diagnostic_ia",
+      requested_service: solutionContext ? `solution_${solutionContext.route || "hybrid"}` : "diagnostic_ia",
       message,
       desired_timeline: data.timeline || null,
       company_size: data.companySize || null,
       form_id: "home-need-brief",
       need_brief: brief,
+      solution_context: solutionContext
+        ? {
+            source: solutionContext.source || "solution_finder",
+            original_query: solutionContext.original_query || null,
+            summary: solutionContext.summary || null,
+            route: solutionContext.route || null,
+            recommended_roles: solutionContext.roles || [],
+            recommended_training: solutionContext.trainings || [],
+            completed_at: solutionContext.created_at || null
+          }
+        : null,
       ...attribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
@@ -233,7 +270,7 @@ export default function NeedBriefQuestionnaire() {
       trackLeadConversion({
         form_id: "home-need-brief",
         mode: "diagnostic",
-        requested_service: "diagnostic_ia"
+        requested_service: solutionContext ? `solution_${solutionContext.route || "hybrid"}` : "diagnostic_ia"
       });
     } catch {
       setStatus("error");

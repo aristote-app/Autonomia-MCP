@@ -13587,3 +13587,410 @@ body:has(.territoryCampaignPage) .desktopNav {
     padding-bottom: 82px;
   }
 }
+
+
+/* Homepage AI diagnostic hero */
+.homeHeroDiagnostic {
+  display: grid;
+  gap: 36px;
+  align-items: start;
+}
+
+.homeHeroDiagnostic .heroCopy,
+.homeHeroDiagnostic .heroDiagnostic {
+  position: relative;
+  z-index: 1;
+}
+
+.homeHeroDiagnostic .heroCopy {
+  max-width: none;
+}
+
+.heroDiagnostic {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(247, 245, 240, .18);
+  border-radius: 14px;
+  background: rgba(18, 27, 45, .95);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+}
+
+.solutionFinder {
+  min-width: 0;
+  color: var(--paper);
+}
+
+.solutionFinderTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-dark);
+  color: rgba(247, 245, 240, .58);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.solutionFinderTopline > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--paper);
+}
+
+.scanLiveDot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 5px rgba(255, 200, 87, .1);
+}
+
+.solutionFinderForm {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.solutionFinderForm label {
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  font-weight: 600;
+}
+
+.solutionFinderForm textarea {
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid rgba(247, 245, 240, .18);
+  border-radius: 9px;
+  outline: none;
+  background: rgba(255, 255, 255, .045);
+  color: var(--paper);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: border-color .18s ease, background .18s ease;
+}
+
+.solutionFinderForm textarea::placeholder {
+  color: rgba(247, 245, 240, .38);
+}
+
+.solutionFinderForm textarea:focus {
+  border-color: var(--signal);
+  background: rgba(255, 255, 255, .065);
+}
+
+.solutionFinderSubmit {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+}
+
+.solutionFinderSubmit > span {
+  color: rgba(247, 245, 240, .48);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.solutionFinderSubmit button,
+.solutionHandoff button {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--signal);
+  border-radius: 8px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.solutionFinderSubmit button:disabled {
+  cursor: progress;
+  opacity: .65;
+}
+
+.solutionExamples {
+  display: grid;
+  gap: 1px;
+  border-top: 1px solid var(--line-dark);
+  background: var(--line-dark);
+}
+
+.solutionExamples button {
+  padding: 11px 14px;
+  border: 0;
+  background: var(--ink);
+  color: rgba(247, 245, 240, .65);
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.solutionExamples button:hover {
+  color: var(--paper);
+  background: var(--ink-2);
+}
+
+.solutionFinderError {
+  margin: 0;
+  padding: 12px 18px;
+  border-top: 1px solid rgba(255, 130, 130, .28);
+  color: #ffd1d1;
+  font-size: 12px;
+}
+
+.solutionResult {
+  border-top: 1px solid var(--line-dark);
+  background: rgba(12, 20, 34, .98);
+}
+
+.solutionResultIntro {
+  display: grid;
+  gap: 9px;
+  padding: 18px;
+}
+
+.solutionResultIntro > span,
+.solutionLaneHeading small,
+.solutionTrainingCard small,
+.solutionHandoff small {
+  color: var(--signal);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.solutionResultIntro h2 {
+  margin: 0;
+  font-size: clamp(27px, 3.2vw, 40px);
+  line-height: 1;
+  letter-spacing: -.045em;
+  font-weight: 600;
+}
+
+.solutionResultIntro p,
+.solutionResultIntro small {
+  margin: 0;
+  color: rgba(247, 245, 240, .64);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.solutionLane {
+  padding: 0 18px 18px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.solutionLaneHeading {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 16px 0;
+}
+
+.solutionLaneHeading > span {
+  color: rgba(247, 245, 240, .38);
+  font-size: 9px;
+}
+
+.solutionLaneHeading h3 {
+  margin: 2px 0 0;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -.03em;
+}
+
+.solutionRoleGrid,
+.solutionTrainingGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.solutionRoleCard,
+.solutionTrainingCard {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line-dark);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .035);
+}
+
+.solutionCardTop {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.solutionCardTop > span,
+.solutionTrainingCard > strong {
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.solutionCardTop a,
+.solutionTrainingCard > span {
+  flex: 0 0 auto;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.solutionRoleCard > p,
+.solutionTrainingCard p {
+  margin: 0;
+  color: rgba(247, 245, 240, .62);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.solutionExpertList {
+  display: grid;
+  gap: 8px;
+}
+
+.solutionExpertCard {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.solutionExpertCard > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.solutionExpertCard > div > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  aspect-ratio: 1;
+  border-radius: 7px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.solutionExpertCard strong {
+  font-size: 12px;
+}
+
+.solutionExpertCard ul {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(247, 245, 240, .64);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.solutionExpertCard small {
+  color: rgba(247, 245, 240, .42);
+  font-size: 9px;
+}
+
+.solutionNoExpert {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border-top: 1px solid var(--line-dark);
+  color: rgba(247, 245, 240, .6);
+  font-size: 10px;
+}
+
+.solutionNoExpert strong {
+  color: var(--paper);
+}
+
+.solutionHandoff {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-top: 1px solid var(--line-dark);
+  background: rgba(255, 200, 87, .055);
+}
+
+.solutionHandoff > div {
+  display: grid;
+  gap: 5px;
+}
+
+.solutionHandoff strong {
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.solutionHandoff p {
+  margin: 0;
+  color: rgba(247, 245, 240, .58);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+@media (min-width: 620px) {
+  .solutionFinderSubmit {
+    grid-template-columns: 1fr auto;
+  }
+
+  .solutionExamples {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .solutionTrainingGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .solutionHandoff {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1080px) {
+  .homeHeroDiagnostic {
+    grid-template-columns: minmax(0, 1.08fr) minmax(450px, .92fr);
+    gap: clamp(34px, 4vw, 64px);
+    padding-top: 82px;
+    padding-bottom: 58px;
+  }
+
+  .homeHeroDiagnostic .heroCopy {
+    padding-top: 10px;
+  }
+
+  .homeHeroDiagnostic h1 {
+    max-width: 780px;
+    font-size: clamp(58px, 5.7vw, 88px);
+  }
+
+  .homeHeroDiagnostic .heroText {
+    max-width: 690px;
+    font-size: clamp(18px, 1.55vw, 23px);
+  }
+
+  .heroDiagnostic {
+    align-self: start;
+  }
+}
+
+@media (min-width: 1380px) {
+  .homeHeroDiagnostic {
+    grid-template-columns: minmax(0, 1.1fr) minmax(500px, .9fr);
+  }
+}
