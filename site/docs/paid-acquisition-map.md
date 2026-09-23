@@ -72,6 +72,8 @@ Les autres LP restent indexables et prêtes techniquement. Leur ordre d’activa
 - `autonomia_lab_module_open` : ouverture d’un module AUTONOMIA LAB sur les LP métier/secteur.
 - `autonomia_lab_interaction` : clic dans une micro-app AUTONOMIA LAB.
 - `autonomia_lab_control_change` : modification d’un slider, champ, select ou contrôle AUTONOMIA LAB.
+- `autonomia_lab_cta_click` : passage d’une micro-app métier/secteur vers le formulaire contextualisé.
+- `problem_lead_prefill` / `observatory_lead_prefill` : contexte de démo transféré au champ besoin sans écraser une saisie existante.
 - `problem_demo_cta_click` : clic vers la zone de démonstration depuis le hero.
 - `problem_cta_click` : clic vers le formulaire depuis le flux ou le CTA final.
 - `problem_lp_lead_submit` : tentative d’envoi du formulaire.
@@ -86,7 +88,7 @@ Chaîne cible :
 
 **mot-clé → annonce → headline LP cohérente → formulaire court → Autonomia-MCP**
 
-Les LP consultant / Academy conservent leur configuration Ads dans `site/lib/pages.js`. Les 27 LP problèmes utilisent le registre dédié `site/content/problem-paid-search.js` : intention principale, requêtes secondaires, négatifs, angle d’annonce et score interne sur douleur, démonstrabilité, valeur économique, intention paid et capacité de delivery. Ces scores sont des heuristiques de priorisation, pas des volumes Google Ads.
+Les LP consultant / Academy conservent leur configuration Ads dans `site/lib/pages.js`. Les 27 LP problèmes utilisent le registre dédié `site/content/problem-paid-search.js` : intention principale, requêtes secondaires, négatifs, angle d’annonce et score interne sur douleur, démonstrabilité, valeur économique, intention paid et capacité de delivery. Les 10 LP Priorité 1 disposent en plus de créations RSA vérifiées dans `site/content/problem-paid-creatives.js`. Le script `npm run ads:problem-export` produit les CSV de lancement dans `site/generated/google-ads/` (annonces responsives, mots-clés exact/phrase et négatifs). Ces scores sont des heuristiques de priorisation, pas des volumes Google Ads.
 
 ## Meta — trafic froid
 
@@ -214,6 +216,9 @@ La puissance perçue doit venir de la clarté du système Autonomia et non de pr
 - autonomia_lab_module_open
 - autonomia_lab_interaction
 - autonomia_lab_control_change
+- autonomia_lab_cta_click
+- problem_lead_prefill
+- observatory_lead_prefill
 - observatory_lead_submit
 - generate_lead
 
