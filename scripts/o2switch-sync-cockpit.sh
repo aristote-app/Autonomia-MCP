@@ -121,7 +121,7 @@ if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; th
   npm run content:validate
   npm run build
   mkdir -p .runtime tmp
-  printf '%s\n' "$PUBLIC_PROD_SHA" > .runtime/deployed-sha
+  printf '%s\n' "$PUBLIC_PROD_SHA" > "$PUBLIC_PROD_APP/.runtime/deployed-sha"
   touch tmp/restart.txt
   echo "Production public site synced: $PUBLIC_PROD_SHA"
 
