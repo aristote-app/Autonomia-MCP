@@ -3,9 +3,11 @@ import {
   executionPillars,
   trainingPillars
 } from "@/content/editorial-backlog";
+import { territoryPillars } from "@/content/territory-editorial";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "@/content/published-articles";
 
 const ORGANIC_RELEASE_DATE = "2026-09-20";
@@ -53,6 +55,14 @@ export function getIndexableUrlRecords(base) {
     lastModified: ORGANIC_RELEASE_DATE
   }));
 
+  const territoryPillarPages = territoryPillars.map((pillar) => ({
+    url: `${base}/territoires/guides/${pillar.slug}`,
+    kind: "territory-pillar",
+    priority: 0.84,
+    changeFrequency: "weekly",
+    lastModified: "2026-09-23"
+  }));
+
   const executionArticles = publishedExecutionArticles.map((article) => ({
     url: `${base}/cas-usage-ia/${article.slug}`,
     kind: "execution-article",
@@ -69,13 +79,23 @@ export function getIndexableUrlRecords(base) {
     lastModified: article.modifiedAt || article.publishedAt
   }));
 
+  const territoryArticles = publishedTerritoryArticles.map((article) => ({
+    url: `${base}/territoires/guides/${article.slug}`,
+    kind: "territory-article",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: article.modifiedAt || article.publishedAt
+  }));
+
   return [
     ...staticPages,
     ...commercialPages,
     ...executionPillarPages,
     ...trainingPillarPages,
+    ...territoryPillarPages,
     ...executionArticles,
-    ...trainingArticles
+    ...trainingArticles,
+    ...territoryArticles
   ];
 }
 
