@@ -19,6 +19,17 @@ assert.equal(malt.skills.includes("LangGraph"), true);
 assert.equal(malt.skills.includes("RAG"), true);
 assert.ok(malt.relevance_score >= 55);
 
+const regionalMalt = parseTalentSearchResult({
+  title: "Ashley Martins, Consultante IA Audit Formation - Malt",
+  url: "https://fr.malt.be/profile/ashleymartins",
+  description: "Consultante IA freelance Paris Gouvernance IA Formation IA générative n8n Make 500 € / jour"
+}, "Consultant stratégie intelligence artificielle GenAI freelance");
+
+assert.equal(regionalMalt.source_platform, "malt");
+assert.equal(regionalMalt.display_name, "Ashley Martins");
+assert.equal(regionalMalt.tjm, 500);
+assert.equal(regionalMalt.locations.includes("Paris"), true);
+
 const linkedin = parseTalentSearchResult({
   title: "John Doe - Freelance AI Engineer | LinkedIn",
   url: "https://fr.linkedin.com/in/john-doe",
