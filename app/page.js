@@ -13,6 +13,7 @@ import { searchJobSignals } from "../lib/db/jobSignals.js";
 import { getTeamWorkflowContext, queueKey } from "../lib/db/workItems.js";
 import { getCurrentWorkspaceMembership } from "../lib/auth/access.js";
 import { listWorkspaceSalesContacts } from "../lib/db/salesContacts.js";
+import { listInboundLeads } from "../lib/db/inboundLeads.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
 import {
   claimWorkItem,
@@ -264,19 +265,30 @@ export default async function Home({ searchParams }) {
   const hasWorkspaceSession = Boolean(
     privateContext?.claims?.sub && privateContext?.membership?.workspace_id
   );
-  const privateContacts =
+  const [privateContacts, inboundLeads] =
     live && hasWorkspaceSession
-      ? await listWorkspaceSalesContacts({
-          workspaceId: privateContext.membership.workspace_id,
-          limit: 500
-        }).catch(() => [])
-      : [];
+      ? await Promise.all([
+          listWorkspaceSalesContacts({
+            workspaceId: privateContext.membership.workspace_id,
+            limit: 500
+          }).catch(() => []),
+          listInboundLeads({
+            workspaceId: privateContext.membership.workspace_id,
+            limit: 200
+          }).catch(() => [])
+        ])
+      : [[], []];
+
   const revenueActions =
     live && hasWorkspaceSession
       ? buildRevenueActions({
           accounts: live.accounts || [],
           contacts: privateContacts,
-          kasprReady: Boolean(process.env.KASPR_API_KEY),
+          inboundLeads,
+          kasprReady: Boolean(
+            process.env.KASPR_API_KEY &&
+            String(process.env.KASPR_DATA_TO_GET || "").trim()
+          ),
           waalaxyReady: Boolean(process.env.WAALAXY_API_KEY),
           limit: 8
         })
@@ -314,6 +326,7 @@ export default async function Home({ searchParams }) {
             </small>
           )}
           <Link className="adminNav" href="/accounts">Comptes 360°</Link>
+          <Link className="adminNav" href="/inbound">Inbound</Link>
           <Link className="adminNav" href="/contacts">Contacts</Link>
           <Link className="adminNav" href="/learning">Learning</Link>
           <Link className="adminNav" href="/integrations">Intégrations</Link>
@@ -354,9 +367,11 @@ export default async function Home({ searchParams }) {
                       )}
                     </div>
                     <div className="revenueActionOpen">
-                      {action.account_key && (
+                      {action.href ? (
+                        <Link href={action.href}>Ouvrir →</Link>
+                      ) : action.account_key ? (
                         <Link href={`/accounts/${action.account_key}`}>Ouvrir →</Link>
-                      )}
+                      ) : null}
                     </div>
                   </article>
                 ))}
