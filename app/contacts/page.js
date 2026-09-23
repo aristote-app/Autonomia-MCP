@@ -216,30 +216,12 @@ export default async function ContactsPage({ searchParams }) {
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   const canWrite = hasSession && context.membership.role !== "viewer";
 
-  if (!hasSession) {
-    return (
-      <main>
-        <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
-        <header className="integrationHero">
-          <p className="eyebrow">AUTONOMIA · COMMERCIAL MEMORY</p>
-          <h1>Contacts</h1>
-          <p className="lede">
-            Cette zone contient des données de prospection et reste fermée tant que
-            l'authentification du cockpit n'est pas activée.
-          </p>
-        </header>
-        <div className="lockedContactState">
-          <strong>Zone sécurisée prête</strong>
-          <span>Aucune donnée personnelle n'est exposée sans session de workspace.</span>
-        </div>
-      </main>
-    );
-  }
-
-  const contacts = await listWorkspaceSalesContacts({
-    workspaceId: context.membership.workspace_id,
-    limit: 500
-  }).catch(() => []);
+  const contacts = hasSession
+    ? await listWorkspaceSalesContacts({
+        workspaceId: context.membership.workspace_id,
+        limit: 500
+      }).catch(() => [])
+    : [];
 
   const visible = filterContacts(contacts, active);
 

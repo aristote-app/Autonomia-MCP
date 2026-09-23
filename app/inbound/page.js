@@ -64,30 +64,12 @@ export default async function InboundPage({ searchParams }) {
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   const canWrite = hasSession && context.membership.role !== "viewer";
 
-  if (!hasSession) {
-    return (
-      <main>
-        <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
-        <header className="integrationHero">
-          <p className="eyebrow">AUTONOMIA · INBOUND</p>
-          <h1>Leads entrants</h1>
-          <p className="lede">
-            Les formulaires du site, landing pages et campagnes alimentent cette zone sans exposer
-            les données personnelles publiquement.
-          </p>
-        </header>
-        <div className="lockedContactState">
-          <strong>Inbox privée prête</strong>
-          <span>Elle devient visible après activation de l'authentification du workspace.</span>
-        </div>
-      </main>
-    );
-  }
-
-  const leads = await listInboundLeads({
-    workspaceId: context.membership.workspace_id,
-    limit: 500
-  }).catch(() => []);
+  const leads = hasSession
+    ? await listInboundLeads({
+        workspaceId: context.membership.workspace_id,
+        limit: 500
+      }).catch(() => [])
+    : [];
 
   const visible = filtered(leads, active);
 

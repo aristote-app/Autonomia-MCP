@@ -59,28 +59,6 @@ export default async function ConsultantsPage({ searchParams }) {
     linkedin: 0
   }));
 
-  if (!hasSession) {
-    return (
-      <main>
-        <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
-        <header className="integrationHero">
-          <p className="eyebrow">AUTONOMIA · CONSULTANT INTELLIGENCE</p>
-          <h1>Consultants.</h1>
-          <p className="lede">
-            Pool privé pour le matching mission ↔ consultant et l'approche proactive des comptes.
-          </p>
-        </header>
-        <div className="lockedContactState">
-          <strong>Pool privé prêt</strong>
-          <span>Visible uniquement après authentification du workspace.</span>
-          <span>
-            Talent Hunter : {discoverySummary.candidates} candidat{discoverySummary.candidates > 1 ? "s" : ""} en attente de validation.
-          </span>
-        </div>
-      </main>
-    );
-  }
-
   const [consultants, candidates, summary, accountResult] = await Promise.all([
     listConsultantsWithSkills({ limit: 500 }).catch(() => []),
     listConsultantCandidates({ limit: 120 }).catch(() => []),
@@ -210,7 +188,7 @@ export default async function ConsultantsPage({ searchParams }) {
         <article><strong>{summary.tjm_known}</strong><span>TJM connus</span></article>
       </section>
 
-      {canImport && candidates.length > 0 && (
+      {candidates.length > 0 && (
         <section className="talentCandidateSection">
           <div className="sectionTitle">
             <div>
@@ -252,16 +230,20 @@ export default async function ConsultantsPage({ searchParams }) {
                       Vérifier le profil source ↗
                     </a>
                   )}
-                  <form action={reviewConsultantCandidate}>
-                    <input type="hidden" name="consultant_id" value={candidate.id} />
-                    <input type="hidden" name="decision" value="approve" />
-                    <button type="submit">Valider dans le pool</button>
-                  </form>
-                  <form action={reviewConsultantCandidate}>
-                    <input type="hidden" name="consultant_id" value={candidate.id} />
-                    <input type="hidden" name="decision" value="reject" />
-                    <button type="submit" className="secondary">Rejeter</button>
-                  </form>
+                  {canImport && (
+                    <>
+                      <form action={reviewConsultantCandidate}>
+                        <input type="hidden" name="consultant_id" value={candidate.id} />
+                        <input type="hidden" name="decision" value="approve" />
+                        <button type="submit">Valider dans le pool</button>
+                      </form>
+                      <form action={reviewConsultantCandidate}>
+                        <input type="hidden" name="consultant_id" value={candidate.id} />
+                        <input type="hidden" name="decision" value="reject" />
+                        <button type="submit" className="secondary">Rejeter</button>
+                      </form>
+                    </>
+                  )}
                 </div>
               </article>
             ))}

@@ -344,7 +344,6 @@ export default async function Home({ searchParams }) {
           <Link className="adminNav" href="/learning">Learning</Link>
           <Link className="adminNav" href="/integrations">Intégrations</Link>
           <Link className="adminNav" href="/territoires">Territoires</Link>
-          <Link className="adminNav" href="/admin">Admin</Link>
         </div>
       </header>
 

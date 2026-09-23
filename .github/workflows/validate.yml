@@ -92,3 +92,5 @@ jobs:
         run: npm run smoke:runtime-settings
       - name: Smoke test Talent Hunter
         run: npm run smoke:talent-hunter
+      - name: Smoke test no admin view gates
+        run: npm run smoke:no-admin-gates
