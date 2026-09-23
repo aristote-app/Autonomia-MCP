@@ -344,6 +344,7 @@ export default async function Home({ searchParams }) {
                       <div className="attentionLine">
                         <span className="attentionBucket">{action.label}</span>
                         <span>{action.account_name}</span>
+                        {action.channel && <span>Canal · {action.channel}</span>}
                       </div>
                       <strong>{action.contact_name || action.account_name}</strong>
                       {action.trigger && <p>Signal : {action.trigger}</p>}
