@@ -62,6 +62,27 @@ function normalizeSignal(signal) {
   };
 }
 
+const TERRITORY_SIGNAL_TERMS = [
+  "formation","former","acculturation","sensibilisation","competence","competences",
+  "agent","agents","manager","managers","referent","referents","elu","elus",
+  "direction","directions","charte","gouvernance","verification","verifier",
+  "tpe","pme","entreprise","entreprises","developpement","economique",
+  "assistant","automatisation","processus","usager","usagers","data","donnees"
+];
+
+function territoryLexicalAffinity(topicTitle, signalQuery) {
+  const left = normalize(topicTitle);
+  const right = normalize(signalQuery);
+  let shared = 0;
+
+  for (const term of TERRITORY_SIGNAL_TERMS) {
+    if (left.includes(term) && right.includes(term)) shared += 1;
+  }
+
+  if (!shared) return 0;
+  return Math.min(0.95, 0.38 + shared * 0.16);
+}
+
 function matchStrength(topic, signal) {
   if (signal.family && signal.family !== topic.type) return 0;
 
@@ -72,6 +93,11 @@ function matchStrength(topic, signal) {
         normalize(topic.cluster) === normalize(signal.cluster) ? 1 : 0
       )
     : 0;
+
+  if (topic.type === "territory-use-case") {
+    const lexicalAffinity = territoryLexicalAffinity(topic.title, signal.query);
+    return Math.max(querySimilarity, lexicalAffinity, clusterSimilarity * 0.28);
+  }
 
   return Math.max(querySimilarity, clusterSimilarity * 0.85);
 }
