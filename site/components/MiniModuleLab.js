@@ -104,6 +104,48 @@ function ValueStrip({ blueprint }) {
   );
 }
 
+function ImpactSimulator() {
+  const [volume, setVolume] = useState(80);
+  const [manualMinutes, setManualMinutes] = useState(12);
+  const [assistedMinutes, setAssistedMinutes] = useState(4);
+
+  const monthlyHours = Math.max(
+    0,
+    Math.round((((manualMinutes - assistedMinutes) * volume * 4.33) / 60) * 10) / 10
+  );
+
+  return (
+    <div className="wowImpact">
+      <div className="wowImpactIntro">
+        <span>SIMULATION INDICATIVE</span>
+        <strong>Et chez vous, qu’est-ce que cela pourrait représenter ?</strong>
+        <small>Modifiez vos propres hypothèses. Ce calcul n’est pas une promesse de performance.</small>
+      </div>
+
+      <div className="wowImpactControls">
+        <label>
+          <span>Volume / semaine <b>{volume}</b></span>
+          <input type="range" min="5" max="500" step="5" value={volume} onChange={(e)=>setVolume(Number(e.target.value))} />
+        </label>
+        <label>
+          <span>Temps actuel / unité <b>{manualMinutes} min</b></span>
+          <input type="range" min="1" max="60" value={manualMinutes} onChange={(e)=>setManualMinutes(Number(e.target.value))} />
+        </label>
+        <label>
+          <span>Temps assisté estimé <b>{assistedMinutes} min</b></span>
+          <input type="range" min="0" max={manualMinutes} value={Math.min(assistedMinutes, manualMinutes)} onChange={(e)=>setAssistedMinutes(Number(e.target.value))} />
+        </label>
+      </div>
+
+      <div className="wowImpactResult">
+        <span>TEMPS POTENTIELLEMENT RENDU</span>
+        <strong>{monthlyHours} h</strong>
+        <small>par mois · selon les hypothèses ci-dessus</small>
+      </div>
+    </div>
+  );
+}
+
 function RankingExperience({ topic, module, blueprint }) {
   const c = ctx(topic);
   const [speed, setSpeed] = useState(60);
@@ -453,6 +495,7 @@ export default function MiniModuleLab({ topic }) {
 
           <Experience type={blueprint.type} topic={topic} module={module} blueprint={blueprint} />
           <ValueStrip blueprint={blueprint} />
+          <ImpactSimulator />
         </div>
       </div>
     </section>
