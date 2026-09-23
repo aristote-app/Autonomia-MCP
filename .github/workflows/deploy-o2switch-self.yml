@@ -1,0 +1,42 @@
+name: deploy-o2switch-self
+
+on:
+  workflow_run:
+    workflows:
+      - validate
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger guarded o2switch self-deploy
+        env:
+          DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
+          DEPLOY_TOKEN: ${{ secrets.AUTONOMIA_SELF_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$DEPLOY_TOKEN" ]; then
+            echo "AUTONOMIA_SELF_DEPLOY_TOKEN is not configured; deployment trigger skipped."
+            exit 0
+          fi
+
+          HTTP_CODE="$(curl -sS             -o /tmp/autonomia-self-deploy.json             -w "%{http_code}"             -X POST "$DEPLOY_URL"             -H "x-autonomia-token: $DEPLOY_TOKEN")"
+
+          cat /tmp/autonomia-self-deploy.json
+
+          if [ "$HTTP_CODE" = "202" ]; then
+            echo "o2switch self-deploy accepted."
+            exit 0
+          fi
+
+          echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE."
+          exit 1
