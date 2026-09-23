@@ -19,6 +19,7 @@ export default function IntegrationsPage() {
     ),
     kaspr: Boolean(process.env.KASPR_API_KEY),
     waalaxy: Boolean(process.env.WAALAXY_API_KEY),
+    waalaxyReply: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
     decisionDiscovery:
       process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
@@ -79,6 +80,15 @@ export default function IntegrationsPage() {
           <p>
             Le connecteur API Autonomia est prêt pour importer un profil LinkedIn dans une liste
             Waalaxy et, si choisi, l'inscrire à une campagne.
+          </p>
+        </article>
+
+        <article>
+          <State ready={states.waalaxyReply} label="Waalaxy Reply Sync" />
+          <h2>Réponses → CRM Autonomia</h2>
+          <p>
+            Endpoint webhook prêt pour recevoir directement la synchronisation « CRM Sync on reply »,
+            reconnaître le contact par identifiant exact et passer automatiquement le pipeline à Réponse.
           </p>
         </article>
 
