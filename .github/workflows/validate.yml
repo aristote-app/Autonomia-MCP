@@ -88,3 +88,5 @@ jobs:
         run: npm run smoke:mcp
       - name: Smoke test GitHub OIDC deploy policy
         run: npm run smoke:deploy-oidc
+      - name: Smoke test runtime integration settings allowlist
+        run: npm run smoke:runtime-settings

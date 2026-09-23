@@ -35,7 +35,8 @@
     "smoke:consultant-import": "node scripts/smoke-consultant-import.mjs",
     "smoke:account-watch": "node scripts/smoke-account-watch.mjs",
     "smoke:company-registry": "node scripts/smoke-company-registry.mjs",
-    "smoke:deploy-oidc": "node scripts/smoke-deploy-oidc.mjs"
+    "smoke:deploy-oidc": "node scripts/smoke-deploy-oidc.mjs",
+    "smoke:runtime-settings": "node scripts/smoke-runtime-settings.mjs"
   },
   "engines": {
     "node": ">=22"

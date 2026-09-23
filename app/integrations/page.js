@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getCurrentWorkspaceMembership, canManageWorkspace } from "../../lib/auth/access.js";
+import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
+import { saveIntegrationSettings } from "../actions/integration-settings.js";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +13,20 @@ function State({ ready, label }) {
   );
 }
 
-export default function IntegrationsPage() {
+export default async function IntegrationsPage() {
+  const context = await getCurrentWorkspaceMembership().catch(() => ({
+    configured: false,
+    claims: null,
+    membership: null
+  }));
+  const canManage = Boolean(
+    context?.claims?.sub &&
+    context?.membership &&
+    canManageWorkspace(context.membership.role)
+  );
+  const runtimeState = canManage
+    ? await runtimeIntegrationStatus().catch(() => null)
+    : null;
   const states = {
     brave: Boolean(process.env.BRAVE_SEARCH_API_KEY),
     franceTravail: Boolean(
@@ -30,9 +46,7 @@ export default function IntegrationsPage() {
     accountResearch:
       process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
-    selfDeploy:
-      process.env.AUTONOMIA_SELF_DEPLOY_ENABLED === "true" &&
-      Boolean(process.env.AUTONOMIA_INTERNAL_TOKEN)
+    selfDeploy: true
   };
 
   return (
@@ -51,6 +65,109 @@ export default function IntegrationsPage() {
           </p>
         </div>
       </header>
+
+      {canManage && (
+        <section className="integrationSettingsPanel">
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">CONNEXIONS SERVEUR</p>
+              <h2>Brancher sans terminal.</h2>
+            </div>
+            <p>
+              Les champs secrets ne sont jamais préremplis. Laisser un champ vide conserve la valeur
+              actuelle ; cocher « effacer » la supprime du stockage serveur.
+            </p>
+          </div>
+
+          <form action={saveIntegrationSettings} className="integrationSettingsForm">
+            <fieldset>
+              <legend>Kaspr</legend>
+              <label>
+                <span>API key</span>
+                <input
+                  type="password"
+                  name="KASPR_API_KEY"
+                  autoComplete="new-password"
+                  placeholder={runtimeState?.configured?.KASPR_API_KEY ? "Configurée · laisser vide pour conserver" : "À renseigner"}
+                />
+              </label>
+              <label>
+                <span>Champs Kaspr autorisés</span>
+                <input
+                  name="KASPR_DATA_TO_GET"
+                  placeholder={runtimeState?.configured?.KASPR_DATA_TO_GET ? "Configurés · laisser vide pour conserver" : "IDs/champs autorisés selon ton compte Kaspr"}
+                />
+              </label>
+              <label className="integrationClear">
+                <input type="checkbox" name="clear_KASPR_API_KEY" />
+                <span>Effacer la clé Kaspr enregistrée</span>
+              </label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Waalaxy</legend>
+              <label>
+                <span>API key</span>
+                <input
+                  type="password"
+                  name="WAALAXY_API_KEY"
+                  autoComplete="new-password"
+                  placeholder={runtimeState?.configured?.WAALAXY_API_KEY ? "Configurée · laisser vide pour conserver" : "À renseigner"}
+                />
+              </label>
+              <label>
+                <span>Token webhook réponses</span>
+                <input
+                  type="password"
+                  name="AUTONOMIA_WAALAXY_WEBHOOK_TOKEN"
+                  autoComplete="new-password"
+                  placeholder={runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ? "Configuré · laisser vide pour conserver" : "Secret fort choisi pour le webhook"}
+                />
+              </label>
+              <label className="integrationClear">
+                <input type="checkbox" name="clear_WAALAXY_API_KEY" />
+                <span>Effacer la clé Waalaxy enregistrée</span>
+              </label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Acquisition & recherche</legend>
+              <label>
+                <span>Token leads entrants</span>
+                <input
+                  type="password"
+                  name="AUTONOMIA_INBOUND_TOKEN"
+                  autoComplete="new-password"
+                  placeholder={runtimeState?.configured?.AUTONOMIA_INBOUND_TOKEN ? "Configuré · laisser vide pour conserver" : "Secret pour l'API inbound"}
+                />
+              </label>
+              <label className="integrationToggle">
+                <input
+                  type="checkbox"
+                  name="account_research_enabled"
+                  defaultChecked={Boolean(runtimeState?.flags?.account_research)}
+                />
+                <span>Activer Account Researcher</span>
+              </label>
+              <label className="integrationToggle">
+                <input
+                  type="checkbox"
+                  name="decision_discovery_enabled"
+                  defaultChecked={Boolean(runtimeState?.flags?.decision_discovery)}
+                />
+                <span>Activer Decision Maker Finder</span>
+              </label>
+            </fieldset>
+
+            <div className="integrationSettingsFooter">
+              <button type="submit">Enregistrer côté serveur</button>
+              <small>
+                Fichier .runtime ignoré par Git · permissions 600 · jamais renvoyé par l'API health.
+              </small>
+            </div>
+          </form>
+        </section>
+      )}
 
       <section className="integrationGrid">
         <article>

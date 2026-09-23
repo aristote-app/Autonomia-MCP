@@ -1,4 +1,29 @@
 const { createServer } = require("node:http");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
+
+const RUNTIME_INTEGRATION_KEYS = new Set([
+  "KASPR_API_KEY",
+  "KASPR_DATA_TO_GET",
+  "WAALAXY_API_KEY",
+  "AUTONOMIA_WAALAXY_WEBHOOK_TOKEN",
+  "AUTONOMIA_INBOUND_TOKEN",
+  "AUTONOMIA_ACCOUNT_RESEARCH_ENABLED",
+  "AUTONOMIA_DECISION_DISCOVERY_ENABLED"
+]);
+
+try {
+  const runtimeFile = join(process.cwd(), ".runtime", "integration-settings.json");
+  const parsed = JSON.parse(readFileSync(runtimeFile, "utf8"));
+  for (const [key, value] of Object.entries(parsed?.values || {})) {
+    if (RUNTIME_INTEGRATION_KEYS.has(key) && typeof value === "string" && value) {
+      process.env[key] = value;
+    }
+  }
+} catch {
+  // Runtime integration settings are optional.
+}
+
 
 // o2switch/Passenger runtime bridge: keep server-only config dynamic after build.
 if (!process.env.SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL) {
