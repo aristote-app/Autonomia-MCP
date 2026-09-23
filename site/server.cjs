@@ -1,15 +1,26 @@
 const { createServer } = require("node:http");
 const next = require("next");
 
-const port = Number(process.env.PORT || 3000);
+const fallbackPort = Number(process.env.PORT || 3000);
 const hostname = "0.0.0.0";
-const app = next({ dev: false, hostname, port });
+const app = next({ dev: false, hostname, port: fallbackPort });
 const handle = app.getRequestHandler();
+
+if (typeof PhusionPassenger !== "undefined") {
+  PhusionPassenger.configure({ autoInstall: false });
+}
 
 app.prepare()
   .then(() => {
-    createServer((req, res) => handle(req, res)).listen(port, hostname, () => {
-      console.log(`Autonomia public site listening on ${hostname}:${port}`);
+    const server = createServer((req, res) => handle(req, res));
+    const target = typeof PhusionPassenger !== "undefined" ? "passenger" : fallbackPort;
+
+    server.listen(target, hostname, () => {
+      console.log(
+        typeof PhusionPassenger !== "undefined"
+          ? "Autonomia public site listening through Passenger"
+          : `Autonomia public site listening on ${hostname}:${fallbackPort}`
+      );
     });
   })
   .catch((error) => {
