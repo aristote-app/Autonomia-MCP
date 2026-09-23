@@ -67,6 +67,21 @@ const territoryClusters = [
       "Passer d'une formation ChatGPT à des cas d'usage métier réellement appliqués",
       "Mesurer l'adoption de l'IA dans une collectivité sans confondre usage et valeur"
     ]
+  },
+  {
+    cluster: "Services techniques & infrastructures",
+    pillar: "Appliquer l'IA aux services techniques et aux infrastructures territoriales",
+    summary: "Cadrer des usages IA sur des données techniques, des réseaux et des équipements publics sans transformer un cas d'usage métier en projet opaque : données, supervision humaine, mesure, résilience et réversibilité restent explicites.",
+    topics: [
+      "IA pour optimiser un réseau d'eau potable : cas d'usage, données et garde-fous",
+      "Détecter les anomalies et fuites d'un réseau d'eau avec l'IA sans automatiser aveuglément les décisions",
+      "Utiliser l'IA pour prioriser la maintenance des équipements publics",
+      "Créer une maintenance prédictive simple pour les équipements d'une intercommunalité",
+      "Aider les services voirie à prioriser les interventions avec des données et de l'IA",
+      "Utiliser l'IA pour analyser les consommations énergétiques des bâtiments publics",
+      "Préparer des tournées et interventions plus efficaces pour les services techniques avec l'IA",
+      "Comment cadrer un pilote IA pour un service technique territorial avant passage à l'échelle"
+    ]
   }
 ];
 
