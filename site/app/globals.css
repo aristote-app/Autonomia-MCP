@@ -7864,3 +7864,220 @@ button {
     grid-template-columns: 170px minmax(0,1fr);
   }
 }
+
+
+/* Observatoire needs explorer */
+.obsHub,
+.obsLanding {
+  background: var(--paper);
+  color: var(--ink);
+}
+.obsHubHero {
+  padding: 92px 18px 60px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.obsHubHero h1 {
+  max-width: 1080px;
+  margin: 10px 0 20px;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: .92;
+  letter-spacing: -.06em;
+  font-weight: 610;
+}
+.obsHubHero > p:not(.eyebrow) {
+  max-width: 820px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.55;
+}
+.obsHubIntro {
+  display: grid;
+  gap: 1px;
+  padding: 18px;
+  background: var(--line);
+}
+.obsHubIntro > * {
+  padding: 18px;
+  background: #fff;
+}
+.obsHubIntro > span {
+  color: #9b6a00;
+  font-weight: 900;
+}
+.obsHubIntro strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 19px;
+}
+.obsHubIntro p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.obsExplorer {
+  padding: 62px 18px;
+}
+.obsTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.obsTabs button {
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+.obsTabs button.active {
+  background: var(--ink);
+  color: #fff;
+}
+.obsExplorerLayout {
+  display: grid;
+  gap: 20px;
+}
+.obsTopicList {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.obsTopicList button {
+  display: grid;
+  gap: 5px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.obsTopicList button.active {
+  border-color: var(--ink);
+  box-shadow: inset 4px 0 0 var(--signal);
+}
+.obsTopicList strong {
+  font-size: 18px;
+}
+.obsTopicList span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.obsTopicPreview {
+  min-width: 0;
+  padding: 24px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+}
+.obsTopicPreview h2 {
+  max-width: 850px;
+  margin: 8px 0 14px;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+.obsTopicPreview > p:not(.eyebrow) {
+  max-width: 760px;
+  color: rgba(255,255,255,.72);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.obsMiniModules {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+}
+.obsMiniModules article {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+}
+.obsMiniModules article > span {
+  color: #ffd16a;
+  font-size: 11px;
+  font-weight: 900;
+}
+.obsMiniModules h3 {
+  margin: 12px 0 10px;
+  font-size: 19px;
+}
+.obsMiniModules p {
+  margin: 5px 0;
+  color: rgba(255,255,255,.68);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.obsMiniModules b {
+  color: #fff;
+}
+.obsMiniModules small {
+  display: block;
+  margin-top: 10px;
+  color: #ffd16a;
+  line-height: 1.4;
+}
+.obsPreviewActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.obsHubFooter {
+  display: grid;
+  gap: 24px;
+  padding: 62px 18px;
+  border-top: 1px solid var(--line);
+}
+.obsHubFooter h2 {
+  max-width: 850px;
+  margin: 0 0 14px;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: .98;
+  letter-spacing: -.05em;
+}
+.obsHubFooter p:not(.sectionIndex) {
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+@media (min-width: 760px) {
+  .obsHubIntro {
+    grid-template-columns: 70px repeat(3,minmax(0,1fr));
+    padding: 28px;
+  }
+  .obsExplorerLayout {
+    grid-template-columns: minmax(260px, 360px) minmax(0,1fr);
+  }
+  .obsMiniModules {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .obsHubFooter {
+    grid-template-columns: 180px minmax(0,1fr);
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+}
+@media (min-width: 1180px) {
+  .obsHubHero,
+  .obsExplorer,
+  .obsHubFooter,
+  .obsHubIntro {
+    padding-left: max(34px, calc((100vw - var(--max))/2));
+    padding-right: max(34px, calc((100vw - var(--max))/2));
+  }
+  .obsMiniModules {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
