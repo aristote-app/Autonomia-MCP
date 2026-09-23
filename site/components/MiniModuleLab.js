@@ -457,6 +457,28 @@ export default function MiniModuleLab({ topic }) {
   const module = topic.modules[active];
   const blueprint = blueprints[active];
 
+  function trackLabClick(event) {
+    const button=event.target.closest?.("button");
+    if (!button || button.closest(".wowModuleTabs")) return;
+    trackEvent("autonomia_lab_interaction",{
+      topic:topic.slug,
+      module_name:module[0],
+      module_index:active+1,
+      action:(button.textContent || "button").trim().replace(/\s+/g," ").slice(0,100)
+    });
+  }
+
+  function trackLabChange(event) {
+    const target=event.target;
+    if (!target || !["INPUT","SELECT","TEXTAREA"].includes(target.tagName)) return;
+    trackEvent("autonomia_lab_control_change",{
+      topic:topic.slug,
+      module_name:module[0],
+      module_index:active+1,
+      control_type:target.type || target.tagName.toLowerCase()
+    });
+  }
+
   return (
     <section className="miniModuleLab wowLab" id="mini-modules">
       <div className="miniModuleIntro wowIntro">
@@ -480,7 +502,7 @@ export default function MiniModuleLab({ topic }) {
         ))}
       </div>
 
-      <div className="wowProductFrame">
+      <div className="wowProductFrame" onClickCapture={trackLabClick} onChangeCapture={trackLabChange}>
         <div className="wowProductTopbar">
           <div><i /><i /><i /></div>
           <span>AUTONOMIA LAB · {topic.title}</span>
