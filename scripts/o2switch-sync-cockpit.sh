@@ -34,7 +34,7 @@ NODE_BIN="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node"
 report_deploy_exit() {
   code=$?
   if [ -f "$REPORTER" ] && [ -x "$NODE_BIN" ]; then
-    "$NODE_BIN" "$REPORTER" "cockpit" "$TARGET_SHA" "$code" "$WORKER_LOG" || true
+    "$NODE_BIN" --env-file="$APP_ROOT/.env.production.local" "$REPORTER" "cockpit" "$TARGET_SHA" "$code" "$WORKER_LOG" || true
   fi
   return "$code"
 }
