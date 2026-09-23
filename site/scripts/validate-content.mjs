@@ -16,6 +16,7 @@ import {
 } from "../content/editorial-backlog.js";
 import { problemSolutions } from "../content/problem-solutions.js";
 import { problemSalesCopy } from "../content/problem-sales-copy.js";
+import { problemPaidSearch } from "../content/problem-paid-search.js";
 
 const articles = [...publishedExecutionArticles, ...publishedTrainingArticles, ...publishedTerritoryArticles];
 const errors = [];
@@ -157,6 +158,7 @@ const requiredRuntimeFiles = [
   "components/ProblemLink.js",
   "content/problem-solutions.js",
   "content/problem-sales-copy.js",
+  "content/problem-paid-search.js",
   "app/solutions-ia/page.js",
   "app/solutions-ia/[slug]/page.js",
   "scripts/seo-audit.mjs",
@@ -227,6 +229,33 @@ for (const item of problemSolutions) {
   }
   if (!Array.isArray(item.deliverables) || item.deliverables.length !== 4) {
     errors.push(`${item.slug}: problem LP must expose exactly 4 project deliverables.`);
+  }
+
+  const paidSearch = problemPaidSearch[item.slug];
+  if (!paidSearch) {
+    errors.push(`${item.slug}: problem LP is missing paid-search configuration.`);
+  } else {
+    if (!paidSearch.primaryKeyword || !paidSearch.adAngle) {
+      errors.push(`${item.slug}: paid-search config requires primaryKeyword and adAngle.`);
+    }
+    if (!Array.isArray(paidSearch.secondaryKeywords) || paidSearch.secondaryKeywords.length < 3) {
+      errors.push(`${item.slug}: paid-search config requires at least three secondary keywords.`);
+    }
+    if (!Array.isArray(paidSearch.negativeKeywords) || paidSearch.negativeKeywords.length < 3) {
+      errors.push(`${item.slug}: paid-search config requires at least three negative keywords.`);
+    }
+    for (const criterion of ["pain","demo","economicValue","paidIntent","deliverability"]) {
+      const value = paidSearch.scores?.[criterion];
+      if (!Number.isInteger(value) || value < 1 || value > 5) {
+        errors.push(`${item.slug}: paid-search score ${criterion} must be an integer from 1 to 5.`);
+      }
+    }
+  }
+}
+
+for (const slug of Object.keys(problemPaidSearch)) {
+  if (!problemSlugs.includes(slug)) {
+    errors.push(`${slug}: paid-search config has no corresponding problem LP.`);
   }
 }
 
