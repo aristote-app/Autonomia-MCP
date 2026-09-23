@@ -10,16 +10,9 @@ WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
 
 mkdir -p "$APP_ROOT/.runtime"
 
-# Long children launched by Passenger can be interrupted by the hosting process
-# lifecycle. Re-parent the real deployment once, then let the HTTP shell exit.
-if [ "${AUTONOMIA_PUBLIC_DEPLOY_DAEMONIZED:-0}" != "1" ]; then
-  echo "Launching detached public-site deploy worker..."
-  AUTONOMIA_PUBLIC_DEPLOY_DAEMONIZED=1 \
-  AUTONOMIA_DEPLOY_SHA="$TARGET_SHA" \
-  nohup bash "$0" >> "$WORKER_LOG" 2>&1 </dev/null &
-  echo "Detached public deploy worker pid=$! log=$WORKER_LOG"
-  exit 0
-fi
+# The /api/internal/self-deploy route already launches this script detached.
+# Do not daemonize a second time: on shared hosting Passenger may reap that
+# grandchild before it can acquire the lock or write deployment logs.
 
 DEBUG_FILE="$APP_ROOT/public/__autonomia_deploy_debug.txt"
 mkdir -p "$APP_ROOT/public"
