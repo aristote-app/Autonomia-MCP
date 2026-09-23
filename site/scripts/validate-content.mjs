@@ -111,6 +111,7 @@ const requiredRuntimeFiles = [
   "content/editorial-separations.js",
   "content/ai-glossary.js",
   "lib/clientTracking.js",
+  "lib/clientAttribution.js",
   "lib/editorialGraph.js",
   "lib/editorialOpportunityEngine.js",
   "lib/organicUrls.js",
@@ -242,6 +243,33 @@ for (const item of waveOneProblems) {
   }
   if (!sales.trigger || !sales.human) {
     errors.push(`${item.slug}: Wave 1 buying-context copy must include trigger and human gate.`);
+  }
+}
+
+const attributionSource = readFileSync(resolve(siteRoot, "lib/clientAttribution.js"), "utf8");
+for (const requiredPattern of [
+  "campaign_id",
+  "adset_id",
+  "ad_id",
+  "creative_id",
+  "gclid",
+  "fbclid",
+  "autonomia_first_touch",
+  "autonomia_attribution_history"
+]) {
+  if (!attributionSource.includes(requiredPattern)) {
+    errors.push(`Shared client attribution is missing marker: ${requiredPattern}.`);
+  }
+}
+
+for (const formPath of [
+  "components/LeadForm.js",
+  "components/ObservatoryLeadForm.js",
+  "components/ProblemLeadForm.js"
+]) {
+  const source = readFileSync(resolve(siteRoot, formPath), "utf8");
+  if (!source.includes("getClientAttribution")) {
+    errors.push(`${formPath}: form must use shared client attribution.`);
   }
 }
 
