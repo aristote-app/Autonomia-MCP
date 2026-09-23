@@ -73,24 +73,42 @@ async function loadSeoGeo() {
   const signals = buildSeoGeoSignals(market);
   const signalSummary = summarizeSeoGeoSignals(signals);
 
-  const [manifest, backlog, recommendations, google] = await Promise.all([
+  const [manifest, backlog, google, searchDemand] = await Promise.all([
     organicFetch("/api/organic/manifest"),
     organicFetch("/api/organic/backlog"),
-    organicFetch("/api/organic/editorial-opportunities", {
-      method: "POST",
-      body: JSON.stringify({ signals, max_results: 25 })
-    }),
-    organicFetch("/api/organic/google/sitemap")
+    organicFetch("/api/organic/google/sitemap"),
+    organicFetch("/api/organic/google/search-demand?days=28&limit=500")
   ]);
+
+  const searchSignals = searchDemand.ok
+    ? (searchDemand.data?.rows || []).map((row) => ({
+        query: row.query,
+        search_impressions: Number(row.impressions) || 0,
+        search_clicks: Number(row.clicks) || 0,
+        search_position: Number(row.position) || 0,
+        source: "google_search_console"
+      }))
+    : [];
+
+  const allSignals = [...signals, ...searchSignals];
+  const recommendations = await organicFetch("/api/organic/editorial-opportunities", {
+    method: "POST",
+    body: JSON.stringify({ signals: allSignals, max_results: 25 })
+  });
 
   return {
     market,
-    signals,
-    signalSummary,
+    signals: allSignals,
+    signalSummary: {
+      ...signalSummary,
+      searchQueries: searchSignals.length,
+      total: signalSummary.total + searchSignals.length
+    },
     manifest,
     backlog,
     recommendations,
-    google
+    google,
+    searchDemand
   };
 }
 
@@ -220,6 +238,10 @@ export default async function SeoGeoPage() {
           <div className={styles.statusItem}>
             <strong>Territoires</strong>
             <span>{number(data.signalSummary.territory)}</span>
+          </div>
+          <div className={styles.statusItem}>
+            <strong>Requêtes Google · 28 j</strong>
+            <span>{number(data.signalSummary.searchQueries)}</span>
           </div>
         </div>
         <div className={styles.clusters} style={{ marginTop: 14 }}>
