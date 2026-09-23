@@ -132,7 +132,41 @@ jobs:
               fi
               echo "Verified RH landing stylesheet: $CSS_URL ($CONTENT_TYPE)"
 
-              echo "Sitemap + RSS + Territoires + RH LP CSS smoke checks passed."
+              PROBLEM_HUB_URL="https://build-autonomia.com/solutions-ia"
+              PROBLEM_LP_URL="https://build-autonomia.com/solutions-ia/automatiser-comptes-rendus-reunion"
+              curl -fsS "$PROBLEM_HUB_URL" >/dev/null
+              PROBLEM_HTML="$(curl -fsS "$PROBLEM_LP_URL")"
+              printf '%s' "$PROBLEM_HTML" | grep -Fq "AUTONOMIA LAB"
+              printf '%s' "$SITEMAP" | grep -Fq "/solutions-ia/automatiser-comptes-rendus-reunion"
+
+              PROBLEM_CSS_PATH="$(printf '%s' "$PROBLEM_HTML" | python -c 'import re,sys; html=sys.stdin.read(); m=re.search(r"""href=["\x27]([^"\x27]+\.css(?:\?[^"\x27]*)?)["\x27]""", html); print(m.group(1) if m else "")')"
+              if [ -z "$PROBLEM_CSS_PATH" ]; then
+                echo "::error::Problem landing HTML does not reference a CSS asset."
+                exit 1
+              fi
+              case "$PROBLEM_CSS_PATH" in
+                http://*|https://*) PROBLEM_CSS_URL="$PROBLEM_CSS_PATH" ;;
+                *) PROBLEM_CSS_URL="https://build-autonomia.com$PROBLEM_CSS_PATH" ;;
+              esac
+
+              PROBLEM_CSS_HEADERS="$(mktemp)"
+              PROBLEM_CSS_BODY="$(mktemp)"
+              curl -fsS -D "$PROBLEM_CSS_HEADERS" "$PROBLEM_CSS_URL" -o "$PROBLEM_CSS_BODY"
+              PROBLEM_CONTENT_TYPE="$(grep -i '^content-type:' "$PROBLEM_CSS_HEADERS" | tail -1 | tr -d '\r' | cut -d: -f2- | xargs)"
+              case "$PROBLEM_CONTENT_TYPE" in
+                text/css*) ;;
+                *)
+                  echo "::error::Expected text/css for problem LP asset $PROBLEM_CSS_URL, got: $PROBLEM_CONTENT_TYPE"
+                  exit 1
+                  ;;
+              esac
+              if ! grep -Fq ".problemLab" "$PROBLEM_CSS_BODY"; then
+                echo "::error::Live CSS does not contain the problem LP styles."
+                exit 1
+              fi
+              echo "Verified problem landing stylesheet: $PROBLEM_CSS_URL ($PROBLEM_CONTENT_TYPE)"
+
+              echo "Sitemap + RSS + Territoires + RH LP + problem LP smoke checks passed."
               exit 0
             fi
 
