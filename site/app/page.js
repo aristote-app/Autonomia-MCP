@@ -61,10 +61,12 @@ export default function Home() {
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/#scan">Lancer Autonomia Scan</Link>
-            <Link className="secondaryButton" href="/experts">Explorer nos expertises</Link>
+            <Link className="primaryButton" href="/#solution-finder">Décrire mon besoin</Link>
+            <Link className="secondaryButton" href="/#scan">Lancer Autonomia Scan</Link>
           </div>
         </div>
+
+        <SolutionFinder />
 
         <div className="executionGrid" aria-label="Système d’exécution Autonomia">
           <div className="gridHeader">
