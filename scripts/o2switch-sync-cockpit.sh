@@ -25,17 +25,6 @@ else
   exec >> "$WORKER_LOG" 2>&1
 fi
 
-REPORTER="$APP_ROOT/scripts/report-deploy-diagnostic.mjs"
-NODE_BIN="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node"
-report_deploy_exit() {
-  code=$?
-  if [ -f "$REPORTER" ] && [ -x "$NODE_BIN" ]; then
-    "$NODE_BIN" --env-file="$APP_ROOT/.env.production.local" "$REPORTER" "cockpit" "$TARGET_SHA" "$code" "$WORKER_LOG" || true
-  fi
-  return "$code"
-}
-trap report_deploy_exit EXIT
-
 echo
 echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 echo "target_sha=${TARGET_SHA:-main}"
@@ -112,7 +101,9 @@ PUBLIC_PROD_BRANCH="public-site-production"
 
 if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; then
   echo "Syncing production public site from origin/$PUBLIC_PROD_BRANCH..."
+  set +u
   source "$PUBLIC_PROD_ACTIVATE"
+  set -u
   cd "$PUBLIC_PROD_REPO"
   git fetch --depth=200 origin "$PUBLIC_PROD_BRANCH"
   PUBLIC_PROD_SHA="$(git rev-parse "origin/$PUBLIC_PROD_BRANCH")"
@@ -140,7 +131,9 @@ if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; th
   touch tmp/restart.txt
   echo "Production public site synced: $PUBLIC_PROD_SHA"
 
+  set +u
   source "$NODE_ENV_ACTIVATE"
+  set -u
   cd "$APP_ROOT"
 else
   echo "Production public-site repo unavailable at $PUBLIC_PROD_REPO; skipping bootstrap sync."
