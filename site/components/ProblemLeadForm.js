@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
 
@@ -8,22 +8,40 @@ export default function ProblemLeadForm({ problem }) {
   const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
+  const [labContext, setLabContext] = useState(null);
+  const formStarted = useRef(false);
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
 
   useEffect(() => {
     function prefill(event) {
       const need = event.detail?.need;
       if (!need) return;
+      const demoName = event.detail?.demoName || null;
+      const demoIndex = event.detail?.demoIndex || null;
+      setLabContext({ demoName, demoIndex });
       setData((current) => current.need ? current : { ...current, need });
       trackEvent("problem_lead_prefill", {
         problem_slug: problem.slug,
         problem_cluster: problem.cluster,
-        source_surface: "problem_lab"
+        source_surface: "problem_lab",
+        demo_name: demoName,
+        demo_index: demoIndex
       });
     }
     window.addEventListener("autonomia:prefill-problem-lead", prefill);
     return () => window.removeEventListener("autonomia:prefill-problem-lead", prefill);
   }, [problem.slug, problem.cluster]);
+
+  function markFormStart() {
+    if (formStarted.current) return;
+    formStarted.current = true;
+    trackEvent("problem_lp_form_start", {
+      problem_slug: problem.slug,
+      problem_cluster: problem.cluster,
+      demo_name: labContext?.demoName || null,
+      demo_index: labContext?.demoIndex || null
+    });
+  }
 
   async function submit(event) {
     event.preventDefault();
@@ -40,7 +58,9 @@ export default function ProblemLeadForm({ problem }) {
       form_id: formId,
       requested_service: requestedService,
       problem_slug: problem.slug,
-      problem_cluster: problem.cluster
+      problem_cluster: problem.cluster,
+      demo_name: labContext?.demoName || null,
+      demo_index: labContext?.demoIndex || null
     });
 
     const payload = {
@@ -56,6 +76,8 @@ export default function ProblemLeadForm({ problem }) {
       form_id: formId,
       problem_slug: problem.slug,
       problem_cluster: problem.cluster,
+      problem_demo_name: labContext?.demoName || null,
+      problem_demo_index: labContext?.demoIndex || null,
       ...getClientAttribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
@@ -88,7 +110,7 @@ export default function ProblemLeadForm({ problem }) {
   }
 
   return (
-    <form className="problemLeadForm" onSubmit={submit}>
+    <form className="problemLeadForm" onSubmit={submit} onFocusCapture={markFormStart}>
       <p className="eyebrow">PROTOTYPE SUR VOTRE FLUX</p>
       <h2>{problem.cta}</h2>
       <label><span>Nom / fonction *</span><input value={data.name} onChange={(e)=>set("name",e.target.value)} /></label>
