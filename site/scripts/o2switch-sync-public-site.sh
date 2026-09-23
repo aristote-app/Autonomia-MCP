@@ -9,6 +9,14 @@ fi
 
 SITE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 REPO_DIR="$(cd "$SITE_DIR/.." && pwd)"
+
+mkdir -p "$SITE_DIR/.runtime"
+exec 9>"$SITE_DIR/.runtime/deploy.lock"
+flock 9
+
+NODE_BIN_DIR="$(dirname "$(command -v node)")"
+export PATH="$NODE_BIN_DIR:$PATH"
+
 cd "$REPO_DIR"
 
 echo "Deploying public site commit $TARGET_SHA"
