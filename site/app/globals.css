@@ -12179,3 +12179,22 @@ body:has(.territoryCampaignPage) .desktopNav {
     grid-template-columns: repeat(3,minmax(0,1fr));
   }
 }
+
+
+/* LP consent readability */
+.obsLeadForm label > span,
+.obsLeadForm .consentLine > span,
+.problemLeadForm .consentLine > span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.obsLeadForm > small,
+.obsLeadForm .privacyNote,
+.problemLeadForm .privacyNote {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.obsLeadForm input,
+.obsLeadForm textarea {
+  font-size: 16px;
+}
