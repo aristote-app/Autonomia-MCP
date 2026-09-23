@@ -67,7 +67,10 @@ const TERRITORY_SIGNAL_TERMS = [
   "agent","agents","manager","managers","referent","referents","elu","elus",
   "direction","directions","charte","gouvernance","verification","verifier",
   "tpe","pme","entreprise","entreprises","developpement","economique",
-  "assistant","automatisation","processus","usager","usagers","data","donnees"
+  "assistant","automatisation","processus","usager","usagers","data","donnees",
+  "eau","potable","reseau","reseaux","fuite","fuites","anomalie","anomalies",
+  "maintenance","equipement","equipements","voirie","energie","energetique",
+  "batiment","batiments","intervention","interventions","infrastructure","infrastructures"
 ];
 
 function territoryLexicalAffinity(topicTitle, signalQuery) {
