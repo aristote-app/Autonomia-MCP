@@ -1,0 +1,76 @@
+name: seo-production-smoke-o2switch
+
+on:
+  push:
+    branches:
+      - public-site-production
+    paths:
+      - ".github/workflows/seo-production-smoke-o2switch.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Wait for DNS / Passenger
+        run: sleep 10
+
+      - name: Check production routes
+        env:
+          BASE: https://build-autonomia.com
+        run: |
+          set -euo pipefail
+          for path in             /             /robots.txt             /sitemap.xml             /territoires             /territoires/guides             /cas-usage-ia             /formation-ia/cas-usage             /experts             /academy
+          do
+            echo "Checking $BASE$path"
+            curl -fsS --retry 5 --retry-delay 3 "$BASE$path" -o /tmp/page
+            echo "OK $path ($(wc -c </tmp/page) bytes)"
+          done
+
+      - name: Validate robots
+        env:
+          BASE: https://build-autonomia.com
+        run: |
+          ROBOTS="$(curl -fsS "$BASE/robots.txt")"
+          printf '%s\n' "$ROBOTS"
+          printf '%s' "$ROBOTS" | grep -Fq "Sitemap: https://build-autonomia.com/sitemap.xml"
+          printf '%s' "$ROBOTS" | grep -Fq "Disallow: /api/"
+
+      - name: Validate sitemap
+        env:
+          BASE: https://build-autonomia.com
+        run: |
+          SITEMAP="$(curl -fsS "$BASE/sitemap.xml")"
+          printf '%s\n' "$SITEMAP" | head -c 3000
+          printf '%s' "$SITEMAP" | grep -Fq "https://build-autonomia.com/territoires"
+          printf '%s' "$SITEMAP" | grep -Fq "https://build-autonomia.com/cas-usage-ia"
+          printf '%s' "$SITEMAP" | grep -Fq "https://build-autonomia.com/formation-ia/cas-usage"
+          printf '%s' "$SITEMAP" | grep -Fq "https://build-autonomia.com/territoires/guides"
+          COUNT="$(printf '%s' "$SITEMAP" | grep -o '<url>' | wc -l)"
+          echo "Indexable URLs in sitemap: $COUNT"
+          test "$COUNT" -ge 50
+
+      - name: Validate canonical domain
+        env:
+          BASE: https://build-autonomia.com
+        run: |
+          for path in / /territoires /experts /academy
+          do
+            BODY="$(curl -fsS "$BASE$path")"
+            printf '%s' "$BODY" | grep -Fq 'build-autonomia.com'
+          done
+
+      - name: Ensure cockpit is not in sitemap
+        env:
+          BASE: https://build-autonomia.com
+        run: |
+          SITEMAP="$(curl -fsS "$BASE/sitemap.xml")"
+          if printf '%s' "$SITEMAP" | grep -Fq "cockpit.build-autonomia.com"; then
+            echo "::error::Cockpit URL found in public sitemap."
+            exit 1
+          fi
+          echo "Cockpit absent from public sitemap."
