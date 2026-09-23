@@ -59,15 +59,6 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="audienceRail" aria-label="Publics Autonomia">
-        <span>POUR</span>
-        <strong>Directions générales</strong>
-        <strong>DSI / CTO</strong>
-        <strong>Data / IA</strong>
-        <strong>RH / L&D</strong>
-        <strong>Directions métier</strong>
-      </section>
-
       <section className="twoDoors homeCoreOffers">
         <Link href="/experts" className="door doorExperts">
           <div className="doorTop">
