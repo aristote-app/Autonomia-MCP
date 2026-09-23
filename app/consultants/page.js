@@ -4,6 +4,8 @@ import {
   listConsultantsWithSkills,
   getConsultantPoolSummary
 } from "../../lib/db/consultants.js";
+import { consultantImportTemplate } from "../../lib/consultants/import.js";
+import { importConsultantsFromText } from "../actions/consultants.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { rankAccountsForConsultant } from "../../lib/intelligence/consultantAccounts.js";
 
@@ -27,13 +29,17 @@ function date(value) {
   }).format(new Date(value));
 }
 
-export default async function ConsultantsPage() {
+export default async function ConsultantsPage({ searchParams }) {
   const context = await getCurrentWorkspaceMembership().catch(() => ({
     configured: false,
     claims: null,
     membership: null
   }));
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
+  const canImport = ["admin", "direction", "staffing"].includes(context?.membership?.role);
+  const params = await searchParams;
+  const importedCount = Number(params?.imported || 0);
+  const importedSkillLinks = Number(params?.skills || 0);
 
   if (!hasSession) {
     return (
@@ -86,6 +92,40 @@ export default async function ConsultantsPage() {
           et trouver les meilleurs comptes à attaquer pour un profil disponible.
         </p>
       </header>
+
+      {importedCount > 0 && (
+        <div className="adminFlash">
+          <strong>{importedCount} consultant{importedCount > 1 ? "s" : ""} importé{importedCount > 1 ? "s" : ""}</strong>
+          <span>{importedSkillLinks} lien{importedSkillLinks > 1 ? "s" : ""} de compétences enregistré{importedSkillLinks > 1 ? "s" : ""}.</span>
+        </div>
+      )}
+
+      {canImport && (
+        <section className="detailPanel" style={{ marginBottom: 24 }}>
+          <p className="eyebrow">IMPORT CONSULTANTS</p>
+          <h2>Coller depuis Excel / CSV.</h2>
+          <p className="accountHint">
+            Une ligne par consultant. Séparateur principal : point-virgule ou tabulation.
+            Les compétences et localisations peuvent être séparées par des virgules.
+          </p>
+          <form action={importConsultantsFromText} className="workflowForm" style={{ gridTemplateColumns: "1fr auto" }}>
+            <label className="workflowWide">
+              <span>Données consultants</span>
+              <textarea
+                name="rows"
+                rows={7}
+                required
+                defaultValue={consultantImportTemplate()}
+                style={{ width: "100%", minHeight: 180, padding: 10, border: "1px solid #cfd4ce", font: "inherit", fontSize: 12 }}
+              />
+            </label>
+            <button type="submit">Importer</button>
+          </form>
+          <small className="accountHint">
+            L'import met à jour un consultant existant portant le même identifiant manuel et ajoute les compétences sans supprimer l'historique.
+          </small>
+        </section>
+      )}
 
       <section className="consultantMetrics">
         <article><strong>{summary.active}</strong><span>Actifs</span></article>
