@@ -58,7 +58,8 @@ export async function POST(request) {
       batchSize: 6,
       countPerSource: 20,
       maxPages: 2,
-      maxPersist: 180
+      maxPersist: 180,
+      rotationOffset: round * 6
     });
 
     if (usableBefore == null) usableBefore = result.before?.usable_discovered || 0;
@@ -85,9 +86,6 @@ export async function POST(request) {
     });
 
     if (result.skipped || usableAfter >= target) break;
-
-    // Avoid burning search calls if a full round yielded no new usable profile.
-    if ((result.created || 0) === 0) break;
   }
 
   return Response.json({
