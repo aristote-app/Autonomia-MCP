@@ -27,7 +27,10 @@ import {
   unwatchAccount,
   watchAccount
 } from "../../actions/account-watches.js";
-import { rankWaalaxyCampaigns } from "../../../lib/intelligence/campaignRouter.js";
+import {
+  rankWaalaxyCampaigns,
+  rankWaalaxyLists
+} from "../../../lib/intelligence/campaignRouter.js";
 
 export const dynamic = "force-dynamic";
 
@@ -150,10 +153,16 @@ export default async function AccountDetailPage({ params, searchParams }) {
 
   const waalaxyRouting =
     waalaxyOptions?.available
-      ? rankWaalaxyCampaigns({
-          account,
-          campaigns: waalaxyOptions.campaigns
-        })
+      ? {
+          campaigns: rankWaalaxyCampaigns({
+            account,
+            campaigns: waalaxyOptions.campaigns
+          }),
+          lists: rankWaalaxyLists({
+            account,
+            lists: waalaxyOptions.lists
+          })
+        }
       : null;
 
   return (
@@ -597,11 +606,16 @@ export default async function AccountDetailPage({ params, searchParams }) {
                               <input type="hidden" name="account_key" value={account.slug} />
                               <label>
                                 <span>Liste Waalaxy</span>
-                                <select name="prospect_list_id" required defaultValue="">
+                                <select
+                                  name="prospect_list_id"
+                                  required
+                                  defaultValue={waalaxyRouting?.lists?.recommended?._id || ""}
+                                >
                                   <option value="" disabled>Choisir une liste</option>
-                                  {waalaxyOptions.lists.map((list) => (
+                                  {(waalaxyRouting?.lists?.ranked || waalaxyOptions.lists).map((list) => (
                                     <option key={list._id} value={list._id}>
                                       {list.name || list._id}
+                                      {list._id === waalaxyRouting?.lists?.recommended?._id ? " · recommandée" : ""}
                                     </option>
                                   ))}
                                 </select>
@@ -610,20 +624,20 @@ export default async function AccountDetailPage({ params, searchParams }) {
                                 <span>Campagne (optionnel)</span>
                                 <select
                                   name="campaign_id"
-                                  defaultValue={waalaxyRouting?.recommended?._id || ""}
+                                  defaultValue={waalaxyRouting?.campaigns?.recommended?._id || ""}
                                 >
                                   <option value="">Liste uniquement</option>
-                                  {(waalaxyRouting?.ranked || waalaxyOptions.campaigns).map((campaign) => (
+                                  {(waalaxyRouting?.campaigns?.ranked || waalaxyOptions.campaigns).map((campaign) => (
                                     <option key={campaign._id} value={campaign._id}>
                                       {campaign.name || campaign._id}
-                                      {campaign._id === waalaxyRouting?.recommended?._id ? " · recommandée" : ""}
+                                      {campaign._id === waalaxyRouting?.campaigns?.recommended?._id ? " · recommandée" : ""}
                                     </option>
                                   ))}
                                 </select>
                               </label>
-                              {waalaxyRouting?.recommended && (
+                              {waalaxyRouting?.campaigns?.recommended && (
                                 <small className="waalaxyRecommendation">
-                                  Campagne recommandée : {waalaxyRouting.recommended.name} · {waalaxyRouting.track.label}.
+                                  Campagne recommandée : {waalaxyRouting.recommended.name} · {waalaxyRouting.campaigns.track.label}.
                                   Validation obligatoire avant envoi.
                                 </small>
                               )}
