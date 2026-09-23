@@ -427,7 +427,7 @@ const plannerTypes = new Set(["learning","calendar","site"]);
 const controlTypes = new Set(["control","classify","cluster"]);
 
 const specializedTypes = new Set([
-  "account","seo","campaign","reconcile","timeline","cluster","maintenance","compare",
+  "candidate","decision","pipeline","radar","quality","account","seo","campaign","reconcile","timeline","cluster","maintenance","compare",
   "stock","site","tender","learning","calendar","brand","collect","executive","table",
   "report","variance","sequence","routing","workflow","invoice","extract","classify",
   "brief","catalog"
