@@ -10988,3 +10988,5 @@ body:has(.territoryCampaignPage) .desktopNav {
     justify-self:stretch;
   }
 }
+
+/* LP asset safety marker: validated CSS must be served as text/css before deploy is accepted. */
