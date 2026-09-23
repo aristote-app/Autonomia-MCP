@@ -1,0 +1,25 @@
+{
+  "name": "autonomia-public-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "content:validate": "node scripts/validate-content.mjs",
+    "organic:report": "node scripts/organic-report.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs",
+    "seo:engine-test": "node scripts/test-organic-decision-engine.mjs",
+    "seo:opportunity-test": "node scripts/test-editorial-opportunity-engine.mjs"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.6.5"
+  }
+}
