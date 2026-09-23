@@ -14,6 +14,8 @@ import {
   executionPillars,
   trainingPillars
 } from "../content/editorial-backlog.js";
+import { problemSolutions } from "../content/problem-solutions.js";
+import { problemSalesCopy } from "../content/problem-sales-copy.js";
 
 const articles = [...publishedExecutionArticles, ...publishedTrainingArticles, ...publishedTerritoryArticles];
 const errors = [];
@@ -145,6 +147,15 @@ const requiredRuntimeFiles = [
   "app/methodologie/politique-editoriale/page.js",
   "app/observatoire-ia/page.js",
   "components/MarketObservatory.js",
+  "components/ObservatoryLeadForm.js",
+  "components/ProblemLeadForm.js",
+  "components/ProblemLab.js",
+  "components/ProblemLanding.js",
+  "components/ProblemLink.js",
+  "content/problem-solutions.js",
+  "content/problem-sales-copy.js",
+  "app/solutions-ia/page.js",
+  "app/solutions-ia/[slug]/page.js",
   "scripts/seo-audit.mjs",
   "scripts/test-organic-decision-engine.mjs"
 ];
@@ -168,6 +179,67 @@ const leadSource = readFileSync(resolve(siteRoot, "components/LeadForm.js"), "ut
 for (const requiredPattern of ["trackLeadConversion", "commercial_handoff"]) {
   if (!leadSource.includes(requiredPattern)) {
     errors.push(`LeadForm is missing conversion / qualification marker: ${requiredPattern}.`);
+  }
+}
+
+const observatoryLeadSource = readFileSync(resolve(siteRoot, "components/ObservatoryLeadForm.js"), "utf8");
+const problemLeadSource = readFileSync(resolve(siteRoot, "components/ProblemLeadForm.js"), "utf8");
+
+for (const [label, source] of [
+  ["ObservatoryLeadForm", observatoryLeadSource],
+  ["ProblemLeadForm", problemLeadSource]
+]) {
+  for (const requiredPattern of [
+    "trackLeadConversion",
+    "marketing_consent",
+    "consent_timestamp",
+    "privacy_notice_version",
+    "consent_source"
+  ]) {
+    if (!source.includes(requiredPattern)) {
+      errors.push(`${label} is missing required lead / consent marker: ${requiredPattern}.`);
+    }
+  }
+}
+
+const problemSlugs = problemSolutions.map((item) => item.slug);
+if (problemSolutions.length < 25) {
+  errors.push(`Precise problem registry must contain at least 25 LPs, found ${problemSolutions.length}.`);
+}
+if (new Set(problemSlugs).size !== problemSlugs.length) {
+  errors.push("Precise problem registry contains duplicate slugs.");
+}
+
+const waveOneProblems = problemSolutions.filter((item) => item.wave === 1);
+if (waveOneProblems.length < 10) {
+  errors.push(`Wave 1 must contain at least 10 problem LPs, found ${waveOneProblems.length}.`);
+}
+
+for (const item of problemSolutions) {
+  if (!item.title || !item.headline || !item.intro || !item.cluster) {
+    errors.push(`${item.slug}: problem LP is missing required positioning copy.`);
+  }
+  if (!Array.isArray(item.demos) || item.demos.length !== 4) {
+    errors.push(`${item.slug}: problem LP must expose exactly 4 interactive demos.`);
+  }
+  if (!Array.isArray(item.deliverables) || item.deliverables.length !== 4) {
+    errors.push(`${item.slug}: problem LP must expose exactly 4 project deliverables.`);
+  }
+}
+
+for (const item of waveOneProblems) {
+  const sales = problemSalesCopy[item.slug];
+  if (!sales) {
+    errors.push(`${item.slug}: Wave 1 LP is missing buying-context content.`);
+    continue;
+  }
+  for (const field of ["inputs", "outputs", "systems"]) {
+    if (!Array.isArray(sales[field]) || sales[field].length < 4) {
+      errors.push(`${item.slug}: Wave 1 buying-context field ${field} must contain at least 4 items.`);
+    }
+  }
+  if (!sales.trigger || !sales.human) {
+    errors.push(`${item.slug}: Wave 1 buying-context copy must include trigger and human gate.`);
   }
 }
 
