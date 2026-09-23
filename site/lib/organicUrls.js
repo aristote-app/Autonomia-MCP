@@ -1,4 +1,5 @@
 import { getAllPages } from "@/lib/pages";
+import { aiRoles } from "@/content/ai-roles";
 import {
   executionPillars,
   trainingPillars
@@ -39,6 +40,14 @@ export function getIndexableUrlRecords(base) {
       priority: page.slug === "experts" || page.slug === "academy" ? 0.9 : 0.8,
       changeFrequency: "monthly"
     }));
+
+  const aiRolePages = aiRoles.map((role) => ({
+    url: `${base}/metiers-ia/${role.slug}`,
+    kind: "ai-role-guide",
+    priority: 0.86,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-23"
+  }));
 
   const executionPillarPages = executionPillars.map((pillar) => ({
     url: `${base}/cas-usage-ia/${pillar.slug}`,
@@ -91,6 +100,7 @@ export function getIndexableUrlRecords(base) {
   return [
     ...staticPages,
     ...commercialPages,
+    ...aiRolePages,
     ...executionPillarPages,
     ...trainingPillarPages,
     ...territoryPillarPages,
