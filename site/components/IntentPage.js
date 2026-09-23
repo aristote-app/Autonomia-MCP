@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
 import QualiopiProof from "@/components/QualiopiProof";
-import AutonomiaScan from "@/components/AutonomiaScan";
+import AutonomiaScan from "@/components/AutonomiaScan";\nimport LiveExpertProfiles from "@/components/LiveExpertProfiles";
 
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
