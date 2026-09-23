@@ -25,16 +25,16 @@ export default function Header() {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerCta" href="/#diagnostic-ia">
-            <span>Faire le diagnostic IA</span>
+          <Link className="headerCta" href="/#solution-finder">
+            <span>Trouver ma solution</span>
             <b aria-hidden="true">↗</b>
           </Link>
         </div>
       </header>
 
       <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/#diagnostic-ia">Diagnostic IA</Link>
-        <Link href="/experts">Experts</Link>
+        <Link href="/#solution-finder">Trouver ma solution</Link>
+        <Link href="/academy">Formations IA</Link>
       </nav>
     </>
   );
