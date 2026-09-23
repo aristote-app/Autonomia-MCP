@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { aiRoles, getAiRole, getAiRoleStaticParams } from "@/content/ai-roles";
+import { getRoleEnhancement } from "@/content/ai-role-enhancements";
 import ConsultantLivePanel from "@/components/ConsultantLivePanel";
 
 export function generateStaticParams() {
@@ -38,17 +39,23 @@ function SourceList({ sources }) {
   );
 }
 
-function RoleCrossLinks({ currentSlug }) {
-  const others = aiRoles.filter((role) => role.slug !== currentSlug);
+function RoleCrossLinks({ neighbors }) {
   return (
     <div className="roleCrossLinks">
-      {others.map((role, index) => (
-        <Link key={role.slug} href={"/metiers-ia/" + role.slug}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <strong>{role.title}</strong>
-          <b>↗</b>
-        </Link>
-      ))}
+      {neighbors.map(([slug, reason], index) => {
+        const neighbor = aiRoles.find((item) => item.slug === slug);
+        if (!neighbor) return null;
+        return (
+          <Link key={slug} href={"/metiers-ia/" + slug}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <strong>{neighbor.title}</strong>
+              <small>{reason}</small>
+            </div>
+            <b>↗</b>
+          </Link>
+        );
+      })}
     </div>
   );
 }
@@ -57,6 +64,7 @@ export default async function AiRolePage({ params }) {
   const { slug } = await params;
   const role = getAiRole(slug);
   if (!role) notFound();
+  const enhancement = getRoleEnhancement(role.slug);
 
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com";
   const url = base + "/metiers-ia/" + role.slug;
@@ -181,35 +189,39 @@ export default async function AiRolePage({ params }) {
         </section>
 
         <section className="roleResponsibilities" id="missions">
-          <p className="sectionIndex">03 — MISSIONS</p>
-          <div className="roleReading">
-            <h2>Ce que le {role.title} produit concrètement.</h2>
-            <p>
-              Une fiche de poste utile doit décrire des verbes d’action et des résultats observables. Voici les
-              responsabilités qui structurent le plus souvent ce rôle lorsqu’il intervient sur un projet
-              d’entreprise, du cadrage jusqu’au run.
-            </p>
-          </div>
-          <ol>
-            {role.responsibilities.map((item, index) => (
-              <li key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{item}</p>
-              </li>
-            ))}
-          </ol>
-
-          <div className="roleDeliverables">
-            <div>
-              <p className="roleMicroTitle">LIVRABLES TYPIQUES</p>
+          <p className="sectionIndex">03 — MISSIONS & LIVRABLES</p>
+          <div className="roleResponsibilitiesBody">
+            <div className="roleReading">
+              <h2>Ce que le {role.title} produit concrètement.</h2>
               <p>
-                Les livrables donnent une meilleure idée du niveau d’autonomie attendu. Selon la mission, un
-                {role.title} peut être responsable directement de certains de ces éléments ou les produire avec
-                d’autres membres de l’équipe.
+                Nous séparons les responsabilités du quotidien et les livrables visibles. Cela permet de comprendre
+                ce que le consultant doit réellement prendre en charge, et ce qui doit rester à la fin de la mission.
               </p>
             </div>
-            <div className="rolePills">
-              {role.deliverables.map((item) => <span key={item}>{item}</span>)}
+
+            <ol className="roleResponsibilityList">
+              {role.responsibilities.map((item, index) => (
+                <li key={item}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <p>{item}</p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="roleDeliverablesCompact">
+              <div className="roleDeliverablesIntro">
+                <p className="roleMicroTitle">LIVRABLES TYPIQUES</p>
+                <h3>Ce qu’on doit pouvoir récupérer, relire et réutiliser.</h3>
+              </div>
+              <div className="roleDeliverableGrid">
+                {enhancement.deliverables.map(([title, description], index) => (
+                  <article key={title}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <h4>{title}</h4>
+                    <p>{description}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -326,7 +338,7 @@ export default async function AiRolePage({ params }) {
             </p>
           </div>
           <ol>
-            {role.questions.map((question, index) => (
+            {enhancement.questions.map((question, index) => (
               <li key={question}><span>{String(index + 1).padStart(2, "0")}</span><strong>{question}</strong></li>
             ))}
           </ol>
@@ -399,12 +411,15 @@ export default async function AiRolePage({ params }) {
         </section>
 
         <section className="roleExplore">
-          <div>
+          <div className="roleExploreIntro">
             <p className="sectionIndex">11 — MÉTIERS VOISINS</p>
-            <h2>Explorer les autres compétences IA.</h2>
-            <p>Un projet mobilise rarement un seul rôle. Comparez les frontières avant de figer votre brief.</p>
+            <h2>Les rôles à mobiliser autour du {role.title}.</h2>
+            <p>
+              Un projet IA mobilise rarement un seul métier. Cette sélection montre les rôles qui complètent le plus
+              directement celui-ci, et pourquoi ils deviennent utiles selon le stade du projet.
+            </p>
           </div>
-          <RoleCrossLinks currentSlug={role.slug} />
+          <RoleCrossLinks neighbors={enhancement.neighbors} />
         </section>
       </article>
     </main>
