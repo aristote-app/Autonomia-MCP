@@ -87,10 +87,15 @@ export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 export NEXT_PUBLIC_SITE_URL="https://build-autonomia.com"
 
+echo "Forcing Next SWC WebAssembly for o2switch legacy glibc..."
+rm -rf node_modules/@next/swc-linux-x64-gnu node_modules/@next/swc-linux-x64-musl || true
+rm -rf "$HOME/.cache/next-swc" || true
+export NODE_OPTIONS="--no-addons"
+
 echo "Validating editorial content..."
 npm run content:validate
 
-echo "Building public site Next.js..."
+echo "Building public site Next.js with SWC WASM..."
 npm run build
 
 mkdir -p .runtime tmp
