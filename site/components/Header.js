@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import AutonomiaMark from "@/components/AutonomiaMark";
 
@@ -45,7 +47,7 @@ export default function Header() {
               {NAV_ITEMS.map(([label, href]) => (
                 <Link href={href} key={href}>{label}<span aria-hidden="true">↗</span></Link>
               ))}
-              <Link className="mobileMenuPrimary" href="/#solution-finder">
+              <Link className="mobileMenuPrimary" href="/#solution-finder" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
                 Trouver ma solution <span aria-hidden="true">→</span>
               </Link>
             </nav>
