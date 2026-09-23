@@ -72,8 +72,12 @@ jobs:
 
             if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
               echo "Public production confirms target SHA: $TARGET_SHA"
-              curl -fsS https://build-autonomia.com/sitemap.xml >/dev/null
+              SITEMAP="$(curl -fsS https://build-autonomia.com/sitemap.xml)"
+              FEED="$(curl -fsS https://build-autonomia.com/feed.xml)"
+              printf '%s' "$SITEMAP" | grep -Fq "/territoires/guides/"
+              printf '%s' "$FEED" | grep -Fq "/territoires/guides/"
               curl -fsS https://build-autonomia.com/territoires >/dev/null
+              echo "Sitemap + RSS + Territoires smoke checks passed."
               exit 0
             fi
 
