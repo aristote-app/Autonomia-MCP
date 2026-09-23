@@ -1,9 +1,9 @@
 import Link from "next/link";
-import HomeLeadSwitch from "@/components/HomeLeadSwitch";
-import AutonomiaScan from "@/components/AutonomiaScan";
 import QualiopiProof from "@/components/QualiopiProof";
 import LiveJobSignals from "@/components/LiveJobSignals";
 import HomeUseCaseLab from "@/components/HomeUseCaseLab";
+import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
+import AutonomiaMark from "@/components/AutonomiaMark";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -62,7 +62,7 @@ export default function Home() {
 
           <div className="heroActions">
             <Link className="primaryButton" href="/#cas-usage-test">Voir ce que l’IA peut simplifier</Link>
-            <Link className="secondaryButton" href="/#audit-ia">Demander l’audit IA offert</Link>
+            <Link className="secondaryButton" href="/#fiche-besoin">Préparer ma fiche besoin</Link>
           </div>
         </div>
 
@@ -165,22 +165,10 @@ export default function Home() {
           </div>
         </div>
 
-        <Link className="primaryButton auditCta" href="/#contact">Demander mon audit IA offert</Link>
+        <Link className="primaryButton auditCta" href="/#fiche-besoin">Commencer ma fiche besoin</Link>
       </section>
 
-      <section className="scanSection" id="scan">
-        <div className="scanSectionIntro">
-          <p className="sectionIndex">04 — PREMIÈRE ORIENTATION</p>
-          <div>
-            <h2>Vous voulez commencer tout de suite ? Donnez-nous trois éléments.</h2>
-            <p>
-              Autonomia Scan prépare une première lecture du blocage, des compétences à mobiliser
-              et des prochaines questions à traiter pendant l’audit.
-            </p>
-          </div>
-        </div>
-        <AutonomiaScan />
-      </section>
+      <NeedBriefQuestionnaire />
 
       <section className="twoDoors">
         <Link href="/experts" className="door doorExperts">
@@ -425,7 +413,7 @@ export default function Home() {
           <article>
             <span>04</span>
             <h3>Une prochaine action claire.</h3>
-            <p>Le Scan transforme un objectif flou en première orientation exploitable avant le cadrage détaillé.</p>
+            <p>La fiche besoin transforme un problème encore flou en contexte, irritants, résultat attendu et prochaines questions à traiter.</p>
           </article>
         </div>
       </section>
@@ -473,17 +461,17 @@ export default function Home() {
       <section className="contactSection" id="contact">
         <div className="contactCopy">
           <p className="eyebrow">PASSER À L’EXÉCUTION</p>
-          <h2>Quel est le prochain blocage IA que votre entreprise doit lever ?</h2>
+          <h2>Vous avez déjà identifié votre problème ? Transformez-le en fiche besoin exploitable.</h2>
           <p>
-            Trois étapes courtes. Pas de cahier des charges de quatorze questions.
+            Trois volets, des cases à cocher, quelques champs libres et une synthèse que vous validez avant l’envoi.
           </p>
+          <Link className="primaryButton contactBriefCta" href="/#fiche-besoin">Préparer ma fiche besoin</Link>
         </div>
-        <HomeLeadSwitch />
       </section>
 
       <footer className="siteFooter">
         <div className="brand footerBrand">
-          <span className="brandMark">A</span>
+          <span className="brandMark" aria-hidden="true"><AutonomiaMark size={38} inverse /></span>
           <span>AUTONOMIA</span>
         </div>
         <p>La force d’exécution IA.</p>
