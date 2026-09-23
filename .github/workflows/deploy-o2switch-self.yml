@@ -95,14 +95,18 @@ jobs:
             HEALTH="$(curl -fsS "$HEALTH_URL" || true)"
             DEPLOYED_SHA="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha", ""))' 2>/dev/null || true)"
 
-            if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
-              echo "Production health confirms target SHA: $TARGET_SHA"
-              return 0
+            if [ -n "$DEPLOYED_SHA" ]; then
+              if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
+                echo "Production health confirms target SHA: $TARGET_SHA"
+                return 0
+              fi
+              echo "Production still serves SHA $DEPLOYED_SHA; waiting for $TARGET_SHA."
+              return 1
             fi
 
             BODY="$(curl -fsS "$CONSULTANTS_URL" || true)"
             if printf '%s' "$BODY" | grep -Fq "CANDIDATS DÉCOUVERTS" && ! printf '%s' "$BODY" | grep -Fq "Visible uniquement après authentification du workspace"; then
-              echo "Production UI confirms the admin-gate fix is live."
+              echo "Legacy production without deployedSha confirms the admin-gate fix is live."
               return 0
             fi
 
