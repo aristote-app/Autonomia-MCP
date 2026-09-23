@@ -29,6 +29,17 @@ mkdir -p "$APP_ROOT/public"
 : > "$DEBUG_FILE"
 exec > >(tee -a "$WORKER_LOG" "$DEBUG_FILE") 2>&1
 
+REPORTER="$APP_ROOT/scripts/report-deploy-diagnostic.mjs"
+NODE_BIN="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node"
+report_deploy_exit() {
+  code=$?
+  if [ -f "$REPORTER" ] && [ -x "$NODE_BIN" ]; then
+    "$NODE_BIN" "$REPORTER" "cockpit" "$TARGET_SHA" "$code" "$WORKER_LOG" || true
+  fi
+  return "$code"
+}
+trap report_deploy_exit EXIT
+
 echo
 echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 echo "target_sha=${TARGET_SHA:-main}"
