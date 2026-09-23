@@ -10236,3 +10236,455 @@ body:has(.territoryCampaignPage) .desktopNav {
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
 }
+
+
+/* Specialized wow micro-apps */
+.wowWorkspace.specialized {
+  grid-template-columns: minmax(240px,.72fr) minmax(0,1.28fr);
+}
+.wowBigId {
+  display:block;
+  margin:10px 0 16px;
+  font-size:24px;
+  line-height:1.1;
+}
+.wowToggleRow {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:10px 0 14px;
+}
+.wowToggleRow button,
+.wowClusterBtn,
+.wowLotBtn {
+  min-height:38px;
+  padding:0 11px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+.wowToggleRow button.active,
+.wowClusterBtn.active,
+.wowLotBtn.active {
+  background:#ffd16a;
+  color:var(--ink);
+  border-color:#ffd16a;
+}
+.wowControlPane select {
+  width:100%;
+  margin-top:6px;
+  padding:10px 11px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+}
+.wowControlPane label {
+  display:grid;
+  gap:7px;
+  margin-top:12px;
+}
+.wowControlPane label > span {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  color:rgba(255,255,255,.72);
+  font-size:12px;
+  font-weight:800;
+}
+.wowAccountHero,
+.wowCampaignMock,
+.wowBrandPreview,
+.wowReserveCard,
+.wowMaintenanceGauge {
+  padding:16px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+}
+.wowAccountHero span,
+.wowCampaignMock > span,
+.wowBrandPreview > span,
+.wowMaintenanceGauge > span {
+  color:#ffd16a;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.wowAccountHero strong,
+.wowCampaignMock h4,
+.wowBrandPreview p {
+  display:block;
+  margin:10px 0 6px;
+  font-size:24px;
+  line-height:1.05;
+}
+.wowAccountHero small,
+.wowCampaignMock p {
+  color:rgba(255,255,255,.62);
+}
+.wowAccountGrid,
+.wowControlScore,
+.wowKpiGrid,
+.wowStockGrid,
+.wowBrandChecks,
+.wowLearningPath {
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+.wowAccountGrid article,
+.wowControlScore > div,
+.wowKpiGrid article,
+.wowStockGrid article,
+.wowBrandChecks article,
+.wowLearningPath article {
+  padding:13px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowAccountGrid article,
+.wowBrandChecks article {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.wowAccountGrid span,
+.wowControlScore span,
+.wowKpiGrid span,
+.wowStockGrid span,
+.wowLearningPath span {
+  color:rgba(255,255,255,.58);
+  font-size:10px;
+  font-weight:800;
+}
+.wowControlScore strong,
+.wowKpiGrid strong,
+.wowStockGrid strong {
+  display:block;
+  margin-top:5px;
+  font-size:22px;
+}
+.wowHeatmap {
+  display:grid;
+  gap:8px;
+}
+.wowHeatmap article {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 46px;
+  gap:8px 12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowHeatmap article > div:first-child {
+  display:grid;
+  gap:3px;
+}
+.wowHeatmap small {
+  color:rgba(255,255,255,.52);
+}
+.wowHeatmap > article > b {
+  font-size:21px;
+  text-align:right;
+}
+.wowHeatmap .wowBar {
+  grid-column:1 / -1;
+}
+.wowCampaignMock button {
+  min-height:40px;
+  margin-top:12px;
+  padding:0 12px;
+  border:0;
+  border-radius:7px;
+  background:#fff;
+  color:var(--ink);
+  font-weight:900;
+}
+.wowReconTable,
+.wowTimeline,
+.wowCompare,
+.wowCauseList,
+.wowTenderGrid,
+.wowSequence,
+.wowCalendarGrid {
+  display:grid;
+  gap:8px;
+}
+.wowReconTable article {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 48px 74px;
+  gap:8px;
+  align-items:center;
+  padding:11px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowReconTable article.matched { box-shadow: inset 3px 0 0 #4fd1a8; }
+.wowReconTable article.review { box-shadow: inset 3px 0 0 #ffd16a; }
+.wowReconTable small {
+  color:rgba(255,255,255,.58);
+}
+.wowTimeline button,
+.wowSequence button {
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) auto;
+  gap:10px;
+  align-items:start;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  text-align:left;
+  cursor:pointer;
+}
+.wowTimeline button.active,
+.wowSequence button.active {
+  border-color:#ffd16a;
+  background:rgba(255,209,106,.08);
+}
+.wowTimeline button > span,
+.wowSequence button > span {
+  display:grid;
+  gap:3px;
+}
+.wowTimeline small,
+.wowSequence small {
+  color:rgba(255,255,255,.52);
+}
+.wowTimeline em {
+  grid-column:2 / -1;
+  color:#ffd16a;
+  font-style:normal;
+  font-size:12px;
+}
+.wowClusterBtn {
+  display:flex;
+  width:100%;
+  justify-content:space-between;
+  margin-bottom:7px;
+}
+.wowBubbleArea {
+  display:flex;
+  min-height:280px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:18px;
+  border-radius:10px;
+  background:rgba(255,255,255,.03);
+}
+.wowBubbleArea button {
+  width:var(--size);
+  height:var(--size);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;
+  background:rgba(66,99,216,.22);
+  color:#fff;
+  display:grid;
+  place-content:center;
+  text-align:center;
+  cursor:pointer;
+}
+.wowBubbleArea button.active {
+  background:#ffd16a;
+  color:var(--ink);
+}
+.wowBubbleArea button strong {
+  font-size:13px;
+}
+.wowBubbleArea button span {
+  font-size:20px;
+  font-weight:900;
+}
+.wowMaintenanceGauge strong {
+  display:block;
+  margin:8px 0;
+  font-size:34px;
+}
+.wowCauseList article,
+.wowCompare article,
+.wowTenderGrid article {
+  display:grid;
+  gap:8px;
+  align-items:center;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowCauseList article {
+  grid-template-columns:34px minmax(0,1fr) auto;
+}
+.wowCompare article {
+  grid-template-columns:minmax(120px,1fr) auto auto 48px;
+}
+.wowCompare article .wowBar {
+  grid-column:1/-1;
+}
+.wowStockGrid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.wowStockGrid article.warning { box-shadow: inset 0 3px 0 #ffd16a; }
+.wowStockGrid article.danger { box-shadow: inset 0 3px 0 #ff7a7a; }
+.wowStockGrid article > small {
+  display:block;
+  margin-top:8px;
+  color:#ffd16a;
+  font-weight:800;
+}
+.wowReserveCard {
+  display:grid;
+  grid-template-columns:minmax(180px,.7fr) minmax(0,1fr);
+  gap:16px;
+}
+.wowPhotoPlaceholder {
+  min-height:180px;
+  display:grid;
+  place-content:center;
+  text-align:center;
+  border-radius:8px;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+}
+.wowPhotoPlaceholder span {
+  color:rgba(255,255,255,.5);
+  font-size:10px;
+}
+.wowPhotoPlaceholder b {
+  margin-top:8px;
+}
+.wowLotBtn {
+  width:100%;
+  margin-bottom:7px;
+  text-align:left;
+}
+.wowTenderGrid article {
+  grid-template-columns:34px minmax(0,1fr) auto;
+}
+.wowLearningPath {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.wowLearningPath article strong {
+  display:block;
+  margin:10px 0 4px;
+}
+.wowLearningPath small {
+  color:rgba(255,255,255,.56);
+}
+.wowCalendarGrid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.wowCalendarGrid article {
+  padding:14px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowCalendarGrid article > span {
+  color:#ffd16a;
+  font-size:10px;
+  font-weight:900;
+}
+.wowCalendarGrid strong {
+  display:block;
+  margin:8px 0 3px;
+}
+.wowCalendarGrid small {
+  color:rgba(255,255,255,.52);
+}
+.wowCalendarGrid b {
+  display:block;
+  margin-top:12px;
+  font-size:11px;
+}
+.wowBrandChecks {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.wowBrandChecks article.ok b { color:#4fd1a8; }
+.wowBrandChecks article.warning b { color:#ffd16a; }
+.wowBrandChecks small {
+  color:rgba(255,255,255,.52);
+}
+.wowKpiGrid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.wowKpiGrid small {
+  display:block;
+  margin-top:5px;
+  color:#4fd1a8;
+}
+.wowSparkline {
+  display:flex;
+  align-items:end;
+  gap:6px;
+  height:150px;
+  margin:12px 0;
+  padding:14px;
+  border-radius:9px;
+  background:rgba(255,255,255,.03);
+}
+.wowSparkline i {
+  flex:1;
+  min-height:12px;
+  border-radius:5px 5px 0 0;
+  background:linear-gradient(180deg,#ffd16a,rgba(255,209,106,.28));
+}
+.wowDropzone {
+  display:grid;
+  gap:5px;
+  margin:10px 0 12px;
+  padding:22px 12px;
+  border:1px dashed rgba(255,255,255,.28);
+  border-radius:9px;
+  text-align:center;
+}
+.wowDropzone span {
+  color:rgba(255,255,255,.52);
+}
+.wowDataGrid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.wowDataGrid > div {
+  padding:12px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+}
+.wowDataGrid span {
+  display:block;
+  color:rgba(255,255,255,.52);
+  font-size:10px;
+  font-weight:800;
+}
+.wowDataGrid strong {
+  display:block;
+  margin-top:5px;
+}
+@media (max-width: 880px) {
+  .wowWorkspace.specialized,
+  .wowReserveCard {
+    grid-template-columns:1fr;
+  }
+  .wowStockGrid,
+  .wowLearningPath,
+  .wowKpiGrid {
+    grid-template-columns:1fr;
+  }
+  .wowCompare article,
+  .wowReconTable article {
+    grid-template-columns:1fr;
+  }
+}
