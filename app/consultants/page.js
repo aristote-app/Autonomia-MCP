@@ -53,15 +53,19 @@ export default async function ConsultantsPage({ searchParams }) {
   const lastQuery = String(params?.query || "");
   const discoverySummary = await getConsultantDiscoverySummary().catch(() => ({
     candidates: 0,
+    active: 0,
     rejected: 0,
+    discovered_total: 0,
+    usable_discovered: 0,
     malt: 0,
     freelance_com: 0,
-    linkedin: 0
+    linkedin: 0,
+    collective_work: 0
   }));
 
   const [consultants, candidates, summary, accountResult] = await Promise.all([
     listConsultantsWithSkills({ limit: 500 }).catch(() => []),
-    listConsultantCandidates({ limit: 120 }).catch(() => []),
+    listConsultantCandidates({ limit: 200 }).catch(() => []),
     getConsultantPoolSummary().catch(() => ({
       total: 0, active: 0, available_now: 0, remote: 0, tjm_known: 0
     })),
@@ -93,6 +97,30 @@ export default async function ConsultantsPage({ searchParams }) {
         </p>
       </header>
 
+      <section className="talentIntelligenceStatus">
+        <div className="sectionTitle">
+          <div>
+            <p className="eyebrow">TALENT INTELLIGENCE · COLLECTE CONTINUE</p>
+            <h2>Objectif : 350 profils IA qualifiés.</h2>
+          </div>
+          <p>
+            Rotation quotidienne de 18 familles de compétences. Recherche ciblée sur Malt,
+            Freelance.com, LinkedIn et Collective.work, avec déduplication et conservation
+            de la preuve source.
+          </p>
+        </div>
+        <div className="consultantMetrics">
+          <article><strong>{discoverySummary.usable_discovered}</strong><span>Profils utilisables trouvés</span></article>
+          <article><strong>{discoverySummary.malt}</strong><span>Malt</span></article>
+          <article><strong>{discoverySummary.freelance_com}</strong><span>Freelance.com</span></article>
+          <article><strong>{discoverySummary.linkedin}</strong><span>LinkedIn</span></article>
+          <article><strong>{discoverySummary.collective_work}</strong><span>Collective.work</span></article>
+        </div>
+        <small>
+          Collecte quotidienne progressive jusqu'à 350 profils. Aucun contact automatique et aucun enrichissement payant déclenché par cette collecte.
+        </small>
+      </section>
+
       {importedCount > 0 && (
         <div className="adminFlash">
           <strong>{importedCount} consultant{importedCount > 1 ? "s" : ""} importé{importedCount > 1 ? "s" : ""}</strong>
@@ -119,11 +147,11 @@ export default async function ConsultantsPage({ searchParams }) {
         <section className="talentHunterPanel">
           <div className="sectionTitle">
             <div>
-              <p className="eyebrow">TALENT HUNTER · MALT + FREELANCE.COM + LINKEDIN</p>
+              <p className="eyebrow">TALENT HUNTER · MALT + FREELANCE.COM + LINKEDIN + COLLECTIVE.WORK</p>
               <h2>Chercher les profils dont Autonomia a besoin.</h2>
             </div>
             <p>
-              Trois recherches web ciblées maximum par déclenchement, mises en cache 12 h. Les résultats restent candidats jusqu'à validation humaine.
+              Recherche paginée sur quatre sources, mise en cache 24 h. Les résultats restent candidats jusqu'à validation humaine.
             </p>
           </div>
           <form action={discoverConsultantsFromWeb} className="talentHunterForm">
@@ -139,7 +167,7 @@ export default async function ConsultantsPage({ searchParams }) {
                 placeholder="Ex. Formateur IA Copilot adoption"
               />
             </label>
-            <button type="submit">Chercher sur 3 sources</button>
+            <button type="submit">Chercher sur 4 sources</button>
           </form>
           <div className="talentHunterPresets">
             <span>Exemples :</span>
@@ -196,7 +224,7 @@ export default async function ConsultantsPage({ searchParams }) {
               <h2>Vérifier avant d'activer.</h2>
             </div>
             <p>
-              Les noms, compétences, TJM et localisations ci-dessous proviennent uniquement des éléments publics trouvés dans l'index web. Les champs absents restent non renseignés.
+              Les noms, compétences, TJM et localisations ci-dessous proviennent uniquement des éléments publics trouvés dans l'index web. Les champs absents restent non renseignés. Affichage des {Math.min(candidates.length, 200)} profils les plus récents sur {discoverySummary.candidates} en attente.
             </p>
           </div>
 
