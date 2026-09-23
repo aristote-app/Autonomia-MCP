@@ -384,11 +384,16 @@ const meetingTypes = new Set(["meeting","timeline","executive","report"]);
 const plannerTypes = new Set(["learning","calendar","site"]);
 const controlTypes = new Set(["control","classify","cluster"]);
 
+const specializedTypes = new Set([
+  "account","seo","campaign","reconcile","timeline","cluster","maintenance","compare",
+  "stock","site","tender","learning","calendar","brand","collect","executive","table",
+  "report","variance","sequence","routing","workflow","invoice","extract","classify",
+  "brief","catalog"
+]);
+
 function Experience({ type, topic, ...props }) {
-  const specialized = <SpecializedExperience type={type} topic={topic} context={ctx(topic)} {...props} />;
-  if (specialized.type !== SpecializedExperience || specialized.props.type) {
-    const specialTypes = new Set(["account","seo","campaign","reconcile","timeline","cluster","maintenance","compare","stock","site","tender","learning","calendar","brand","collect","executive","table","report","variance","sequence","routing","workflow","invoice","extract","classify","brief","catalog"]);
-    if (specialTypes.has(type)) return specialized;
+  if (specializedTypes.has(type)) {
+    return <SpecializedExperience type={type} topic={topic} context={ctx(topic)} {...props} />;
   }
 
   const allProps = { topic, ...props };
