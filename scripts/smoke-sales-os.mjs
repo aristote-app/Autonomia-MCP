@@ -96,6 +96,36 @@ assert.equal(revenueActions[0].kind, "verify_contact");
 assert.equal(revenueActions[0].channel, "LinkedIn");
 assert.ok(revenueActions.some((item) => item.kind === "find_contact" && item.account_key === "acme"));
 
+const outreachActions = buildRevenueActions({
+  accounts: [{
+    slug: "acme",
+    name: "Acme",
+    heat_score: 80,
+    intermediary_risk: false,
+    recommended_offer: "Prestation / automatisation IA",
+    playbook: { trigger: "Déploiement Copilot" }
+  }],
+  contacts: [{
+    id: "contact-2",
+    account_key: "acme",
+    account_name: "Acme",
+    full_name: "Jean Martin",
+    first_name: "Jean",
+    verification_status: "verified",
+    outreach_status: "not_started",
+    enrichment_status: "enriched",
+    waalaxy_list_id: null,
+    do_not_contact: false,
+    trigger_title: "Déploiement Copilot"
+  }],
+  waalaxyReady: true
+});
+
+assert.equal(outreachActions[0].kind, "prepare_outreach");
+assert.equal(outreachActions[0].channel, "LinkedIn / Waalaxy");
+assert.ok(outreachActions[0].message.includes("Déploiement Copilot"));
+assert.ok(outreachActions[0].message.includes("Acme"));
+
 const originalFetch = globalThis.fetch;
 const calls = [];
 
