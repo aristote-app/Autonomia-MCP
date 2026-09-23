@@ -17,6 +17,7 @@ import {
 import { problemSolutions } from "../content/problem-solutions.js";
 import { problemSalesCopy } from "../content/problem-sales-copy.js";
 import { problemPaidSearch } from "../content/problem-paid-search.js";
+import { problemPaidCreatives } from "../content/problem-paid-creatives.js";
 
 const articles = [...publishedExecutionArticles, ...publishedTrainingArticles, ...publishedTerritoryArticles];
 const errors = [];
@@ -159,6 +160,8 @@ const requiredRuntimeFiles = [
   "content/problem-solutions.js",
   "content/problem-sales-copy.js",
   "content/problem-paid-search.js",
+  "content/problem-paid-creatives.js",
+  "scripts/export-problem-google-ads.mjs",
   "app/solutions-ia/page.js",
   "app/solutions-ia/[slug]/page.js",
   "scripts/seo-audit.mjs",
@@ -260,6 +263,33 @@ for (const slug of Object.keys(problemPaidSearch)) {
 }
 
 for (const item of waveOneProblems) {
+  const creative = problemPaidCreatives[item.slug];
+  if (!creative) {
+    errors.push(`${item.slug}: Priority 1 LP is missing curated responsive-search assets.`);
+  } else {
+    if (!Array.isArray(creative.headlines) || creative.headlines.length < 6) {
+      errors.push(`${item.slug}: responsive-search creative requires at least six headlines.`);
+    }
+    if (!Array.isArray(creative.descriptions) || creative.descriptions.length < 2) {
+      errors.push(`${item.slug}: responsive-search creative requires at least two descriptions.`);
+    }
+    for (const headline of creative.headlines || []) {
+      if (headline.length > 30) {
+        errors.push(`${item.slug}: Google Ads headline exceeds 30 characters: "${headline}".`);
+      }
+    }
+    for (const description of creative.descriptions || []) {
+      if (description.length > 90) {
+        errors.push(`${item.slug}: Google Ads description exceeds 90 characters.`);
+      }
+    }
+    for (const pathValue of [creative.path1, creative.path2]) {
+      if (!pathValue || pathValue.length > 15) {
+        errors.push(`${item.slug}: Google Ads path must contain 1-15 characters.`);
+      }
+    }
+  }
+
   const sales = problemSalesCopy[item.slug];
   if (!sales) {
     errors.push(`${item.slug}: Wave 1 LP is missing buying-context content.`);
