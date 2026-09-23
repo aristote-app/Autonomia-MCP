@@ -164,20 +164,49 @@ jobs:
       - name: Refresh public and training market
         id: public_market
         run: |
-          rm -f /tmp/autonomia-public-market.json
+          rm -f /tmp/autonomia-public-market-*.json
+          : > /tmp/autonomia-public-market.ndjson
+          success=0
+          i=0
 
-          status="$(curl -sS \
-            --max-time 75 \
-            -o /tmp/autonomia-public-market.json \
-            -w "%{http_code}" \
-            -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
-            "https://cockpit.build-autonomia.com/api/cron/market-refresh?mode=public" || true)"
+          for query in "intelligence artificielle" "IA générative" "LLM" "agent IA"; do
+            i=$((i + 1))
+            file="/tmp/autonomia-public-market-$i.json"
 
-          echo "Public/training refresh: HTTP $status"
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+            status="$(curl -sS \
+              --max-time 55 \
+              -o "$file" \
+              -w "%{http_code}" \
+              -G \
+              -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
+              --data-urlencode "mode=public" \
+              --data-urlencode "q=$query" \
+              "https://cockpit.build-autonomia.com/api/cron/market-refresh" || true)"
 
-          if [ "$status" != "200" ]; then
-            echo "::error::Public/training refresh did not complete successfully."
+            echo "Public/training refresh [$query]: HTTP $status"
+
+            if [ "$status" = "200" ]; then
+              success=1
+              node --input-type=module - "$file" "$query" <<'NODE' >> /tmp/autonomia-public-market.ndjson
+              import fs from "node:fs";
+              const [file, query] = process.argv.slice(2);
+              const raw = fs.readFileSync(file, "utf8");
+              let payload;
+              try {
+                payload = JSON.parse(raw);
+              } catch {
+                payload = { ok: false, mode: "public", query, raw_error: raw.slice(0, 500) };
+              }
+              process.stdout.write(JSON.stringify({ query, payload }) + "\n");
+              NODE
+            else
+              echo "::warning::Public/training query '$query' returned HTTP $status."
+            fi
+          done
+
+          echo "status=$success" >> "$GITHUB_OUTPUT"
+          if [ "$success" != "1" ]; then
+            echo "::error::No public/training market query completed successfully."
             exit 1
           fi
 
@@ -187,27 +216,26 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from "node:fs";
 
-          if (!fs.existsSync("/tmp/autonomia-public-market.json")) process.exit(0);
+          if (!fs.existsSync("/tmp/autonomia-public-market.ndjson")) process.exit(0);
 
-          const raw = fs.readFileSync("/tmp/autonomia-public-market.json", "utf8");
-          let payload;
-          try {
-            payload = JSON.parse(raw);
-          } catch {
-            console.log(raw);
-            process.exit(0);
-          }
+          const rows = fs.readFileSync("/tmp/autonomia-public-market.ndjson", "utf8")
+            .split(/\n+/)
+            .filter(Boolean)
+            .map((line) => JSON.parse(line));
 
-          const runs = Array.isArray(payload.runs) ? payload.runs : [];
+          const runs = rows.flatMap((row) =>
+            Array.isArray(row.payload?.runs) ? row.payload.runs : []
+          );
+
           console.log(JSON.stringify({
-            ok: Boolean(payload.ok),
-            mode: payload.mode ?? null,
+            ok: rows.some((row) => Boolean(row.payload?.ok)),
+            mode: "public",
+            completedQueries: rows.length,
             successfulQueries: runs.filter((run) => run.ok).length,
             failedQueries: runs.filter((run) => !run.ok).length,
             persistedRows: runs.reduce(
               (sum, run) => sum + Number(run.persistedRows || 0),
               0
-            ),
-            territorySignals: payload.territorySignals ?? null
+            )
           }, null, 2));
           NODE
