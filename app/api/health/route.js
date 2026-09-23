@@ -26,7 +26,9 @@ export async function GET() {
     ),
     waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY),
     waalaxyReplyWebhookConfigured: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
-    selfDeployConfigured:
+    selfDeployConfigured: true,
+    selfDeployAuthMode: "github_oidc",
+    legacySelfDeployConfigured:
       process.env.AUTONOMIA_SELF_DEPLOY_ENABLED === "true" &&
       Boolean(process.env.AUTONOMIA_INTERNAL_TOKEN),
     timestamp: new Date().toISOString()

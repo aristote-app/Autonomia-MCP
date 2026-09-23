@@ -34,7 +34,8 @@
     "smoke:consultant-accounts": "node scripts/smoke-consultant-account-matching.mjs",
     "smoke:consultant-import": "node scripts/smoke-consultant-import.mjs",
     "smoke:account-watch": "node scripts/smoke-account-watch.mjs",
-    "smoke:company-registry": "node scripts/smoke-company-registry.mjs"
+    "smoke:company-registry": "node scripts/smoke-company-registry.mjs",
+    "smoke:deploy-oidc": "node scripts/smoke-deploy-oidc.mjs"
   },
   "engines": {
     "node": ">=22"

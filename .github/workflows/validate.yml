@@ -86,3 +86,5 @@ jobs:
         run: npm run smoke:search-budget
       - name: Smoke test MCP
         run: npm run smoke:mcp
+      - name: Smoke test GitHub OIDC deploy policy
+        run: npm run smoke:deploy-oidc
