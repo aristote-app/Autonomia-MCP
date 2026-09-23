@@ -40,6 +40,8 @@ jobs:
         run: npm run smoke:import
       - name: Smoke test staffing
         run: npm run smoke:staffing
+      - name: Smoke test proactive consultant account matching
+        run: npm run smoke:consultant-accounts
       - name: Smoke test scoring
         run: npm run smoke:scoring
       - name: Smoke test dormant persistence

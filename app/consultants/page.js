@@ -4,6 +4,8 @@ import {
   listConsultantsWithSkills,
   getConsultantPoolSummary
 } from "../../lib/db/consultants.js";
+import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
+import { rankAccountsForConsultant } from "../../lib/intelligence/consultantAccounts.js";
 
 export const dynamic = "force-dynamic";
 
@@ -52,12 +54,25 @@ export default async function ConsultantsPage() {
     );
   }
 
-  const [consultants, summary] = await Promise.all([
+  const [consultants, summary, accountResult] = await Promise.all([
     listConsultantsWithSkills({ limit: 500 }).catch(() => []),
     getConsultantPoolSummary().catch(() => ({
       total: 0, active: 0, available_now: 0, remote: 0, tjm_known: 0
-    }))
+    })),
+    loadAccountIntelligence({ limit: 250 }).catch(() => ({ accounts: [] }))
   ]);
+
+  const accounts = accountResult.accounts || [];
+  const proactiveMatches = new Map(
+    consultants.map((consultant) => [
+      consultant.id,
+      rankAccountsForConsultant({
+        consultant,
+        accounts,
+        limit: 3
+      }).matches
+    ])
+  );
 
   return (
     <main>
@@ -100,6 +115,29 @@ export default async function ConsultantsPage() {
                   <span key={skill}>{skill}</span>
                 ))}
               </div>
+
+              {(proactiveMatches.get(consultant.id) || []).length > 0 && (
+                <div className="nextAction">
+                  <span>COMPTES À ATTAQUER POUR CE PROFIL</span>
+                  <div className="offerStack">
+                    {(proactiveMatches.get(consultant.id) || []).map((match) => (
+                      <div key={match.account_slug}>
+                        <strong>
+                          <Link href={"/accounts/" + match.account_slug}>
+                            {match.account_name} · {match.score}/100
+                          </Link>
+                        </strong>
+                        <small>
+                          {match.matched_skills.length
+                            ? "Convergence : " + match.matched_skills.slice(0, 4).join(" · ")
+                            : match.reason}
+                        </small>
+                        {match.trigger && <small>Signal : {match.trigger}</small>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </article>
           ))}
         </section>
