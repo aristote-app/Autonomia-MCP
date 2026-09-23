@@ -34,6 +34,24 @@ const plan = buildAccountOutreachPlan(account);
 assert.equal(plan.sequence.length, 4);
 assert.ok(plan.sequence[0].content.includes("Acme"));
 assert.ok(plan.sequence[1].content.includes("Déploiement Copilot"));
+assert.equal(plan.target_role, "décideur du sujet");
+assert.equal(plan.evidence.length, 1);
+assert.equal(plan.stacked_signals, false);
+
+const stackedPlan = buildAccountOutreachPlan({
+  name: "Stacked Acme",
+  source_count: 2,
+  recommended_offer: "Formation & adoption IA",
+  primary_decision_role: { label: "Responsable formation / L&D" },
+  timeline: [
+    { title: "Déploiement Copilot", source_id: "linkedin", source_url: "https://example.test/1" },
+    { title: "Recherche formateur IA", source_id: "france_travail_jobs", source_url: "https://example.test/2" }
+  ]
+});
+assert.equal(stackedPlan.stacked_signals, true);
+assert.equal(stackedPlan.target_role, "Responsable formation / L&D");
+assert.ok(stackedPlan.sequence[2].subject.includes("plusieurs signaux"));
+assert.ok(stackedPlan.sequence[2].content.includes("Recherche formateur IA"));
 
 const battlecard = buildAccountBattlecard({
   name: "Acme",
