@@ -24,6 +24,11 @@ if [ "${AUTONOMIA_DEPLOY_DAEMONIZED:-0}" != "1" ]; then
   exit 0
 fi
 
+DEBUG_FILE="$APP_ROOT/public/__autonomia_cockpit_deploy_debug.txt"
+mkdir -p "$APP_ROOT/public"
+: > "$DEBUG_FILE"
+exec > >(tee -a "$WORKER_LOG" "$DEBUG_FILE") 2>&1
+
 echo
 echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 echo "target_sha=${TARGET_SHA:-main}"
