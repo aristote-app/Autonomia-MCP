@@ -19,9 +19,9 @@ export const metadata = {
     ? { index: false, follow: false, nocache: true }
     : { index: true, follow: true },
   verification: {
-    ...(process.env.GOOGLE_SITE_VERIFICATION
-      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
-      : {}),
+    google:
+      process.env.GOOGLE_SITE_VERIFICATION ||
+      "5Trse8RzUYc2qH5s9OslaXxRzG7T8bJvb8hwCJYZE8s",
     ...(process.env.BING_SITE_VERIFICATION
       ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
       : {})
