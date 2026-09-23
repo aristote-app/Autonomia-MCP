@@ -141,7 +141,16 @@ const replyIds = extractWaalaxyReplyIdentifiers({
 });
 assert.deepEqual(replyIds.linkedinUrls, ["https://www.linkedin.com/in/jane-doe-ai"]);
 assert.deepEqual(replyIds.emails, ["jane@example.test"]);
-assert.deepEqual(replyIds.prospectIds, []);
+assert.deepEqual(replyIds.prospectIds, ["waalaxy-prospect-1"]);
+
+const replyFromProfile = extractWaalaxyReplyIdentifiers({
+  prospect: {
+    _id: "waalaxy-prospect-2",
+    profile: { publicIdentifier: "john-doe" }
+  }
+});
+assert.ok(replyFromProfile.linkedinUrls.includes("https://www.linkedin.com/in/john-doe"));
+assert.ok(replyFromProfile.prospectIds.includes("waalaxy-prospect-2"));
 
 const originalFetch = globalThis.fetch;
 const calls = [];
