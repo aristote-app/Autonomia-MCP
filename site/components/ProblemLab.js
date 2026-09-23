@@ -481,7 +481,7 @@ export default function ProblemLab({ problem }) {
               <p>On repart de vos outils, de vos règles et de vos points de validation pour construire le prototype.</p>
             </div>
             <a href="#diagnostic" onClick={()=>{
-              window.dispatchEvent(new CustomEvent("autonomia:prefill-problem-lead",{detail:{need:`Je veux adapter le module « ${demo[1]} » à notre flux réel. Nos outils et règles sont à préciser.`}}));
+              window.dispatchEvent(new CustomEvent("autonomia:prefill-problem-lead",{detail:{need:`Je veux adapter le module « ${demo[1]} » à notre flux réel. Nos outils et règles sont à préciser.`,demoName:demo[1],demoIndex:active+1}}));
               trackEvent("problem_cta_click",{problem_slug:problem.slug,problem_cluster:problem.cluster,source_surface:"problem_lab",demo_name:demo[1],demo_index:active+1});
             }}>Adapter ce flux à mon entreprise →</a>
           </div>
