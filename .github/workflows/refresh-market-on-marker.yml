@@ -59,7 +59,7 @@ jobs:
               -o /tmp/autonomia-freelance.json \
               -w "%{http_code}" \
               -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
-              "https://autonomia-mcp.vercel.app/api/cron/freelance-refresh" || true)"
+              "https://cockpit.build-autonomia.com/api/cron/freelance-refresh" || true)"
 
             echo "Freelance refresh attempt $attempt: HTTP $status"
 
@@ -118,7 +118,7 @@ jobs:
             -o /tmp/autonomia-territories.json \
             -w "%{http_code}" \
             -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
-            "https://autonomia-mcp.vercel.app/api/cron/market-refresh?mode=territories" || true)"
+            "https://cockpit.build-autonomia.com/api/cron/market-refresh?mode=territories" || true)"
 
           echo "Territory refresh: HTTP $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -171,7 +171,7 @@ jobs:
             -o /tmp/autonomia-public-market.json \
             -w "%{http_code}" \
             -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
-            "https://autonomia-mcp.vercel.app/api/cron/market-refresh?mode=public" || true)"
+            "https://cockpit.build-autonomia.com/api/cron/market-refresh?mode=public" || true)"
 
           echo "Public/training refresh: HTTP $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -189,9 +189,14 @@ jobs:
 
           if (!fs.existsSync("/tmp/autonomia-public-market.json")) process.exit(0);
 
-          const payload = JSON.parse(
-            fs.readFileSync("/tmp/autonomia-public-market.json", "utf8")
-          );
+          const raw = fs.readFileSync("/tmp/autonomia-public-market.json", "utf8");
+          let payload;
+          try {
+            payload = JSON.parse(raw);
+          } catch {
+            console.log(raw);
+            process.exit(0);
+          }
 
           const runs = Array.isArray(payload.runs) ? payload.runs : [];
           console.log(JSON.stringify({
