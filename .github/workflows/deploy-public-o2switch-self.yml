@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: autonomia-public-o2switch-deploy
+  group: autonomia-public-o2switch-deploy-v2
   cancel-in-progress: false
 
 jobs:
