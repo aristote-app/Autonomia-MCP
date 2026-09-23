@@ -131,11 +131,20 @@ export default async function InboundPage({ searchParams }) {
                     <div>
                       <small>MÉTIERS RECOMMANDÉS</small>
                       <div className="inboundSolutionTags">
-                        {lead.scan_context.solution_context.recommended_roles.map((role, index) => (
-                          <b key={(role.slug || role.id || role.label || "role") + index}>
-                            {role.label || role.id || role.slug}
-                          </b>
-                        ))}
+                        {lead.scan_context.solution_context.recommended_roles.map((role, index) => {
+                          const label = role.label || role.id || role.slug;
+                          const key = (role.slug || role.id || role.label || "role") + index;
+                          return role.slug ? (
+                            <a
+                              key={key}
+                              href={"https://build-autonomia.com/metiers-ia/" + role.slug}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {label} ↗
+                            </a>
+                          ) : <b key={key}>{label}</b>;
+                        })}
                       </div>
                     </div>
                   )}
@@ -144,11 +153,20 @@ export default async function InboundPage({ searchParams }) {
                     <div>
                       <small>FORMATIONS RECOMMANDÉES</small>
                       <div className="inboundSolutionTags">
-                        {lead.scan_context.solution_context.recommended_training.map((training, index) => (
-                          <b key={(training.slug || training.id || training.title || "training") + index}>
-                            {training.title || training.id || training.slug}
-                          </b>
-                        ))}
+                        {lead.scan_context.solution_context.recommended_training.map((training, index) => {
+                          const label = training.title || training.id || training.slug;
+                          const key = (training.slug || training.id || training.title || "training") + index;
+                          return training.slug ? (
+                            <a
+                              key={key}
+                              href={"https://build-autonomia.com/formation-ia/" + training.slug}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {label} ↗
+                            </a>
+                          ) : <b key={key}>{label}</b>;
+                        })}
                       </div>
                     </div>
                   )}
