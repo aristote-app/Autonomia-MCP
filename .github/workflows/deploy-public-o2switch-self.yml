@@ -206,9 +206,10 @@ jobs:
           SUBMIT_URL: https://build-autonomia.com/api/internal/search-console-submit
           OIDC_TOKEN: ${{ steps.seo_oidc.outputs.token }}
         run: |
-          HTTP_CODE="$(curl -sS -X POST \
+          HTTP_CODE="$(curl -sS -G \
             -o /tmp/search-console-submit.json \
             -w "%{http_code}" \
+            --data-urlencode "action=submit" \
             -H "Authorization: Bearer $OIDC_TOKEN" \
             "$SUBMIT_URL" || true)"
 
