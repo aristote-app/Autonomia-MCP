@@ -21,7 +21,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
 
     steps:
       - name: Probe cockpit deployment capability
@@ -36,7 +36,8 @@ jobs:
             echo "GitHub OIDC self-deploy is active in production."
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "Bootstrap still required: production does not expose GitHub OIDC self-deploy yet."
+            echo "::error::Production does not expose GitHub OIDC self-deploy."
+            exit 1
           fi
 
       - name: Request GitHub OIDC deployment identity
@@ -71,15 +72,85 @@ jobs:
             --data "{\"sha\":\"$TARGET_SHA\"}")"
 
           cat /tmp/autonomia-self-deploy.json
+          echo
 
-          if [ "$HTTP_CODE" = "202" ]; then
-            echo "o2switch self-deploy accepted for $TARGET_SHA."
-            exit 0
+          if [ "$HTTP_CODE" != "202" ]; then
+            echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE."
+            exit 1
           fi
 
-          echo "::error::Self-deploy endpoint returned HTTP $HTTP_CODE."
-          exit 1
+          echo "o2switch self-deploy accepted for $TARGET_SHA."
 
+      - name: Verify production and retry once if needed
+        if: steps.probe.outputs.ready == 'true'
+        env:
+          DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
+          HEALTH_URL: https://cockpit.build-autonomia.com/api/health
+          CONSULTANTS_URL: https://cockpit.build-autonomia.com/consultants
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          AUDIENCE: autonomia-o2switch
+        run: |
+          verify_target() {
+            HEALTH="$(curl -fsS "$HEALTH_URL" || true)"
+            DEPLOYED_SHA="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha", ""))' 2>/dev/null || true)"
+
+            if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
+              echo "Production health confirms target SHA: $TARGET_SHA"
+              return 0
+            fi
+
+            BODY="$(curl -fsS "$CONSULTANTS_URL" || true)"
+            if printf '%s' "$BODY" | grep -Fq "CANDIDATS DÉCOUVERTS" && ! printf '%s' "$BODY" | grep -Fq "Visible uniquement après authentification du workspace"; then
+              echo "Production UI confirms the admin-gate fix is live."
+              return 0
+            fi
+
+            return 1
+          }
+
+          echo "Waiting for background build + Passenger restart..."
+          for attempt in $(seq 1 18); do
+            if verify_target; then
+              exit 0
+            fi
+            echo "Target not live yet (attempt $attempt/18)."
+            sleep 10
+          done
+
+          echo "First deploy was accepted but did not become visible. Retrying once with a fresh OIDC token."
+
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          RETRY_TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+
+          HTTP_CODE="$(curl -sS \
+            -o /tmp/autonomia-self-deploy-retry.json \
+            -w "%{http_code}" \
+            -X POST "$DEPLOY_URL" \
+            -H "Authorization: Bearer $RETRY_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"sha\":\"$TARGET_SHA\"}")"
+
+          cat /tmp/autonomia-self-deploy-retry.json
+          echo
+
+          if [ "$HTTP_CODE" != "202" ]; then
+            echo "::error::Retry self-deploy endpoint returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
+          for attempt in $(seq 1 24); do
+            if verify_target; then
+              exit 0
+            fi
+            echo "Target still not live after retry (attempt $attempt/24)."
+            sleep 10
+          done
+
+          echo "::error::o2switch accepted the deploy twice but production never switched to the target version."
+          exit 1
 
       - name: Bootstrap consultant candidates once
         if: steps.probe.outputs.ready == 'true'
@@ -87,24 +158,18 @@ jobs:
           BOOTSTRAP_URL: https://cockpit.build-autonomia.com/api/internal/talent-bootstrap
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
         run: |
-          echo "Waiting for the newly deployed Talent Hunter endpoint..."
-          for attempt in $(seq 1 24); do
-            HTTP_CODE="$(curl -sS \
-              -o /tmp/autonomia-talent-bootstrap.json \
-              -w "%{http_code}" \
-              -X POST "$BOOTSTRAP_URL" \
-              -H "Authorization: Bearer $OIDC_TOKEN")"
+          HTTP_CODE="$(curl -sS \
+            -o /tmp/autonomia-talent-bootstrap.json \
+            -w "%{http_code}" \
+            -X POST "$BOOTSTRAP_URL" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
 
-            if [ "$HTTP_CODE" = "200" ]; then
-              cat /tmp/autonomia-talent-bootstrap.json
-              echo
-              echo "Talent Hunter bootstrap completed or was already seeded."
-              exit 0
-            fi
+          if [ "$HTTP_CODE" = "200" ]; then
+            cat /tmp/autonomia-talent-bootstrap.json
+            echo
+            echo "Talent Hunter bootstrap completed or was already seeded."
+            exit 0
+          fi
 
-            echo "Talent bootstrap not ready yet (HTTP $HTTP_CODE, attempt $attempt/24)."
-            sleep 10
-          done
-
-          echo "::warning::Talent Hunter bootstrap did not become available during the deployment window."
+          echo "::warning::Talent Hunter bootstrap returned HTTP $HTTP_CODE after a verified deployment."
           exit 0

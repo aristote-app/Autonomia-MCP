@@ -1,5 +1,14 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+
 export async function GET() {
+  const deployedSha = await readFile(
+    join(process.cwd(), ".runtime", "deployed-sha"),
+    "utf8"
+  ).then((value) => value.trim()).catch(() => null);
+
   return Response.json({
+    deployedSha,
     ok: true,
     service: "autonomia-market-intelligence",
     version: "0.1.0",
