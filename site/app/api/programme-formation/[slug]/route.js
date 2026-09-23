@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
 import {
   getAcademyTraining,
   getAcademyTrainingStaticParams,
@@ -13,7 +12,7 @@ export function generateStaticParams() {
   return getAcademyTrainingStaticParams();
 }
 
-function safeText(value = "") {
+function clean(value = "") {
   return String(value)
     .replaceAll("’", "'")
     .replaceAll("‘", "'")
@@ -23,19 +22,28 @@ function safeText(value = "") {
     .replaceAll("—", "-")
     .replaceAll("œ", "oe")
     .replaceAll("Œ", "OE")
+    .replaceAll("€", "EUR")
     .replaceAll("…", "...")
-    .replaceAll("·", "-");
+    .replace(/[^\x09\x0A\x0D\x20-\xFF]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function wrap(text, font, size, width) {
-  const words = safeText(text).split(/\s+/);
+function esc(value = "") {
+  return clean(value)
+    .replaceAll("\\", "\\\\")
+    .replaceAll("(", "\\(")
+    .replaceAll(")", "\\)");
+}
+
+function wrap(text, max = 78) {
+  const words = clean(text).split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
   for (const word of words) {
-    const test = line ? line + " " + word : word;
-    if (font.widthOfTextAtSize(test, size) <= width) {
-      line = test;
-    } else {
+    const next = line ? line + " " + word : word;
+    if (next.length <= max) line = next;
+    else {
       if (line) lines.push(line);
       line = word;
     }
@@ -44,228 +52,218 @@ function wrap(text, font, size, width) {
   return lines;
 }
 
-function drawWrapped(page, text, x, y, opts) {
-  const { font, size = 11, maxWidth = 500, lineHeight = size * 1.35, color = rgb(0.11,0.12,0.16), maxLines } = opts;
-  const lines = wrap(text, font, size, maxWidth);
-  const useLines = maxLines ? lines.slice(0, maxLines) : lines;
-  let cursor = y;
-  for (const line of useLines) {
-    page.drawText(line, { x, y: cursor, size, font, color });
-    cursor -= lineHeight;
-  }
-  return cursor;
+function text(lines, {
+  x = 42,
+  y = 760,
+  size = 11,
+  leading = 15,
+  bold = false,
+  color = "0.09 0.12 0.19"
+} = {}) {
+  const font = bold ? "/F2" : "/F1";
+  const out = ["BT", color + " rg", font + " " + size + " Tf", "1 0 0 1 " + x + " " + y + " Tm"];
+  lines.forEach((line, index) => {
+    if (index) out.push("0 -" + leading + " Td");
+    out.push("(" + esc(line) + ") Tj");
+  });
+  out.push("ET");
+  return out.join("\n");
 }
 
-function drawLogo(page, x, y, scale = 1) {
-  const black = rgb(0.08, 0.08, 0.08);
-  const yellow = rgb(1, 0.784, 0.341);
-  const s = 14 * scale;
-  const gap = 4 * scale;
-  const radius = 2.5 * scale;
-  const points = [
-    [0, 0], [s+gap, 0],
-    [0, -(s+gap)], [s+gap, -(s+gap)], [2*(s+gap), -(s+gap)],
-    [0, -2*(s+gap)], [s+gap, -2*(s+gap)], [2*(s+gap), -2*(s+gap)]
+function logo(x = 42, y = 790) {
+  const s = 11, g = 4;
+  const pts = [
+    [0,0],[s+g,0],
+    [0,-s-g],[s+g,-s-g],[2*(s+g),-s-g],
+    [0,-2*(s+g)],[s+g,-2*(s+g)],[2*(s+g),-2*(s+g)]
   ];
-  for (const [dx, dy] of points) {
-    page.drawRectangle({ x:x+dx, y:y+dy, width:s, height:s, color:black, borderRadius:radius });
+  return [
+    "0.05 0.05 0.05 rg",
+    ...pts.map(([dx,dy]) => (x+dx) + " " + (y+dy) + " " + s + " " + s + " re f"),
+    "1 0.78 0.34 rg",
+    (x+2*(s+g)+3) + " " + (y+11) + " " + s + " " + s + " re f"
+  ].join("\n");
+}
+
+function makePdf(pages) {
+  const objects = [];
+  const add = (body) => {
+    objects.push(body);
+    return objects.length;
+  };
+
+  const catalogId = add("");
+  const pagesId = add("");
+  const fontRegular = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  const fontBold = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+
+  const pageIds = [];
+
+  for (const commands of pages) {
+    const stream = Buffer.from(commands, "latin1");
+    const contentId = add(Buffer.concat([
+      Buffer.from("<< /Length " + stream.length + " >>\nstream\n", "latin1"),
+      stream,
+      Buffer.from("\nendstream", "latin1")
+    ]));
+    const pageId = add(
+      "<< /Type /Page /Parent " + pagesId + " 0 R " +
+      "/MediaBox [0 0 595 842] " +
+      "/Resources << /Font << /F1 " + fontRegular + " 0 R /F2 " + fontBold + " 0 R >> >> " +
+      "/Contents " + contentId + " 0 R >>"
+    );
+    pageIds.push(pageId);
   }
-  page.drawRectangle({
-    x:x+2*(s+gap)+3*scale,
-    y:y+11*scale,
-    width:s,
-    height:s,
-    color:yellow,
-    rotate: degrees(12),
-    borderRadius:radius
+
+  objects[catalogId - 1] = "<< /Type /Catalog /Pages " + pagesId + " 0 R >>";
+  objects[pagesId - 1] = "<< /Type /Pages /Kids [" + pageIds.map((id) => id + " 0 R").join(" ") + "] /Count " + pageIds.length + " >>";
+
+  const chunks = [Buffer.from("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n", "latin1")];
+  const offsets = [0];
+  let offset = chunks[0].length;
+
+  objects.forEach((body, index) => {
+    offsets.push(offset);
+    const prefix = Buffer.from((index + 1) + " 0 obj\n", "latin1");
+    const payload = Buffer.isBuffer(body) ? body : Buffer.from(body, "latin1");
+    const suffix = Buffer.from("\nendobj\n", "latin1");
+    chunks.push(prefix, payload, suffix);
+    offset += prefix.length + payload.length + suffix.length;
   });
+
+  const xrefOffset = offset;
+  const xref = [
+    "xref",
+    "0 " + (objects.length + 1),
+    "0000000000 65535 f ",
+    ...offsets.slice(1).map((value) => String(value).padStart(10, "0") + " 00000 n "),
+    "trailer",
+    "<< /Size " + (objects.length + 1) + " /Root " + catalogId + " 0 R >>",
+    "startxref",
+    String(xrefOffset),
+    "%%EOF"
+  ].join("\n");
+
+  chunks.push(Buffer.from(xref, "latin1"));
+  return Buffer.concat(chunks);
 }
 
-function header(page, fonts, label) {
-  const { regular, bold } = fonts;
-  page.drawRectangle({ x:0, y:806, width:595.28, height:36, color: rgb(0.09,0.12,0.19) });
-  drawLogo(page, 32, 820, .55);
-  page.drawText("AUTONOMIA", { x:90, y:819, size:12, font:bold, color:rgb(1,1,1) });
-  page.drawText("ACADEMY", { x:164, y:819, size:9, font:bold, color:rgb(1,0.784,0.341) });
-  page.drawText(safeText(label), { x:420, y:819, size:8, font:regular, color:rgb(.86,.88,.92) });
+function coverPage(training) {
+  const duration = training.standardDays + " jours - " + (training.standardDays * 7) + " heures";
+  return [
+    "0.09 0.12 0.19 rg 0 0 595 842 re f",
+    logo(42, 793),
+    text(["AUTONOMIA"], { x:105, y:797, size:16, bold:true, color:"1 1 1" }),
+    text(["ACADEMY"], { x:105, y:777, size:9, bold:true, color:"1 0.78 0.34" }),
+    text(["PROGRAMME DE FORMATION"], { x:42, y:690, size:10, bold:true, color:"1 0.78 0.34" }),
+    text(wrap(training.title, 34), { x:42, y:646, size:29, leading:33, bold:true, color:"1 1 1" }),
+    text(wrap(training.subtitle, 74), { x:42, y:525, size:13, leading:19, color:"0.86 0.88 0.92" }),
+    "0.13 0.17 0.26 rg 42 304 511 128 re f",
+    text(["FORMAT RECOMMANDE"], { x:60, y:402, size:9, bold:true, color:"1 0.78 0.34" }),
+    text([duration], { x:60, y:374, size:20, bold:true, color:"1 1 1" }),
+    text(["Presentiel ou distanciel - Intra ou inter-entreprises"], { x:60, y:348, size:10, color:"0.86 0.88 0.92" }),
+    text(["Intra : 1 800 EUR HT / jour / groupe"], { x:60, y:326, size:10, bold:true, color:"1 1 1" }),
+    text(["Inter : 990 EUR HT / jour / participant"], { x:300, y:326, size:9, color:"0.86 0.88 0.92" }),
+    text(["Initiation " + training.introDays + " j  |  Operationnel " + training.standardDays + " j  |  Expert " + training.expertDays + " j"], { x:42, y:242, size:11, bold:true, color:"1 0.78 0.34" }),
+    text(["build-autonomia.com"], { x:42, y:48, size:9, color:"0.65 0.68 0.74" })
+  ].join("\n");
 }
 
-function footer(page, fonts, pageNo) {
-  page.drawLine({ start:{x:32,y:32}, end:{x:563,y:32}, thickness:.6, color:rgb(.83,.84,.86) });
-  page.drawText("build-autonomia.com", { x:32, y:18, size:8, font:fonts.regular, color:rgb(.35,.37,.42) });
-  page.drawText(String(pageNo), { x:548, y:18, size:8, font:fonts.bold, color:rgb(.35,.37,.42) });
+function essentialsPage(training) {
+  let y = 775;
+  const c = [
+    "0.97 0.96 0.94 rg 0 0 595 842 re f",
+    text(["AUTONOMIA ACADEMY  |  PROGRAMME"], { x:42, y:806, size:9, bold:true, color:"0.09 0.12 0.19" }),
+    text(["01 - L'ESSENTIEL"], { x:42, y, size:10, bold:true, color:"0.10 0.46 0.43" })
+  ];
+  y -= 34;
+  c.push(text(wrap("Public, prerequis et objectifs pedagogiques", 46), { x:42, y, size:24, leading:28, bold:true }));
+  y -= 84;
+  c.push(text(["PUBLIC VISE"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  y -= 20;
+  training.audience.forEach((item) => { c.push(text(wrap("- " + item, 58), { x:42, y, size:10, leading:14 })); y -= 32; });
+  y -= 8;
+  c.push(text(["PREREQUIS"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  y -= 20;
+  training.prerequisites.forEach((item) => { c.push(text(wrap("- " + item, 58), { x:42, y, size:10, leading:14 })); y -= 32; });
+  y -= 6;
+  c.push(text(["OBJECTIFS PEDAGOGIQUES"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  y -= 20;
+  training.goals.slice(0, 6).forEach((item) => { c.push(text(wrap("- " + item, 82), { x:42, y, size:10, leading:14 })); y -= 32; });
+  c.push(text(["build-autonomia.com"], { x:42, y:30, size:8, color:"0.40 0.43 0.48" }));
+  return c.join("\n");
 }
 
-function newPage(pdf, fonts, label, pageNo) {
-  const page = pdf.addPage([595.28, 841.89]);
-  header(page, fonts, label);
-  footer(page, fonts, pageNo);
-  return page;
-}
-
-function sectionTitle(page, fonts, index, title, y) {
-  page.drawText(index, { x:32, y, size:9, font:fonts.bold, color:rgb(.61,.42,0) });
-  const next = drawWrapped(page, title, 92, y+2, {
-    font:fonts.bold, size:22, maxWidth:445, lineHeight:25, color:rgb(.09,.12,.19)
+function dayPage(training, day, index) {
+  let y = 775;
+  const c = [
+    "1 1 1 rg 0 0 595 842 re f",
+    text(["AUTONOMIA ACADEMY  |  " + training.title], { x:42, y:806, size:8, bold:true, color:"0.09 0.12 0.19" }),
+    text([String(index + 2).padStart(2, "0") + " - PROGRAMME DETAILLE"], { x:42, y, size:10, bold:true, color:"0.10 0.46 0.43" })
+  ];
+  y -= 34;
+  c.push(text(wrap(day.title, 48), { x:42, y, size:23, leading:27, bold:true }));
+  y -= 88;
+  day.modules.forEach((item) => {
+    c.push("1 0.78 0.34 rg 42 " + (y + 4) + " 6 6 re f");
+    c.push(text(wrap(item, 72), { x:58, y, size:11, leading:15 }));
+    y -= Math.max(34, wrap(item, 72).length * 15 + 14);
   });
-  return next - 14;
+  y -= 10;
+  c.push("0.95 0.94 0.91 rg 42 " + (y - 128) + " 511 128 re f");
+  c.push(text(["ATELIER"], { x:60, y: y - 25, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(wrap(day.workshop, 70), { x:60, y: y - 46, size:10, leading:14 }));
+  c.push(text(["LIVRABLE"], { x:60, y: y - 84, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(wrap(day.deliverable, 70), { x:60, y: y - 105, size:10, leading:14 }));
+  c.push(text(["build-autonomia.com"], { x:42, y:30, size:8, color:"0.40 0.43 0.48" }));
+  return c.join("\n");
 }
 
-function bulletList(page, items, x, y, fonts, width = 470, size = 10.5, gap = 9) {
-  let cursor = y;
-  for (const item of items) {
-    page.drawCircle({ x:x+3, y:cursor+3, size:2.3, color:rgb(1,.784,.341) });
-    cursor = drawWrapped(page, item, x+14, cursor+7, {
-      font:fonts.regular, size, maxWidth:width-14, lineHeight:size*1.35
-    }) - gap;
-  }
-  return cursor;
+function finalPage(training) {
+  const intra = trainingPrice(training.standardDays, "intra");
+  const inter = trainingPrice(training.standardDays, "inter");
+  return [
+    "0.97 0.96 0.94 rg 0 0 595 842 re f",
+    text(["AUTONOMIA ACADEMY  |  MODALITES & TARIFS"], { x:42, y:806, size:9, bold:true }),
+    text(["MODALITES PEDAGOGIQUES"], { x:42, y:760, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    text(wrap("Apports courts, demonstrations, exercices progressifs, ateliers fil rouge et production de livrables reutilisables. En intra, les cas peuvent etre adaptes aux outils et processus de l'entreprise.", 82), { x:42, y:735, size:11, leading:16 }),
+    text(["EVALUATION"], { x:42, y:650, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    text(wrap("Positionnement initial, exercices d'application, observation des productions et evaluation finale des acquis. Une attestation de fin de formation peut etre remise.", 82), { x:42, y:625, size:11, leading:16 }),
+    "0.09 0.12 0.19 rg 42 324 511 210 re f",
+    text(["TARIFS"], { x:60, y:505, size:10, bold:true, color:"1 0.78 0.34" }),
+    text(["INTRA-ENTREPRISE"], { x:60, y:468, size:9, bold:true, color:"0.86 0.88 0.92" }),
+    text(["1 800 EUR HT / jour / groupe"], { x:60, y:440, size:18, bold:true, color:"1 1 1" }),
+    text(["INTER-ENTREPRISES"], { x:60, y:395, size:9, bold:true, color:"0.86 0.88 0.92" }),
+    text(["990 EUR HT / jour / participant"], { x:60, y:367, size:18, bold:true, color:"1 1 1" }),
+    text(["Parcours recommande : " + training.standardDays + " jours - Intra " + intra + " EUR HT / groupe - Inter " + inter + " EUR HT / participant"], { x:60, y:340, size:9, color:"0.86 0.88 0.92" }),
+    text(["FINANCEMENT OPCO"], { x:42, y:270, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    text(wrap("Une demande de prise en charge OPCO peut etre etudiee et peut aller jusqu'a 100 % selon votre branche, les budgets disponibles, les criteres d'eligibilite et l'accord prealable du financeur. Aucune prise en charge n'est garantie avant accord ecrit.", 84), { x:42, y:244, size:10, leading:15 }),
+    text(["AUTONOMIA ACADEMY - build-autonomia.com"], { x:42, y:45, size:10, bold:true, color:"0.09 0.12 0.19" })
+  ].join("\n");
 }
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   const { slug } = await params;
   const training = getAcademyTraining(slug);
   if (!training) {
-    return NextResponse.json({ error:"training_not_found" }, { status:404 });
+    return NextResponse.json({ error: "training_not_found" }, { status: 404 });
   }
 
-  const pdf = await PDFDocument.create();
-  const fonts = {
-    regular: await pdf.embedFont(StandardFonts.Helvetica),
-    bold: await pdf.embedFont(StandardFonts.HelveticaBold)
-  };
-  const W = 595.28;
-  const navy = rgb(.09,.12,.19);
-  const yellow = rgb(1,.784,.341);
-  const teal = rgb(.10,.48,.45);
-  const muted = rgb(.38,.41,.47);
-
-  let pageNo = 1;
-  let page = pdf.addPage([595.28, 841.89]);
-  page.drawRectangle({ x:0, y:0, width:W, height:841.89, color:navy });
-  drawLogo(page, 38, 774, 1.05);
-  page.drawText("AUTONOMIA", { x:128, y:788, size:18, font:fonts.bold, color:rgb(1,1,1) });
-  page.drawText("ACADEMY", { x:128, y:770, size:10, font:fonts.bold, color:yellow });
-
-  page.drawText("PROGRAMME DE FORMATION", { x:38, y:694, size:10, font:fonts.bold, color:yellow });
-  let cy = drawWrapped(page, training.title, 38, 655, {
-    font:fonts.bold, size:30, maxWidth:515, lineHeight:33, color:rgb(1,1,1)
-  });
-  cy -= 18;
-  cy = drawWrapped(page, training.subtitle, 38, cy, {
-    font:fonts.regular, size:14, maxWidth:505, lineHeight:19, color:rgb(.83,.86,.91)
-  });
-
-  page.drawRectangle({ x:38, y:392, width:519, height:126, color:rgb(.13,.17,.26), borderColor:rgb(.22,.26,.35), borderWidth:.8 });
-  page.drawText("FORMAT RECOMMANDE", { x:58, y:488, size:9, font:fonts.bold, color:yellow });
-  page.drawText(training.standardDays + " jours - " + (training.standardDays*7) + " heures", { x:58, y:463, size:22, font:fonts.bold, color:rgb(1,1,1) });
-  page.drawText("Presentiel ou distanciel - Intra ou inter-entreprises", { x:58, y:438, size:11, font:fonts.regular, color:rgb(.83,.86,.91) });
-  page.drawText("Intra : 1 800 EUR HT / jour / groupe", { x:58, y:414, size:10, font:fonts.bold, color:rgb(1,1,1) });
-  page.drawText("Inter : 990 EUR HT / jour / participant - session selon programmation", { x:294, y:414, size:9.5, font:fonts.regular, color:rgb(.83,.86,.91) });
-
-  page.drawText("Parcours disponibles", { x:38, y:335, size:11, font:fonts.bold, color:yellow });
-  const levels = [
-    ["Initiation", training.introDays],
-    ["Operationnel", training.standardDays],
-    ["Expert", training.expertDays]
+  const pages = [
+    coverPage(training),
+    essentialsPage(training),
+    ...training.days.map((day, index) => dayPage(training, day, index)),
+    finalPage(training)
   ];
-  levels.forEach(([name, days], idx) => {
-    const x = 38 + idx*173;
-    page.drawRectangle({ x, y:245, width:157, height:72, color: idx === 1 ? teal : rgb(.13,.17,.26) });
-    page.drawText(name.toUpperCase(), { x:x+12, y:292, size:9, font:fonts.bold, color:idx===1?rgb(1,1,1):yellow });
-    page.drawText(days + " j - " + (days*7) + " h", { x:x+12, y:267, size:17, font:fonts.bold, color:rgb(1,1,1) });
-  });
-  page.drawText("Programme detaille - edition 2026", { x:38, y:64, size:9, font:fonts.regular, color:rgb(.63,.67,.74) });
-  footer(page, fonts, pageNo);
 
-  // Page 2 - public, prereqs, objectives
-  pageNo++;
-  page = newPage(pdf, fonts, "PROGRAMME", pageNo);
-  let y = 770;
-  y = sectionTitle(page, fonts, "01", "Public, prerequis et objectifs pedagogiques", y);
-  page.drawText("PUBLIC VISE", { x:32, y, size:9, font:fonts.bold, color:teal }); y -= 18;
-  y = bulletList(page, training.audience, 32, y, fonts, 250, 10); 
-  page.drawText("PREREQUIS", { x:318, y:744, size:9, font:fonts.bold, color:teal });
-  bulletList(page, training.prerequisites, 318, 726, fonts, 240, 10);
-
-  y -= 6;
-  page.drawLine({ start:{x:32,y}, end:{x:563,y}, thickness:.7, color:rgb(.83,.84,.86) }); y -= 28;
-  page.drawText("OBJECTIFS PEDAGOGIQUES", { x:32, y, size:9, font:fonts.bold, color:teal }); y -= 20;
-  y = bulletList(page, training.goals, 32, y, fonts, 520, 10.5, 10);
-
-  y -= 4;
-  page.drawText("COMPETENCES TRAVAILLEES", { x:32, y, size:9, font:fonts.bold, color:teal }); y -= 22;
-  let tx = 32;
-  let ty = y;
-  for (const skill of training.skills) {
-    const label = safeText(skill);
-    const width = Math.min(150, fonts.bold.widthOfTextAtSize(label, 9) + 18);
-    if (tx + width > 563) { tx = 32; ty -= 30; }
-    page.drawRectangle({ x:tx, y:ty-5, width, height:22, color:rgb(.95,.93,.88), borderColor:rgb(.83,.79,.66), borderWidth:.5 });
-    page.drawText(label, { x:tx+9, y:ty+2, size:9, font:fonts.bold, color:navy });
-    tx += width + 8;
-  }
-
-  page.drawText("OUTILS ET ENVIRONNEMENTS", { x:32, y:ty-42, size:9, font:fonts.bold, color:teal });
-  bulletList(page, training.tools, 32, ty-60, fonts, 520, 10);
-
-  // Program pages
-  for (let i=0; i<training.days.length; i++) {
-    pageNo++;
-    page = newPage(pdf, fonts, "PROGRAMME DETAILLE", pageNo);
-    let py = 770;
-    py = sectionTitle(page, fonts, String(i+2).padStart(2,"0"), training.days[i].title, py);
-    py = bulletList(page, training.days[i].modules, 32, py, fonts, 520, 11, 13);
-    py -= 6;
-    page.drawRectangle({ x:32, y:py-108, width:531, height:104, color:rgb(.96,.95,.91), borderColor:rgb(.84,.82,.75), borderWidth:.7 });
-    page.drawText("ATELIER", { x:48, y:py-28, size:9, font:fonts.bold, color:teal });
-    drawWrapped(page, training.days[i].workshop, 48, py-47, { font:fonts.regular, size:10.5, maxWidth:480, lineHeight:14 });
-    page.drawText("LIVRABLE", { x:48, y:py-79, size:9, font:fonts.bold, color:teal });
-    drawWrapped(page, training.days[i].deliverable, 48, py-97, { font:fonts.regular, size:10.5, maxWidth:480, lineHeight:14 });
-
-    page.drawText("EXEMPLES DE CAS APPLICATIFS", { x:32, y:py-145, size:9, font:fonts.bold, color:teal });
-    bulletList(page, training.cases.slice(0,4), 32, py-165, fonts, 520, 10);
-  }
-
-  // Final page
-  pageNo++;
-  page = newPage(pdf, fonts, "MODALITES & TARIFS", pageNo);
-  let fy = 770;
-  fy = sectionTitle(page, fonts, String(training.days.length+2).padStart(2,"0"), "Modalites, evaluation, tarifs et financement", fy);
-
-  const blocks = [
-    ["MODALITES PEDAGOGIQUES", "Apports courts, demonstrations, exercices progressifs, ateliers fil rouge, supports et modeles reutilisables. En intra, les cas pratiques peuvent etre adaptes a l'environnement de l'entreprise."],
-    ["EVALUATION", "Positionnement initial, exercices d'application, observation des productions, evaluation finale des acquis et synthese des points a renforcer."],
-    ["ACCESSIBILITE", "Les besoins specifiques peuvent etre signales en amont afin d'etudier les adaptations pedagogiques ou materielles possibles."],
-    ["ATTESTATION", "Une attestation de fin de formation peut etre remise avec les objectifs et la duree effectivement suivis."]
-  ];
-  for (const [title,text] of blocks) {
-    page.drawText(title, { x:32, y:fy, size:9, font:fonts.bold, color:teal }); fy -= 17;
-    fy = drawWrapped(page, text, 32, fy, { font:fonts.regular, size:10.5, maxWidth:520, lineHeight:14.5, color:muted }) - 14;
-  }
-
-  page.drawRectangle({ x:32, y:194, width:531, height:130, color:navy });
-  page.drawText("TARIFS", { x:50, y:298, size:10, font:fonts.bold, color:yellow });
-  page.drawText("Intra : 1 800 EUR HT / jour / groupe", { x:50, y:270, size:15, font:fonts.bold, color:rgb(1,1,1) });
-  page.drawText("Inter : 990 EUR HT / jour / participant", { x:50, y:247, size:14, font:fonts.bold, color:rgb(1,1,1) });
-  page.drawText("Parcours operationnel : " + training.standardDays + " jours", { x:50, y:222, size:10, font:fonts.regular, color:rgb(.82,.85,.9) });
-  page.drawText("Intra : " + trainingPrice(training.standardDays,"intra").toLocaleString("fr-FR") + " EUR HT / groupe", { x:300, y:270, size:10, font:fonts.regular, color:rgb(.82,.85,.9) });
-  page.drawText("Inter : " + trainingPrice(training.standardDays,"inter").toLocaleString("fr-FR") + " EUR HT / participant", { x:300, y:247, size:10, font:fonts.regular, color:rgb(.82,.85,.9) });
-
-  page.drawText("FINANCEMENT OPCO", { x:32, y:156, size:9, font:fonts.bold, color:teal });
-  drawWrapped(page,
-    "Une demande de prise en charge OPCO peut etre etudiee et peut aller jusqu'a 100 % selon la branche, les budgets disponibles, les criteres d'eligibilite et l'accord prealable de l'OPCO. Aucune prise en charge n'est garantie avant accord ecrit.",
-    32, 137, { font:fonts.regular, size:10.2, maxWidth:520, lineHeight:14, color:muted }
-  );
-
-  const bytes = await pdf.save();
+  const bytes = makePdf(pages);
   const filename = "programme-" + training.slug + "-autonomia.pdf";
 
   return new NextResponse(bytes, {
     status: 200,
     headers: {
       "content-type": "application/pdf",
-      "content-disposition": `attachment; filename="${filename}"`,
+      "content-disposition": 'attachment; filename="' + filename + '"',
       "cache-control": "public, max-age=3600"
     }
   });
