@@ -11091,6 +11091,46 @@ body:has(.territoryCampaignPage) .desktopNav {
 .miniModuleLab .wowValueStrip strong {
   font-size: 15px;
 }
+.miniModuleLab .wowProductTopbar > span,
+.miniModuleLab .wowProductTopbar > b,
+.miniModuleLab .wowRanking article > b,
+.miniModuleLab .wowRanking article span,
+.miniModuleLab .wowQueue button > span,
+.miniModuleLab .wowQueue small,
+.miniModuleLab .wowCitationList small,
+.miniModuleLab .wowRawDoc small,
+.miniModuleLab .wowDecisionBoard small,
+.miniModuleLab .wowPlan small,
+.miniModuleLab .wowBubbleArea button strong,
+.miniModuleLab .wowTimeline small,
+.miniModuleLab .wowSequence small,
+.miniModuleLab .wowTalentHead small,
+.miniModuleLab .wowTalentFoot span,
+.miniModuleLab .wowSignalFeed small,
+.miniModuleLab .wowQualityList small,
+.miniModuleLab .wowCalendarGrid small,
+.miniModuleLab .wowImpactIntro small,
+.miniModuleLab .wowImpactResult small {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.miniModuleLab .wowToggleRow button,
+.miniModuleLab .wowClusterBtn,
+.miniModuleLab .wowLotBtn {
+  min-height: 44px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.miniModuleLab .wowWorkspace,
+.miniModuleLab .wowWorkspace.specialized {
+  min-width: 0;
+}
+.miniModuleLab .wowControlPane,
+.miniModuleLab .wowAppPane,
+.miniModuleLab .wowProductBody {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 @media (max-width: 759px) {
   .miniModuleLab {
@@ -11126,6 +11166,34 @@ body:has(.territoryCampaignPage) .desktopNav {
   }
   .wowProductBody {
     padding: 14px;
+  }
+  .wowWorkspace.specialized {
+    grid-template-columns: 1fr;
+  }
+  .wowPlan p,
+  .wowResultCard > div,
+  .wowCitationList button,
+  .wowTalentHead,
+  .wowTalentFoot,
+  .wowDecisionMatrix article,
+  .wowSequence button,
+  .wowTimeline button {
+    min-width: 0;
+  }
+  .wowPlan p {
+    grid-template-columns: 52px minmax(0,1fr);
+  }
+  .wowPlan p > small {
+    grid-column: 2;
+  }
+  .wowResultCard > div {
+    grid-template-columns: 86px minmax(0,1fr);
+  }
+  .wowCitationList button {
+    grid-template-columns: 28px minmax(0,1fr);
+  }
+  .wowCitationList button > small {
+    grid-column: 2;
   }
   .wowAppHeader {
     display: grid;
