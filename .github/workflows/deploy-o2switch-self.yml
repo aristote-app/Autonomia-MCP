@@ -24,13 +24,27 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Probe cockpit health
+      - name: Probe cockpit deployment capability
+        id: probe
         run: |
           echo "Production health before deploy:"
-          curl -fsS "https://cockpit.build-autonomia.com/api/health" || true
-          echo
+          HEALTH="$(curl -fsS "https://cockpit.build-autonomia.com/api/health" || true)"
+          printf '%s\n' "$HEALTH"
+          MODE="$(printf '%s' "$HEALTH" | python -c 'import json,sys
+try:
+    print(json.load(sys.stdin).get("selfDeployAuthMode", ""))
+except Exception:
+    print("")')"
+          if [ "$MODE" = "github_oidc" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub OIDC self-deploy is active in production."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Bootstrap still required: production does not expose GitHub OIDC self-deploy yet."
+          fi
 
       - name: Request GitHub OIDC deployment identity
+        if: steps.probe.outputs.ready == 'true'
         id: oidc
         env:
           AUDIENCE: autonomia-o2switch
@@ -46,6 +60,7 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Trigger SHA-pinned o2switch self-deploy
+        if: steps.probe.outputs.ready == 'true'
         env:
           DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
