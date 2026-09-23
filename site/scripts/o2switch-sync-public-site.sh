@@ -24,6 +24,25 @@ fi
 DEBUG_FILE="$APP_ROOT/public/__autonomia_deploy_debug.txt"
 mkdir -p "$APP_ROOT/public"
 : > "$DEBUG_FILE"
+
+# Server-side serialization: GitHub jobs can overlap or be cancelled after the
+# detached worker has already started. Lock the shared checkout/build directory
+# so only one public deploy can reset/build/restart Passenger at a time.
+PUBLIC_DEPLOY_LOCK="$APP_ROOT/.runtime/public-deploy.lock"
+exec 9>"$PUBLIC_DEPLOY_LOCK"
+if command -v flock >/dev/null 2>&1; then
+  echo "Waiting for public deploy lock..."
+  flock 9
+  echo "Public deploy lock acquired."
+else
+  PUBLIC_DEPLOY_LOCK_DIR="$PUBLIC_DEPLOY_LOCK.d"
+  echo "flock unavailable; waiting on mkdir deploy lock..."
+  while ! mkdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null; do
+    sleep 3
+  done
+  trap 'rmdir "$PUBLIC_DEPLOY_LOCK_DIR" 2>/dev/null || true' EXIT
+  echo "Fallback public deploy lock acquired."
+fi
 if [ -t 1 ]; then
   echo "Interactive terminal detected; keeping deployment output on screen."
 else
