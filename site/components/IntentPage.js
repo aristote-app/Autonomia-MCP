@@ -79,6 +79,8 @@ export default function IntentPage({ page }) {
         </div>
       </section>
 
+      {isExpert && <LiveExpertProfiles pageSlug={page.slug} />}
+
       {page.translations?.length > 0 && (
         <section className="translationSection">
           <p className="sectionIndex">03 — DU BESOIN À L’ACTIVATION</p>
