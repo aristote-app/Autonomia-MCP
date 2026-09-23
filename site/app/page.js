@@ -1,5 +1,4 @@
 import Link from "next/link";
-import QualiopiProof from "@/components/QualiopiProof";
 import LiveJobSignals from "@/components/LiveJobSignals";
 import HomeUseCaseLab from "@/components/HomeUseCaseLab";
 import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
@@ -421,7 +420,6 @@ export default function Home() {
         </div>
       </section>
 
-      <QualiopiProof />
 
       <section className="faqSection homeFaq" id="faq">
         <p className="sectionIndex">10 — QUESTIONS</p>
