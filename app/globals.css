@@ -924,3 +924,9 @@ h3 { margin: 0 0 8px; }
   .inboundFilters { grid-template-columns:1fr 1fr; }
   .inboundList > article { grid-template-columns:1fr; }
 }
+
+
+.kasprContactAction { margin-top: 12px; padding: 12px; border: 1px solid #d9ddd7; background: #f8f9f6; }
+.kasprContactAction form { display: grid; gap: 7px; }
+.kasprContactAction button { width: fit-content; min-height: 36px; border: 1px solid #111; background: #111; color: #fff; padding: 8px 11px; font-size: 11px; font-weight: 800; cursor: pointer; }
+.kasprContactAction small { color: #677068; font-size: 10px; line-height: 1.45; }
