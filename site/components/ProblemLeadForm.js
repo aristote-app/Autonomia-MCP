@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
 
@@ -9,6 +9,21 @@ export default function ProblemLeadForm({ problem }) {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const set = (key, value) => setData((current) => ({ ...current, [key]: value }));
+
+  useEffect(() => {
+    function prefill(event) {
+      const need = event.detail?.need;
+      if (!need) return;
+      setData((current) => current.need ? current : { ...current, need });
+      trackEvent("problem_lead_prefill", {
+        problem_slug: problem.slug,
+        problem_cluster: problem.cluster,
+        source_surface: "problem_lab"
+      });
+    }
+    window.addEventListener("autonomia:prefill-problem-lead", prefill);
+    return () => window.removeEventListener("autonomia:prefill-problem-lead", prefill);
+  }, [problem.slug, problem.cluster]);
 
   async function submit(event) {
     event.preventDefault();
