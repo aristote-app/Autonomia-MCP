@@ -7,7 +7,7 @@ import WebVitalsReporter from "@/components/WebVitalsReporter";
 const isPreview = process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production";
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com"),
   title: {
     default: "Autonomia — La force d’exécution IA",
     template: "%s | Autonomia"
@@ -48,7 +48,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com";
   const organizationSchema = {
     "@context": "https://schema.org",
     "@graph": [
