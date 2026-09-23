@@ -13,14 +13,16 @@ if (typeof PhusionPassenger !== "undefined") {
 app.prepare()
   .then(() => {
     const server = createServer((req, res) => handle(req, res));
-    const target = typeof PhusionPassenger !== "undefined" ? "passenger" : fallbackPort;
 
-    server.listen(target, hostname, () => {
-      console.log(
-        typeof PhusionPassenger !== "undefined"
-          ? "Autonomia public site listening through Passenger"
-          : `Autonomia public site listening on ${hostname}:${fallbackPort}`
-      );
+    if (typeof PhusionPassenger !== "undefined") {
+      server.listen("passenger", () => {
+        console.log("Autonomia public site listening through Passenger");
+      });
+      return;
+    }
+
+    server.listen(fallbackPort, hostname, () => {
+      console.log(`Autonomia public site listening on ${hostname}:${fallbackPort}`);
     });
   })
   .catch((error) => {
