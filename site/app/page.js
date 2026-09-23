@@ -3,6 +3,7 @@ import HomeLeadSwitch from "@/components/HomeLeadSwitch";
 import AutonomiaScan from "@/components/AutonomiaScan";
 import QualiopiProof from "@/components/QualiopiProof";
 import LiveJobSignals from "@/components/LiveJobSignals";
+import HomeUseCaseLab from "@/components/HomeUseCaseLab";
 import {
   publishedExecutionArticles,
   publishedTrainingArticles
@@ -48,35 +49,34 @@ export default function Home() {
 
       <section className="homeHero" id="top">
         <div className="heroCopy">
-          <p className="eyebrow">AI EXECUTION PARTNER</p>
+          <p className="eyebrow">AUTONOMIA — AI EXECUTION PARTNER</p>
           <h1>
-            L’IA ne manque pas
-            <br />
-            de promesses.
-            <span>Elle manque d’exécution.</span>
+            De vos irritants quotidiens
+            <span>à des usages IA réellement déployés.</span>
           </h1>
           <p className="heroText">
-            Autonomia transforme un objectif IA en plan d’exécution : les compétences externes pour construire,
-            les compétences internes pour adopter et déployer.
+            Vous perdez du temps à rechercher, recopier, trier, relancer, consolider ou produire manuellement.
+            Autonomia part de votre travail réel pour identifier où l’IA peut être utile, construire les bons outils
+            et transmettre les compétences à vos équipes.
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/#scan">Lancer Autonomia Scan</Link>
-            <Link className="secondaryButton" href="/experts">Explorer nos expertises</Link>
+            <Link className="primaryButton" href="/#cas-usage-test">Voir ce que l’IA peut simplifier</Link>
+            <Link className="secondaryButton" href="/#audit-ia">Demander l’audit IA offert</Link>
           </div>
         </div>
 
-        <div className="executionGrid" aria-label="Système d’exécution Autonomia">
+        <div className="executionGrid" aria-label="De l’irritant à l’autonomie">
           <div className="gridHeader">
-            <span>AUTONOMIA / EXECUTION GRID</span>
+            <span>VOTRE QUOTIDIEN → UNE CAPACITÉ DURABLE</span>
             <span>01—05</span>
           </div>
           <div className="gridFlow">
-            <div><small>01</small><strong>AMBITION</strong><span>Besoin business</span></div>
-            <div><small>02</small><strong>EXPERTS</strong><span>Compétences externes</span></div>
-            <div><small>03</small><strong>BUILD</strong><span>Construction / delivery</span></div>
-            <div><small>04</small><strong>ACADEMY</strong><span>Compétences internes</span></div>
-            <div><small>05</small><strong>ADOPTION</strong><span>Capacité durable</span></div>
+            <div><small>01</small><strong>IRRITANTS</strong><span>Ce qui vous ralentit vraiment</span></div>
+            <div><small>02</small><strong>PRIORISER</strong><span>Les cas d’usage qui valent la peine</span></div>
+            <div><small>03</small><strong>CONSTRUIRE</strong><span>Automatisations, assistants, agents</span></div>
+            <div><small>04</small><strong>TRANSMETTRE</strong><span>Méthodes et compétences internes</span></div>
+            <div><small>05</small><strong>AUTONOMIE</strong><span>Des usages intégrés au travail réel</span></div>
           </div>
           <div className="gridPulse" aria-hidden="true"><i /><i /><i /><i /><i /></div>
         </div>
@@ -93,33 +93,93 @@ export default function Home() {
         <strong>Directions métier</strong>
       </section>
 
+      <section className="marketProblem">
+        <p className="sectionIndex">01 — LE PROBLÈME</p>
+        <div>
+          <h2>
+            Qu’est-ce qui vous fait perdre du temps aujourd’hui ?
+            <span>Nous commençons par là.</span>
+          </h2>
+          <ul className="painBulletList">
+            <li>Des informations dispersées entre e-mails, fichiers, CRM, Drive ou outils métier.</li>
+            <li>Des données recopiées plusieurs fois et des tâches administratives répétitives.</li>
+            <li>Des reportings, synthèses, comptes rendus ou documents encore produits à la main.</li>
+            <li>Des équipes qui utilisent l’IA chacune à leur manière, sans méthode commune.</li>
+            <li>Des idées d’automatisation qui restent au stade de l’idée faute de temps ou d’expertise.</li>
+          </ul>
+          <p className="problemClosing">
+            Nous ne commençons pas par un outil ni par un catalogue. Nous partons du travail réel,
+            de ce qui vous ralentit et du résultat que vous voulez atteindre.
+          </p>
+        </div>
+      </section>
+
+      <HomeUseCaseLab />
+
+      <section className="auditOffer" id="audit-ia">
+        <div className="auditOfferIntro">
+          <p className="sectionIndex">03 — AUDIT IA OFFERT</p>
+          <div>
+            <p className="auditKicker">AVANT DE CONSTRUIRE, COMPRENDRE.</p>
+            <h2>Nous auditons votre organisation pour identifier où l’IA peut réellement vous aider.</h2>
+            <p>
+              L’audit part de vos équipes, de vos processus, de vos outils et de vos irritants.
+              L’objectif : faire émerger les cas d’usage pertinents, comprendre ce qu’il faudrait construire
+              et distinguer ce qui relève de l’automatisation, de l’expertise ou de la montée en compétences.
+            </p>
+          </div>
+        </div>
+
+        <div className="auditGrid">
+          <article>
+            <span>01</span>
+            <h3>Observer le travail réel</h3>
+            <p>Tâches répétitives, points de friction, recherches, doubles saisies, délais et dépendances.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Cartographier l’existant</h3>
+            <p>Outils, données, documents, flux, accès, règles métier et validations humaines.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Prioriser les cas d’usage</h3>
+            <p>Distinguer les idées séduisantes des usages réellement utiles, faisables et suffisamment maîtrisables.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Définir quoi construire</h3>
+            <p>Automatisation, assistant, agent, recherche documentaire, intégration ou parcours Academy.</p>
+          </article>
+        </div>
+
+        <div className="auditBeforeAfter">
+          <div>
+            <small>POINT A</small>
+            <strong>« Nous savons que l’IA peut nous aider, mais nous ne savons pas par où commencer. »</strong>
+          </div>
+          <span aria-hidden="true">→</span>
+          <div>
+            <small>POINT B</small>
+            <strong>Des cas d’usage priorisés et une première vision claire de ce qu’il faut construire.</strong>
+          </div>
+        </div>
+
+        <Link className="primaryButton auditCta" href="/#contact">Demander mon audit IA offert</Link>
+      </section>
+
       <section className="scanSection" id="scan">
         <div className="scanSectionIntro">
-          <p className="sectionIndex">00 — AUTONOMIA SCAN</p>
+          <p className="sectionIndex">04 — PREMIÈRE ORIENTATION</p>
           <div>
-            <h2>Ne commencez pas par chercher un profil. Commencez par identifier ce qui bloque l’exécution.</h2>
+            <h2>Vous voulez commencer tout de suite ? Donnez-nous trois éléments.</h2>
             <p>
-              Trois réponses suffisent pour produire une première orientation : lecture du blocage,
-              profils et compétences à examiner, montée en compétences éventuelle et prochaines étapes.
+              Autonomia Scan prépare une première lecture du blocage, des compétences à mobiliser
+              et des prochaines questions à traiter pendant l’audit.
             </p>
           </div>
         </div>
         <AutonomiaScan />
-      </section>
-
-      <section className="marketProblem">
-        <p className="sectionIndex">01 — LE CONSTAT</p>
-        <div>
-          <h2>
-            Votre entreprise n’a pas besoin d’une nouvelle présentation sur l’IA.
-            <span>Elle a besoin des bonnes compétences au bon moment.</span>
-          </h2>
-          <p>
-            Entre l’idée et le déploiement, les projets se bloquent sur des rôles absents,
-            des expertises trop rares, des équipes insuffisamment formées ou une adoption
-            qui reste superficielle. Autonomia agit précisément à cet endroit.
-          </p>
-        </div>
       </section>
 
       <section className="twoDoors">
