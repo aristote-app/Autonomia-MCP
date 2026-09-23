@@ -19,6 +19,10 @@ import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
 import { researchAccountPublicContext } from "../lib/collectors/accountResearch.js";
 import { buildSalesLearningSnapshot } from "../lib/intelligence/salesLearning.js";
 import { buildRevenueActions } from "../lib/intelligence/revenueOrchestrator.js";
+import {
+  evaluateKasprGuard,
+  evaluateWaalaxyGuard
+} from "../lib/intelligence/outreachGuard.js";
 
 const account = {
   name: "Acme",
@@ -201,6 +205,55 @@ assert.equal(consultantRevenueActions[0].account_key, "agentic-bank");
 assert.equal(consultantRevenueActions[0].contact_name, "Consultant Agentic");
 assert.ok(consultantRevenueActions[0].staffing_match_score >= 60);
 assert.ok(consultantRevenueActions[0].matched_skills.includes("LangGraph"));
+
+
+const waalaxyGuard = evaluateWaalaxyGuard({
+  contact: {
+    id: "c-main",
+    verification_status: "verified",
+    outreach_status: "not_started",
+    do_not_contact: false
+  },
+  accountContacts: [
+    { id: "c-1", outreach_status: "active", do_not_contact: false },
+    { id: "c-2", outreach_status: "queued", do_not_contact: false }
+  ]
+});
+assert.equal(waalaxyGuard.allowed, false);
+assert.equal(waalaxyGuard.code, "account_saturation");
+
+const duplicateCampaignGuard = evaluateWaalaxyGuard({
+  contact: {
+    id: "c-main",
+    verification_status: "verified",
+    outreach_status: "not_started",
+    do_not_contact: false,
+    waalaxy_campaign_id: "campaign-1"
+  },
+  accountContacts: [],
+  campaignId: "campaign-1"
+});
+assert.equal(duplicateCampaignGuard.code, "same_campaign");
+
+const kasprNotFoundGuard = evaluateKasprGuard({
+  contact: {
+    verification_status: "verified",
+    enrichment_status: "not_found",
+    do_not_contact: false,
+    updated_at: new Date().toISOString()
+  }
+});
+assert.equal(kasprNotFoundGuard.allowed, false);
+assert.equal(kasprNotFoundGuard.code, "not_found_cooldown");
+
+const kasprFresh = evaluateKasprGuard({
+  contact: {
+    verification_status: "verified",
+    enrichment_status: "not_requested",
+    do_not_contact: false
+  }
+});
+assert.equal(kasprFresh.allowed, true);
 
 const replyIds = extractWaalaxyReplyIdentifiers({
   prospect: {

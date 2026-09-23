@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
   getSalesContact,
+  listSalesContacts,
   markSalesContactWaalaxyImported,
   markSalesContactEnrichmentRequested,
   applySalesContactKasprResult,
@@ -18,6 +19,10 @@ import {
   extractKasprContactData,
   kasprRequestedFields
 } from "../../lib/integrations/kaspr.js";
+import {
+  evaluateKasprGuard,
+  evaluateWaalaxyGuard
+} from "../../lib/intelligence/outreachGuard.js";
 
 async function requireWriter() {
   const context = await getCurrentWorkspaceMembership();
@@ -63,8 +68,19 @@ export async function sendVerifiedContactToWaalaxy(formData) {
   if (contact.verification_status !== "verified") {
     throw new Error("Verify the contact before sending it to Waalaxy");
   }
-  if (contact.do_not_contact) {
-    throw new Error("This contact is marked do-not-contact");
+  const accountContacts = await listSalesContacts({
+    workspaceId: context.membership.workspace_id,
+    accountKey,
+    limit: 50
+  });
+
+  const guard = evaluateWaalaxyGuard({
+    contact,
+    accountContacts,
+    campaignId
+  });
+  if (!guard.allowed) {
+    throw new Error("Waalaxy bloqué : " + guard.reason);
   }
 
   const result = await importWaalaxyProspects({
@@ -127,8 +143,9 @@ export async function enrichVerifiedContactWithKaspr(formData) {
   if (contact.verification_status !== "verified") {
     throw new Error("Verify the contact before Kaspr enrichment");
   }
-  if (contact.do_not_contact) {
-    throw new Error("This contact is marked do-not-contact");
+  const guard = evaluateKasprGuard({ contact });
+  if (!guard.allowed) {
+    throw new Error("Kaspr bloqué : " + guard.reason);
   }
 
   const contactName =
