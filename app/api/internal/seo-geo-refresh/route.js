@@ -39,6 +39,28 @@ export async function GET(request) {
   const recommendations = snapshot.recommendations?.ok
     ? snapshot.recommendations?.data?.recommendations || []
     : [];
+  const territoryRecommendations = recommendations
+    .filter((item) => item?.family === "territory")
+    .slice(0, 10)
+    .map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      cluster: item.cluster,
+      action: item.action,
+      score: item.score,
+      evidence: item.evidence
+    }));
+  const draftBriefs = (Array.isArray(snapshot.draftQueue) ? snapshot.draftQueue : [])
+    .map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      family: item.family,
+      cluster: item.cluster,
+      action: item.action,
+      score: item.score,
+      evidence: item.evidence,
+      briefReady: Boolean(item.brief)
+    }));
 
   return Response.json({
     ok: Boolean(
@@ -55,7 +77,10 @@ export async function GET(request) {
     totalSignals: Number(snapshot.signalSummary?.total) || 0,
     territorySignals: Number(snapshot.signalSummary?.territory) || 0,
     recommendations: recommendations.length,
-    preparedBriefs: Array.isArray(snapshot.draftQueue) ? snapshot.draftQueue.length : 0,
+    preparedBriefs: draftBriefs.length,
+    territoryRecommendations,
+    draftBriefs,
+    topClusters: snapshot.signalSummary?.topClusters || [],
     sourceCounts: snapshot.sourceCounts || {},
     errors: {
       manifest: snapshot.manifest?.ok ? null : snapshot.manifest?.error,
