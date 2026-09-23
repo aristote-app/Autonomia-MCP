@@ -22,7 +22,7 @@ function attribution() {
 }
 
 export default function ObservatoryLeadForm({ topic, compact = false }) {
-  const [data, setData] = useState({ name: "", company: "", email: "", need: "" });
+  const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
@@ -58,7 +58,11 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         "Besoin exprimé : " + (data.need || "À préciser")
       ].join("\n"),
       form_id: "observatoire-landing-" + topic.slug,
-      ...attribution()
+      ...attribution(),
+      marketing_consent: Boolean(data.marketingConsent),
+      consent_timestamp: new Date().toISOString(),
+      privacy_notice_version: "2026-09-20-v1",
+      consent_source: "observatoire-landing-" + topic.slug
     };
 
     try {
@@ -110,6 +114,12 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         <span>Décrivez l’irritant avec vos mots</span>
         <textarea rows="4" placeholder={topic.prompt} value={data.need} onChange={(e) => set("need", e.target.value)} />
       </label>
+
+      <label className="consentLine">
+        <input type="checkbox" checked={data.marketingConsent} onChange={(e) => set("marketingConsent", e.target.checked)} />
+        <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
+      </label>
+      <p className="privacyNote">Les informations envoyées sont utilisées pour répondre à votre demande. Le consentement marketing est facultatif.</p>
 
       {error && <p className="formError">{error}</p>}
 
