@@ -107,8 +107,12 @@ if [ -d "$PUBLIC_PROD_REPO/.git" ] && [ -f "$PUBLIC_PROD_APP/package.json" ]; th
   git reset --hard "$PUBLIC_PROD_SHA"
 
   cd "$PUBLIC_PROD_APP"
-  echo "Synchronizing production public-site dependencies..."
-  npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+  if [ -x node_modules/.bin/next ]; then
+    echo "Reusing installed production public-site dependencies."
+  else
+    echo "Production public-site node_modules incomplete; installing dependencies."
+    npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+  fi
 
   export NODE_ENV=production
   export NEXT_TELEMETRY_DISABLED=1
