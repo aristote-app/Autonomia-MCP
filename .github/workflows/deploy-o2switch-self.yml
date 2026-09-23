@@ -66,10 +66,10 @@ jobs:
           HTTP_CODE="$(curl -sS \
             -o /tmp/autonomia-self-deploy.json \
             -w "%{http_code}" \
-            -X POST "$DEPLOY_URL" \
-            -H "Authorization: Bearer $OIDC_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data "{\"sha\":\"$TARGET_SHA\"}")"
+            -G "$DEPLOY_URL" \
+            --data-urlencode "action=deploy" \
+            --data-urlencode "sha=$TARGET_SHA" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
 
           cat /tmp/autonomia-self-deploy.json
           echo
@@ -132,10 +132,10 @@ jobs:
           HTTP_CODE="$(curl -sS \
             -o /tmp/autonomia-self-deploy-retry.json \
             -w "%{http_code}" \
-            -X POST "$DEPLOY_URL" \
-            -H "Authorization: Bearer $RETRY_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data "{\"sha\":\"$TARGET_SHA\"}")"
+            -G "$DEPLOY_URL" \
+            --data-urlencode "action=deploy" \
+            --data-urlencode "sha=$TARGET_SHA" \
+            -H "Authorization: Bearer $RETRY_TOKEN")"
 
           cat /tmp/autonomia-self-deploy-retry.json
           echo
