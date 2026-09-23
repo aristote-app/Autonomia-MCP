@@ -12199,6 +12199,142 @@ body:has(.territoryCampaignPage) .desktopNav {
   margin-top: 6px;
   font-size: 22px;
 }
+.problemReviewRules {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.problemReviewRules button {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 4px 10px;
+  min-height: 72px;
+  padding: 11px 12px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.problemReviewRules button.active {
+  border-color: #ffd16a;
+  background: rgba(255,209,106,.08);
+}
+.problemReviewRules button > span {
+  grid-column: 1 / -1;
+  color: rgba(255,255,255,.6);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemReviewRules button.missing > span,
+.problemReviewRules button.conflict > span {
+  color: #ffd16a;
+}
+.problemReviewRules button > strong {
+  min-width: 0;
+  font-size: 15px;
+}
+.problemReviewRules button > small {
+  color: rgba(255,255,255,.55);
+  font-size: 14px;
+}
+.problemReviewWorkspace {
+  display: grid;
+  gap: 10px;
+}
+.problemReviewSummary {
+  display: grid;
+  gap: 8px;
+}
+.problemReviewSummary article {
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+}
+.problemReviewSummary span {
+  display: block;
+  color: rgba(255,255,255,.56);
+  font-size: 14px;
+  font-weight: 850;
+}
+.problemReviewSummary strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 20px;
+}
+.problemEvidenceCard {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+}
+.problemEvidenceCard.missing,
+.problemEvidenceCard.conflict {
+  border-color: rgba(255,209,106,.4);
+  box-shadow: inset 3px 0 0 #ffd16a;
+}
+.problemEvidenceHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.problemEvidenceHead > span {
+  color: #ffd16a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+.problemEvidenceHead > b {
+  font-size: 15px;
+}
+.problemEvidenceCard h4 {
+  margin: 8px 0 8px;
+  font-size: 24px;
+  line-height: 1.08;
+}
+.problemEvidenceCard > p {
+  margin: 0 0 12px;
+  color: rgba(255,255,255,.72);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.problemEvidenceCard > div:not(.problemEvidenceHead) {
+  display: grid;
+  gap: 4px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255,255,255,.09);
+}
+.problemEvidenceCard > div:not(.problemEvidenceHead) > span {
+  color: rgba(255,255,255,.5);
+  font-size: 13px;
+  font-weight: 900;
+}
+.problemEvidenceCard > div:not(.problemEvidenceHead) > strong {
+  font-size: 15px;
+}
+.problemReviewActions {
+  display: grid;
+  gap: 8px;
+}
+.problemReviewActions button {
+  min-height: 46px;
+  padding: 0 13px;
+  border: 1px solid #ffd16a;
+  border-radius: 9px;
+  background: #ffd16a;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.problemReviewActions button.secondary {
+  background: transparent;
+  color: #ffd16a;
+}
 .problemToggle {
   display: flex;
   flex-wrap: wrap;
@@ -12655,6 +12791,12 @@ body:has(.territoryCampaignPage) .desktopNav {
   .problemExtractWorkspace {
     grid-template-columns: minmax(220px,.9fr) minmax(0,1.1fr);
     align-items: start;
+  }
+  .problemReviewSummary {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+  .problemReviewActions {
+    grid-template-columns: repeat(2,minmax(0,1fr));
   }
   .problemStock {
     grid-template-columns: repeat(3,minmax(0,1fr));
