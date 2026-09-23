@@ -37,7 +37,7 @@ La promesse commune est :
 
 Les pages `/solutions-ia/[slug]` visent une intention différente des LP “consultant / formation” : le visiteur connaît déjà **la tâche ou le processus qu’il veut transformer**, sans nécessairement connaître le profil IA à acheter.
 
-### Wave 1 — à utiliser en premier pour les tests Search
+### Priorité 1 — à utiliser en premier pour les tests Search
 
 | Groupe d’annonces | Landing page | Intention exprimée | Démo dominante | CTA / conversion |
 |---|---|---|---|---|
@@ -60,13 +60,18 @@ Ne pas mélanger les 10 problèmes dans un même groupe d’annonces. Le contrat
 
 Les mots-clés doivent reprendre le vocabulaire de la tâche, puis l’annonce doit réutiliser la même formulation dans le titre et la description. La LP ne doit pas rediriger vers un catalogue avant d’avoir montré le flux correspondant.
 
-Les Wave 2 et Wave 3 restent indexables et prêtes techniquement, mais elles servent d’abord à observer la demande organique et les clics internes avant activation média.
+Les autres LP restent indexables et prêtes techniquement. Leur ordre d’activation média est piloté par le registre paid-search et les données réellement observées.
 
 ### Événements spécifiques aux LP problème
 
 - `problem_hub_click` : entrée vers le hub depuis Home / Observatoire / autre surface.
 - `problem_lp_click` : clic vers une LP précise avec `problem_slug`, `problem_cluster`, `source_surface`.
-- `problem_lab_demo_open` : interaction avec une micro-app de la LP.
+- `problem_lab_demo_open` : ouverture d’une micro-app de la LP.
+- `problem_lab_interaction` : clic à l’intérieur d’une micro-app problème avec action, slug, cluster et démo.
+- `problem_lab_control_change` : modification d’un contrôle d’une micro-app problème.
+- `autonomia_lab_module_open` : ouverture d’un module AUTONOMIA LAB sur les LP métier/secteur.
+- `autonomia_lab_interaction` : clic dans une micro-app AUTONOMIA LAB.
+- `autonomia_lab_control_change` : modification d’un slider, champ, select ou contrôle AUTONOMIA LAB.
 - `problem_demo_cta_click` : clic vers la zone de démonstration depuis le hero.
 - `problem_cta_click` : clic vers le formulaire depuis le flux ou le CTA final.
 - `problem_lp_lead_submit` : tentative d’envoi du formulaire.
@@ -81,7 +86,7 @@ Chaîne cible :
 
 **mot-clé → annonce → headline LP cohérente → formulaire court → Autonomia-MCP**
 
-Les groupes de mots-clés, variantes de headline et négatifs sont stockés dans `site/lib/pages.js`.
+Les LP consultant / Academy conservent leur configuration Ads dans `site/lib/pages.js`. Les 27 LP problèmes utilisent le registre dédié `site/content/problem-paid-search.js` : intention principale, requêtes secondaires, négatifs, angle d’annonce et score interne sur douleur, démonstrabilité, valeur économique, intention paid et capacité de delivery. Ces scores sont des heuristiques de priorisation, pas des volumes Google Ads.
 
 ## Meta — trafic froid
 
@@ -203,8 +208,12 @@ La puissance perçue doit venir de la clarté du système Autonomia et non de pr
 - problem_hub_click
 - problem_lp_click
 - problem_lab_demo_open
+- problem_lab_interaction
+- problem_lab_control_change
 - problem_lp_lead_submit
 - autonomia_lab_module_open
+- autonomia_lab_interaction
+- autonomia_lab_control_change
 - observatory_lead_submit
 - generate_lead
 
