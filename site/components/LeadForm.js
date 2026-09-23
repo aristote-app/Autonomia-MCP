@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
+import { getClientAttribution } from "@/lib/clientAttribution";
 
 const OPTIONS = {
   experts: ["GenAI / LLM", "RAG", "Agents IA", "AI Project Manager", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance / AI Act", "Je ne sais pas encore"],
@@ -16,41 +17,6 @@ const OPTIONS = {
     "Je veux cadrer le besoin"
   ]
 };
-
-function attribution() {
-  if (typeof window === "undefined") return {};
-  const url = new URL(window.location.href);
-  const get = (key) => url.searchParams.get(key);
-  let firstTouch = null;
-  let history = [];
-
-  try {
-    firstTouch = JSON.parse(window.localStorage.getItem("autonomia_first_touch") || "null");
-    history = JSON.parse(window.localStorage.getItem("autonomia_attribution_history") || "[]");
-  } catch {
-    firstTouch = null;
-    history = [];
-  }
-
-  return {
-    landing_page_url: url.href,
-    landing_page_topic: window.location.pathname,
-    referrer_url: document.referrer || null,
-    utm_source: get("utm_source"),
-    utm_medium: get("utm_medium"),
-    utm_campaign: get("utm_campaign"),
-    utm_content: get("utm_content"),
-    utm_term: get("utm_term"),
-    campaign_id: get("campaign_id") || get("meta_campaign_id"),
-    adset_id: get("adset_id"),
-    ad_id: get("ad_id"),
-    creative_id: get("creative_id"),
-    gclid: get("gclid"),
-    fbclid: get("fbclid"),
-    first_touch: firstTouch,
-    attribution_history: history
-  };
-}
 
 const SCAN_LABELS = {
   objective: {
@@ -176,7 +142,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
             completed_at: scanContext.created_at || null
           }
         : null,
-      ...attribution(),
+      ...getClientAttribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
       privacy_notice_version: "2026-09-20-v1",

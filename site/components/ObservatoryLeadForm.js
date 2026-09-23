@@ -2,24 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
-
-function attribution() {
-  if (typeof window === "undefined") return {};
-  const url = new URL(window.location.href);
-  const get = (key) => url.searchParams.get(key);
-  return {
-    landing_page_url: url.href,
-    landing_page_topic: window.location.pathname,
-    referrer_url: document.referrer || null,
-    utm_source: get("utm_source"),
-    utm_medium: get("utm_medium"),
-    utm_campaign: get("utm_campaign"),
-    utm_content: get("utm_content"),
-    utm_term: get("utm_term"),
-    gclid: get("gclid"),
-    fbclid: get("fbclid")
-  };
-}
+import { getClientAttribution } from "@/lib/clientAttribution";
 
 export default function ObservatoryLeadForm({ topic, compact = false }) {
   const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
@@ -58,7 +41,7 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         "Besoin exprimé : " + (data.need || "À préciser")
       ].join("\n"),
       form_id: "observatoire-landing-" + topic.slug,
-      ...attribution(),
+      ...getClientAttribution(),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
       privacy_notice_version: "2026-09-20-v1",
