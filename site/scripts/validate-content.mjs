@@ -137,6 +137,8 @@ const requiredRuntimeFiles = [
   "app/api/organic/brief/route.js",
   "app/api/organic/backlog/route.js",
   "app/api/organic/google/sitemap/route.js",
+  "app/api/internal/search-console-status/route.js",
+  "app/api/internal/search-console-submit/route.js",
   "app/api/organic/google/search-demand/route.js",
   "app/feed.xml/route.js",
   "content/article-packs/market-demand-wave-3.js",
