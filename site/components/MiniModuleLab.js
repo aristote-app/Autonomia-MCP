@@ -525,7 +525,10 @@ export default function MiniModuleLab({ topic }) {
               <strong>Ce module ressemble à un irritant de votre équipe ?</strong>
               <p>Décrivez le flux actuel : Autonomia pourra repartir de vos outils, règles et données autorisées.</p>
             </div>
-            <a href="#diagnostic" onClick={()=>trackEvent("autonomia_lab_cta_click",{topic:topic.slug,module_name:module[0],module_index:active+1})}>Décrire mon flux réel →</a>
+            <a href="#diagnostic" onClick={()=>{
+              window.dispatchEvent(new CustomEvent("autonomia:prefill-observatory-lead",{detail:{need:`Je veux adapter le module « ${module[0]} » à notre organisation. Le flux actuel et les outils sont à préciser.`}}));
+              trackEvent("autonomia_lab_cta_click",{topic:topic.slug,module_name:module[0],module_index:active+1});
+            }}>Décrire mon flux réel →</a>
           </div>
           <p className="wowDemoDisclosure">Données fictives · résultats illustratifs · aucune performance n’est garantie · les décisions sensibles restent humaines.</p>
         </div>
