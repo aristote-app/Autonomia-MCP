@@ -19,7 +19,11 @@ echo "Running detached deploy child directly (spawned by Node self-deploy endpoi
 DEBUG_FILE="$APP_ROOT/public/__autonomia_cockpit_deploy_debug.txt"
 mkdir -p "$APP_ROOT/public"
 : > "$DEBUG_FILE"
-exec > >(tee -a "$WORKER_LOG" "$DEBUG_FILE") 2>&1
+if [ -t 1 ]; then
+  echo "Interactive terminal detected; keeping deployment output on screen."
+else
+  exec >> "$WORKER_LOG" 2>&1
+fi
 
 REPORTER="$APP_ROOT/scripts/report-deploy-diagnostic.mjs"
 NODE_BIN="/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node"
