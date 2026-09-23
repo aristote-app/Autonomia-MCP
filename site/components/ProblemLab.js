@@ -105,30 +105,48 @@ function Score({ demo }) {
   const [fit,setFit]=useState(75);
   const [urgency,setUrgency]=useState(55);
   const [risk,setRisk]=useState(30);
+  const labelsByCluster={
+    Commercial:["Nova Industrie","Groupe Atlas","Maison Rive"],
+    RH:["A.M. · 6 ans","N.K. · 4 ans","L.R. · 8 ans"],
+    Marketing:["Sujet acquisition","Page offre","Signal concurrent"],
+    Reporting:["BU Île-de-France","BU Nord","BU Sud"],
+    Industrie:["SKU-8842","SKU-1194","SKU-7812"],
+    Administratif:["Dossier 2481","Dossier 2482","Dossier 2483"]
+  };
+  const labels=labelsByCluster[demo.problemCluster] || ["Cas A","Cas B","Cas C"];
   const rows=useMemo(()=>[
-    ["Cas A",Math.round(55+fit*.28+urgency*.12-risk*.08)],
-    ["Cas B",Math.round(48+fit*.19+urgency*.2-risk*.04)],
-    ["Cas C",Math.round(42+fit*.15+urgency*.1+risk*.08)]
-  ].map(([name,score])=>[name,Math.max(0,Math.min(99,score))]).sort((a,b)=>b[1]-a[1]),[fit,urgency,risk]);
+    [labels[0],Math.round(55+fit*.28+urgency*.12-risk*.08),["forte adéquation","signal récent"]],
+    [labels[1],Math.round(48+fit*.19+urgency*.2-risk*.04),["urgence élevée","preuve partielle"]],
+    [labels[2],Math.round(42+fit*.15+urgency*.1+risk*.08),["potentiel à vérifier","risque plus élevé"]]
+  ].map(([name,score,reasons])=>[name,Math.max(0,Math.min(99,score)),reasons]).sort((a,b)=>b[1]-a[1]),[fit,urgency,risk]);
+  const leader=rows[0];
   return <Shell demo={demo} side={<>
     <label><span>Adéquation <b>{fit}%</b></span><input type="range" min="0" max="100" value={fit} onChange={(e)=>setFit(Number(e.target.value))}/></label>
     <label><span>Urgence <b>{urgency}%</b></span><input type="range" min="0" max="100" value={urgency} onChange={(e)=>setUrgency(Number(e.target.value))}/></label>
     <label><span>Risque <b>{risk}%</b></span><input type="range" min="0" max="100" value={risk} onChange={(e)=>setRisk(Number(e.target.value))}/></label>
+    <div className="problemWeightNote"><span>RÈGLE</span><p>Le score reste explicable : changez un critère et observez le classement.</p></div>
   </>}>
-    <div className="problemScoreList">{rows.map(([name,score],i)=><article key={name}><b>0{i+1}</b><strong>{name}</strong><em>{score}</em><div><i style={{width:score+"%"}}/></div></article>)}</div>
+    <div className="problemScoreList">{rows.map(([name,score,reasons],i)=><article key={name} className={i===0?"top":""}><b>0{i+1}</b><strong>{name}</strong><em>{score}</em><div><i style={{width:score+"%"}}/></div><small>{reasons.join(" · ")}</small></article>)}</div>
+    <div className="problemScoreExplain"><span>POURQUOI #1 ?</span><strong>{leader[0]}</strong><p>{leader[2].join(" · ")}. Le classement est illustratif et doit rester relié à vos critères réels.</p></div>
   </Shell>;
 }
 
 function Router({ demo }) {
   const [selected,setSelected]=useState(0);
+  const [prepared,setPrepared]=useState(false);
   const messages=[
-    ["URGENT","Client bloqué sur commande 4821","Support N2"],
-    ["STANDARD","Demande de devis — 3 sites","Commercial"],
-    ["À CONTRÔLER","Pièce jointe sans référence","Back-office"]
+    {priority:"URGENT",subject:"Client bloqué sur commande 4821",route:"Support N2",confidence:"96 %",fields:["Commande 4821","Blocage livraison"],action:"Créer ticket prioritaire"},
+    {priority:"STANDARD",subject:"Demande de devis — 3 sites",route:"Commercial",confidence:"91 %",fields:["3 sites","Besoin devis"],action:"Créer opportunité"},
+    {priority:"À CONTRÔLER",subject:"Pièce jointe sans référence",route:"Back-office",confidence:"72 %",fields:["PDF joint","Référence absente"],action:"Demander la référence"}
   ];
   const item=messages[selected];
-  return <Shell demo={demo} side={<div className="problemQueue">{messages.map((m,i)=><button type="button" key={m[1]} className={selected===i?"active":""} onClick={()=>setSelected(i)}><span>{m[0]}</span><strong>{m[1]}</strong></button>)}</div>}>
-    <div className="problemRouteCard"><span>CATÉGORIE PROPOSÉE</span><strong>{item[2]}</strong><p>{item[1]}</p><div><b>Priorité</b><em>{item[0]}</em></div><div><b>Action</b><em>Soumettre au bon flux</em></div></div>
+  return <Shell demo={demo} side={<div className="problemQueue">{messages.map((m,i)=><button type="button" key={m.subject} className={selected===i?"active":""} onClick={()=>{setSelected(i);setPrepared(false);}}><span>{m.priority}</span><strong>{m.subject}</strong><small>{m.route} · confiance {m.confidence}</small></button>)}</div>}>
+    <div className="problemRouteWorkspace">
+      <div className="problemRouteCard"><span>DESTINATION PROPOSÉE</span><strong>{item.route}</strong><p>{item.subject}</p><div><b>Priorité</b><em>{item.priority}</em></div><div><b>Confiance</b><em>{item.confidence}</em></div></div>
+      <div className="problemExtractedSignals"><span>ÉLÉMENTS DÉTECTÉS</span>{item.fields.map((field)=><b key={field}>{field}</b>)}</div>
+      <button type="button" className="problemRouteAction" onClick={()=>setPrepared(true)}>Préparer le traitement</button>
+      {prepared&&<div className="problemPreparedAction"><span>ACTION PRÉPARÉE</span><strong>{item.action}</strong><small>À valider avant écriture ou envoi dans l’outil métier.</small></div>}
+    </div>
   </Shell>;
 }
 
@@ -165,11 +183,21 @@ function Control({ demo }) {
 
 function Dashboard({ demo }) {
   const [period,setPeriod]=useState("Semaine");
+  const [signal,setSignal]=useState(1);
   const values=period==="Jour"?[18,14,3]:period==="Semaine"?[96,81,11]:[382,326,37];
-  return <Shell demo={demo} side={<div className="problemToggle">{["Jour","Semaine","Mois"].map((p)=><button type="button" key={p} className={period===p?"active":""} onClick={()=>setPeriod(p)}>{p}</button>)}</div>}>
-    <div className="problemKpis"><article><span>VOLUME</span><strong>{values[0]}</strong></article><article><span>TRAITÉ</span><strong>{values[1]}</strong></article><article><span>À VOIR</span><strong>{values[2]}</strong></article></div>
-    <div className="problemBars">{[42,58,51,66,63,78,91].map((h,i)=><i key={i} style={{height:h+"%"}}/>)}</div>
-    <p className="problemInsight">Le commentaire automatique doit rester relié aux chiffres observés ; les causes non démontrées sont présentées comme questions à investiguer.</p>
+  const signals=[
+    ["Volume entrant","+18 %","Hausse observée sur la période"],
+    ["Exceptions","11","Au-dessus du niveau habituel"],
+    ["Délai médian","-9 %","Amélioration observée"]
+  ];
+  return <Shell demo={demo} side={<>
+    <div className="problemToggle">{["Jour","Semaine","Mois"].map((p)=><button type="button" key={p} className={period===p?"active":""} onClick={()=>setPeriod(p)}>{p}</button>)}</div>
+    <div className="problemSourceStatus"><span>SOURCES</span><b><i/>CRM synchronisé</b><b><i/>ERP synchronisé</b><b><i className="warning"/>Tableur · 1 contrôle</b></div>
+  </>}>
+    <div className="problemKpis"><article><span>VOLUME</span><strong>{values[0]}</strong><small>entrées</small></article><article><span>TRAITÉ</span><strong>{values[1]}</strong><small>flux consolidés</small></article><article><span>À VOIR</span><strong>{values[2]}</strong><small>exceptions</small></article></div>
+    <div className="problemBars">{[42,58,51,66,63,78,91].map((h,i)=><i key={i} className={i===6?"active":""} style={{height:h+"%"}}/>)}</div>
+    <div className="problemSignalList">{signals.map(([name,value,detail],i)=><button type="button" key={name} className={signal===i?"active":""} onClick={()=>setSignal(i)}><span>{name}</span><strong>{value}</strong><small>{detail}</small></button>)}</div>
+    <div className="problemNarrative"><span>COMMENTAIRE ASSISTÉ</span><p><b>Fait :</b> {signals[signal][2]}. <b>À investiguer :</b> la cause n’est pas déduite automatiquement sans preuve dans les sources.</p></div>
   </Shell>;
 }
 
