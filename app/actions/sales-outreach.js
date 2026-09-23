@@ -2,11 +2,22 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
-import { getSalesContact, markSalesContactWaalaxyImported } from "../../lib/db/salesContacts.js";
+import {
+  getSalesContact,
+  markSalesContactWaalaxyImported,
+  markSalesContactEnrichmentRequested,
+  applySalesContactKasprResult,
+  markSalesContactEnrichmentError
+} from "../../lib/db/salesContacts.js";
 import {
   importWaalaxyProspects,
   assertSuccessfulWaalaxyImport
 } from "../../lib/integrations/waalaxy.js";
+import {
+  enrichKasprLinkedInProfile,
+  extractKasprContactData,
+  kasprRequestedFields
+} from "../../lib/integrations/kaspr.js";
 
 async function requireWriter() {
   const context = await getCurrentWorkspaceMembership();
@@ -83,4 +94,85 @@ export async function sendVerifiedContactToWaalaxy(formData) {
   });
 
   revalidatePath("/accounts/" + accountKey);
+}
+
+
+export async function enrichVerifiedContactWithKaspr(formData) {
+  const context = await requireWriter();
+
+  if (!process.env.KASPR_API_KEY) {
+    throw new Error("Kaspr is not configured");
+  }
+
+  const requestedFields = kasprRequestedFields();
+  if (!requestedFields.length) {
+    throw new Error(
+      "Kaspr fields are not configured. Set KASPR_DATA_TO_GET before spending enrichment credits."
+    );
+  }
+
+  const contactId = clean(formData.get("contact_id"), 80);
+  const accountKey = clean(formData.get("account_key"), 120);
+
+  if (!contactId || !accountKey) {
+    throw new Error("Contact and account are required");
+  }
+
+  const contact = await getSalesContact({
+    workspaceId: context.membership.workspace_id,
+    contactId
+  });
+
+  if (!contact) throw new Error("Contact not found");
+  if (contact.verification_status !== "verified") {
+    throw new Error("Verify the contact before Kaspr enrichment");
+  }
+  if (contact.do_not_contact) {
+    throw new Error("This contact is marked do-not-contact");
+  }
+
+  const contactName =
+    contact.full_name ||
+    [contact.first_name, contact.last_name].filter(Boolean).join(" ").trim();
+
+  if (!contactName) {
+    throw new Error("A verified contact name is required before Kaspr enrichment");
+  }
+
+  await markSalesContactEnrichmentRequested({
+    workspaceId: context.membership.workspace_id,
+    actorUserId: context.claims.sub,
+    contactId
+  });
+
+  try {
+    const providerResult = await enrichKasprLinkedInProfile({
+      linkedinUrl: contact.linkedin_url,
+      name: contactName,
+      dataToGet: requestedFields
+    });
+
+    const extracted = extractKasprContactData(providerResult);
+
+    await applySalesContactKasprResult({
+      workspaceId: context.membership.workspace_id,
+      actorUserId: context.claims.sub,
+      contactId,
+      extracted,
+      requestedFields,
+      providerStatus: "success"
+    });
+  } catch (error) {
+    await markSalesContactEnrichmentError({
+      workspaceId: context.membership.workspace_id,
+      actorUserId: context.claims.sub,
+      contactId,
+      errorMessage: error instanceof Error ? error.message : String(error)
+    }).catch(() => null);
+
+    throw error;
+  }
+
+  revalidatePath("/accounts/" + accountKey);
+  revalidatePath("/contacts");
 }
