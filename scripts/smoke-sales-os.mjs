@@ -432,6 +432,30 @@ try {
   assert.equal(hiddenClient.candidates[0].candidate_domain, "careers.banque-exemple.test");
   assert.ok(hiddenClient.candidates[0].similarity_score >= 45);
 
+  const hiddenCallsBeforeReplay = calls.filter((call) =>
+    call.url.includes("api.search.brave.com") &&
+    new URL(call.url).searchParams.get("q")?.includes("Industrialisation Agentic AI LangGraph")
+  ).length;
+  const hiddenClientCached = await resolveHiddenEndClient({
+    account: {
+      name: "Collective.work",
+      intermediary_risk: true,
+      timeline: [{
+        title: "Industrialisation Agentic AI LangGraph - Freelance (H/F)",
+        source_url: "https://candidat.francetravail.fr/offres/recherche/detail/test"
+      }]
+    },
+    apiKey: "test-brave",
+    maxSignals: 1,
+    countPerQuery: 5
+  });
+  const hiddenCallsAfterReplay = calls.filter((call) =>
+    call.url.includes("api.search.brave.com") &&
+    new URL(call.url).searchParams.get("q")?.includes("Industrialisation Agentic AI LangGraph")
+  ).length;
+  assert.equal(hiddenCallsAfterReplay, hiddenCallsBeforeReplay);
+  assert.ok(hiddenClientCached.searches.every((item) => item.cache_hit === true));
+
   const research = await researchAccountPublicContext({
     company: "Acme",
     apiKey: "test-brave",
