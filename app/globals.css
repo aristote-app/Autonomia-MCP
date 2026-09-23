@@ -770,3 +770,15 @@ h3 { margin: 0 0 8px; }
   .revenueActionList article { grid-template-columns:auto 1fr; align-items:start; }
   .revenueActionOpen { grid-column:2; }
 }
+
+
+.contactDue {
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  padding:4px 6px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff !important;
+  font-weight:800;
+}
