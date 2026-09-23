@@ -10,17 +10,17 @@ import {
 } from "@/content/published-articles";
 
 const expertRoles = [
-  "AI Project Manager",
-  "GenAI Engineer",
-  "LLM Engineer",
-  "RAG Engineer",
-  "AI Agent Engineer",
-  "Data Scientist",
-  "ML Engineer",
-  "MLOps / LLMOps",
-  "AI Product Manager",
-  "AI Governance",
-  "Automatisation"
+  { label: "AI Project Manager", slug: "ai-project-manager" },
+  { label: "GenAI Engineer", slug: "genai-engineer" },
+  { label: "LLM Engineer", slug: "llm-engineer" },
+  { label: "RAG Engineer", slug: "rag-engineer" },
+  { label: "AI Agent Engineer", slug: "ai-agent-engineer" },
+  { label: "Data Scientist", slug: "data-scientist" },
+  { label: "ML Engineer", slug: "ml-engineer" },
+  { label: "MLOps / LLMOps", slug: "mlops-llmops-engineer" },
+  { label: "AI Product Manager", slug: "ai-product-manager" },
+  { label: "AI Governance", slug: "ai-governance" },
+  { label: "Automatisation", slug: "automation-engineer" }
 ];
 
 const trainingTopics = [
@@ -264,9 +264,10 @@ export default function Home() {
 
         <div className="roleMarquee">
           {expertRoles.map((role, index) => (
-            <Link href="/expert-ia" key={role} className="roleChip">
+            <Link href={"/metiers-ia/" + role.slug} key={role.slug} className="roleChip">
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{role}</strong>
+              <strong>{role.label}</strong>
+              <b aria-hidden="true">↗</b>
             </Link>
           ))}
         </div>
