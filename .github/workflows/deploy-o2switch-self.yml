@@ -82,6 +82,7 @@ jobs:
 
 
       - name: Bootstrap consultant candidates once
+        if: steps.probe.outputs.ready == 'true'
         env:
           BOOTSTRAP_URL: https://cockpit.build-autonomia.com/api/internal/talent-bootstrap
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
