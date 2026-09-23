@@ -118,8 +118,14 @@ const charterTopic = concreteTerritoryTraining.recommendations.find(
   (item) => item.slug === "creer-une-charte-d-usage-operationnelle-de-l-ia-pour-les-agents"
 );
 
-if (!managersTraining || !charterTopic || managersTraining.score <= charterTopic.score) {
+if (!managersTraining || managersTraining.evidence.matched_signals <= 0) {
   throw new Error(
-    "Concrete manager-training evidence must rank the manager topic above generic territory cluster topics."
+    "Concrete manager-training evidence must keep the manager topic evidence-backed."
+  );
+}
+
+if (charterTopic && managersTraining.score <= charterTopic.score) {
+  throw new Error(
+    "When a generic territory topic remains in the shortlist, a direct manager-training match must rank above it."
   );
 }
