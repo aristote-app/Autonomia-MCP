@@ -24,7 +24,10 @@ export default function IntegrationsPage() {
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
     accountResearch:
       process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
-      Boolean(process.env.BRAVE_SEARCH_API_KEY)
+      Boolean(process.env.BRAVE_SEARCH_API_KEY),
+    selfDeploy:
+      process.env.AUTONOMIA_SELF_DEPLOY_ENABLED === "true" &&
+      Boolean(process.env.AUTONOMIA_INTERNAL_TOKEN)
   };
 
   return (
@@ -130,6 +133,15 @@ export default function IntegrationsPage() {
           <p>
             Les contacts peuvent porter une prochaine action datée. Les relances dues remontent
             dans le pipeline et dans le moteur Next Best Action.
+          </p>
+        </article>
+
+        <article>
+          <State ready={states.selfDeploy} label="Auto-déploiement o2switch" />
+          <h2>GitHub → cockpit</h2>
+          <p>
+            Endpoint de self-update protégé par token et workflow GitHub prêts. Après le bootstrap
+            unique sur o2switch, chaque validation réussie pourra déployer automatiquement.
           </p>
         </article>
       </section>
