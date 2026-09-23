@@ -33,7 +33,7 @@ async function authorize(request) {
   }
 }
 
-export async function POST(request) {
+async function submit(request) {
   const auth = await authorize(request);
   if (!auth.ok) return auth.response;
 
@@ -67,4 +67,16 @@ export async function POST(request) {
       status: error?.status || null
     }, { status: 200 });
   }
+}
+
+export async function POST(request) {
+  return submit(request);
+}
+
+export async function GET(request) {
+  const url = new URL(request.url);
+  if (url.searchParams.get("action") !== "submit") {
+    return Response.json({ error: "missing_submit_action" }, { status: 400 });
+  }
+  return submit(request);
 }
