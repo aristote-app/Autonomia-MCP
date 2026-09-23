@@ -115,6 +115,68 @@ export async function submitSearchConsoleSitemap() {
   };
 }
 
+function isoDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+export async function querySearchConsoleDemand({ days = 28, rowLimit = 500 } = {}) {
+  const config = getSearchConsoleConfig();
+  if (!config.configured) {
+    return {
+      configured: false,
+      site_url: config.siteUrl || null,
+      rows: []
+    };
+  }
+
+  const end = new Date();
+  end.setUTCDate(end.getUTCDate() - 1);
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - Math.max(1, Math.min(Number(days) || 28, 90)) + 1);
+
+  const token = await accessToken();
+  const endpoint = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(
+    config.siteUrl
+  )}/searchAnalytics/query`;
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      startDate: isoDate(start),
+      endDate: isoDate(end),
+      dimensions: ["query"],
+      rowLimit: Math.max(1, Math.min(Number(rowLimit) || 500, 25000)),
+      type: "web"
+    }),
+    cache: "no-store"
+  });
+
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    const error = new Error(body?.error?.message || "search_console_query_failed");
+    error.status = response.status;
+    throw error;
+  }
+
+  return {
+    configured: true,
+    site_url: config.siteUrl,
+    period_start: isoDate(start),
+    period_end: isoDate(end),
+    rows: (body?.rows || []).map((row) => ({
+      query: row?.keys?.[0] || "",
+      clicks: Number(row?.clicks) || 0,
+      impressions: Number(row?.impressions) || 0,
+      ctr: Number(row?.ctr) || 0,
+      position: Number(row?.position) || 0
+    })).filter((row) => row.query)
+  };
+}
+
 export async function getSearchConsoleSitemapStatus() {
   const config = getSearchConsoleConfig();
   if (!config.configured) {
