@@ -82,6 +82,10 @@ export default async function SeoGeoPage() {
     return acc;
   }, { submitted: 0, indexed: 0 });
   const draftQueue = snapshot?.draftQueue || [];
+  const territoryDraftQueue = snapshot?.territoryDraftQueue || [];
+  const territoryRecommendations = recommendations
+    .filter((item) => item?.family === "territory")
+    .slice(0, 6);
   const site = siteConfig().base;
 
   return (
@@ -365,6 +369,64 @@ export default async function SeoGeoPage() {
               {!draftQueue.length && (
                 <tr>
                   <td colSpan="4">La première veille automatique remplira cette file dès que le moteur du site public sera relié.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <p className={styles.eyebrow}>TERRITOIRES</p>
+            <h2>5 briefs Territoires à préparer</h2>
+            <p>
+              File dédiée aux communautés de communes et d’agglomération. Elle reste distincte du classement
+              éditorial général et ne transforme pas un signal ancien en demande actuelle.
+            </p>
+          </div>
+        </div>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Score</th>
+                <th>Sujet</th>
+                <th>Preuves</th>
+                <th>Brief</th>
+              </tr>
+            </thead>
+            <tbody>
+              {territoryDraftQueue.map((item) => (
+                <tr key={`territory:${item.slug}`}>
+                  <td className={styles.score}>{item.score}</td>
+                  <td><strong>{item.title}</strong><br/><small>{item.cluster}</small></td>
+                  <td>
+                    {number(item.evidence?.matched_signals)} signaux ·
+                    {" "}{number(item.evidence?.territory_mentions)} territoire ·
+                    {" "}{number(item.evidence?.public_procurement_mentions)} marchés ·
+                    {" "}{number(item.evidence?.job_mentions)} emploi
+                  </td>
+                  <td>{item.brief ? "Prêt pour rédaction" : `Erreur : ${item.brief_error || "inconnue"}`}</td>
+                </tr>
+              ))}
+              {!territoryDraftQueue.length && territoryRecommendations.map((item) => (
+                <tr key={`territory-rec:${item.slug}`}>
+                  <td className={styles.score}>{item.score}</td>
+                  <td><strong>{item.title}</strong><br/><small>{item.cluster}</small></td>
+                  <td>
+                    {number(item.evidence?.matched_signals)} signaux ·
+                    {" "}{number(item.evidence?.territory_mentions)} territoire ·
+                    {" "}{number(item.evidence?.public_procurement_mentions)} marchés ·
+                    {" "}{number(item.evidence?.job_mentions)} emploi
+                  </td>
+                  <td>À préparer à la prochaine veille</td>
+                </tr>
+              ))}
+              {!territoryDraftQueue.length && !territoryRecommendations.length && (
+                <tr>
+                  <td colSpan="4">Aucune recommandation Territoires étayée pour le moment.</td>
                 </tr>
               )}
             </tbody>
