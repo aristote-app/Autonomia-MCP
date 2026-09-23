@@ -2,7 +2,10 @@
 import assert from "node:assert/strict";
 import { buildAccountOutreachPlan } from "../lib/intelligence/outreach.js";
 import { buildAccountBattlecard } from "../lib/intelligence/battlecard.js";
-import { importWaalaxyProspects } from "../lib/integrations/waalaxy.js";
+import {
+  importWaalaxyProspects,
+  assertSuccessfulWaalaxyImport
+} from "../lib/integrations/waalaxy.js";
 import {
   enrichKasprLinkedInProfile,
   standardLinkedInProfileId
@@ -230,6 +233,13 @@ try {
   });
 
   assert.equal(imported.result[0].importCode, "success");
+  assert.equal(assertSuccessfulWaalaxyImport(imported).importCode, "success");
+  assert.throws(
+    () => assertSuccessfulWaalaxyImport({
+      result: [{ importCode: "duplicated_prospect", message: "already elsewhere" }]
+    }),
+    /did not succeed/
+  );
 
   const waalaxyCall = calls.find((call) =>
     call.url.includes("/prospects/addProspectFromIntegration")
