@@ -158,6 +158,8 @@ fi
 
 write_debug "build-complete" "validating static assets"
 
+# Avoid grep -q pipelines here: with pipefail, a successful early grep exit can
+# SIGPIPE find and turn a valid asset tree into a false deployment failure.
 STATIC_ASSET_SAMPLE="$(find .next/static -type f \( -name '*.css' -o -name '*.js' \) -size +0c -print -quit)"
 if [ -z "$STATIC_ASSET_SAMPLE" ]; then
   echo "Refusing deploy: Next static assets are missing after build." >&2
