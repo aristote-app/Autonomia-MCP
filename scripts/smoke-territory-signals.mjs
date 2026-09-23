@@ -160,3 +160,28 @@ assert.equal(
   matchTerritoryByName("CA Grand Exemple", territoryIndex)?.id,
   "ca-test"
 );
+
+
+const sirenMatchedSignals = buildSeoGeoSignals({
+  opportunities: [
+    {
+      title: "Déploiement d'un assistant IA documentaire",
+      buyer_name: "Acheteur public régional",
+      siren: "987654321",
+      estimated_value_eur: 110000
+    }
+  ],
+  territoryDirectory: [
+    {
+      id: "territory-siren",
+      siren: "987654321",
+      name: "CA Grand Test",
+      territory_type: "CA"
+    }
+  ]
+});
+
+assert.equal(sirenMatchedSignals.length, 1);
+assert.equal(sirenMatchedSignals[0].family, "territory-use-case");
+assert.equal(sirenMatchedSignals[0].territory_mentions, 1);
+assert.equal(sirenMatchedSignals[0].territory_name, "CA Grand Test");
