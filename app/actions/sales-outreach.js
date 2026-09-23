@@ -3,7 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import { getSalesContact, markSalesContactWaalaxyImported } from "../../lib/db/salesContacts.js";
-import { importWaalaxyProspects } from "../../lib/integrations/waalaxy.js";
+import {
+  importWaalaxyProspects,
+  assertSuccessfulWaalaxyImport
+} from "../../lib/integrations/waalaxy.js";
 
 async function requireWriter() {
   const context = await getCurrentWorkspaceMembership();
@@ -67,6 +70,8 @@ export async function sendVerifiedContactToWaalaxy(formData) {
     campaignId,
     addExistingProspectInCampaign: Boolean(campaignId)
   });
+
+  assertSuccessfulWaalaxyImport(result, { campaignId });
 
   await markSalesContactWaalaxyImported({
     workspaceId: context.membership.workspace_id,
