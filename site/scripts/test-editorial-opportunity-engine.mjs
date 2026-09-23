@@ -101,7 +101,7 @@ console.log(
 const concreteTerritoryTraining = prioritizeEditorialBacklog(
   [
     {
-      query: "Mise en place de formation aux métiers de la data et de l'intelligence artificielle sur le territoire",
+      query: "Formation et accompagnement des managers territoriaux à l'usage de l'intelligence artificielle",
       cluster: "Collectivités & territoires",
       family: "territory-use-case",
       public_procurement_mentions: 1,
@@ -111,15 +111,15 @@ const concreteTerritoryTraining = prioritizeEditorialBacklog(
   { max_results: 100 }
 );
 
-const planTraining = concreteTerritoryTraining.recommendations.find(
-  (item) => item.slug === "construire-un-plan-de-formation-ia-pour-les-agents-d-une-communaute-de-communes"
-);
 const managersTraining = concreteTerritoryTraining.recommendations.find(
   (item) => item.slug === "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia"
 );
+const charterTopic = concreteTerritoryTraining.recommendations.find(
+  (item) => item.slug === "creer-une-charte-d-usage-operationnelle-de-l-ia-pour-les-agents"
+);
 
-if (!planTraining || !managersTraining || planTraining.score <= managersTraining.score) {
+if (!managersTraining || !charterTopic || managersTraining.score <= charterTopic.score) {
   throw new Error(
-    "Concrete territory training evidence must rank the direct training-plan topic above cluster-only manager topics."
+    "Concrete manager-training evidence must rank the manager topic above generic territory cluster topics."
   );
 }
