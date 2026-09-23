@@ -150,7 +150,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       phone: data.phone || null,
       company_name: data.company,
       requested_service: requestedService || mode,
-      message: scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
+      message: solutionContext?.original_query || scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
       desired_timeline: mode === "experts" ? data.qualifier : null,
       company_size: mode === "academy" ? data.qualifier : null,
       form_id: formId,
