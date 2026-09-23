@@ -44,13 +44,13 @@ export default function Home() {
             <span>Transmettre les compétences.</span>
           </h1>
           <p className="heroText">
-            Autonomia part d’un besoin métier réel pour concevoir, déployer et faire adopter l’IA.
-            Nos experts accélèrent l’exécution. Autonomia Academy rend les équipes capables de reprendre la main.
+            Décrivez votre besoin en langage naturel. Autonomia vous oriente vers les métiers IA pertinents,
+            les consultants disponibles et les formations Academy adaptées.
           </p>
 
           <div className="heroActions">
-            <Link className="primaryButton" href="/experts">Voir les experts IA</Link>
-            <Link className="secondaryButton" href="/academy">Voir les formations IA</Link>
+            <Link className="primaryButton" href="#solution-finder">Décrire mon besoin</Link>
+            <Link className="secondaryButton" href="/#diagnostic-ia">Faire le diagnostic détaillé</Link>
           </div>
         </div>
 
