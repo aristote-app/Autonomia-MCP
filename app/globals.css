@@ -1551,3 +1551,69 @@ h3 { margin: 0 0 8px; }
     flex-direction:column;
   }
 }
+
+
+.inboundAccessForm {
+  display:grid;
+  gap:12px;
+  max-width:520px;
+  margin:18px 0 64px;
+  padding:18px;
+  border:1px solid #d9ddd7;
+  background:#fff;
+}
+
+.inboundAccessForm label {
+  display:grid;
+  gap:6px;
+}
+
+.inboundAccessForm label > span {
+  color:#677068;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.inboundAccessForm input {
+  min-height:46px;
+  width:100%;
+  border:1px solid #cfd4ce;
+  background:#fff;
+  color:#111;
+  padding:10px 12px;
+  font:inherit;
+  font-size:14px;
+}
+
+.inboundAccessForm button {
+  min-height:44px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+  padding:10px 14px;
+  font:inherit;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.inboundAccessForm > p {
+  margin:0;
+  color:#8a1f11;
+  font-size:11px;
+  font-weight:800;
+}
+
+.inboundTemporaryAccessNotice {
+  border-color:#c9b35a;
+  background:#fff7d8;
+}
+
+@media (max-width:680px) {
+  .inboundAccessForm {
+    max-width:none;
+    margin-bottom:40px;
+  }
+}
