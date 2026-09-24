@@ -1,5 +1,32 @@
 import { NextResponse } from "next/server";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { z } from "zod";
+
+async function resolveInboundToken() {
+  if (process.env.AUTONOMIA_INBOUND_TOKEN) {
+    return process.env.AUTONOMIA_INBOUND_TOKEN;
+  }
+
+  const candidates = [
+    join(process.cwd(), ".runtime", "integration-settings.json"),
+    join(process.cwd(), "..", ".runtime", "integration-settings.json"),
+    "/home/dide4169/autonomia-cockpit-app/.runtime/integration-settings.json"
+  ];
+
+  for (const runtimeFile of candidates) {
+    try {
+      const parsed = JSON.parse(await readFile(runtimeFile, "utf8"));
+      const token = parsed?.values?.AUTONOMIA_INBOUND_TOKEN;
+      if (typeof token === "string" && token) {
+        process.env.AUTONOMIA_INBOUND_TOKEN = token;
+        return token;
+      }
+    } catch {}
+  }
+
+  return null;
+}
 
 const Lead = z.object({
   external_lead_id: z.string().min(1),
@@ -52,10 +79,12 @@ export async function POST(request) {
     );
   }
 
-  const endpoint = process.env.AUTONOMIA_INBOUND_URL;
-  const token = process.env.AUTONOMIA_INBOUND_TOKEN;
+  const endpoint =
+    process.env.AUTONOMIA_INBOUND_URL ||
+    "https://cockpit.build-autonomia.com/api/inbound/leads";
+  const token = await resolveInboundToken();
 
-  if (!endpoint || !token) {
+  if (!token) {
     return NextResponse.json(
       { error: "inbound_integration_not_configured" },
       { status: 503 }
@@ -73,6 +102,11 @@ export async function POST(request) {
   });
 
   if (!response.ok) {
+    const upstream = await response.json().catch(() => null);
+    console.error("Autonomia inbound rejected public lead", {
+      status: response.status,
+      error: upstream?.error || null
+    });
     return NextResponse.json(
       { error: "inbound_rejected" },
       { status: 502 }
