@@ -5,7 +5,7 @@ import { marketDemandExecutionArticlesWave3, marketDemandTrainingArticlesWave3 }
 import { marketDemandExecutionArticlesWave4, marketDemandTrainingArticlesWave4 } from "./article-packs/market-demand-wave-4.js";
 import { marketDemandExecutionArticlesWave5, marketDemandTrainingArticlesWave5 } from "./article-packs/market-demand-wave-5.js";
 import { marketDemandExecutionArticlesWave6, marketDemandTrainingArticlesWave6 } from "./article-packs/market-demand-wave-6.js";
-import { marketDemandExecutionArticlesWave7, marketDemandTrainingArticlesWave7 } from "./article-packs/market-demand-wave-7.js";
+import { marketDemandExecutionArticlesWave7, marketDemandTrainingArticlesWave7 } from "./article-packs/market-demand-wave-7.js";\nimport { marketDemandExecutionArticlesWave8, marketDemandTrainingArticlesWave8 } from "./article-packs/market-demand-wave-8.js";
 
 const baseExecutionArticles = [
   {
