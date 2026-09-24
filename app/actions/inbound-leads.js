@@ -2,7 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
-import { setInboundLeadStatus } from "../../lib/db/inboundLeads.js";
+import {
+  setInboundLeadStatus,
+  updateInboundLeadFollowUp
+} from "../../lib/db/inboundLeads.js";
 
 async function requireWriter() {
   const context = await getCurrentWorkspaceMembership();
@@ -34,6 +37,31 @@ export async function updateInboundLeadStatus(formData) {
     workspaceId: context.membership.workspace_id,
     leadId,
     status
+  });
+
+  revalidatePath("/inbound");
+}
+
+
+export async function updateInboundLeadFollowUpAction(formData) {
+  const context = await requireWriter();
+  const leadId = clean(formData.get("lead_id"), 80);
+  const status = clean(formData.get("status"), 40);
+  const priority = clean(formData.get("priority"), 20) || "normal";
+  const nextAction = clean(formData.get("next_action"), 500);
+  const followUpDueAt = clean(formData.get("follow_up_due_at"), 40);
+  const followUpNote = clean(formData.get("follow_up_note"), 3000);
+
+  if (!leadId || !status) throw new Error("Lead and status are required");
+
+  await updateInboundLeadFollowUp({
+    workspaceId: context.membership.workspace_id,
+    leadId,
+    status,
+    nextAction,
+    followUpNote,
+    followUpDueAt,
+    priority
   });
 
   revalidatePath("/inbound");
