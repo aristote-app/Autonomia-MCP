@@ -175,3 +175,22 @@ write_debug "completed" "Passenger restart requested for $REMOTE_SHA"
 
 echo "Autonomia public site deployed and Passenger restart requested: $REMOTE_SHA"
 
+# ONE-TIME COCKPIT RECOVERY BRIDGE
+# The cockpit detached self-deploy worker is currently accepted by Passenger
+# but dies before switching the production SHA. The public worker is healthy,
+# so use it once to execute the already-validated cockpit release synchronously.
+COCKPIT_RECOVERY_SHA="2c2f3c231d7a8981a2556a51336814ed70badd76"
+COCKPIT_SCRIPT="/home/dide4169/autonomia-cockpit-app/scripts/o2switch-sync-cockpit.sh"
+
+if [ -f "$COCKPIT_SCRIPT" ]; then
+  echo "Running one-time cockpit recovery bridge for $COCKPIT_RECOVERY_SHA..."
+  AUTONOMIA_DEPLOY_DAEMONIZED=1 \
+  AUTONOMIA_DEPLOY_SHA="$COCKPIT_RECOVERY_SHA" \
+  FORCE_DEPLOY=1 \
+  bash "$COCKPIT_SCRIPT"
+  echo "One-time cockpit recovery bridge completed for $COCKPIT_RECOVERY_SHA."
+else
+  echo "Cockpit recovery script not found: $COCKPIT_SCRIPT" >&2
+  exit 1
+fi
+
