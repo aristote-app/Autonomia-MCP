@@ -284,8 +284,8 @@ export default function SolutionFinder() {
               <form className="solutionContactForm" onSubmit={submitLead}>
                 <div className="solutionSendCopy">
                   <small>ENVOYER MA DEMANDE</small>
-                  <h3>Vous voulez qu’Autonomia reprenne ce besoin ?</h3>
-                  <p>Quelques coordonnées suffisent. Nous recevons votre demande avec le métier et la formation recommandés.</p>
+                  <h3>Transmettez votre besoin à Autonomia</h3>
+                  <p>Nous recevons votre demande avec le métier expert et la formation recommandés.</p>
                 </div>
 
                 <div className="solutionContactFields">
