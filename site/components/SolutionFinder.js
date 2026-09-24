@@ -1,5 +1,19 @@
 "use client";
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 import { useState } from "react";
 import Link from "next/link";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
@@ -168,7 +182,7 @@ export default function SolutionFinder() {
     };
 
     try {
-      const response = await fetch("/api/leads", {
+      const response = await fetchWithTimeout("/api/leads", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload)
@@ -192,9 +206,11 @@ export default function SolutionFinder() {
     } catch (submissionError) {
       setLeadStatus("error");
       setLeadError(
-        submissionError?.message === "configuration"
-          ? "La liaison avec Autonomia est momentanément indisponible. Réessayez dans quelques instants."
-          : "La demande n’a pas pu être envoyée. Merci de réessayer."
+        submissionError?.name === "AbortError"
+          ? "L’envoi a pris trop de temps. Votre demande n’a pas été confirmée : merci de réessayer."
+          : submissionError?.message === "configuration"
+            ? "La liaison avec Autonomia est momentanément indisponible. Réessayez dans quelques instants."
+            : "La demande n’a pas pu être envoyée. Merci de réessayer."
       );
     }
   }
