@@ -176,7 +176,7 @@ mkdir -p .runtime tmp
 # so execute the already-validated cockpit release synchronously and capture
 # enough diagnostics to make any server-side failure actionable.
 COCKPIT_RECOVERY_SHA="2c2f3c231d7a8981a2556a51336814ed70badd76"
-COCKPIT_SCRIPT="/home/dide4169/autonomia-cockpit-app/scripts/o2switch-sync-cockpit.sh"
+COCKPIT_SCRIPT="/home/dide4169/autonomia-public-site-src/site/scripts/o2switch-sync-cockpit-recovery.sh"
 COCKPIT_RECOVERY_DEBUG="$APP_ROOT/public/__autonomia_cockpit_recovery_debug.txt"
 
 : > "$COCKPIT_RECOVERY_DEBUG"
