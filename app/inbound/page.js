@@ -99,6 +99,39 @@ export default async function InboundPage({ searchParams }) {
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   const canWrite = hasSession && context.membership.role !== "viewer";
 
+  if (!hasSession) {
+    const fallbackWorkspace = await getAutonomiaWorkspace().catch(() => null);
+    const securedLeadCount = fallbackWorkspace?.id
+      ? await listInboundLeads({
+          workspaceId: fallbackWorkspace.id,
+          limit: 500
+        }).then((items) => items.length).catch(() => 0)
+      : 0;
+
+    return (
+      <main>
+        <div className="detailBack"><Link href="/">← Retour au cockpit</Link></div>
+        <header className="integrationHero">
+          <p className="eyebrow">AUTONOMIA · INBOUND</p>
+          <h1>Leads entrants.</h1>
+          <p className="lede">
+            Les demandes sont bien enregistrées. L’accès aux coordonnées et au suivi est protégé.
+          </p>
+        </header>
+        <div className="inboundLockedState">
+          <strong>{securedLeadCount}</strong>
+          <div>
+            <span>LEADS SÉCURISÉS</span>
+            <p>
+              Activez la connexion administrateur pour consulter les coordonnées,
+              qualifier les demandes et modifier le suivi commercial.
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   const membershipWorkspace = context?.membership?.workspaces;
   const membershipWorkspaceSlug = Array.isArray(membershipWorkspace)
     ? membershipWorkspace[0]?.slug
@@ -107,24 +140,9 @@ export default async function InboundPage({ searchParams }) {
     ? membershipWorkspace[0]?.name
     : membershipWorkspace?.name;
 
-  const fallbackWorkspace = !hasSession
-    ? await getAutonomiaWorkspace().catch(() => null)
-    : null;
-
-  const effectiveWorkspaceId =
-    context?.membership?.workspace_id ||
-    fallbackWorkspace?.id ||
-    null;
-
-  const effectiveWorkspaceSlug =
-    membershipWorkspaceSlug ||
-    fallbackWorkspace?.slug ||
-    null;
-
-  const effectiveWorkspaceName =
-    membershipWorkspaceName ||
-    fallbackWorkspace?.name ||
-    null;
+  const effectiveWorkspaceId = context?.membership?.workspace_id || null;
+  const effectiveWorkspaceSlug = membershipWorkspaceSlug || null;
+  const effectiveWorkspaceName = membershipWorkspaceName || null;
 
   const isAutonomiaWorkspace =
     effectiveWorkspaceSlug === "autonomia" ||
