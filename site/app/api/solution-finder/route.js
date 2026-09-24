@@ -339,7 +339,22 @@ export async function POST(request) {
 
   const query = parsed.data.query;
   const aiClassification = await classifyWithOpenAI(query);
-  const classification = aiClassification || fallbackClassification(query);
+  let classification = aiClassification || fallbackClassification(query);
+
+  if (
+    classification.route !== "academy" &&
+    classification.role_ids?.[0] &&
+    !classification.training_ids?.length
+  ) {
+    const companionTraining = ROLE_TRAINING_FALLBACK[classification.role_ids[0]];
+    if (companionTraining && existsTraining(companionTraining)) {
+      classification = {
+        ...classification,
+        route: "hybrid",
+        training_ids: [companionTraining]
+      };
+    }
+  }
 
   const roles = classification.role_ids.map((id) => {
     const role = aiRoles.find((item) => item.slug === id);
