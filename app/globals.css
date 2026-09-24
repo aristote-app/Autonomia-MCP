@@ -1473,3 +1473,36 @@ h3 { margin: 0 0 8px; }
   letter-spacing:.06em;
   text-transform:uppercase;
 }
+
+
+.inboundReadOnlyNotice {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 8px;
+  padding:10px 12px;
+  border:1px solid #d8c36b;
+  background:#fff8d8;
+  color:#3f3600;
+  font-size:11px;
+  line-height:1.4;
+}
+
+.inboundReadOnlyNotice strong {
+  flex:0 0 auto;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.inboundReadOnlyNotice span {
+  color:#665b1a;
+}
+
+@media (max-width:680px) {
+  .inboundReadOnlyNotice {
+    align-items:flex-start;
+    flex-direction:column;
+    gap:4px;
+  }
+}
