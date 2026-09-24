@@ -169,28 +169,41 @@ fi
 echo "Validated Next static asset: $STATIC_ASSET_SAMPLE"
 
 mkdir -p .runtime tmp
-printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
-touch tmp/restart.txt
-write_debug "completed" "Passenger restart requested for $REMOTE_SHA"
-
-echo "Autonomia public site deployed and Passenger restart requested: $REMOTE_SHA"
 
 # ONE-TIME COCKPIT RECOVERY BRIDGE
 # The cockpit detached self-deploy worker is currently accepted by Passenger
 # but dies before switching the production SHA. The public worker is healthy,
-# so use it once to execute the already-validated cockpit release synchronously.
+# so execute the already-validated cockpit release synchronously and capture
+# enough diagnostics to make any server-side failure actionable.
 COCKPIT_RECOVERY_SHA="2c2f3c231d7a8981a2556a51336814ed70badd76"
 COCKPIT_SCRIPT="/home/dide4169/autonomia-cockpit-app/scripts/o2switch-sync-cockpit.sh"
+COCKPIT_RECOVERY_DEBUG="$APP_ROOT/public/__autonomia_cockpit_recovery_debug.txt"
+
+: > "$COCKPIT_RECOVERY_DEBUG"
+write_debug "cockpit-recovery-start" "$COCKPIT_RECOVERY_SHA"
 
 if [ -f "$COCKPIT_SCRIPT" ]; then
   echo "Running one-time cockpit recovery bridge for $COCKPIT_RECOVERY_SHA..."
-  AUTONOMIA_DEPLOY_DAEMONIZED=1 \
-  AUTONOMIA_DEPLOY_SHA="$COCKPIT_RECOVERY_SHA" \
-  FORCE_DEPLOY=1 \
-  bash "$COCKPIT_SCRIPT"
+  if ! AUTONOMIA_DEPLOY_DAEMONIZED=1 \
+    AUTONOMIA_DEPLOY_SHA="$COCKPIT_RECOVERY_SHA" \
+    FORCE_DEPLOY=1 \
+    bash -x "$COCKPIT_SCRIPT" > "$COCKPIT_RECOVERY_DEBUG" 2>&1; then
+    RECOVERY_TAIL="$(tail -n 30 "$COCKPIT_RECOVERY_DEBUG" | tr '\n' ' ' | cut -c1-3500)"
+    write_debug "failed" "cockpit recovery failed: $RECOVERY_TAIL"
+    echo "Cockpit recovery bridge failed. See $COCKPIT_RECOVERY_DEBUG" >&2
+    exit 1
+  fi
   echo "One-time cockpit recovery bridge completed for $COCKPIT_RECOVERY_SHA."
+  write_debug "cockpit-recovery-complete" "$COCKPIT_RECOVERY_SHA"
 else
+  write_debug "failed" "cockpit recovery script not found: $COCKPIT_SCRIPT"
   echo "Cockpit recovery script not found: $COCKPIT_SCRIPT" >&2
   exit 1
 fi
+
+printf '%s\n' "$REMOTE_SHA" > .runtime/deployed-sha
+touch tmp/restart.txt
+write_debug "completed" "Passenger restart requested for $REMOTE_SHA; cockpit recovery=$COCKPIT_RECOVERY_SHA"
+
+echo "Autonomia public site deployed and Passenger restart requested: $REMOTE_SHA"
 
