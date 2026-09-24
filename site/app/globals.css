@@ -14657,3 +14657,56 @@ body:has(.territoryCampaignPage) .desktopNav {
     max-width:620px;
   }
 }
+
+
+/* AI Match v5 — compact lead form */
+.solutionSendSimple .solutionContactForm {
+  grid-template-columns:1fr !important;
+  gap:20px;
+}
+
+.solutionSendSimple .solutionSendCopy,
+.solutionSendSimple .solutionContactFields,
+.solutionSendSimple .solutionConsent,
+.solutionSendSimple .solutionSendActions,
+.solutionSendSimple .solutionContactForm > .solutionFinderError {
+  grid-column:1 !important;
+  min-width:0;
+}
+
+.solutionSendSimple .solutionSendCopy {
+  max-width:none;
+}
+
+.solutionSendSimple .solutionSendCopy h3 {
+  max-width:100%;
+  margin:7px 0 6px;
+  font-size:clamp(27px,2.45vw,36px);
+  line-height:1.02;
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+}
+
+.solutionSendSimple .solutionSendCopy p {
+  max-width:100%;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.solutionSendSimple .solutionContactFields {
+  width:100%;
+}
+
+.solutionSendSimple .solutionContactFields input {
+  min-width:0;
+}
+
+@media (max-width:619px) {
+  .solutionSendSimple .solutionContactFields {
+    grid-template-columns:1fr;
+  }
+
+  .solutionSendSimple {
+    padding:22px 18px 24px;
+  }
+}
