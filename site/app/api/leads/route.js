@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { z } from "zod";
 
@@ -26,6 +27,55 @@ async function resolveInboundToken() {
   }
 
   return null;
+}
+
+async function queueLeadLocally(payload) {
+  const directories = [
+    "/home/dide4169/autonomia-cockpit-app/.runtime/inbound-spool",
+    join(process.cwd(), ".runtime", "inbound-spool")
+  ];
+
+  const safeId = String(payload.external_lead_id || randomUUID())
+    .replace(/[^a-zA-Z0-9._-]/g, "-")
+    .slice(0, 120);
+
+  const queuedPayload = {
+    ...payload,
+    _queued_at: new Date().toISOString()
+  };
+
+  for (const dir of directories) {
+    try {
+      await mkdir(dir, { recursive: true });
+      const target = join(dir, safeId + ".json");
+      const temp = target + ".tmp-" + randomUUID();
+      await writeFile(temp, JSON.stringify(queuedPayload) + "\n", "utf8");
+      await rename(temp, target);
+      return { ok: true, path: target };
+    } catch {}
+  }
+
+  return { ok: false, path: null };
+}
+
+async function forwardLead(endpoint, token, payload) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+
+  try {
+    return await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 const Lead = z.object({
@@ -94,27 +144,45 @@ export async function POST(request) {
     );
   }
 
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify(parsed.data),
-    cache: "no-store"
-  });
+  try {
+    const response = await forwardLead(endpoint, token, parsed.data);
 
-  if (!response.ok) {
+    if (response.ok) {
+      const upstream = await response.json().catch(() => null);
+      return NextResponse.json(
+        {
+          accepted: true,
+          queued: false,
+          lead_id: upstream?.lead_id || null
+        },
+        { status: 202 }
+      );
+    }
+
     const upstream = await response.json().catch(() => null);
     console.error("Autonomia inbound rejected public lead", {
       status: response.status,
       error: upstream?.error || null
     });
+  } catch (error) {
+    console.error("Autonomia inbound request timed out or failed", {
+      error: error?.name || error?.message || String(error)
+    });
+  }
+
+  const queued = await queueLeadLocally(parsed.data);
+  if (!queued.ok) {
     return NextResponse.json(
-      { error: "inbound_rejected" },
-      { status: 502 }
+      { error: "inbound_unavailable_and_queue_failed" },
+      { status: 503 }
     );
   }
 
-  return NextResponse.json({ accepted: true }, { status: 202 });
+  return NextResponse.json(
+    {
+      accepted: true,
+      queued: true
+    },
+    { status: 202 }
+  );
 }
