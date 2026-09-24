@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { normalizeJobSearchResult } from "../lib/collectors/jobDiscovery.js";
+import { normalizeFranceTravailOffer } from "../lib/collectors/franceTravail.js";
 
 const linkedin = normalizeJobSearchResult({
   sourceId: "linkedin",
@@ -30,5 +31,38 @@ const indeed = normalizeJobSearchResult({
 assert.equal(indeed.sourceRecordId, "1aca39d46ad89084");
 assert.equal(indeed.contractType, "Freelance / indépendant");
 assert.ok(indeed.signalKeys.includes("freelance"));
+
+const territory = normalizeFranceTravailOffer(
+  {
+    id: "FT-TERRITORY-1",
+    intitule: "Chef de projet intelligence artificielle",
+    description:
+      "La collectivité recherche un chef de projet IA pour automatiser des processus et accompagner les agents territoriaux.",
+    entreprise: { nom: "Communauté d'agglomération Exemple" },
+    lieuTravail: { libelle: "France" },
+    dateCreation: "2026-09-24T08:00:00Z",
+    dateActualisation: "2026-09-24T09:00:00Z",
+    competences: [{ libelle: "Intelligence artificielle" }]
+  },
+  { kind: "territory", query: "chef de projet IA collectivité" }
+);
+
+assert.ok(territory);
+assert.equal(territory.contractType, "Signal recrutement collectivité IA");
+assert.ok(territory.signalKeys.includes("territorial"));
+assert.ok(territory.signalKeys.includes("territory_ai_job"));
+assert.ok(territory.signalKeys.includes("territory_automation"));
+
+const falseTerritory = normalizeFranceTravailOffer(
+  {
+    id: "FT-PRIVATE-1",
+    intitule: "Chef de projet intelligence artificielle",
+    description: "Entreprise privée recherchant un chef de projet IA.",
+    entreprise: { nom: "Entreprise privée Exemple" }
+  },
+  { kind: "territory", query: "chef de projet IA collectivité" }
+);
+
+assert.equal(falseTerritory, null);
 
 console.log("job discovery smoke test passed");
