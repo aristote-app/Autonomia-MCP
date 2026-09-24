@@ -23,7 +23,7 @@ const base = {
   utm_campaign: "automation-ia"
 };
 
-const lead = normalizeInboundLead({
+const baseWithSolution = {
   ...base,
   solution_context: {
     source: "solution_finder",
@@ -39,7 +39,9 @@ const lead = normalizeInboundLead({
     engine: "openai",
     generated_at: "2026-09-23T05:00:30Z"
   }
-});
+};
+
+const lead = normalizeInboundLead(baseWithSolution);
 
 assert.equal(lead.email, "alice@example.com");
 assert.equal(lead.marketing_consent, false);
@@ -54,9 +56,13 @@ assert.equal(lead.scan_context.solution_context.original_query, "Nous voulons au
 assert.ok(/^[a-f0-9]{64}$/.test(lead.event_hash));
 assert.ok(/^[a-f0-9]{64}$/.test(lead.dedupe_key));
 
-const duplicate = normalizeInboundLead(base);
+const duplicate = normalizeInboundLead(baseWithSolution);
 assert.equal(duplicate.event_hash, lead.event_hash);
 assert.equal(duplicate.dedupe_key, lead.dedupe_key);
+
+const sameContactWithoutSolution = normalizeInboundLead(base);
+assert.notEqual(sameContactWithoutSolution.event_hash, lead.event_hash);
+assert.equal(sameContactWithoutSolution.dedupe_key, lead.dedupe_key);
 
 const training = normalizeInboundLead({
   ...base,
