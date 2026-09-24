@@ -69,8 +69,8 @@ if [ -n "$TARGET_SHA" ]; then
     git fetch --depth=1 origin "$TARGET_SHA"
   fi
 
-  if [ "$TARGET_SHA" != "$MAIN_SHA" ] && ! git merge-base --is-ancestor "$TARGET_SHA" "$MAIN_SHA"; then
-    echo "Refusing deploy: target SHA is not on origin/main." >&2
+  if [ "$TARGET_SHA" != "$MAIN_SHA" ]; then
+    echo "Refusing stale recovery deploy: target $TARGET_SHA is not current origin/main $MAIN_SHA." >&2
     exit 1
   fi
 
