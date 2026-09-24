@@ -177,11 +177,11 @@ export default function EditorialArticle({ article }) {
           )}
 
           <section className="articleCta">
-            <p className="eyebrow">AUTONOMIA</p>
-            <h2>{isTraining ? "Vous voulez transformer ce scénario en formation pour vos équipes ?" : isTerritory ? "Vous voulez transformer ce guide en feuille de route pour votre territoire ?" : "Vous voulez transformer ce scénario en système réel ?"}</h2>
-            <p>{isTraining ? "Autonomia Academy part des usages, des outils et du niveau de vos équipes." : isTerritory ? "Autonomia peut partir des missions des agents, des besoins des entreprises locales et des contraintes de l’EPCI pour prioriser une première vague de cas d’usage." : "Autonomia Experts peut vous aider à traduire le besoin en compétences et en architecture d’exécution."}</p>
-            <Link className="primaryButton" href={isTraining ? "/formation-ia-entreprise" : isTerritory ? "/territoires" : "/expert-ia"}>
-              {isTraining ? "Construire le parcours" : isTerritory ? "Cadrer la feuille de route" : "Cadrer le besoin"}
+            <p className="eyebrow">{articleCta.eyebrow}</p>
+            <h2>{articleCta.title}</h2>
+            <p>{articleCta.text}</p>
+            <Link className="primaryButton" href={articleCta.href}>
+              {articleCta.label}
             </Link>
           </section>
         </article>
