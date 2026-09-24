@@ -43,6 +43,18 @@ const SCAN_LABELS = {
   }
 };
 
+function sourceModuleLabel(mode, formId) {
+  const labels = {
+    experts: "Formulaire Experts",
+    academy: "Formulaire Academy",
+    diagnostic: "Diagnostic IA",
+    territories: "Formulaire Territoires"
+  };
+  const pageTitle = typeof document !== "undefined" ? document.title : "";
+  const module = labels[mode] || "Formulaire Autonomia";
+  return pageTitle ? `${module} · ${pageTitle}` : `${module} · ${formId}`;
+}
+
 function scanMessage(scanContext) {
   if (!scanContext?.answers) return null;
   const { objective, stage, gap } = scanContext.answers;
@@ -98,8 +110,15 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
     event.preventDefault();
     setError("");
 
-    if (!data.firstName || !data.email || !data.company) {
-      setError("Merci de renseigner votre prénom, votre entreprise et votre e-mail.");
+    const phone = data.phone.replace(/\D/g, "");
+
+    if (!data.firstName || !data.lastName || !data.email || !data.company || !phone) {
+      setError("Merci de renseigner tous les champs de contact.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      setError("Le numéro de téléphone doit comporter exactement 10 chiffres.");
       return;
     }
 
@@ -111,15 +130,14 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
       source_platform: "autonomia_public_site",
       received_at: new Date().toISOString(),
       first_name: data.firstName,
-      last_name: data.lastName || null,
+      last_name: data.lastName,
       email: data.email,
-      phone: data.phone || null,
+      phone,
       company_name: data.company,
       requested_service: requestedService || mode,
       message: scanMessage(scanContext) || (mode === "territories" ? [data.need, data.qualifier].filter(Boolean).join(" · ") : data.need),
       desired_timeline: mode === "experts" ? data.qualifier : null,
       company_size: mode === "academy" ? data.qualifier : null,
-      form_id: formId,
       scan_context: scanContext
         ? {
             version: scanContext.scan_version || null,
@@ -143,6 +161,8 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
           }
         : null,
       ...getClientAttribution(),
+      form_id: formId,
+      landing_page_topic: sourceModuleLabel(mode, formId),
       marketing_consent: Boolean(data.marketingConsent),
       consent_timestamp: new Date().toISOString(),
       privacy_notice_version: "2026-09-20-v1",
@@ -236,11 +256,11 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
         <fieldset>
           <legend>Où pouvons-nous vous répondre ?</legend>
           <div className="fieldGrid">
-            <label><span>Prénom *</span><input value={data.firstName} onChange={(e) => set("firstName", e.target.value)} autoComplete="given-name" /></label>
-            <label><span>Nom</span><input value={data.lastName} onChange={(e) => set("lastName", e.target.value)} autoComplete="family-name" /></label>
-            <label><span>Entreprise *</span><input value={data.company} onChange={(e) => set("company", e.target.value)} autoComplete="organization" /></label>
-            <label><span>E-mail professionnel *</span><input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" /></label>
-            <label className="fullField"><span>Téléphone</span><input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" /></label>
+            <label><span>Prénom *</span><input required value={data.firstName} onChange={(e) => set("firstName", e.target.value)} autoComplete="given-name" /></label>
+            <label><span>Nom *</span><input required value={data.lastName} onChange={(e) => set("lastName", e.target.value)} autoComplete="family-name" /></label>
+            <label><span>Entreprise *</span><input required value={data.company} onChange={(e) => set("company", e.target.value)} autoComplete="organization" /></label>
+            <label><span>E-mail professionnel *</span><input required type="email" value={data.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" /></label>
+            <label className="fullField"><span>Téléphone *</span><input required type="tel" inputMode="numeric" pattern="[0-9]{10}" minLength={10} maxLength={10} value={data.phone} onChange={(e) => set("phone", e.target.value.replace(/\D/g, "").slice(0, 10))} autoComplete="tel" placeholder="0612345678" /></label>
           </div>
 
           <label className="consentLine">
