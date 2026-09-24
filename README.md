@@ -46,3 +46,5 @@ Foundation, persistence, initial real public-market data, private signals, staff
 
 ## Inbound acquisition
 Website forms, landing pages and future Meta Lead Ads feed one normalized lead contract into Autonomia. Autonomia owns attribution preservation, deduplication, enrichment, qualification, routing, opportunity creation, next-best-action and downstream revenue analytics. See `docs/inbound-acquisition.md`.
+
+<!-- o2switch deploy trigger: 2026-09-24T10:24:00Z -->
