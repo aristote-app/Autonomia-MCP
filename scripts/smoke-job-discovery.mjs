@@ -77,7 +77,7 @@ const emploiTerritorial = normalizeWebDemandResult(
     title: "Chef de projet Intelligence Artificielle - Conseil départemental",
     url: "https://www.emploi-territorial.fr/offre/o070260609001070-chef-projet-intelligence-artificielle",
     description:
-      "La collectivité pilote sa stratégie IA, automatise certains processus, forme les agents et structure la gouvernance."
+      "La collectivité pilote sa stratégie IA, automatise certains processus, organise la formation des agents et structure la gouvernance."
   }
 );
 
