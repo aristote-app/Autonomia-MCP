@@ -1,5 +1,19 @@
 "use client";
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 import { useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
@@ -170,7 +184,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
     };
 
     try {
-      const response = await fetch("/api/leads", {
+      const response = await fetchWithTimeout("/api/leads", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload)
