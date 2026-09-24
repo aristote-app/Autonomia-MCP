@@ -85,7 +85,7 @@ jobs:
           items = data["items"]
           started_at = data["sourceUpdatedAt"]
           token = os.environ["TERRITORY_REFRESH_TOKEN"]
-          endpoint = "https://autonomia-mcp.vercel.app/api/territories/import"
+          endpoint = "https://cockpit.build-autonomia.com/api/territories/import"
 
           def post(payload):
               body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
