@@ -480,3 +480,5 @@ Après branchement de `AUTONOMIA_CONTENT_SIGNALS_URL` :
 <!-- execute cockpit recovery bridge: 2026-09-24T12:36:00Z -->
 
 <!-- run diagnosed cockpit recovery bridge: 2026-09-24T12:43:00Z -->
+
+<!-- public deploy v3 trigger: 2026-09-24T14:29:00Z -->
