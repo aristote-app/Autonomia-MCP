@@ -25,8 +25,25 @@ fi
 
 DEBUG_FILE="$APP_ROOT/public/__autonomia_cockpit_deploy_debug.txt"
 mkdir -p "$APP_ROOT/public"
-: > "$DEBUG_FILE"
-exec > >(tee -a "$WORKER_LOG" "$DEBUG_FILE") 2>&1
+
+write_debug() {
+  local state="$1"
+  local detail="${2:-}"
+  {
+    printf 'timestamp=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf 'state=%s\n' "$state"
+    printf 'target_sha=%s\n' "${TARGET_SHA:-main}"
+    if [ -n "$detail" ]; then
+      printf 'detail=%s\n' "$detail"
+    fi
+  } > "$DEBUG_FILE"
+}
+
+# o2switch does not expose /dev/fd reliably under Passenger. Avoid Bash
+# process substitution here; it previously killed the deploy before git fetch.
+touch "$WORKER_LOG"
+write_debug "worker-started"
+exec >> "$WORKER_LOG" 2>&1
 
 echo
 echo "=== DETACHED DEPLOY WORKER $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
@@ -38,6 +55,7 @@ cd "$APP_ROOT"
 
 echo "node=$(node -v) npm=$(npm -v)"
 echo "Fetching origin/$BRANCH..."
+write_debug "fetching" "origin/$BRANCH"
 git fetch --depth=200 origin "$BRANCH"
 MAIN_SHA="$(git rev-parse "origin/$BRANCH")"
 
@@ -69,6 +87,7 @@ if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ] && [ -f .runti
 fi
 
 echo "Deploying validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
+write_debug "syncing" "$LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "$REMOTE_SHA"
 
 cat > lib/runtime/buildStamp.generated.js <<EOF
@@ -92,6 +111,7 @@ echo "Ensuring shared inbound lead token..."
 node scripts/ensure-inbound-token.mjs
 
 echo "Building cockpit Next.js..."
+write_debug "building" "$REMOTE_SHA"
 npm run build
 
 # Public site deployment is intentionally independent.
@@ -118,5 +138,6 @@ else
 fi
 
 touch tmp/restart.txt
+write_debug "completed" "Passenger restart requested for $REMOTE_SHA"
 
-echo "Autonomia cockpit + public site deployed and Passenger restarts requested: $REMOTE_SHA"
+echo "Autonomia cockpit deployed and Passenger restart requested: $REMOTE_SHA"
