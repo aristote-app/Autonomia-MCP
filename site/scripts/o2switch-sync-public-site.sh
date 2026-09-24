@@ -170,12 +170,12 @@ echo "Validated Next static asset: $STATIC_ASSET_SAMPLE"
 
 mkdir -p .runtime tmp
 
-# ONE-TIME COCKPIT RECOVERY BRIDGE
+# COCKPIT RECOVERY BRIDGE
 # The cockpit detached self-deploy worker is currently accepted by Passenger
 # but dies before switching the production SHA. The public worker is healthy,
 # so execute the already-validated cockpit release synchronously and capture
 # enough diagnostics to make any server-side failure actionable.
-COCKPIT_RECOVERY_SHA="c559a94afb55f22c5ac3c5a17feedc6f9a0f0cf7"
+COCKPIT_RECOVERY_SHA="03242c292eab13ac5a5f972941202e3f754fd44c"
 COCKPIT_SCRIPT="/home/dide4169/autonomia-public-site-src/site/scripts/o2switch-sync-cockpit-recovery.sh"
 COCKPIT_RECOVERY_DEBUG="$APP_ROOT/public/__autonomia_cockpit_recovery_debug.txt"
 
