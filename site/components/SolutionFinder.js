@@ -223,13 +223,15 @@ export default function SolutionFinder() {
         </div>
       </form>
 
-      <div className="solutionExamples" aria-label="Exemples de demandes">
-        {EXAMPLES.map((example) => (
-          <button type="button" key={example} onClick={() => chooseExample(example)}>
-            {example}
-          </button>
-        ))}
-      </div>
+      {!result && (
+        <div className="solutionExamples" aria-label="Exemples de demandes">
+          {EXAMPLES.map((example) => (
+            <button type="button" key={example} onClick={() => chooseExample(example)}>
+              {example}
+            </button>
+          ))}
+        </div>
+      )}
 
       {error && <p className="solutionFinderError" role="alert">{error}</p>}
 
