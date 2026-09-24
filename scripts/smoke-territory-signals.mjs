@@ -93,6 +93,47 @@ assert.equal(summary.territory, 1);
 assert.equal(summary.procurement, 1);
 
 
+const tedTerritorySignals = buildSeoGeoSignals({
+  territorySignals: [
+    {
+      signal_type: "territory_ai_project",
+      signal_source: "ted",
+      title: "Assistant documentaire RAG pour une communauté d'agglomération",
+      importance: 5,
+      detected_at: new Date().toISOString(),
+      evidence_url: "https://ted.europa.eu/fr/notice/-/detail/TEST",
+      territory_name: "CA Exemple",
+      territory_type: "CA",
+      payload: {
+        buyer_name: "CA Exemple",
+        query: "assistant documentaire intelligence artificielle"
+      }
+    }
+  ]
+});
+
+assert.equal(tedTerritorySignals.length, 1);
+assert.ok(tedTerritorySignals[0].public_procurement_mentions > 0);
+assert.equal(tedTerritorySignals[0].source, "ted");
+
+const normalizedTed = normalizeTerritoryMarketSignal(
+  {
+    source: "ted",
+    sourceId: "TED-TEST",
+    sourceUrl: "https://ted.europa.eu/fr/notice/-/detail/TEST",
+    title: "Formation des agents territoriaux à l'intelligence artificielle",
+    buyerName: "CA Grand Exemple",
+    publishedAt: "2026-09-24T00:00:00Z"
+  },
+  { id: "territory-ted", siren: "222222222", name: "CA Grand Exemple", territory_type: "CA" },
+  "formation intelligence artificielle",
+  { matchKind: "buyer_name" }
+);
+
+assert.equal(normalizedTed.signalSource, "ted");
+assert.equal(normalizedTed.payload.territory_match_kind, "buyer_name");
+
+
 const directoryMatchedSignals = buildSeoGeoSignals({
   opportunities: [
     {
