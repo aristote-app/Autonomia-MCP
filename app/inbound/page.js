@@ -10,6 +10,8 @@ import {
   listQueuedInboundLeads
 } from "../../lib/inbound/spool.js";
 import { updateInboundLeadFollowUpAction } from "../actions/inbound-leads.js";
+import { hasTemporaryInboundAccess } from "../../lib/inbound/access.js";
+import { unlockInboundAccessAction } from "./access-actions.js";
 
 export const dynamic = "force-dynamic";
 
@@ -97,10 +99,18 @@ export default async function InboundPage({ searchParams }) {
   }));
 
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
-  const canWrite = hasSession && context.membership.role !== "viewer";
+  const temporaryAccess = !hasSession
+    ? await hasTemporaryInboundAccess().catch(() => false)
+    : false;
+  const fallbackWorkspace = !hasSession
+    ? await getAutonomiaWorkspace().catch(() => null)
+    : null;
+  const canWrite =
+    hasSession
+      ? context.membership.role !== "viewer"
+      : Boolean(temporaryAccess && fallbackWorkspace?.id);
 
-  if (!hasSession) {
-    const fallbackWorkspace = await getAutonomiaWorkspace().catch(() => null);
+  if (!hasSession && !temporaryAccess) {
     const securedLeadCount = fallbackWorkspace?.id
       ? await listInboundLeads({
           workspaceId: fallbackWorkspace.id,
@@ -115,19 +125,36 @@ export default async function InboundPage({ searchParams }) {
           <p className="eyebrow">AUTONOMIA · INBOUND</p>
           <h1>Leads entrants.</h1>
           <p className="lede">
-            Les demandes sont bien enregistrées. L’accès aux coordonnées et au suivi est protégé.
+            Les demandes sont bien enregistrées. Saisissez le code temporaire pour ouvrir les fiches et le suivi.
           </p>
         </header>
+
         <div className="inboundLockedState">
           <strong>{securedLeadCount}</strong>
           <div>
-            <span>LEADS SÉCURISÉS</span>
+            <span>LEADS ENREGISTRÉS</span>
             <p>
-              Activez la connexion administrateur pour consulter les coordonnées,
-              qualifier les demandes et modifier le suivi commercial.
+              Accès temporaire au module Inbound, sans activer l’authentification complète du cockpit.
             </p>
           </div>
         </div>
+
+        <form action={unlockInboundAccessAction} className="inboundAccessForm">
+          <label>
+            <span>Code d’accès Inbound</span>
+            <input
+              name="access_code"
+              type="password"
+              autoComplete="one-time-code"
+              required
+              placeholder="Saisir le code"
+            />
+          </label>
+          <button type="submit">Ouvrir les leads</button>
+          {params?.access === "invalid" && (
+            <p>Code incorrect. Réessayez.</p>
+          )}
+        </form>
       </main>
     );
   }
@@ -140,9 +167,18 @@ export default async function InboundPage({ searchParams }) {
     ? membershipWorkspace[0]?.name
     : membershipWorkspace?.name;
 
-  const effectiveWorkspaceId = context?.membership?.workspace_id || null;
-  const effectiveWorkspaceSlug = membershipWorkspaceSlug || null;
-  const effectiveWorkspaceName = membershipWorkspaceName || null;
+  const effectiveWorkspaceId =
+    context?.membership?.workspace_id ||
+    fallbackWorkspace?.id ||
+    null;
+  const effectiveWorkspaceSlug =
+    membershipWorkspaceSlug ||
+    fallbackWorkspace?.slug ||
+    null;
+  const effectiveWorkspaceName =
+    membershipWorkspaceName ||
+    fallbackWorkspace?.name ||
+    null;
 
   const isAutonomiaWorkspace =
     effectiveWorkspaceSlug === "autonomia" ||
@@ -189,11 +225,11 @@ export default async function InboundPage({ searchParams }) {
         </p>
       </header>
 
-      {!canWrite && (
-        <div className="inboundReadOnlyNotice">
-          <strong>Lecture active.</strong>
+      {!hasSession && temporaryAccess && (
+        <div className="inboundReadOnlyNotice inboundTemporaryAccessNotice">
+          <strong>Accès temporaire actif.</strong>
           <span>
-            Les leads entrants sont visibles. L’édition du suivi sera activée après sécurisation de l’accès cockpit.
+            Les fiches Inbound et le suivi commercial sont ouverts sur cet appareil.
           </span>
         </div>
       )}
