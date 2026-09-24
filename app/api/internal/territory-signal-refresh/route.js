@@ -36,16 +36,24 @@ export async function GET(request) {
 
   const url = new URL(request.url);
   const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 40, 10), 75);
+  const sources = (url.searchParams.get("sources") || "boamp,ted")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
 
   try {
     const result = await runAutomatedTerritorySignalRefresh({
       limitPerQuery: limit,
+      sources,
       triggerMode: "github_oidc"
     });
 
     return Response.json({
       ok: Boolean(result?.available),
-      source: result?.source || "boamp",
+      source: result?.source || "multi_public",
+      sources: Array.isArray(result?.sources) ? result.sources : sources,
+      sourceStats: result?.source_stats || {},
+      sourceRequests: result?.source_requests || 0,
       queries: result?.queries || 0,
       successfulQueries: result?.successful_queries || 0,
       failedQueries: result?.failed_queries || 0,
