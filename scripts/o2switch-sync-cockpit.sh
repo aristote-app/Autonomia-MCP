@@ -147,7 +147,7 @@ node scripts/ensure-inbound-token.mjs
 echo "Building cockpit Next.js..."
 CURRENT_STEP="next-build"
 write_debug "building" "$REMOTE_SHA"
-npm run build
+UV_THREADPOOL_SIZE=1 npm run build
 
 # Public site deployment is intentionally independent.
 # build-autonomia.com has its own validated o2switch self-deploy workflow.
