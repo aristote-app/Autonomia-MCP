@@ -36,7 +36,10 @@ const Lead = z.object({
   first_name: z.string().min(1),
   last_name: z.string().nullable().optional(),
   email: z.string().email(),
-  phone: z.string().nullable().optional(),
+  phone: z.union([
+    z.string().regex(/^\d{10}$/, "phone_must_have_10_digits"),
+    z.null()
+  ]).optional(),
   company_name: z.string().min(1),
   requested_service: z.string().min(1),
   message: z.string().nullable().optional(),
