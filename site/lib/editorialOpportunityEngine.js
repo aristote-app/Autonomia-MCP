@@ -58,7 +58,8 @@ function normalizeSignal(signal) {
     public_procurement_mentions: number(signal.public_procurement_mentions),
     territory_mentions: number(signal.territory_mentions),
     ai_citations: number(signal.ai_citations ?? signal.citations),
-    revenue: number(signal.revenue)
+    revenue: number(signal.revenue),
+    source_text: signal.source_text || ""
   };
 }
 
@@ -67,29 +68,160 @@ const TERRITORY_SIGNAL_TERMS = [
   "agent","agents","manager","managers","referent","referents","elu","elus",
   "direction","directions","charte","gouvernance","verification","verifier",
   "tpe","pme","entreprise","entreprises","developpement","economique",
-  "assistant","automatisation","processus","usager","usagers","data","donnees",
-  "eau","potable","reseau","reseaux","fuite","fuites","anomalie","anomalies",
-  "maintenance","equipement","equipements","voirie","energie","energetique",
-  "batiment","batiments","intervention","interventions","infrastructure","infrastructures"
+  "assistant","automatisation","automatiser","workflow","processus","usager","usagers",
+  "administre","administres","document","documents","rag","procedure","procedures",
+  "base de connaissances","data","donnees","eau","potable","reseau","reseaux",
+  "fuite","fuites","anomalie","anomalies","maintenance","equipement","equipements",
+  "voirie","energie","energetique","batiment","batiments","intervention",
+  "interventions","infrastructure","infrastructures"
 ];
 
-function territoryLexicalAffinity(topicTitle, signalQuery) {
-  const left = normalize(topicTitle);
-  const right = normalize(signalQuery);
-  let shared = 0;
+const TERRITORY_INTENTS = [
+  {
+    key: "training",
+    weight: 1,
+    terms: [
+      "formation","former","acculturation","sensibilisation","montee en competences",
+      "competence","competences","atelier","ateliers","parcours de formation"
+    ]
+  },
+  {
+    key: "managers",
+    weight: 1.35,
+    terms: ["manager","managers","encadrer","encadrement","management"]
+  },
+  {
+    key: "agents",
+    weight: 1,
+    terms: ["agent","agents","agent territorial","agents territoriaux","personnel territorial"]
+  },
+  {
+    key: "referents",
+    weight: 1.25,
+    terms: ["referent","referents","referent ia","referents ia","ambassadeur ia","ambassadeurs ia"]
+  },
+  {
+    key: "elected",
+    weight: 1.25,
+    terms: ["elu","elus","executif local","executifs locaux"]
+  },
+  {
+    key: "governance",
+    weight: 1.35,
+    terms: [
+      "gouvernance","charte","comite ia","cadre d usage","regles d usage",
+      "responsabilite","responsabilites","ai act","politique ia"
+    ]
+  },
+  {
+    key: "economic-development",
+    weight: 1.4,
+    terms: [
+      "tpe","pme","tpe pme","entreprise locale","entreprises locales","artisan","artisans",
+      "commerce","commerces","developpement economique","accelerateur","accompagnement des entreprises"
+    ]
+  },
+  {
+    key: "automation",
+    weight: 1.35,
+    terms: [
+      "automatisation","automatiser","workflow","processus","tache repetitive","taches repetitives",
+      "compte rendu","comptes rendus"
+    ]
+  },
+  {
+    key: "citizen-relation",
+    weight: 1.35,
+    terms: [
+      "usager","usagers","administre","administres","relation usager","relation aux usagers",
+      "reponse aux administres","reponses aux administres","service public"
+    ]
+  },
+  {
+    key: "document-rag",
+    weight: 1.45,
+    terms: [
+      "rag","assistant documentaire","document","documents","dossier","dossiers",
+      "procedure","procedures","base de connaissances","knowledge base","sources"
+    ]
+  },
+  {
+    key: "data",
+    weight: 1.1,
+    terms: ["data","donnee","donnees","analyse de donnees","tableau de bord"]
+  },
+  {
+    key: "water-network",
+    weight: 1.55,
+    terms: ["eau potable","reseau d eau","reseaux d eau","fuite","fuites"]
+  },
+  {
+    key: "maintenance",
+    weight: 1.35,
+    terms: [
+      "maintenance","maintenance predictive","equipement","equipements",
+      "voirie","intervention","interventions","batiment","batiments","energie","energetique"
+    ]
+  }
+];
 
-  for (const term of TERRITORY_SIGNAL_TERMS) {
-    if (left.includes(term) && right.includes(term)) shared += 1;
+function containsTerm(text, term) {
+  const normalizedText = ` ${normalize(text).replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim()} `;
+  const normalizedTerm = normalize(term).replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+  return normalizedTerm ? normalizedText.includes(` ${normalizedTerm} `) : false;
+}
+
+function intentProfile(value) {
+  const profile = new Map();
+  for (const intent of TERRITORY_INTENTS) {
+    if (intent.terms.some((term) => containsTerm(value, term))) {
+      profile.set(intent.key, intent.weight);
+    }
+  }
+  return profile;
+}
+
+function territoryLexicalAffinity(topicTitle, signalText) {
+  const topicIntents = intentProfile(topicTitle);
+  const signalIntents = intentProfile(signalText);
+
+  let signalWeight = 0;
+  let topicWeight = 0;
+  let sharedWeight = 0;
+
+  for (const weight of signalIntents.values()) signalWeight += weight;
+  for (const weight of topicIntents.values()) topicWeight += weight;
+  for (const [key, weight] of signalIntents.entries()) {
+    if (topicIntents.has(key)) sharedWeight += weight;
   }
 
-  if (!shared) return 0;
-  return Math.min(0.95, 0.38 + shared * 0.16);
+  const intentCoverage = signalWeight > 0 ? sharedWeight / signalWeight : 0;
+  const intentPrecision = topicWeight > 0 ? sharedWeight / topicWeight : 0;
+
+  let sharedTerms = 0;
+  let signalTerms = 0;
+  for (const term of TERRITORY_SIGNAL_TERMS) {
+    const inSignal = containsTerm(signalText, term);
+    if (inSignal) signalTerms += 1;
+    if (inSignal && containsTerm(topicTitle, term)) sharedTerms += 1;
+  }
+  const lexicalCoverage = signalTerms > 0 ? sharedTerms / signalTerms : 0;
+
+  if (!sharedWeight && !sharedTerms) return 0;
+
+  return Math.min(
+    0.98,
+    intentCoverage * 0.68 +
+      intentPrecision * 0.22 +
+      lexicalCoverage * 0.1
+  );
 }
 
 function matchStrength(topic, signal) {
   if (signal.family && signal.family !== topic.type) return 0;
 
-  const querySimilarity = similarity(topic.title, signal.query);
+  const signalText = [signal.query, signal.source_text].filter(Boolean).join(" ");
+  const querySimilarity = similarity(topic.title, signalText);
   const clusterSimilarity = signal.cluster
     ? Math.max(
         similarity(topic.cluster, signal.cluster),
@@ -98,7 +230,7 @@ function matchStrength(topic, signal) {
     : 0;
 
   if (topic.type === "territory-use-case") {
-    const lexicalAffinity = territoryLexicalAffinity(topic.title, signal.query);
+    const lexicalAffinity = territoryLexicalAffinity(topic.title, signalText);
     return Math.max(querySimilarity, lexicalAffinity, clusterSimilarity * 0.28);
   }
 
@@ -187,7 +319,10 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
           ? Math.max(
               0,
               ...matches.map((match) =>
-                territoryLexicalAffinity(topic.title, match.signal.query)
+                territoryLexicalAffinity(
+                  topic.title,
+                  [match.signal.query, match.signal.source_text].filter(Boolean).join(" ")
+                )
               )
             )
           : 0;
