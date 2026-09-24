@@ -14427,3 +14427,77 @@ body:has(.territoryCampaignPage) .desktopNav {
     display: none;
   }
 }
+
+
+/* AI Match v3 — simplified recommendation */
+.solutionResultSimple {
+  display:grid;
+}
+
+.solutionAnswerGrid {
+  display:grid;
+  gap:10px;
+  padding:0 18px 18px;
+}
+
+.solutionAnswerCard {
+  display:grid;
+  gap:8px;
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--line-dark);
+  border-radius:10px;
+  background:rgba(255,255,255,.035);
+}
+
+.solutionAnswerCard > small {
+  color:var(--signal);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.solutionAnswerCard h3 {
+  margin:0;
+  font-size:20px;
+  line-height:1.06;
+  letter-spacing:-.03em;
+}
+
+.solutionAnswerCard > span {
+  color:rgba(247,245,240,.45);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+.solutionAnswerCard p {
+  margin:0;
+  color:rgba(247,245,240,.62);
+  font-size:11px;
+  line-height:1.5;
+}
+
+.solutionAnswerCard a {
+  width:max-content;
+  max-width:100%;
+  color:var(--signal);
+  font-size:10px;
+  font-weight:900;
+}
+
+.solutionAnswerTraining {
+  background:rgba(24,117,109,.16);
+}
+
+.solutionSendSimple {
+  border-top:1px solid var(--line-dark);
+}
+
+@media (min-width:620px) {
+  .solutionAnswerGrid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
