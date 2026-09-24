@@ -1506,3 +1506,48 @@ h3 { margin: 0 0 8px; }
     gap:4px;
   }
 }
+
+
+.inboundLockedState {
+  display:flex;
+  align-items:center;
+  gap:22px;
+  margin:24px 0 64px;
+  padding:22px;
+  border:1px solid #d9ddd7;
+  background:#fff;
+}
+
+.inboundLockedState > strong {
+  flex:0 0 auto;
+  min-width:84px;
+  font-size:58px;
+  line-height:.9;
+  letter-spacing:-.05em;
+}
+
+.inboundLockedState > div {
+  display:grid;
+  gap:5px;
+}
+
+.inboundLockedState span {
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.inboundLockedState p {
+  max-width:680px;
+  margin:0;
+  color:#5d655f;
+  font-size:12px;
+  line-height:1.55;
+}
+
+@media (max-width:680px) {
+  .inboundLockedState {
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
