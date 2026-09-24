@@ -98,6 +98,7 @@ export async function GET(request) {
     territoryDraftBriefs,
     topClusters: snapshot.signalSummary?.topClusters || [],
     sourceCounts: snapshot.sourceCounts || {},
+    marketLoadErrors: snapshot.marketLoadErrors || {},
     errors: {
       manifest: snapshot.manifest?.ok ? null : snapshot.manifest?.error,
       google: snapshot.google?.ok ? null : snapshot.google?.error,
