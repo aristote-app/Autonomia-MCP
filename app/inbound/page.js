@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
   claimUnassignedPublicInboundLeads,
+  getAutonomiaWorkspace,
   listInboundLeads
 } from "../../lib/db/inboundLeads.js";
 import {
@@ -98,27 +99,52 @@ export default async function InboundPage({ searchParams }) {
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   const canWrite = hasSession && context.membership.role !== "viewer";
 
-  const workspace = context?.membership?.workspaces;
-  const workspaceSlug = Array.isArray(workspace) ? workspace[0]?.slug : workspace?.slug;
-  const workspaceName = Array.isArray(workspace) ? workspace[0]?.name : workspace?.name;
+  const membershipWorkspace = context?.membership?.workspaces;
+  const membershipWorkspaceSlug = Array.isArray(membershipWorkspace)
+    ? membershipWorkspace[0]?.slug
+    : membershipWorkspace?.slug;
+  const membershipWorkspaceName = Array.isArray(membershipWorkspace)
+    ? membershipWorkspace[0]?.name
+    : membershipWorkspace?.name;
+
+  const fallbackWorkspace = !hasSession
+    ? await getAutonomiaWorkspace().catch(() => null)
+    : null;
+
+  const effectiveWorkspaceId =
+    context?.membership?.workspace_id ||
+    fallbackWorkspace?.id ||
+    null;
+
+  const effectiveWorkspaceSlug =
+    membershipWorkspaceSlug ||
+    fallbackWorkspace?.slug ||
+    null;
+
+  const effectiveWorkspaceName =
+    membershipWorkspaceName ||
+    fallbackWorkspace?.name ||
+    null;
+
   const isAutonomiaWorkspace =
-    workspaceSlug === "autonomia" ||
-    /autonomia/i.test(String(workspaceName || ""));
+    effectiveWorkspaceSlug === "autonomia" ||
+    /autonomia/i.test(String(effectiveWorkspaceName || ""));
 
-  if (hasSession && canWrite && isAutonomiaWorkspace) {
+  if (effectiveWorkspaceId && isAutonomiaWorkspace) {
     await claimUnassignedPublicInboundLeads({
-      workspaceId: context.membership.workspace_id
+      workspaceId: effectiveWorkspaceId
     }).catch(() => 0);
+
+    await drainInboundSpool({
+      limit: 10,
+      timeoutMs: 5000
+    }).catch(() => ({ processed: 0, failed: 0 }));
   }
 
-  if (hasSession && canWrite && isAutonomiaWorkspace) {
-    await drainInboundSpool({ limit: 10, timeoutMs: 5000 }).catch(() => ({ processed: 0, failed: 0 }));
-  }
-
-  const [persistedLeads, queuedLeads] = hasSession
+  const [persistedLeads, queuedLeads] = effectiveWorkspaceId
     ? await Promise.all([
         listInboundLeads({
-          workspaceId: context.membership.workspace_id,
+          workspaceId: effectiveWorkspaceId,
           limit: 500
         }).catch(() => []),
         isAutonomiaWorkspace ? listQueuedInboundLeads({ limit: 100 }).catch(() => []) : Promise.resolve([])
@@ -144,6 +170,15 @@ export default async function InboundPage({ searchParams }) {
           Chaque demande entrante, sa provenance et son suivi commercial dans une seule vue.
         </p>
       </header>
+
+      {!canWrite && (
+        <div className="inboundReadOnlyNotice">
+          <strong>Lecture active.</strong>
+          <span>
+            Les leads entrants sont visibles. L’édition du suivi sera activée après sécurisation de l’accès cockpit.
+          </span>
+        </div>
+      )}
 
       <nav className="inboundFilters">
         {FILTERS.map(([key, label]) => (
