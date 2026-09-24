@@ -140,6 +140,20 @@ const TRAINING_HINTS = {
   }
 };
 
+const ROLE_TRAINING_FALLBACK = {
+  "ai-project-manager": "ia-chefs-projet",
+  "genai-engineer": "ia-generative-entreprise",
+  "llm-engineer": "llm-rag-agents-ia",
+  "rag-engineer": "rag-recherche-documentaire-ia",
+  "ai-agent-engineer": "agents-ia-entreprise",
+  "data-scientist": "analyse-donnees-reporting-ia",
+  "ml-engineer": "llm-rag-agents-ia",
+  "mlops-llmops-engineer": "llm-rag-agents-ia",
+  "ai-product-manager": "product-management-ia",
+  "ai-governance": "gouvernance-ia-ai-act",
+  "automation-engineer": "automatisation-ia"
+};
+
 function normalize(value) {
   return String(value || "")
     .normalize("NFD")
@@ -186,16 +200,24 @@ function fallbackClassification(query) {
   ].some((token) => text.includes(token));
 
   const roleIds = (roleScores.length ? roleScores : [{ id: "ai-project-manager", score: 1 }])
-    .slice(0, 3)
+    .slice(0, 1)
     .map((item) => item.id)
     .filter(existsRole);
 
-  let trainingIds = trainingScores.slice(0, 3).map((item) => item.id).filter(existsTraining);
+  let trainingIds = trainingScores.slice(0, 1).map((item) => item.id).filter(existsTraining);
   if (trainingIntent && !trainingIds.length) trainingIds = ["ia-generative-entreprise"];
 
   let route = "experts";
   if (trainingIntent && !executionIntent) route = "academy";
   else if (trainingIds.length && roleIds.length) route = "hybrid";
+
+  if (route !== "academy" && !trainingIds.length && roleIds[0]) {
+    const companionTraining = ROLE_TRAINING_FALLBACK[roleIds[0]];
+    if (companionTraining && existsTraining(companionTraining)) {
+      trainingIds = [companionTraining];
+      route = "hybrid";
+    }
+  }
 
   if (route === "academy") {
     return {
@@ -244,7 +266,7 @@ async function classifyWithOpenAI(query) {
     "Academy = besoin de montée en compétences, adoption ou transfert.",
     "Hybrid = les deux sont utiles.",
     "Retourne UNIQUEMENT du JSON valide, sans markdown.",
-    "0 à 3 role_ids et 0 à 3 training_ids.",
+    "0 à 1 role_id et 0 à 1 training_id. Priorise la recommandation la plus directement utile.",
     "Si le besoin expert est ambigu, utilise ai-project-manager plutôt que d'inventer un métier.",
     "Le summary doit être en français, concret, en 1 à 3 phrases, sans promesse de résultat.",
     `role_ids autorisés: ${allowedRoles.join(", ")}`,
@@ -278,10 +300,10 @@ async function classifyWithOpenAI(query) {
     const parsed = JSON.parse(rawText);
 
     const roleIds = Array.isArray(parsed.role_ids)
-      ? parsed.role_ids.filter(existsRole).slice(0, 3)
+      ? parsed.role_ids.filter(existsRole).slice(0, 1)
       : [];
     const trainingIds = Array.isArray(parsed.training_ids)
-      ? parsed.training_ids.filter(existsTraining).slice(0, 3)
+      ? parsed.training_ids.filter(existsTraining).slice(0, 1)
       : [];
     const route = ["experts", "academy", "hybrid"].includes(parsed.route)
       ? parsed.route
@@ -302,29 +324,6 @@ async function classifyWithOpenAI(query) {
   }
 }
 
-async function loadExperts(roleSlug) {
-  const base =
-    process.env.AUTONOMIA_CONSULTANTS_URL ||
-    "https://cockpit.build-autonomia.com/api/public/consultants";
-
-  try {
-    const endpoint = new URL(base);
-    endpoint.searchParams.set("role", roleSlug);
-    endpoint.searchParams.set("limit", "3");
-
-    const response = await fetch(endpoint, {
-      cache: "no-store",
-      headers: { accept: "application/json" }
-    });
-    if (!response.ok) return [];
-
-    const payload = await response.json();
-    return Array.isArray(payload?.profiles) ? payload.profiles.slice(0, 3) : [];
-  } catch {
-    return [];
-  }
-}
-
 export async function POST(request) {
   let raw;
   try {
@@ -342,20 +341,17 @@ export async function POST(request) {
   const aiClassification = await classifyWithOpenAI(query);
   const classification = aiClassification || fallbackClassification(query);
 
-  const roles = await Promise.all(
-    classification.role_ids.map(async (id) => {
-      const role = aiRoles.find((item) => item.slug === id);
-      const hint = ROLE_HINTS[id];
-      return {
-        id,
-        label: role?.title || id,
-        french_title: role?.frenchTitle || null,
-        slug: id,
-        why: hint.why,
-        experts: await loadExperts(id)
-      };
-    })
-  );
+  const roles = classification.role_ids.map((id) => {
+    const role = aiRoles.find((item) => item.slug === id);
+    const hint = ROLE_HINTS[id];
+    return {
+      id,
+      label: role?.title || id,
+      french_title: role?.frenchTitle || null,
+      slug: id,
+      why: hint.why
+    };
+  });
 
   const trainings = classification.training_ids
     .map((id) => {
