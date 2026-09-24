@@ -40,7 +40,7 @@ export async function GET(request) {
         completedAt: new Date().toISOString(),
         territorySignals: {
           available: false,
-          source: "boamp",
+          source: "multi_public",
           persisted: 0,
           error: error instanceof Error ? error.message : String(error)
         }

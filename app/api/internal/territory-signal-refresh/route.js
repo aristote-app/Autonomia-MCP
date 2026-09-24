@@ -1,4 +1,7 @@
-import { runAutomatedTerritorySignalRefresh } from "../../../../lib/market/territorySignals.js";
+import {
+  DEFAULT_TERRITORY_PUBLIC_SOURCES,
+  runAutomatedTerritorySignalRefresh
+} from "../../../../lib/market/territorySignals.js";
 import { verifyGitHubDeploymentToken } from "../../../../lib/deploy/githubOidc.js";
 
 export const runtime = "nodejs";
@@ -36,7 +39,7 @@ export async function GET(request) {
 
   const url = new URL(request.url);
   const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 40, 10), 75);
-  const sources = (url.searchParams.get("sources") || "boamp,ted")
+  const sources = (url.searchParams.get("sources") || DEFAULT_TERRITORY_PUBLIC_SOURCES.join(","))
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
