@@ -476,3 +476,5 @@ Après branchement de `AUTONOMIA_CONTENT_SIGNALS_URL` :
 <!-- o2switch deploy trigger: 2026-09-24T11:58:00Z -->
 
 <!-- inbound crm deploy trigger: 2026-09-24T12:10:00Z -->
+
+<!-- execute cockpit recovery bridge: 2026-09-24T12:36:00Z -->
