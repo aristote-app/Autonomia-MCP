@@ -107,8 +107,13 @@ export default function SolutionFinder() {
     const lastName = contact.lastName.trim();
     const phone = contact.phone.trim();
 
-    if (!firstName || !company || !email) {
-      setLeadError("Merci de renseigner votre prénom, votre entreprise et votre e-mail professionnel.");
+    if (!firstName || !lastName || !company || !email || !phone) {
+      setLeadError("Merci de renseigner tous les champs de contact.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      setLeadError("Le numéro de téléphone doit comporter exactement 10 chiffres.");
       return;
     }
 
@@ -144,17 +149,18 @@ export default function SolutionFinder() {
       source_platform: "autonomia_public_site",
       received_at: new Date().toISOString(),
       first_name: firstName,
-      last_name: lastName || null,
+      last_name: lastName,
       email,
-      phone: phone || null,
+      phone,
       company_name: company,
       requested_service: `solution_${result.route || "hybrid"}`,
       message: originalQuery,
       desired_timeline: null,
       company_size: null,
-      form_id: "home-solution-finder",
       solution_context: solutionContext,
       ...getClientAttribution(),
+      form_id: "module-ia-home",
+      landing_page_topic: "Module IA Home",
       marketing_consent: Boolean(contact.marketingConsent),
       consent_timestamp: new Date().toISOString(),
       privacy_notice_version: "2026-09-24-v1",
@@ -299,8 +305,9 @@ export default function SolutionFinder() {
                     />
                   </label>
                   <label>
-                    <span>Nom</span>
+                    <span>Nom *</span>
                     <input
+                      required
                       value={contact.lastName}
                       onChange={(e) => setContactField("lastName", e.target.value)}
                       autoComplete="family-name"
@@ -326,12 +333,20 @@ export default function SolutionFinder() {
                     />
                   </label>
                   <label className="fullField">
-                    <span>Téléphone</span>
+                    <span>Téléphone *</span>
                     <input
+                      required
                       type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      minLength={10}
+                      maxLength={10}
                       value={contact.phone}
-                      onChange={(e) => setContactField("phone", e.target.value)}
+                      onChange={(e) =>
+                        setContactField("phone", e.target.value.replace(/\D/g, "").slice(0, 10))
+                      }
                       autoComplete="tel"
+                      placeholder="0612345678"
                     />
                   </label>
                 </div>
