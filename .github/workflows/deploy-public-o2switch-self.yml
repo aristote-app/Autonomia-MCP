@@ -177,24 +177,6 @@ jobs:
           echo "::error::Public site did not switch to target SHA."
           exit 1
 
-      - name: Verify cockpit recovery target
-        env:
-          COCKPIT_HEALTH_URL: https://cockpit.build-autonomia.com/api/health
-          COCKPIT_TARGET_SHA: c559a94afb55f22c5ac3c5a17feedc6f9a0f0cf7
-        run: |
-          for attempt in $(seq 1 36); do
-            HEALTH="$(curl -fsS "$COCKPIT_HEALTH_URL" || true)"
-            DEPLOYED_SHA="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha", ""))' 2>/dev/null || true)"
-            if [ "$DEPLOYED_SHA" = "$COCKPIT_TARGET_SHA" ]; then
-              echo "Cockpit production confirms recovery SHA: $COCKPIT_TARGET_SHA"
-              exit 0
-            fi
-            echo "Cockpit still serves $DEPLOYED_SHA; waiting for $COCKPIT_TARGET_SHA ($attempt/36)."
-            sleep 10
-          done
-          echo "::error::Cockpit recovery target did not become live."
-          exit 1
-
       - name: Dump cockpit recovery diagnostics on failure
         if: failure()
         run: |
