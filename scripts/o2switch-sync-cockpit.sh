@@ -8,6 +8,7 @@ BRANCH="main"
 FORCE_DEPLOY="${FORCE_DEPLOY:-0}"
 TARGET_SHA="${AUTONOMIA_DEPLOY_SHA:-}"
 WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
+LOCK_DIR="$APP_ROOT/.runtime/self-deploy.lock"
 
 mkdir -p "$APP_ROOT/.runtime"
 
@@ -39,6 +40,36 @@ write_debug() {
   } > "$DEBUG_FILE"
 }
 
+# A retry must never start a second Next build in the same application tree.
+# mkdir is atomic and works on o2switch without relying on flock.
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+  LOCK_STARTED="$(cat "$LOCK_DIR/started_at" 2>/dev/null || echo 0)"
+  NOW="$(date +%s)"
+  LOCK_AGE=$((NOW - LOCK_STARTED))
+  if [ "$LOCK_STARTED" -gt 0 ] && [ "$LOCK_AGE" -gt 900 ]; then
+    echo "Removing stale deploy lock age=${LOCK_AGE}s."
+    rm -rf "$LOCK_DIR"
+    mkdir "$LOCK_DIR"
+  else
+    echo "Another cockpit deploy worker is already active; exiting without starting a concurrent build."
+    exit 0
+  fi
+fi
+
+date +%s > "$LOCK_DIR/started_at"
+printf '%s\n' "$" > "$LOCK_DIR/pid"
+
+CURRENT_STEP="worker-started"
+on_deploy_error() {
+  local code=$?
+  trap - ERR
+  write_debug "failed" "step=$CURRENT_STEP exit=$code"
+  echo "Cockpit deploy failed at step=$CURRENT_STEP exit=$code" >&2
+  exit "$code"
+}
+trap 'rm -rf "$LOCK_DIR"' EXIT
+trap on_deploy_error ERR
+
 # o2switch does not expose /dev/fd reliably under Passenger. Avoid Bash
 # process substitution here; it previously killed the deploy before git fetch.
 touch "$WORKER_LOG"
@@ -55,6 +86,7 @@ cd "$APP_ROOT"
 
 echo "node=$(node -v) npm=$(npm -v)"
 echo "Fetching origin/$BRANCH..."
+CURRENT_STEP="git-fetch"
 write_debug "fetching" "origin/$BRANCH"
 git fetch --depth=200 origin "$BRANCH"
 MAIN_SHA="$(git rev-parse "origin/$BRANCH")"
@@ -87,6 +119,7 @@ if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ] && [ -f .runti
 fi
 
 echo "Deploying validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
+CURRENT_STEP="git-sync"
 write_debug "syncing" "$LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "$REMOTE_SHA"
 
@@ -108,9 +141,11 @@ export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 
 echo "Ensuring shared inbound lead token..."
+CURRENT_STEP="ensure-inbound-token"
 node scripts/ensure-inbound-token.mjs
 
 echo "Building cockpit Next.js..."
+CURRENT_STEP="next-build"
 write_debug "building" "$REMOTE_SHA"
 npm run build
 
@@ -137,6 +172,7 @@ else
   echo "crontab unavailable; Talent and SEO/GEO refreshes remain manually executable."
 fi
 
+CURRENT_STEP="passenger-restart"
 touch tmp/restart.txt
 write_debug "completed" "Passenger restart requested for $REMOTE_SHA"
 
