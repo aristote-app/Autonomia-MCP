@@ -3,23 +3,41 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
+  getAutonomiaWorkspace,
   setInboundLeadStatus,
   updateInboundLeadFollowUp
 } from "../../lib/db/inboundLeads.js";
+import { hasTemporaryInboundAccess } from "../../lib/inbound/access.js";
 
 async function requireWriter() {
-  const context = await getCurrentWorkspaceMembership();
+  const context = await getCurrentWorkspaceMembership().catch(() => ({
+    configured: false,
+    claims: null,
+    membership: null
+  }));
 
-  if (
-    !context.configured ||
-    !context.claims?.sub ||
-    !context.membership ||
-    context.membership.role === "viewer"
-  ) {
+  if (context?.membership?.workspace_id && context.membership.role !== "viewer") {
+    return context;
+  }
+
+  const temporaryAccess = await hasTemporaryInboundAccess().catch(() => false);
+  if (!temporaryAccess) {
     throw new Error("Workspace write access required");
   }
 
-  return context;
+  const workspace = await getAutonomiaWorkspace();
+  if (!workspace?.id) {
+    throw new Error("Autonomia workspace is required");
+  }
+
+  return {
+    ...context,
+    membership: {
+      workspace_id: workspace.id,
+      role: "direction",
+      workspaces: workspace
+    }
+  };
 }
 
 function clean(value, max = 200) {
