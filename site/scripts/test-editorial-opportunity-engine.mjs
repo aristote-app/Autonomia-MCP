@@ -131,6 +131,91 @@ if (charterTopic && managersTraining.score <= charterTopic.score) {
 }
 
 
+
+function assertTerritoryIntent(signalQuery, targetSlug, decoySlugs = []) {
+  const output = prioritizeEditorialBacklog(
+    [
+      {
+        query: signalQuery,
+        cluster: "Collectivités & territoires",
+        family: "territory-use-case",
+        public_procurement_mentions: 1,
+        territory_mentions: 5
+      }
+    ],
+    { max_results: 100 }
+  );
+
+  const target = output.recommendations.find((item) => item.slug === targetSlug);
+  if (!target || target.evidence.matched_signals <= 0) {
+    throw new Error(`Expected concrete territory intent to support ${targetSlug}: ${signalQuery}`);
+  }
+
+  for (const decoySlug of decoySlugs) {
+    const decoy = output.recommendations.find((item) => item.slug === decoySlug);
+    if (decoy && target.score <= decoy.score) {
+      throw new Error(
+        `Expected ${targetSlug} (${target.score}) to outrank ${decoySlug} (${decoy.score}) for: ${signalQuery}`
+      );
+    }
+  }
+}
+
+assertTerritoryIntent(
+  "Formation et accompagnement des managers territoriaux à l'usage de l'intelligence artificielle",
+  "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia",
+  [
+    "creer-une-charte-d-usage-operationnelle-de-l-ia-pour-les-agents",
+    "organiser-une-acculturation-ia-pour-les-elus-et-directions-generales"
+  ]
+);
+
+assertTerritoryIntent(
+  "Programme d'accompagnement IA des TPE PME et entreprises locales du territoire",
+  "comment-une-communaute-de-communes-peut-accompagner-les-tpe-pme-sur-l-ia",
+  [
+    "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia",
+    "creer-une-charte-d-usage-operationnelle-de-l-ia-pour-les-agents"
+  ]
+);
+
+assertTerritoryIntent(
+  "Automatisation des comptes rendus de réunion et du suivi des actions pour les agents",
+  "automatiser-les-comptes-rendus-de-reunion-dans-une-collectivite-avec-validation-humaine",
+  [
+    "creer-un-assistant-ia-interne-qui-cite-les-procedures-de-la-collectivite",
+    "utiliser-l-ia-pour-preparer-des-reponses-aux-administres-sans-automatiser-la-decision"
+  ]
+);
+
+assertTerritoryIntent(
+  "Charte IA, gouvernance, règles d'usage et responsabilités pour les agents territoriaux",
+  "creer-une-charte-d-usage-operationnelle-de-l-ia-pour-les-agents",
+  [
+    "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia",
+    "organiser-des-ateliers-ia-pour-les-entreprises-d-un-territoire"
+  ]
+);
+
+assertTerritoryIntent(
+  "Améliorer la relation usager et préparer les réponses aux administrés avec validation humaine",
+  "utiliser-l-ia-pour-preparer-des-reponses-aux-administres-sans-automatiser-la-decision",
+  [
+    "creer-un-assistant-ia-interne-qui-cite-les-procedures-de-la-collectivite",
+    "automatiser-les-comptes-rendus-de-reunion-dans-une-collectivite-avec-validation-humaine"
+  ]
+);
+
+assertTerritoryIntent(
+  "Assistant documentaire RAG sur les procédures et documents internes avec citation des sources",
+  "creer-un-assistant-ia-interne-qui-cite-les-procedures-de-la-collectivite",
+  [
+    "utiliser-l-ia-pour-preparer-des-reponses-aux-administres-sans-automatiser-la-decision",
+    "automatiser-les-comptes-rendus-de-reunion-dans-une-collectivite-avec-validation-humaine"
+  ]
+);
+
+
 const waterNetworkTerritory = prioritizeEditorialBacklog(
   [
     {
