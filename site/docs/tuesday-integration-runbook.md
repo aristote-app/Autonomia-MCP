@@ -472,3 +472,5 @@ Après branchement de `AUTONOMIA_CONTENT_SIGNALS_URL` :
 - vérifier que l’Observatoire est présent dans le sitemap.
 
 <!-- o2switch deploy trigger: 2026-09-24T10:24:00Z -->
+
+<!-- o2switch deploy trigger: 2026-09-24T11:58:00Z -->
