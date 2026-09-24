@@ -1,0 +1,35 @@
+name: o2switch-diagnostic
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/o2switch-diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read o2switch diagnostics
+        run: |
+          set +e
+          echo "===== PUBLIC HEALTH ====="
+          curl -fsS https://build-autonomia.com/api/health || true
+          echo
+          echo "===== PUBLIC DEPLOY DEBUG ====="
+          curl -fsS https://build-autonomia.com/__autonomia_deploy_debug.txt || true
+          echo
+          echo "===== PUBLIC COCKPIT RECOVERY DEBUG ====="
+          curl -fsS https://build-autonomia.com/__autonomia_cockpit_recovery_debug.txt || true
+          echo
+          echo "===== COCKPIT HEALTH ====="
+          curl -fsS https://cockpit.build-autonomia.com/api/health || true
+          echo
+          echo "===== COCKPIT DEPLOY DEBUG ====="
+          curl -fsS https://cockpit.build-autonomia.com/__autonomia_cockpit_deploy_debug.txt || true
+          echo
