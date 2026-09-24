@@ -1454,3 +1454,22 @@ h3 { margin: 0 0 8px; }
     width:100%;
   }
 }
+
+
+.inboundLeadHeaderStatus {
+  display:grid;
+  justify-items:end;
+  gap:7px;
+}
+
+.inboundQueuedBadge {
+  display:inline-block;
+  padding:5px 7px;
+  border:1px solid #b88913;
+  background:#fff7dc;
+  color:#755400;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
