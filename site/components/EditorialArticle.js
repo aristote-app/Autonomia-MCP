@@ -29,6 +29,22 @@ export default function EditorialArticle({ article }) {
     .filter((item, index, items) => items.findIndex((candidate) => candidate.href === item.href) === index)
     .slice(0, 6);
 
+  const articleCta = article.cta || {
+    eyebrow: "AUTONOMIA",
+    title: isTraining
+      ? "Vous voulez transformer ce scénario en formation pour vos équipes ?"
+      : isTerritory
+        ? "Vous voulez transformer ce guide en feuille de route pour votre territoire ?"
+        : "Vous voulez transformer ce scénario en système réel ?",
+    text: isTraining
+      ? "Autonomia Academy part des usages, des outils et du niveau de vos équipes."
+      : isTerritory
+        ? "Autonomia peut partir des missions des agents, des besoins des entreprises locales et des contraintes de l’EPCI pour prioriser une première vague de cas d’usage."
+        : "Autonomia Experts peut vous aider à traduire le besoin en compétences et en architecture d’exécution.",
+    href: isTraining ? "/formation-ia-entreprise" : isTerritory ? "/territoires" : "/expert-ia",
+    label: isTraining ? "Construire le parcours" : isTerritory ? "Cadrer la feuille de route" : "Cadrer le besoin"
+  };
+
   return (
     <main className="editorialArticle">
       <nav className="articleBreadcrumb" aria-label="Fil d’Ariane">
