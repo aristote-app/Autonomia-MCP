@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
-import { listInboundLeads } from "../../lib/db/inboundLeads.js";
-import { updateInboundLeadStatus } from "../actions/inbound-leads.js";
+import {
+  claimUnassignedPublicInboundLeads,
+  listInboundLeads
+} from "../../lib/db/inboundLeads.js";
+import { updateInboundLeadFollowUpAction } from "../actions/inbound-leads.js";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +34,13 @@ const STATUSES = [
   ["disqualified", "Disqualifié"]
 ];
 
+const PRIORITIES = [
+  ["low", "Basse"],
+  ["normal", "Normale"],
+  ["high", "Haute"],
+  ["urgent", "Urgente"]
+];
+
 function filtered(items, filter) {
   return filter === "all" ? items : items.filter((item) => item.status === filter);
 }
@@ -51,6 +61,26 @@ function formatDate(value) {
   }).format(new Date(value));
 }
 
+function dateInputValue(value) {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return String(value).slice(0, 10);
+  return parsed.toISOString().slice(0, 10);
+}
+
+function sourceTitle(lead) {
+  return (
+    lead.latest_touch?.landing_page_topic ||
+    lead.latest_touch?.form_id ||
+    lead.latest_touch?.landing_page_url ||
+    "Source non renseignée"
+  );
+}
+
+function statusLabel(status) {
+  return STATUSES.find(([value]) => value === status)?.[1] || status || "Nouveau";
+}
+
 export default async function InboundPage({ searchParams }) {
   const params = await searchParams;
   const active = FILTERS.some(([key]) => key === params?.filter) ? params.filter : "all";
@@ -63,6 +93,19 @@ export default async function InboundPage({ searchParams }) {
 
   const hasSession = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   const canWrite = hasSession && context.membership.role !== "viewer";
+
+  const workspace = context?.membership?.workspaces;
+  const workspaceSlug = Array.isArray(workspace) ? workspace[0]?.slug : workspace?.slug;
+  const workspaceName = Array.isArray(workspace) ? workspace[0]?.name : workspace?.name;
+  const isAutonomiaWorkspace =
+    workspaceSlug === "autonomia" ||
+    /autonomia/i.test(String(workspaceName || ""));
+
+  if (hasSession && canWrite && isAutonomiaWorkspace) {
+    await claimUnassignedPublicInboundLeads({
+      workspaceId: context.membership.workspace_id
+    }).catch(() => 0);
+  }
 
   const leads = hasSession
     ? await listInboundLeads({
@@ -81,7 +124,7 @@ export default async function InboundPage({ searchParams }) {
         <p className="eyebrow">AUTONOMIA · INBOUND</p>
         <h1>Leads entrants.</h1>
         <p className="lede">
-          Attribution conservée, déduplication, besoin probable et prochaine action dans la même vue.
+          Chaque demande entrante, sa provenance et son suivi commercial dans une seule vue.
         </p>
       </header>
 
@@ -98,113 +141,236 @@ export default async function InboundPage({ searchParams }) {
         ))}
       </nav>
 
-      <div className="inboundList">
-        {visible.length ? visible.map((lead) => (
-          <article key={lead.id}>
-            <div className="inboundIdentity">
-              <p className="buyer">{lead.company_name}</p>
-              <h3>{[lead.first_name, lead.last_name].filter(Boolean).join(" ")}</h3>
-              <div className="inboundChannels">
-                <a href={"mailto:" + lead.email}>{lead.email}</a>
-                {lead.phone && <a href={"tel:" + lead.phone}>{lead.phone}</a>}
-              </div>
-            </div>
+      <div className="inboundLeadList">
+        {visible.length ? visible.map((lead) => {
+          const solution = lead.scan_context?.solution_context;
+          const priority = lead.scan_context?.priority || "normal";
+          const nextAction = lead.scan_context?.next_action || "";
+          const followUpNote = lead.scan_context?.follow_up_note || "";
+          const followUpDueAt = lead.scan_context?.follow_up_due_at || "";
 
-            <div className="inboundNeed">
-              <span className="attentionBucket">
-                {lead.scan_context?.classification || "besoin à qualifier"}
-              </span>
-              <strong>{lead.requested_service}</strong>
-              {lead.message && <p>{lead.message}</p>}
-
-              {lead.scan_context?.solution_context && (
-                <div className="inboundSolutionContext">
-                  <span>
-                    AI MATCH · {(lead.scan_context.solution_context.route || "orientation").toUpperCase()}
-                  </span>
-
-                  {lead.scan_context.solution_context.summary && (
-                    <p>{lead.scan_context.solution_context.summary}</p>
-                  )}
-
-                  {(lead.scan_context.solution_context.recommended_roles || []).length > 0 && (
-                    <div>
-                      <small>MÉTIERS RECOMMANDÉS</small>
-                      <div className="inboundSolutionTags">
-                        {lead.scan_context.solution_context.recommended_roles.map((role, index) => {
-                          const label = role.label || role.id || role.slug;
-                          const key = (role.slug || role.id || role.label || "role") + index;
-                          return role.slug ? (
-                            <a
-                              key={key}
-                              href={"https://build-autonomia.com/metiers-ia/" + role.slug}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {label} ↗
-                            </a>
-                          ) : <b key={key}>{label}</b>;
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {(lead.scan_context.solution_context.recommended_training || []).length > 0 && (
-                    <div>
-                      <small>FORMATIONS RECOMMANDÉES</small>
-                      <div className="inboundSolutionTags">
-                        {lead.scan_context.solution_context.recommended_training.map((training, index) => {
-                          const label = training.title || training.id || training.slug;
-                          const key = (training.slug || training.id || training.title || "training") + index;
-                          return training.slug ? (
-                            <a
-                              key={key}
-                              href={"https://build-autonomia.com/formation-ia/" + training.slug}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {label} ↗
-                            </a>
-                          ) : <b key={key}>{label}</b>;
-                        })}
-                      </div>
-                    </div>
-                  )}
+          return (
+            <article className="inboundLeadCard" key={lead.id}>
+              <header className="inboundLeadHeader">
+                <div>
+                  <span>REÇU LE {formatDate(lead.last_received_at)}</span>
+                  <h2>{lead.company_name}</h2>
+                  <p>{lead.first_name} {lead.last_name}</p>
                 </div>
-              )}
-            </div>
+                <strong className={"inboundStatus inboundStatus-" + (lead.status || "new")}>
+                  {statusLabel(lead.status)}
+                </strong>
+              </header>
 
-            <div className="inboundAttribution">
-              <span>{lead.source_channel} · {lead.source_platform}</span>
-              <strong>
-                {lead.latest_touch?.utm_campaign ||
-                  lead.latest_touch?.landing_page_topic ||
-                  "Attribution organique / directe"}
-              </strong>
-              <small>Reçu : {formatDate(lead.last_received_at)}</small>
-              <small>
-                Consentement marketing : {lead.marketing_consent ? "oui" : "non"}
-              </small>
-            </div>
+              <div className="inboundLeadBody">
+                <section className="inboundLeadSection">
+                  <small>CONTACT</small>
+                  <dl className="inboundFieldList">
+                    <div>
+                      <dt>Prénom</dt>
+                      <dd>{lead.first_name || "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Nom</dt>
+                      <dd>{lead.last_name || "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Entreprise</dt>
+                      <dd>{lead.company_name || "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>E-mail</dt>
+                      <dd>{lead.email ? <a href={"mailto:" + lead.email}>{lead.email}</a> : "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Téléphone</dt>
+                      <dd>{lead.phone ? <a href={"tel:" + lead.phone}>{lead.phone}</a> : "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Marketing</dt>
+                      <dd>{lead.marketing_consent ? "Consentement oui" : "Consentement non"}</dd>
+                    </div>
+                  </dl>
+                </section>
 
-            <div className="inboundAction">
-              <span>PROCHAINE ACTION</span>
-              <strong>{lead.scan_context?.next_action || "Qualifier le besoin."}</strong>
+                <section className="inboundLeadSection inboundLeadRequest">
+                  <small>DEMANDE</small>
+                  <span className="attentionBucket">
+                    {lead.scan_context?.classification || "besoin à qualifier"}
+                  </span>
+                  <strong>{lead.requested_service}</strong>
+                  {lead.message && <p>{lead.message}</p>}
 
-              {canWrite && (
-                <form action={updateInboundLeadStatus}>
-                  <input type="hidden" name="lead_id" value={lead.id} />
-                  <select name="status" defaultValue={lead.status}>
-                    {STATUSES.map(([value, label]) => (
-                      <option key={value} value={value}>{label}</option>
-                    ))}
-                  </select>
-                  <button type="submit">Mettre à jour</button>
-                </form>
-              )}
-            </div>
-          </article>
-        )) : (
+                  {solution && (
+                    <div className="inboundSolutionContext">
+                      <span>AI MATCH · {(solution.route || "orientation").toUpperCase()}</span>
+                      {solution.summary && <p>{solution.summary}</p>}
+
+                      {(solution.recommended_roles || []).length > 0 && (
+                        <div>
+                          <small>MÉTIER RECOMMANDÉ</small>
+                          <div className="inboundSolutionTags">
+                            {solution.recommended_roles.map((role, index) => {
+                              const label = role.label || role.id || role.slug;
+                              const key = (role.slug || role.id || role.label || "role") + index;
+                              return role.slug ? (
+                                <a
+                                  key={key}
+                                  href={"https://build-autonomia.com/metiers-ia/" + role.slug}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {label} ↗
+                                </a>
+                              ) : <b key={key}>{label}</b>;
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {(solution.recommended_training || []).length > 0 && (
+                        <div>
+                          <small>FORMATION RECOMMANDÉE</small>
+                          <div className="inboundSolutionTags">
+                            {solution.recommended_training.map((training, index) => {
+                              const label = training.title || training.id || training.slug;
+                              const key = (training.slug || training.id || training.title || "training") + index;
+                              return training.slug ? (
+                                <a
+                                  key={key}
+                                  href={"https://build-autonomia.com/formation-ia/" + training.slug}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {label} ↗
+                                </a>
+                              ) : <b key={key}>{label}</b>;
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </section>
+
+                <section className="inboundLeadSection">
+                  <small>PROVENANCE</small>
+                  <dl className="inboundFieldList">
+                    <div>
+                      <dt>Module / page</dt>
+                      <dd><strong>{sourceTitle(lead)}</strong></dd>
+                    </div>
+                    <div>
+                      <dt>Date / heure</dt>
+                      <dd>{formatDate(lead.last_received_at)}</dd>
+                    </div>
+                    <div>
+                      <dt>Canal</dt>
+                      <dd>{lead.source_channel || "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Plateforme</dt>
+                      <dd>{lead.source_platform || "—"}</dd>
+                    </div>
+                    {lead.latest_touch?.landing_page_url && (
+                      <div>
+                        <dt>URL</dt>
+                        <dd>
+                          <a
+                            href={lead.latest_touch.landing_page_url}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Ouvrir la page ↗
+                          </a>
+                        </dd>
+                      </div>
+                    )}
+                    {lead.latest_touch?.utm_campaign && (
+                      <div>
+                        <dt>Campagne</dt>
+                        <dd>{lead.latest_touch.utm_campaign}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </section>
+              </div>
+
+              <section className="inboundFollowUp">
+                <div className="inboundFollowUpHeading">
+                  <div>
+                    <small>SUIVI COMMERCIAL</small>
+                    <strong>Prochaine action et historique de travail</strong>
+                  </div>
+                  {followUpDueAt && <span>Relance : {formatDate(followUpDueAt)}</span>}
+                </div>
+
+                {canWrite ? (
+                  <form action={updateInboundLeadFollowUpAction} className="inboundFollowUpForm">
+                    <input type="hidden" name="lead_id" value={lead.id} />
+
+                    <label>
+                      <span>Statut</span>
+                      <select name="status" defaultValue={lead.status}>
+                        {STATUSES.map(([value, label]) => (
+                          <option key={value} value={value}>{label}</option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Priorité</span>
+                      <select name="priority" defaultValue={priority}>
+                        {PRIORITIES.map(([value, label]) => (
+                          <option key={value} value={value}>{label}</option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Date de relance</span>
+                      <input
+                        type="date"
+                        name="follow_up_due_at"
+                        defaultValue={dateInputValue(followUpDueAt)}
+                      />
+                    </label>
+
+                    <label className="inboundFollowUpWide">
+                      <span>Prochaine action</span>
+                      <input
+                        name="next_action"
+                        defaultValue={nextAction}
+                        placeholder="Ex. Appeler pour qualifier le périmètre"
+                        maxLength={500}
+                      />
+                    </label>
+
+                    <label className="inboundFollowUpWide">
+                      <span>Note interne</span>
+                      <textarea
+                        name="follow_up_note"
+                        defaultValue={followUpNote}
+                        placeholder="Contexte, échange, objection, décision…"
+                        rows={3}
+                        maxLength={3000}
+                      />
+                    </label>
+
+                    <div className="inboundFollowUpSubmit">
+                      <button type="submit">Enregistrer le suivi</button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="inboundFollowUpReadOnly">
+                    <strong>{nextAction || "Aucune prochaine action renseignée."}</strong>
+                    {followUpNote && <p>{followUpNote}</p>}
+                  </div>
+                )}
+              </section>
+            </article>
+          );
+        }) : (
           <div className="emptyState">Aucun lead dans cette étape.</div>
         )}
       </div>
