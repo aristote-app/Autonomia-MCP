@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { normalizeJobSearchResult } from "../lib/collectors/jobDiscovery.js";
 import { normalizeFranceTravailOffer } from "../lib/collectors/franceTravail.js";
+import { normalizeWebDemandResult } from "../lib/collectors/webDemandDiscovery.js";
 
 const linkedin = normalizeJobSearchResult({
   sourceId: "linkedin",
@@ -64,5 +65,27 @@ const falseTerritory = normalizeFranceTravailOffer(
 );
 
 assert.equal(falseTerritory, null);
+
+const emploiTerritorial = normalizeWebDemandResult(
+  {
+    sourceId: "emploi_territorial",
+    kind: "territory",
+    query: 'site:emploi-territorial.fr/offre "intelligence artificielle"',
+    urlPattern: /emploi-territorial\.fr\/offre\//i
+  },
+  {
+    title: "Chef de projet Intelligence Artificielle - Conseil départemental",
+    url: "https://www.emploi-territorial.fr/offre/o070260609001070-chef-projet-intelligence-artificielle",
+    description:
+      "La collectivité pilote sa stratégie IA, automatise certains processus, forme les agents et structure la gouvernance."
+  }
+);
+
+assert.ok(emploiTerritorial);
+assert.equal(emploiTerritorial.contractType, "Signal recrutement collectivité IA");
+assert.ok(emploiTerritorial.signalKeys.includes("territorial"));
+assert.ok(emploiTerritorial.signalKeys.includes("territory_automation"));
+assert.ok(emploiTerritorial.signalKeys.includes("territory_ai_governance"));
+assert.ok(emploiTerritorial.signalKeys.includes("territory_ai_training"));
 
 console.log("job discovery smoke test passed");
