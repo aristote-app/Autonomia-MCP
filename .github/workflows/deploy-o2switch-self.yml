@@ -114,12 +114,12 @@ jobs:
           }
 
           echo "Waiting for background build + Passenger restart..."
-          for attempt in $(seq 1 2); do
+          for attempt in $(seq 1 18); do
             if verify_target; then
               exit 0
             fi
-            echo "Target not live yet (attempt $attempt/2)."
-            sleep 8
+            echo "Target not live yet (attempt $attempt/18)."
+            sleep 10
           done
 
           echo "First deploy was accepted but did not become visible. Retrying once with a fresh OIDC token."
@@ -145,12 +145,12 @@ jobs:
             exit 1
           fi
 
-          for attempt in $(seq 1 6); do
+          for attempt in $(seq 1 18); do
             if verify_target; then
               exit 0
             fi
-            echo "Target still not live after retry (attempt $attempt/6)."
-            sleep 8
+            echo "Target still not live after retry (attempt $attempt/18)."
+            sleep 10
           done
 
           echo "::error::o2switch accepted the deploy twice but production never switched to the target version."
