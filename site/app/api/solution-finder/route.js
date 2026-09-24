@@ -384,11 +384,26 @@ export async function POST(request) {
     })
     .filter(Boolean);
 
+  let summary = classification.summary;
+
+  if (!aiClassification) {
+    const roleName = roles[0]?.french_title || roles[0]?.label || null;
+    const trainingName = trainings[0]?.title || null;
+
+    if (roleName && trainingName) {
+      summary = `Pour ce besoin, le métier à mobiliser en priorité est ${roleName}. En complément, la formation « ${trainingName} » permet de transférer la méthode et les usages aux équipes concernées.`;
+    } else if (roleName) {
+      summary = `Pour ce besoin, le métier à mobiliser en priorité est ${roleName}. Un échange de cadrage permettra ensuite de préciser le périmètre de la mission.`;
+    } else if (trainingName) {
+      summary = `Votre demande relève d’abord d’une montée en compétences. La formation « ${trainingName} » est le parcours Autonomia le plus directement lié au besoin exprimé.`;
+    }
+  }
+
   return NextResponse.json(
     {
       ok: true,
       query,
-      summary: classification.summary,
+      summary,
       route: classification.route,
       roles,
       trainings,
