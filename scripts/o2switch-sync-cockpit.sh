@@ -157,17 +157,20 @@ mkdir -p .runtime tmp
 
 TALENT_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-talent.mjs >> /home/dide4169/autonomia-cockpit-app/talent-refresh.log 2>&1'
 SEO_GEO_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-seo-geo.mjs >> /home/dide4169/autonomia-cockpit-app/seo-geo-refresh.log 2>&1'
+JOBS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-jobs.mjs >> /home/dide4169/autonomia-cockpit-app/job-refresh.log 2>&1'
 if command -v crontab >/dev/null 2>&1; then
   TMP_CRON="$(mktemp)"
   {
-    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' || true
+    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' || true
     echo "17 4 * * * $TALENT_CMD"
     echo "23 */6 * * * $SEO_GEO_CMD"
+    echo "*/15 * * * * $JOBS_CMD"
   } > "$TMP_CRON"
   crontab "$TMP_CRON"
   rm -f "$TMP_CRON"
   echo "Talent Intelligence cron installed: daily at 04:17 server time."
   echo "SEO/GEO Intelligence cron installed: every 6 hours at minute 23."
+  echo "Market/job refresh cron installed: every 15 minutes; source-specific throttling remains enforced by the refresh script."
 else
   echo "crontab unavailable; Talent and SEO/GEO refreshes remain manually executable."
 fi
