@@ -4,6 +4,10 @@ import {
   claimUnassignedPublicInboundLeads,
   listInboundLeads
 } from "../../lib/db/inboundLeads.js";
+import {
+  drainInboundSpool,
+  listQueuedInboundLeads
+} from "../../lib/inbound/spool.js";
 import { updateInboundLeadFollowUpAction } from "../actions/inbound-leads.js";
 
 export const dynamic = "force-dynamic";
@@ -107,12 +111,25 @@ export default async function InboundPage({ searchParams }) {
     }).catch(() => 0);
   }
 
-  const leads = hasSession
-    ? await listInboundLeads({
-        workspaceId: context.membership.workspace_id,
-        limit: 500
-      }).catch(() => [])
-    : [];
+  if (hasSession && canWrite && isAutonomiaWorkspace) {
+    await drainInboundSpool({ limit: 10, timeoutMs: 5000 }).catch(() => ({ processed: 0, failed: 0 }));
+  }
+
+  const [persistedLeads, queuedLeads] = hasSession
+    ? await Promise.all([
+        listInboundLeads({
+          workspaceId: context.membership.workspace_id,
+          limit: 500
+        }).catch(() => []),
+        isAutonomiaWorkspace ? listQueuedInboundLeads({ limit: 100 }).catch(() => []) : Promise.resolve([])
+      ])
+    : [[], []];
+
+  const persistedExternalIds = new Set(persistedLeads.map((lead) => lead.external_lead_id).filter(Boolean));
+  const leads = [
+    ...queuedLeads.filter((lead) => !persistedExternalIds.has(lead.external_lead_id)),
+    ...persistedLeads
+  ].sort((a, b) => new Date(b.last_received_at || 0) - new Date(a.last_received_at || 0));
 
   const visible = filtered(leads, active);
 
@@ -157,9 +174,12 @@ export default async function InboundPage({ searchParams }) {
                   <h2>{lead.company_name}</h2>
                   <p>{lead.first_name} {lead.last_name}</p>
                 </div>
-                <strong className={"inboundStatus inboundStatus-" + (lead.status || "new")}>
-                  {statusLabel(lead.status)}
-                </strong>
+                <div className="inboundLeadHeaderStatus">
+                  {lead.queued && <span className="inboundQueuedBadge">EN ATTENTE DE SYNCHRO</span>}
+                  <strong className={"inboundStatus inboundStatus-" + (lead.status || "new")}>
+                    {statusLabel(lead.status)}
+                  </strong>
+                </div>
               </header>
 
               <div className="inboundLeadBody">
@@ -305,7 +325,7 @@ export default async function InboundPage({ searchParams }) {
                   {followUpDueAt && <span>Relance : {formatDate(followUpDueAt)}</span>}
                 </div>
 
-                {canWrite ? (
+                {canWrite && !lead.queued ? (
                   <form action={updateInboundLeadFollowUpAction} className="inboundFollowUpForm">
                     <input type="hidden" name="lead_id" value={lead.id} />
 
@@ -363,7 +383,11 @@ export default async function InboundPage({ searchParams }) {
                   </form>
                 ) : (
                   <div className="inboundFollowUpReadOnly">
-                    <strong>{nextAction || "Aucune prochaine action renseignée."}</strong>
+                    <strong>
+                      {lead.queued
+                        ? "Lead conservé localement. La synchronisation avec la base sera retentée automatiquement."
+                        : (nextAction || "Aucune prochaine action renseignée.")}
+                    </strong>
                     {followUpNote && <p>{followUpNote}</p>}
                   </div>
                 )}
