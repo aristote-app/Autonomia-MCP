@@ -171,6 +171,15 @@ assertTerritoryIntent(
 );
 
 assertTerritoryIntent(
+  "Formation pratique IA pour les agents territoriaux : vérifier les réponses, les sources et les hallucinations",
+  "former-les-agents-a-verifier-les-reponses-d-une-ia-generative",
+  [
+    "former-les-managers-territoriaux-a-encadrer-l-usage-de-l-ia",
+    "organiser-une-acculturation-ia-pour-les-elus-et-directions-generales"
+  ]
+);
+
+assertTerritoryIntent(
   "Programme d'accompagnement IA des TPE PME et entreprises locales du territoire",
   "comment-une-communaute-de-communes-peut-accompagner-les-tpe-pme-sur-l-ia",
   [
