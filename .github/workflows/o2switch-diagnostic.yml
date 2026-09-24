@@ -33,3 +33,19 @@ jobs:
           echo "===== COCKPIT DEPLOY DEBUG ====="
           curl -fsS https://cockpit.build-autonomia.com/__autonomia_cockpit_deploy_debug.txt || true
           echo
+          echo "===== END-TO-END INBOUND LEAD TEST ====="
+          TEST_ID="diag-$(date +%s)"
+          START="$(date +%s)"
+          HTTP_CODE="$(curl -sS --max-time 20 \
+            -o /tmp/inbound-response.json \
+            -w "%{http_code}" \
+            -X POST https://build-autonomia.com/api/leads \
+            -H "content-type: application/json" \
+            --data-binary @- <<JSON
+{"external_lead_id":"$TEST_ID","source_channel":"website","source_platform":"autonomia_public_site","received_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","first_name":"AUTONOMIA","last_name":"DIAGNOSTIC","email":"diagnostic@build-autonomia.com","phone":"0600000000","company_name":"AUTONOMIA DIAGNOSTIC","requested_service":"diagnostic_pipeline","message":"Diagnostic technique du pipeline inbound","form_id":"diagnostic-pipeline","landing_page_topic":"Diagnostic pipeline","landing_page_url":"https://build-autonomia.com/","marketing_consent":false,"consent_timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","privacy_notice_version":"diagnostic","consent_source":"diagnostic-pipeline"}
+JSON
+          )"
+          END="$(date +%s)"
+          echo "HTTP=$HTTP_CODE duration=$((END-START))s"
+          cat /tmp/inbound-response.json 2>/dev/null || true
+          echo
