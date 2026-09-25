@@ -50,6 +50,20 @@ const trainingSourceSets = {
       url: "https://www.nist.gov/itl/ai-risk-management-framework"
     }
   ],
+  service: [
+    {
+      label: "Microsoft Learn — Copilot dans Customer Service : fonctionnalités et limites",
+      url: "https://learn.microsoft.com/en-us/dynamics365/customer-service/administer/faq-copilot-features"
+    },
+    {
+      label: "Microsoft Learn — guide d’onboarding Copilot pour les centres de contact",
+      url: "https://learn.microsoft.com/en-us/dynamics365/guidance/resources/cs-contact-center-copilot-onboarding-guide"
+    },
+    {
+      label: "NIST — AI Risk Management Framework",
+      url: "https://www.nist.gov/itl/ai-risk-management-framework"
+    }
+  ],
   finance: [
     {
       label: "CNIL — Intelligence artificielle et protection des données",
@@ -102,6 +116,13 @@ const defaultTags = {
     "human_in_loop",
     "change_adoption"
   ],
+  service: [
+    "customer_service",
+    "knowledge_management",
+    "genai",
+    "human_in_loop",
+    "process_integration"
+  ],
   finance: [
     "finance_ops",
     "automation",
@@ -150,6 +171,14 @@ const trainingFamilyContext = {
     futureReviews: "prochains rendez-vous, opportunités et revues commerciales",
     evidenceDocument: "fiche compte, opportunité ou proposition",
     learningFrame: "préparer, personnaliser et vérifier"
+  },
+  service: {
+    subject: "usage IA dans le service client",
+    participantRole: "professionnel du support",
+    reviewPlace: "revue de tickets, atelier qualité ou revue de base de connaissances",
+    futureReviews: "prochains tickets, revues qualité et évolutions de la base de connaissances",
+    evidenceDocument: "ticket, historique client ou article de connaissance",
+    learningFrame: "retrouver, répondre et escalader"
   },
   finance: {
     subject: "usage IA dans une fonction finance ou administrative",
