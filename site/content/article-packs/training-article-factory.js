@@ -21,6 +21,34 @@ const trainingSourceSets = {
       label: "OECD.AI — principes de l’OCDE sur l’intelligence artificielle",
       url: "https://oecd.ai/en/ai-principles"
     }
+  ],
+  commercial: [
+    {
+      label: "Microsoft Learn — Sales insights dans le récapitulatif de réunion",
+      url: "https://learn.microsoft.com/fr-fr/microsoft-sales-copilot/view-meeting-summary-recap"
+    },
+    {
+      label: "HubSpot Knowledge Base — créer et utiliser des workflows",
+      url: "https://knowledge.hubspot.com/workflows/create-workflows"
+    },
+    {
+      label: "NIST — AI Risk Management Framework",
+      url: "https://www.nist.gov/itl/ai-risk-management-framework"
+    }
+  ],
+  rh: [
+    {
+      label: "Commission européenne — cadre réglementaire européen sur l’intelligence artificielle",
+      url: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
+    },
+    {
+      label: "NIST — AI Risk Management Framework",
+      url: "https://www.nist.gov/itl/ai-risk-management-framework"
+    },
+    {
+      label: "Microsoft Graph — permissions reference",
+      url: "https://learn.microsoft.com/en-us/graph/permissions-reference"
+    }
   ]
 };
 
@@ -31,6 +59,20 @@ const defaultTags = {
     "human_in_loop",
     "process_integration",
     "strategy"
+  ],
+  commercial: [
+    "sales_automation",
+    "crm",
+    "genai",
+    "human_in_loop",
+    "change_adoption"
+  ],
+  rh: [
+    "change_adoption",
+    "human_in_loop",
+    "ai_governance",
+    "files_documents",
+    "process_integration"
   ]
 };
 
