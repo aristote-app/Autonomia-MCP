@@ -11,6 +11,30 @@ export const metadata = {
 };
 
 export default function UseCaseHub() {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com";
+  const useCaseHubSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${base}/cas-usage-ia#collection`,
+        url: `${base}/cas-usage-ia`,
+        name: "Cas d’usage IA en entreprise — scénarios concrets",
+        description:
+          "Bibliothèque Autonomia de scénarios concrets d’IA, d’automatisation, de RAG, d’agents et de workflows métier."
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: publishedExecutionArticles.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: article.title,
+          url: `${base}/cas-usage-ia/${article.slug}`
+        }))
+      }
+    ]
+  };
+
   const publishedSlugs = new Set(publishedExecutionArticles.map((article) => article.slug));
   const clusters = [...new Set(executionBacklog.map((item) => item.cluster))];
   const adoptionArticle = publishedExecutionArticles.find(
@@ -19,6 +43,10 @@ export default function UseCaseHub() {
 
   return (
     <main className="contentHub">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(useCaseHubSchema) }}
+      />
       <section className="contentHubHero">
         <p className="eyebrow">BIBLIOTHÈQUE AUTONOMIA</p>
         <h1>Ce que l’IA peut réellement faire dans votre entreprise.</h1>
