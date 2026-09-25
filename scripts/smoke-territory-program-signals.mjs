@@ -58,6 +58,23 @@ const funding = normalizeWebDemandResult(
 assert.ok(funding);
 assert.equal(funding.marketSignalType, "territory_funding_program");
 
+const territoiresIaFunding = normalizeWebDemandResult(
+  {
+    sourceId: "demarche_numerique_territoires_ia",
+    kind: "territory_program",
+    query: 'site:demarche.numerique.gouv.fr/commencer/territoires-d-ia cofinancement collectivités IA',
+    urlPattern: /demarche\.numerique\.gouv\.fr\/commencer\/territoires-d-ia-/i
+  },
+  {
+    url: "https://demarche.numerique.gouv.fr/commencer/territoires-d-ia-banque-des-territoires-cofinancement",
+    title: "Territoires d'IA - Banque des Territoires : cofinancement",
+    description:
+      "Guichet de cofinancement pour les collectivités et EPCI afin de faciliter l'achat et l'appropriation de solutions d'intelligence artificielle."
+  }
+);
+assert.ok(territoiresIaFunding);
+assert.equal(territoiresIaFunding.marketSignalType, "territory_funding_program");
+
 const createdAt = new Date().toISOString();
 const seoSignals = buildSeoGeoSignals({
   territoryPrograms: [
