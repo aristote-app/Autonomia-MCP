@@ -1,0 +1,147 @@
+import { buildTrainingArticle } from "./training-article-factory.js";
+
+const directionSpecs = [
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Former un dirigeant à identifier les cas d’usage IA réellement prioritaires",
+    audience: "dirigeants, membres de CODIR et responsables de transformation",
+    objective: "savoir distinguer un cas d’usage séduisant d’un cas réellement prioritaire pour l’entreprise",
+    workshop: "classer une dizaine d’idées IA selon problème métier, fréquence, données, risque, réversibilité et capacité de mesure",
+    deliverable: "une matrice de priorisation documentée avec critères, preuves disponibles et prochaines expérimentations",
+    assessment: "prioriser un nouveau portefeuille de cas d’usage et justifier les trois premiers sans utiliser de score automatique comme verdict",
+    transfer: "utiliser la même matrice lors des prochains comités d’investissement ou ateliers métier",
+    guardrail: "aucun projet n’est priorisé uniquement parce qu’il utilise une technologie plus avancée ou parce qu’un fournisseur promet un gain générique",
+    example: "un comité reçoit plusieurs idées — assistant documentaire, automatisation commerciale, agent support, copilote finance — sans méthode commune pour décider par quoi commencer",
+    decisionFrame: "friction métier, fréquence, données disponibles, risque, contrôle humain, capacité de test et valeur observable"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Apprendre à un comité de direction à décider où investir dans l’IA",
+    audience: "comités de direction et directions fonctionnelles",
+    objective: "structurer les arbitrages entre exploration, pilote, industrialisation, formation et gouvernance",
+    workshop: "répartir un budget fictif entre plusieurs projets IA dont le niveau de preuve, le risque et la maturité diffèrent",
+    deliverable: "une grille d’investissement avec niveau de preuve attendu, étape financée et condition de passage à l’étape suivante",
+    assessment: "arbitrer un portefeuille de quatre projets en expliquant ce qui mérite un pilote, ce qui nécessite un cadrage et ce qui doit être arrêté",
+    transfer: "réutiliser la logique de portes d’investissement lors des revues budgétaires et comités innovation",
+    guardrail: "le financement suit le niveau de preuve atteint et non la force de la promesse commerciale",
+    example: "plusieurs directions réclament un budget IA mais les dossiers mélangent prototypes, abonnements logiciels et projets d’intégration sans niveau de maturité comparable",
+    decisionFrame: "importance du problème, maturité du besoin, preuve disponible, coût de prochaine étape, risque et dépendances"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Former la direction à distinguer automatisation, copilote et agent IA",
+    audience: "directions générales, métiers, DSI et sponsors de projets IA",
+    objective: "choisir le bon niveau d’autonomie selon la tâche et éviter d’appeler agent tout système qui utilise un modèle",
+    workshop: "reclasser des projets réels en automatisation déterministe, copilote, workflow enrichi par IA ou agent avec outils",
+    deliverable: "une carte des niveaux d’autonomie avec exemples internes, actions autorisées et validations nécessaires",
+    assessment: "analyser cinq scénarios et proposer l’architecture la moins autonome qui répond réellement au besoin",
+    transfer: "utiliser cette taxonomie dans les appels d’offres, business cases et réunions de cadrage",
+    guardrail: "l’autonomie supplémentaire doit être justifiée par un besoin concret et accompagnée de permissions, limites et reprise humaine",
+    example: "des équipes utilisent le mot agent pour décrire aussi bien un chatbot, une automatisation et un système capable d’agir dans plusieurs outils",
+    decisionFrame: "déclencheur, choix possibles, outils accessibles, action finale, réversibilité et contrôle humain"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Apprendre à cadrer une feuille de route IA sans être technique",
+    audience: "dirigeants, directions métiers et responsables de transformation non techniques",
+    objective: "construire une feuille de route par capacités et problèmes métier plutôt que par catalogue d’outils",
+    workshop: "transformer les irritants de trois équipes en une feuille de route en vagues : apprentissage, pilotes, intégrations et gouvernance",
+    deliverable: "une roadmap de douze mois structurée par objectifs, dépendances, propriétaires, preuves et décisions de passage",
+    assessment: "construire une première roadmap à partir d’un cas d’entreprise incomplet en identifiant les dépendances manquantes",
+    transfer: "utiliser la trame comme document vivant lors des revues trimestrielles",
+    guardrail: "la feuille de route ne promet pas de dates ou de ROI non vérifiés et distingue clairement exploration, pilote et déploiement",
+    example: "l’entreprise possède une liste d’outils et d’idées IA mais aucune séquence cohérente reliant compétences, données, projets et gouvernance",
+    decisionFrame: "problèmes prioritaires, capacités à construire, prérequis, propriétaires, niveaux de preuve et critères de passage"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Former les dirigeants aux risques de données liés aux IA génératives",
+    audience: "dirigeants, responsables métiers, DSI et fonctions conformité",
+    objective: "comprendre quelles questions poser avant qu’une équipe transmette des données internes à un service d’IA",
+    workshop: "cartographier plusieurs situations d’usage et décider quelles données sont nécessaires, autorisées, minimisables ou à exclure",
+    deliverable: "une grille de revue des données avec catégorie, finalité, outil, accès, conservation, validation et alternative possible",
+    assessment: "analyser un nouveau cas d’usage et identifier les données superflues, sensibles ou insuffisamment cadrées",
+    transfer: "intégrer cette revue dans l’approbation des nouveaux outils et cas d’usage IA",
+    guardrail: "aucune donnée n’est envoyée à un modèle uniquement parce qu’elle pourrait éventuellement être utile",
+    example: "des collaborateurs copient des documents, e-mails ou exports dans différents assistants sans toujours savoir quelles données sont réellement nécessaires ni ce que permet le contrat de l’outil",
+    decisionFrame: "finalité, minimisation, accès, fournisseur, conservation, droits, sensibilité et responsabilité"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Apprendre à challenger un projet IA avant de le financer",
+    audience: "sponsors, directions générales, directions financières et responsables innovation",
+    objective: "détecter les hypothèses fragiles dans un dossier IA avant l’engagement de budget",
+    workshop: "auditer un business case contenant des promesses de productivité, un prototype convaincant et plusieurs dépendances non confirmées",
+    deliverable: "une fiche de challenge avec hypothèses, preuves, inconnues, risques, conditions du pilote et décision de prochaine étape",
+    assessment: "identifier les cinq questions les plus importantes à poser sur un projet différent avant toute décision de financement",
+    transfer: "ajouter cette fiche aux revues d’investissement et comités projet",
+    guardrail: "une démonstration ou un benchmark externe n’est jamais traité comme une preuve suffisante de valeur dans l’organisation",
+    example: "un projet est présenté avec une promesse de gain importante mais sans baseline, sans jeu de tests et sans confirmation des données nécessaires",
+    decisionFrame: "baseline, utilisateurs, données, intégration, mesure, coûts récurrents, risque et méthode de pilote"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Former un dirigeant à lire un business case IA avec esprit critique",
+    audience: "dirigeants, directions financières et responsables de portefeuille",
+    objective: "savoir distinguer coûts certains, hypothèses, métriques observables et bénéfices encore à démontrer",
+    workshop: "décomposer un business case en hypothèses de volume, temps, adoption, coûts techniques, supervision et valeur attendue",
+    deliverable: "un business case annoté avec niveau de confiance, source de chaque hypothèse et méthode de validation",
+    assessment: "relire un nouveau dossier et reconstruire les hypothèses qui expliquent le ROI annoncé",
+    transfer: "exiger une baseline et une méthode de mesure commune dans les futurs dossiers IA",
+    guardrail: "aucun ROI n’est présenté comme certain lorsque les volumes, l’adoption, le temps réellement évité ou les coûts d’exploitation n’ont pas été mesurés",
+    example: "un dossier affirme qu’un assistant fera gagner plusieurs milliers d’heures alors que le temps actuel, le taux d’utilisation et la charge de validation n’ont jamais été mesurés",
+    decisionFrame: "baseline, volume, coût unitaire, adoption, qualité, supervision, coûts récurrents et incertitude"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Apprendre à construire une gouvernance IA adaptée à l’entreprise",
+    audience: "directions générales, DSI, juridique, RH et responsables de transformation",
+    objective: "définir un système de décision simple qui encadre les usages sans bloquer toutes les expérimentations",
+    workshop: "concevoir le parcours d’un nouveau cas d’usage depuis l’idée jusqu’à l’approbation, le pilote, le déploiement et la revue",
+    deliverable: "un schéma de gouvernance avec rôles, seuils, règles d’escalade, preuves exigées et registre des décisions",
+    assessment: "placer plusieurs cas d’usage de niveaux de risque différents dans le bon circuit de gouvernance",
+    transfer: "utiliser le schéma comme base pour harmoniser les revues entre métiers, DSI, juridique et achats",
+    guardrail: "la gouvernance est proportionnée au risque et à l’action du système ; elle ne transforme pas une expérimentation faible risque en procédure lourde identique à un système sensible",
+    example: "chaque équipe lance ses propres tests IA et demande tardivement à la DSI ou au juridique si l’outil peut être utilisé en production",
+    decisionFrame: "type d’usage, données, action, population, fournisseur, niveau d’autonomie, risque et propriétaire"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Former un CODIR à piloter l’adoption de l’IA",
+    audience: "comités de direction, DRH, directions métiers et responsables de transformation",
+    objective: "piloter l’adoption comme un changement de pratiques et de compétences plutôt que comme un simple déploiement de licences",
+    workshop: "analyser trois populations internes, leurs tâches, freins, usages actuels et besoins de compétences puis construire une première vague d’adoption",
+    deliverable: "un plan d’adoption par population avec cas d’usage, formation, support, règles, indicateurs et boucle de retour",
+    assessment: "concevoir une vague d’adoption pour une équipe non utilisée dans l’atelier en justifiant les indicateurs choisis",
+    transfer: "revoir l’adoption à partir des usages observés, corrections, abandons et besoins remontés plutôt qu’à partir du nombre de licences distribuées",
+    guardrail: "le taux d’activation d’un outil n’est pas assimilé à une adoption utile ni à une compétence acquise",
+    example: "l’entreprise a ouvert des accès à des outils IA mais ne sait pas quelles équipes les utilisent réellement, pour quelles tâches et avec quelles difficultés",
+    decisionFrame: "population, tâches, compétence, outil, règle d’usage, support, preuve d’utilisation et résultat observable"
+  },
+  {
+    family: "direction",
+    cluster: "Direction",
+    title: "Apprendre à mesurer un projet IA sans inventer de ROI",
+    audience: "dirigeants, directions financières, sponsors et chefs de projet",
+    objective: "choisir des métriques vérifiables avant de transformer une promesse de productivité en chiffre financier",
+    workshop: "construire un protocole de mesure avant/après sur un cas d’usage avec volume, qualité, temps de traitement et charge de validation",
+    deliverable: "une fiche de mesure avec baseline, échantillon, métriques, méthode, période, limites et décision attendue",
+    assessment: "corriger un dossier qui mélange temps estimé, satisfaction, volume et ROI afin de proposer une mesure réellement observable",
+    transfer: "utiliser la fiche dans chaque pilote avant de décider une généralisation",
+    guardrail: "un gain estimé n’est jamais converti automatiquement en économie financière sans vérifier l’usage réel et ce que devient effectivement le temps dégagé",
+    example: "un projet annonce un pourcentage de gain de productivité mais personne n’a défini le temps de référence, le taux d’adoption ni la qualité minimale acceptable",
+    decisionFrame: "baseline, volume, délai, qualité, correction humaine, adoption, coût d’exploitation et limites de l’échantillon"
+  }
+];
+
+export const marketDemandExecutionArticlesWave22 = [];
+export const marketDemandTrainingArticlesWave22 = directionSpecs.map(buildTrainingArticle);
