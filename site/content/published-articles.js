@@ -13,6 +13,11 @@ import { marketDemandExecutionArticlesWave11, marketDemandTrainingArticlesWave11
 import { marketDemandExecutionArticlesWave12, marketDemandTrainingArticlesWave12 } from "./article-packs/market-demand-wave-12.js";
 import { marketDemandExecutionArticlesWave13, marketDemandTrainingArticlesWave13 } from "./article-packs/market-demand-wave-13.js";
 import { marketDemandExecutionArticlesWave14, marketDemandTrainingArticlesWave14 } from "./article-packs/market-demand-wave-14.js";
+import { marketDemandExecutionArticlesWave15, marketDemandTrainingArticlesWave15 } from "./article-packs/market-demand-wave-15.js";
+import { marketDemandExecutionArticlesWave16, marketDemandTrainingArticlesWave16 } from "./article-packs/market-demand-wave-16.js";
+import { marketDemandExecutionArticlesWave17, marketDemandTrainingArticlesWave17 } from "./article-packs/market-demand-wave-17.js";
+import { marketDemandExecutionArticlesWave18, marketDemandTrainingArticlesWave18 } from "./article-packs/market-demand-wave-18.js";
+import { marketDemandExecutionArticlesWave19, marketDemandTrainingArticlesWave19 } from "./article-packs/market-demand-wave-19.js";
 
 const baseExecutionArticles = [
   {
@@ -345,7 +350,12 @@ export const publishedExecutionArticles = [
   ...marketDemandExecutionArticlesWave11,
   ...marketDemandExecutionArticlesWave12,
   ...marketDemandExecutionArticlesWave13,
-  ...marketDemandExecutionArticlesWave14
+  ...marketDemandExecutionArticlesWave14,
+  ...marketDemandExecutionArticlesWave15,
+  ...marketDemandExecutionArticlesWave16,
+  ...marketDemandExecutionArticlesWave17,
+  ...marketDemandExecutionArticlesWave18,
+  ...marketDemandExecutionArticlesWave19
 ];
 
 export const publishedTrainingArticles = [
@@ -363,7 +373,12 @@ export const publishedTrainingArticles = [
   ...marketDemandTrainingArticlesWave11,
   ...marketDemandTrainingArticlesWave12,
   ...marketDemandTrainingArticlesWave13,
-  ...marketDemandTrainingArticlesWave14
+  ...marketDemandTrainingArticlesWave14,
+  ...marketDemandTrainingArticlesWave15,
+  ...marketDemandTrainingArticlesWave16,
+  ...marketDemandTrainingArticlesWave17,
+  ...marketDemandTrainingArticlesWave18,
+  ...marketDemandTrainingArticlesWave19
 ];
 
 export function getPublishedExecutionArticle(slug) {
