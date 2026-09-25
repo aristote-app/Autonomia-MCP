@@ -2,7 +2,7 @@ import { buildTrainingArticle } from "./training-article-factory.js";
 
 const managerSpecs = [
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Former les managers à utiliser l’IA sans perdre le contrôle du travail",
     audience: "managers de proximité, responsables d’équipe et managers de fonctions support",
@@ -15,7 +15,7 @@ const managerSpecs = [
     example: "les collaborateurs utilisent déjà différents assistants pour rédiger, résumer ou analyser, mais le manager ne sait pas toujours quels usages sont fiables ni où fixer les limites"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Apprendre à un manager à créer des briefs de meilleure qualité avec l’IA",
     audience: "managers, chefs d’équipe et responsables de projet",
@@ -28,7 +28,7 @@ const managerSpecs = [
     example: "une demande comme « prépare-moi une présentation pour demain » déclenche beaucoup d’allers-retours parce que l’objectif, le public, le niveau de détail et le résultat attendu n’ont pas été précisés"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Former les managers à revoir et valider un travail produit avec l’IA",
     audience: "managers responsables de livrables produits ou assistés par IA",
@@ -41,7 +41,7 @@ const managerSpecs = [
     example: "un collaborateur gagne du temps grâce à l’IA mais le manager passe ensuite beaucoup de temps à vérifier des livrables dont la qualité varie fortement"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Apprendre à préparer des réunions et comptes rendus avec l’IA",
     audience: "managers, chefs de projet et responsables d’équipe",
@@ -54,7 +54,7 @@ const managerSpecs = [
     example: "les réunions produisent beaucoup de notes mais les actions et décisions restent dispersées, puis le manager reconstitue manuellement le suivi après chaque échange"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Former les managers à identifier les tâches automatisables de leur équipe",
     audience: "managers opérationnels et responsables de transformation d’équipe",
@@ -67,7 +67,7 @@ const managerSpecs = [
     example: "une équipe dit perdre du temps mais mélange dans la même liste des tâches administratives répétitives, des arbitrages complexes et des échanges humains sensibles"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Apprendre à construire des règles d’usage IA dans une équipe",
     audience: "managers qui doivent encadrer les pratiques IA quotidiennes",
@@ -80,7 +80,7 @@ const managerSpecs = [
     example: "l’entreprise dispose d’une charte IA mais les collaborateurs demandent encore au manager s’ils peuvent utiliser tel outil avec tel document ou pour telle tâche"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Former les managers à détecter les mauvaises automatisations",
     audience: "managers supervisant des workflows, automatisations ou projets IA métier",
@@ -93,7 +93,7 @@ const managerSpecs = [
     example: "une automatisation créée rapidement devient critique pour l’équipe alors que personne ne sait quoi faire si un connecteur expire ou si le scénario traite deux fois la même demande"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Apprendre à transformer un processus d’équipe en workflow IA",
     audience: "managers, responsables opérationnels et chefs de projet non développeurs",
@@ -106,7 +106,7 @@ const managerSpecs = [
     example: "l’équipe veut « automatiser avec l’IA » un processus qui passe aujourd’hui par e-mails, tableur, validation et ressaisie mais personne n’a encore représenté les étapes"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Former les managers à accompagner les collaborateurs réticents à l’IA",
     audience: "managers qui conduisent l’adoption de l’IA dans leurs équipes",
@@ -119,7 +119,7 @@ const managerSpecs = [
     example: "certains membres de l’équipe utilisent déjà l’IA quotidiennement tandis que d’autres l’évitent par crainte de l’erreur, de la confidentialité ou d’une dégradation de leur travail"
   },
   {
-    family: "direction",
+    family: "manager",
     cluster: "Managers",
     title: "Apprendre à mesurer l’adoption de l’IA dans une équipe",
     audience: "managers, RH, responsables de transformation et sponsors IA",
