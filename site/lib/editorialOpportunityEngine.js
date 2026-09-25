@@ -56,6 +56,7 @@ function normalizeSignal(signal) {
     inbound_mentions: number(signal.inbound_mentions),
     job_mentions: number(signal.job_mentions),
     public_procurement_mentions: number(signal.public_procurement_mentions),
+    territory_program_mentions: number(signal.territory_program_mentions ?? signal.program_mentions),
     territory_mentions: number(signal.territory_mentions),
     ai_citations: number(signal.ai_citations ?? signal.citations),
     revenue: number(signal.revenue),
@@ -244,6 +245,7 @@ function signalValue(signal) {
   const inbound = Math.log10(1 + signal.inbound_mentions);
   const jobs = Math.log10(1 + signal.job_mentions);
   const procurement = Math.log10(1 + signal.public_procurement_mentions);
+  const territoryPrograms = Math.log10(1 + signal.territory_program_mentions);
   const territory = Math.log10(1 + signal.territory_mentions);
   const citations = Math.log10(1 + signal.ai_citations);
   const revenue = Math.log10(1 + Math.max(0, signal.revenue) / 100);
@@ -255,6 +257,7 @@ function signalValue(signal) {
     inbound * 2 +
     jobs * 1.05 +
     procurement * 1.7 +
+    territoryPrograms * 1.6 +
     territory * 1.5 +
     citations * 1.2 +
     revenue * 2.6
@@ -351,6 +354,7 @@ export function prioritizeEditorialBacklog(rawSignals = [], options = {}) {
         inbound_mentions: matches.reduce((sum, match) => sum + match.signal.inbound_mentions, 0),
         job_mentions: matches.reduce((sum, match) => sum + match.signal.job_mentions, 0),
         public_procurement_mentions: matches.reduce((sum, match) => sum + match.signal.public_procurement_mentions, 0),
+        territory_program_mentions: matches.reduce((sum, match) => sum + match.signal.territory_program_mentions, 0),
         territory_mentions: matches.reduce((sum, match) => sum + match.signal.territory_mentions, 0),
         ai_citations: matches.reduce((sum, match) => sum + match.signal.ai_citations, 0),
         revenue: matches.reduce((sum, match) => sum + match.signal.revenue, 0),

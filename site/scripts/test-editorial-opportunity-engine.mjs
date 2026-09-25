@@ -225,6 +225,31 @@ assertTerritoryIntent(
 );
 
 
+const territoryProgramEvidence = prioritizeEditorialBacklog(
+  [
+    {
+      query: "Programme d'accompagnement IA des TPE PME et entreprises locales du territoire",
+      cluster: "Collectivités & territoires",
+      family: "territory-use-case",
+      territory_program_mentions: 4
+    }
+  ],
+  { max_results: 100 }
+);
+
+const territoryProgramTopic = territoryProgramEvidence.recommendations.find(
+  (item) => item.slug === "comment-une-communaute-de-communes-peut-accompagner-les-tpe-pme-sur-l-ia"
+);
+
+if (!territoryProgramTopic || territoryProgramTopic.evidence.territory_program_mentions <= 0) {
+  throw new Error("Territory program evidence must be preserved as its own evidence family.");
+}
+
+if (territoryProgramTopic.evidence.job_mentions !== 0) {
+  throw new Error("Territory program evidence must not be counted as job evidence.");
+}
+
+
 const waterNetworkTerritory = prioritizeEditorialBacklog(
   [
     {
