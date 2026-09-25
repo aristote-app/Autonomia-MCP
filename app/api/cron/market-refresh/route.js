@@ -30,18 +30,21 @@ export async function GET(request) {
         webKinds: ["territory_program"]
       });
 
+      const territoryPrograms = extended.territoryPrograms || {
+        discoveredRows: 0,
+        persistedRows: 0,
+        error: null
+      };
+      const ok = Boolean(extended.available) && !territoryPrograms.error;
+
       return Response.json({
-        ok: Boolean(extended.available),
+        ok,
         mode,
         completedAt: new Date().toISOString(),
-        territoryPrograms: extended.territoryPrograms || {
-          discoveredRows: 0,
-          persistedRows: 0,
-          error: null
-        },
+        territoryPrograms,
         web: extended.web || null
       }, {
-        status: extended.available ? 200 : 502
+        status: ok ? 200 : 502
       });
     } catch (error) {
       return Response.json({

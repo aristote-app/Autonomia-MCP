@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { normalizeWebDemandResult } from "../lib/collectors/webDemandDiscovery.js";
 import {
   buildSeoGeoSignals,
@@ -93,3 +94,23 @@ console.log(JSON.stringify({
   funding: funding.marketSignalType,
   seoTerritoryProgramMentions: seoSignals[0].territory_program_mentions
 }, null, 2));
+
+
+const refreshSource = readFileSync(
+  new URL("../lib/market/automatedRefresh.js", import.meta.url),
+  "utf8"
+);
+const jobStart = refreshSource.indexOf("export async function runAutomatedJobSignalRefresh");
+const extendedStart = refreshSource.indexOf("export async function runAutomatedExtendedDemandRefresh");
+assert.ok(jobStart >= 0 && extendedStart > jobStart);
+
+const jobRefreshSource = refreshSource.slice(jobStart, extendedStart);
+const extendedRefreshSource = refreshSource.slice(extendedStart);
+
+assert.ok(jobRefreshSource.includes("discoveredRows: items.length"));
+assert.ok(!jobRefreshSource.includes("territoryProgramItems"));
+assert.ok(!jobRefreshSource.includes("jobItems"));
+
+assert.ok(extendedRefreshSource.includes("territoryPrograms: {"));
+assert.ok(extendedRefreshSource.includes("discoveredRows: jobItems.length + territoryProgramItems.length"));
+assert.ok(!extendedRefreshSource.includes("discoveredRows: items.length"));
