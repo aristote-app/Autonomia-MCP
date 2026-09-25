@@ -39,6 +39,15 @@ export const executionSourceSets = {
   ]
 };
 
+const defaultTags = {
+  email: ["automation", "messaging_collaboration", "workflow_orchestration", "process_integration"],
+  drive: ["automation", "files_documents", "knowledge_management", "process_integration"],
+  crm: ["automation", "sales_automation", "workflow_orchestration", "process_integration"],
+  meetings: ["automation", "messaging_collaboration", "workflow_orchestration", "human_in_loop"],
+  admin: ["automation", "files_documents", "workflow_orchestration", "human_in_loop"],
+  reporting: ["automation", "data", "analytics", "process_integration"]
+};
+
 const familyCopy = {
   email: {
     noun: "message",
@@ -100,6 +109,8 @@ export function buildExecutionArticle(spec) {
   const slug = slugify(title);
   const keyword = spec.primaryKeyword || title.toLowerCase();
   const sources = executionSourceSets[spec.family];
+  const dek = spec.dek || `${spec.goal}. Le scénario part de ${spec.trigger} pour produire ${spec.output}, avec ${spec.human}.`;
+  const summary = spec.summary || `Ce guide détaille une architecture concrète pour « ${title} » : données d’entrée, rôle de l’IA, règles métier, contrôles humains, exceptions, MVP et critères de mesure. Le cas est conçu autour de ${spec.inputs} et vise ${spec.goal}, sans confondre interprétation générative et décision métier.`;
 
   const sections = [
     {
@@ -205,12 +216,12 @@ export function buildExecutionArticle(spec) {
     slug,
     cluster: spec.cluster,
     title,
-    dek: spec.dek,
-    summary: spec.summary,
+    dek,
+    summary,
     readingTime: "18–24 min",
     publishedAt: "2026-09-25",
     modifiedAt: "2026-09-25",
-    jobSignalTags: spec.jobSignalTags,
+    jobSignalTags: spec.jobSignalTags || defaultTags[spec.family],
     search: {
       primaryKeyword: keyword,
       secondaryQueries: spec.secondaryQueries || [
