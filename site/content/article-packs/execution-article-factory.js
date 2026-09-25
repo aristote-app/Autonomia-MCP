@@ -61,6 +61,11 @@ export const executionSourceSets = {
     { label: "Microsoft Learn — RAG and Generative AI in Azure AI Search", url: "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview?tabs=docs" },
     { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" },
     { label: "Google Drive API — Search query terms and operators", url: "https://developers.google.com/workspace/drive/api/guides/ref-search-terms" }
+  ],
+  marketing: [
+    { label: "Google Search Central — Search appearance overview", url: "https://developers.google.com/search/docs/appearance" },
+    { label: "Google Search Central — Article structured data", url: "https://developers.google.com/search/docs/appearance/structured-data/article" },
+    { label: "Google Search Central — Search documentation updates", url: "https://developers.google.com/search/updates" }
   ]
 };
 
@@ -75,7 +80,8 @@ const defaultTags = {
   rh: ["automation", "change_adoption", "files_documents", "human_in_loop"],
   finance: ["automation", "files_documents", "data", "human_in_loop"],
   btp: ["automation", "workflow_orchestration", "files_documents", "human_in_loop"],
-  knowledge: ["rag", "knowledge_management", "files_documents", "process_integration"]
+  knowledge: ["rag", "knowledge_management", "files_documents", "process_integration"],
+  marketing: ["automation", "marketing_content", "seo", "process_integration"]
 };
 
 const familyCopy = {
@@ -166,6 +172,71 @@ const familyCopy = {
     control: "réponses limitées aux sources accessibles avec citation et refus explicite lorsqu’aucune preuve suffisante n’est trouvée",
     data: "documents, métadonnées, droits, versions, texte indexé, extraits, labels, dates et propriétaires",
     tooling: "Google Drive, SharePoint, moteur de recherche hybride, base vectorielle, RAG et couche de contrôle des permissions"
+  },
+  marketing: {
+    noun: "contenu",
+    system: "chaîne marketing et éditoriale",
+    verb: "préparer et décliner",
+    control: "validation humaine du positionnement, des faits, du ton de marque et de toute publication externe",
+    data: "sujet, intention de recherche, questions clients, offre, preuves internes, mots-clés, pages existantes et règles de marque",
+    tooling: "CMS, Search Console, outils SEO, CRM, base de contenus, Google Workspace et orchestrateur"
+  }
+};
+
+const specDefaults = {
+  support: {
+    trigger: "la création ou la mise à jour d’un ticket dans le périmètre support retenu",
+    inputs: "texte du ticket, demandeur, canal, historique récent, statut, produit ou service, catégorie existante et base de connaissances autorisée",
+    human: "validation par un agent pour toute réponse sensible, escalade, clôture ou décision qui engage la relation client",
+    exceptions: "ticket vide, conversation très longue, plusieurs problèmes dans le même échange, absence de base de connaissances, compte sensible et demande hors périmètre",
+    advanced: "le scénario peut ensuite relier la base de connaissances, le CRM, les SLA et des outils d’action limités sans supprimer la supervision de l’agent",
+    measure: "temps de première qualification, taux de correction, escalades pertinentes, réponses réutilisées, erreurs factuelles et part des tickets restant entièrement manuels",
+    example: "une équipe support reçoit des demandes hétérogènes et passe beaucoup de temps à relire l’historique avant de décider de la prochaine action"
+  },
+  rh: {
+    trigger: "un événement RH défini : nouvelle candidature, préparation d’entretien, onboarding, question salarié ou revue d’un processus interne",
+    inputs: "documents autorisés, données déclaratives, fiche de poste ou procédure, contexte du processus, modèles internes et informations explicitement fournies",
+    human: "validation humaine systématique avant toute décision concernant une personne, son recrutement, son évaluation, ses droits ou sa rémunération",
+    exceptions: "données incomplètes, informations sensibles non nécessaires, documents contradictoires, homonymes, biais possibles et demande relevant d’une décision humaine",
+    advanced: "l’organisation peut ensuite connecter des sources RH autorisées, renforcer les contrôles d’accès et mesurer les corrections sans automatiser les décisions individuelles",
+    measure: "temps de préparation, erreurs factuelles, taux de correction, informations manquantes détectées, usage réel et nombre de décisions explicitement laissées à l’humain",
+    example: "une équipe RH manipule plusieurs documents et procédures pour produire des synthèses ou préparer des interactions, mais ne souhaite pas déléguer la décision à l’IA"
+  },
+  finance: {
+    trigger: "l’arrivée d’une pièce, la clôture d’une période, l’actualisation d’un export ou le franchissement d’une étape de contrôle financier",
+    inputs: "documents financiers, montants, dates, fournisseurs, comptes, lignes, historique, données budgétaires et règles de contrôle",
+    human: "validation par la fonction finance avant comptabilisation, paiement, clôture ou diffusion d’une analyse financière",
+    exceptions: "pièce illisible, montant contradictoire, devise inattendue, doublon, fournisseur non reconnu, données incomplètes et changement de plan comptable",
+    advanced: "le flux peut ensuite être relié à l’ERP ou au logiciel comptable avec des contrôles d’écriture, des approbations et une piste d’audit",
+    measure: "précision des champs, contrôles déclenchés, corrections, doublons évités, temps de traitement mesuré et taux d’exception",
+    example: "une équipe finance répète des contrôles, saisies et synthèses à partir de factures, exports et tableurs qui contiennent déjà l’essentiel de l’information"
+  },
+  btp: {
+    trigger: "la réception d’un compte rendu, d’une photo, d’un document chantier ou la préparation d’un rituel de suivi",
+    inputs: "comptes rendus, actions, réserves, entreprises, photos, commentaires, dates, lots, plans ou documents de référence selon le cas",
+    human: "validation par le responsable chantier avant diffusion d’un compte rendu, attribution d’une action, relance d’une entreprise ou qualification d’une réserve",
+    exceptions: "information non datée, lot ambigu, photo sans contexte, action sans responsable, documents contradictoires, changement de planning et réserve déjà levée",
+    advanced: "le système peut ensuite croiser comptes rendus, photos, actions, documents et e-mails dans une mémoire chantier sourcée et des workflows de suivi",
+    measure: "actions correctement extraites, réserves suivies, corrections de lot ou responsable, délais de mise à jour et temps de préparation des réunions",
+    example: "le suivi chantier repose sur des comptes rendus, photos et e-mails riches mais dispersés, ce qui oblige les équipes à reconstituer manuellement l’état réel"
+  },
+  knowledge: {
+    trigger: "une question utilisateur, l’ajout d’un document ou une opération planifiée de contrôle de la base documentaire",
+    inputs: "documents autorisés, métadonnées, droits, versions, texte indexé, dates, propriétaires et taxonomie documentaire",
+    human: "validation humaine pour les réponses engageantes et contrôle régulier des sources, versions et droits exposés au système",
+    exceptions: "document obsolète, doublon, source contradictoire, fichier illisible, droit insuffisant, information absente et question hors périmètre",
+    advanced: "la base peut ensuite combiner recherche lexicale et vectorielle, filtres de métadonnées, contrôle des permissions, citations et orchestration agentique lorsque le besoin le justifie",
+    measure: "taux de réponses sourcées, questions sans réponse, clics vers les sources, erreurs de citation, documents obsolètes détectés et temps de recherche",
+    example: "les équipes disposent de milliers de documents internes mais continuent à demander autour d’elles où se trouve la bonne procédure ou la dernière version"
+  },
+  marketing: {
+    trigger: "la création d’un nouveau sujet, la remontée d’une question commerciale ou la préparation d’une landing page",
+    inputs: "intention de recherche, questions clients, offre, preuves disponibles, contenus existants, contraintes de marque et données SEO autorisées",
+    human: "validation éditoriale avant publication, avec contrôle des faits, du positionnement, du ton et de la promesse commerciale",
+    exceptions: "sujet sans preuve, intention ambiguë, contenu déjà couvert, mot-clé trompeur, affirmation non vérifiée et page trop proche d’un contenu existant",
+    advanced: "la chaîne peut ensuite alimenter le CMS, le maillage interne, les variantes de landing pages et le suivi Search Console tout en conservant une validation éditoriale",
+    measure: "temps de brief, taux de réécriture, cannibalisation évitée, pages publiées, requêtes réellement obtenues et conversions associées",
+    example: "les équipes marketing possèdent de nombreuses questions clients et idées de contenus mais perdent du temps à transformer chacune en brief et en page cohérente"
   }
 };
 
@@ -174,6 +245,7 @@ function paragraph(text) {
 }
 
 export function buildExecutionArticle(spec) {
+  spec = { ...(specDefaults[spec.family] || {}), ...spec };
   const family = familyCopy[spec.family];
   const title = spec.title;
   const slug = slugify(title);
