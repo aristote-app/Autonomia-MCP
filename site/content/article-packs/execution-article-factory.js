@@ -36,6 +36,31 @@ export const executionSourceSets = {
     { label: "Google for Developers — Read and write Google Sheets values", url: "https://developers.google.com/workspace/sheets/api/guides/values" },
     { label: "Google Sheets API — Batch update values", url: "https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/batchUpdate?hl=fr" },
     { label: "Microsoft Learn — Power BI dataset refresh API", url: "https://learn.microsoft.com/en-us/rest/api/power-bi/datasets/refresh-dataset" }
+  ],
+  support: [
+    { label: "Zendesk Developer — Tickets API", url: "https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/" },
+    { label: "Google for Developers — Manage Gmail threads", url: "https://developers.google.com/workspace/gmail/api/guides/threads" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" }
+  ],
+  rh: [
+    { label: "Microsoft Graph — Permissions reference", url: "https://learn.microsoft.com/en-us/graph/permissions-reference" },
+    { label: "Microsoft Graph — Manage groups", url: "https://learn.microsoft.com/en-us/graph/api/resources/groups-overview" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" }
+  ],
+  finance: [
+    { label: "Microsoft Learn — Document Intelligence invoice model", url: "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/invoice?view=doc-intel-4.0.0" },
+    { label: "Google for Developers — Read and write Google Sheets values", url: "https://developers.google.com/workspace/sheets/api/guides/values" },
+    { label: "Microsoft Learn — Power Automate approvals", url: "https://learn.microsoft.com/en-us/power-automate/get-started-approvals" }
+  ],
+  btp: [
+    { label: "Microsoft Graph — Create Planner tasks", url: "https://learn.microsoft.com/en-us/graph/api/planner-post-tasks" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" },
+    { label: "Google for Developers — Manage Gmail threads", url: "https://developers.google.com/workspace/gmail/api/guides/threads" }
+  ],
+  knowledge: [
+    { label: "Microsoft Learn — RAG and Generative AI in Azure AI Search", url: "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview?tabs=docs" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" },
+    { label: "Google Drive API — Search query terms and operators", url: "https://developers.google.com/workspace/drive/api/guides/ref-search-terms" }
   ]
 };
 
@@ -45,7 +70,12 @@ const defaultTags = {
   crm: ["automation", "sales_automation", "workflow_orchestration", "process_integration"],
   meetings: ["automation", "messaging_collaboration", "workflow_orchestration", "human_in_loop"],
   admin: ["automation", "files_documents", "workflow_orchestration", "human_in_loop"],
-  reporting: ["automation", "data", "analytics", "process_integration"]
+  reporting: ["automation", "data", "analytics", "process_integration"],
+  support: ["automation", "customer_support", "knowledge_management", "human_in_loop"],
+  rh: ["automation", "change_adoption", "files_documents", "human_in_loop"],
+  finance: ["automation", "files_documents", "data", "human_in_loop"],
+  btp: ["automation", "workflow_orchestration", "files_documents", "human_in_loop"],
+  knowledge: ["rag", "knowledge_management", "files_documents", "process_integration"]
 };
 
 const familyCopy = {
@@ -96,6 +126,46 @@ const familyCopy = {
     control: "séparation stricte entre faits calculés et hypothèses interprétatives",
     data: "valeurs, périodes, dimensions, sources, formules, seuils, historique et commentaires métiers",
     tooling: "Google Sheets, Excel, Power BI, Looker Studio, API de données et orchestrateur"
+  },
+  support: {
+    noun: "ticket",
+    system: "outil de support client",
+    verb: "qualifier et assister",
+    control: "validation humaine avant réponse sensible, clôture ou escalade engageante",
+    data: "ticket, demandeur, canal, historique, statut, priorité, produit, pièces jointes, commentaires et base de connaissances",
+    tooling: "Zendesk, HubSpot Service Hub, Freshdesk, Gmail, base de connaissances et orchestrateur"
+  },
+  rh: {
+    noun: "dossier RH",
+    system: "processus RH",
+    verb: "préparer et assister",
+    control: "validation humaine systématique pour les décisions concernant recrutement, évaluation, rémunération ou droits des personnes",
+    data: "fiche de poste, CV, compétences déclarées, procédures, documents d’onboarding, réponses salariés et historique autorisé",
+    tooling: "Microsoft 365, Google Workspace, ATS, SIRH, Drive, SharePoint et orchestrateur"
+  },
+  finance: {
+    noun: "pièce financière",
+    system: "processus finance et comptabilité",
+    verb: "extraire, contrôler et synthétiser",
+    control: "validation humaine avant comptabilisation, paiement, clôture ou diffusion d’un commentaire financier",
+    data: "factures, montants, fournisseurs, dates, comptes, lignes, pièces justificatives, exports, budgets et données de trésorerie",
+    tooling: "Document Intelligence, Google Sheets, Excel, ERP, logiciel comptable, Power Automate, n8n ou Make"
+  },
+  btp: {
+    noun: "élément chantier",
+    system: "suivi de chantier",
+    verb: "structurer et suivre",
+    control: "validation par le conducteur de travaux, la maîtrise d’œuvre ou le responsable désigné avant toute action engageante",
+    data: "comptes rendus, réserves, photos, plans, entreprises, échéances, actions, documents et e-mails chantier",
+    tooling: "Microsoft Planner, Teams, Google Drive, Gmail, outils chantier, n8n, Make ou Power Automate"
+  },
+  knowledge: {
+    noun: "connaissance",
+    system: "base documentaire d’entreprise",
+    verb: "retrouver et sourcer",
+    control: "réponses limitées aux sources accessibles avec citation et refus explicite lorsqu’aucune preuve suffisante n’est trouvée",
+    data: "documents, métadonnées, droits, versions, texte indexé, extraits, labels, dates et propriétaires",
+    tooling: "Google Drive, SharePoint, moteur de recherche hybride, base vectorielle, RAG et couche de contrôle des permissions"
   }
 };
 
