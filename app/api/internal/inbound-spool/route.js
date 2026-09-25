@@ -1,8 +1,8 @@
-import { verifyGitHubDeploymentToken } from "../../../../../lib/deploy/githubOidc.js";
+import { verifyGitHubDeploymentToken } from "../../../../lib/deploy/githubOidc.js";
 import {
   drainInboundSpool,
   listQueuedInboundLeads
-} from "../../../../../lib/inbound/spool.js";
+} from "../../../../lib/inbound/spool.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
