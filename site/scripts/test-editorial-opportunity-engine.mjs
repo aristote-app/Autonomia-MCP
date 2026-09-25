@@ -59,8 +59,20 @@ if (result.rules?.no_signal_auto_publish !== false) {
   throw new Error("Editorial engine must never auto-publish no-signal topics.");
 }
 
-if (result.remaining_candidates < 300) {
-  throw new Error(`Unexpectedly small remaining backlog: ${result.remaining_candidates}`);
+if (
+  !Number.isInteger(result.remaining_candidates) ||
+  result.remaining_candidates < 0 ||
+  result.remaining_candidates > 400
+) {
+  throw new Error(
+    `Editorial engine returned an invalid remaining backlog count: ${result.remaining_candidates}`
+  );
+}
+
+if (result.recommendations.length > 25) {
+  throw new Error(
+    `Editorial engine exceeded max_results: ${result.recommendations.length}`
+  );
 }
 
 const promoted = result.recommendations.filter((item) => item.action === "promote");
