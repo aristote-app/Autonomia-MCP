@@ -39,7 +39,8 @@
     "smoke:runtime-settings": "node scripts/smoke-runtime-settings.mjs",
     "smoke:talent-hunter": "node scripts/smoke-talent-hunter.mjs",
     "smoke:talent-intelligence": "node scripts/smoke-talent-intelligence.mjs",
-    "smoke:no-admin-gates": "node scripts/smoke-no-admin-gates.mjs"
+    "smoke:no-admin-gates": "node scripts/smoke-no-admin-gates.mjs",
+    "smoke:territory-programs": "node scripts/smoke-territory-program-signals.mjs"
   },
   "engines": {
     "node": ">=22"

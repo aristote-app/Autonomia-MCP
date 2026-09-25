@@ -72,6 +72,8 @@ jobs:
         run: npm run smoke:job-discovery
       - name: Smoke test territory signal classifier
         run: npm run smoke:territory-signals
+      - name: Smoke test territory program signals
+        run: npm run smoke:territory-programs
       - name: Smoke test account intelligence
         run: npm run smoke:accounts
       - name: Smoke test account watch state
