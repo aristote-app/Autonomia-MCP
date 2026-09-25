@@ -208,6 +208,50 @@ jobs:
           exit 0
 
 
+      - name: Refresh GitHub OIDC identity for inbound drain
+        if: always() && steps.probe.outputs.ready == 'true'
+        id: inbound_oidc
+        env:
+          AUDIENCE: autonomia-o2switch
+        run: |
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GitHub OIDC token is empty."
+            exit 1
+          fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Drain inbound spool and verify
+        if: always() && steps.probe.outputs.ready == 'true'
+        env:
+          INBOUND_SPOOL_URL: https://cockpit.build-autonomia.com/api/internal/inbound-spool
+          OIDC_TOKEN: ${{ steps.inbound_oidc.outputs.token }}
+        run: |
+          HTTP_CODE="$(curl -sS \
+            --max-time 60 \
+            -o /tmp/autonomia-inbound-spool.json \
+            -w "%{http_code}" \
+            -G "$INBOUND_SPOOL_URL" \
+            --data-urlencode "action=drain" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+
+          cat /tmp/autonomia-inbound-spool.json
+          echo
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Inbound spool drain returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
+          OK="$(cat /tmp/autonomia-inbound-spool.json | python -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("ok"))).lower())')"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Inbound spool drain did not confirm ok=true."
+            exit 1
+          fi
+
       - name: Refresh GitHub OIDC identity for SEO GEO diagnostic
         if: always() && steps.probe.outputs.ready == 'true'
         id: seo_geo_oidc
