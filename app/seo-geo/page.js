@@ -277,6 +277,10 @@ export default async function SeoGeoPage() {
             <span>{number(data.signalSummary.territory)}</span>
           </div>
           <div className={styles.statusItem}>
+            <strong>Programmes / appels à projets territoriaux</strong>
+            <span>{number(data.signalSummary.territoryPrograms)}</span>
+          </div>
+          <div className={styles.statusItem}>
             <strong>Leads entrants / besoins exprimés</strong>
             <span>{number(data.signalSummary.inbound)}</span>
           </div>
@@ -322,7 +326,8 @@ export default async function SeoGeoPage() {
                     {number(item.evidence?.matched_signals)} signaux ·
                     {" "}{number(item.evidence?.search_impressions)} impr. search ·
                     {" "}{number(item.evidence?.job_mentions)} emploi ·
-                    {" "}{number(item.evidence?.public_procurement_mentions)} marchés
+                    {" "}{number(item.evidence?.public_procurement_mentions)} marchés ·
+                    {" "}{number(item.evidence?.territory_program_mentions)} programmes/AAP
                   </td>
                 </tr>
               ))}
@@ -406,6 +411,7 @@ export default async function SeoGeoPage() {
                     {number(item.evidence?.matched_signals)} signaux ·
                     {" "}{number(item.evidence?.territory_mentions)} territoire ·
                     {" "}{number(item.evidence?.public_procurement_mentions)} marchés ·
+                    {" "}{number(item.evidence?.territory_program_mentions)} programmes/AAP ·
                     {" "}{number(item.evidence?.job_mentions)} emploi
                   </td>
                   <td>{item.brief ? "Prêt pour rédaction" : `Erreur : ${item.brief_error || "inconnue"}`}</td>
@@ -419,6 +425,7 @@ export default async function SeoGeoPage() {
                     {number(item.evidence?.matched_signals)} signaux ·
                     {" "}{number(item.evidence?.territory_mentions)} territoire ·
                     {" "}{number(item.evidence?.public_procurement_mentions)} marchés ·
+                    {" "}{number(item.evidence?.territory_program_mentions)} programmes/AAP ·
                     {" "}{number(item.evidence?.job_mentions)} emploi
                   </td>
                   <td>À préparer à la prochaine veille</td>

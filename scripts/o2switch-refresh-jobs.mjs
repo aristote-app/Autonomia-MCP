@@ -100,7 +100,7 @@ async function main() {
         triggerMode: "scheduled",
         includeWeb: true,
         includeFranceTravail: false,
-        webKinds: ["freelance", "training", "adoption", "territory"]
+        webKinds: ["freelance", "training", "adoption", "territory", "territory_program"]
       });
       state.extendedWeb = new Date().toISOString();
     } catch (error) {
