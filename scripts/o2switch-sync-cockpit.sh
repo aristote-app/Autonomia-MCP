@@ -162,9 +162,10 @@ JOBS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/aut
 if command -v crontab >/dev/null 2>&1; then
   TMP_CRON="$(mktemp)"
   {
-    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' || true
+    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' | grep -v 'o2switch-drain-inbound.mjs' || true
     echo "17 4 * * * $TALENT_CMD"
     echo "23 */6 * * * $SEO_GEO_CMD"
+    echo "*/5 * * * * $INBOUND_DRAIN_CMD"
     echo "*/15 * * * * $JOBS_CMD"
   } > "$TMP_CRON"
   crontab "$TMP_CRON"
