@@ -109,6 +109,17 @@ export default async function TrainingArticlePage({ params }) {
             { "@type": "ListItem", position: 3, name: article.cluster, item: pillarUrl },
             { "@type": "ListItem", position: 4, name: article.title, item: pageUrl }
           ]
+        },
+        {
+          "@type": "FAQPage",
+          mainEntity: (article.faq || []).map(([question, answer]) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: answer
+            }
+          }))
         }
       ]
     };
