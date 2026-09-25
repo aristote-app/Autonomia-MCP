@@ -392,6 +392,44 @@ for (const requiredPattern of ["captureLead", "requestedService={page.slug}", "s
   }
 }
 
+function articleFingerprintTokens(article) {
+  const text = [
+    article.title,
+    article.dek,
+    article.summary,
+    ...(article.sections || []).flatMap((section) => [
+      section.heading,
+      ...(section.paragraphs || [])
+    ])
+  ]
+    .join(" ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]+/g, " ");
+
+  const words = text
+    .split(/\s+/)
+    .filter((word) => word.length >= 5);
+
+  const shingles = new Set();
+  for (let i = 0; i < words.length - 4; i += 1) {
+    shingles.add(words.slice(i, i + 5).join(" "));
+  }
+  return shingles;
+}
+
+function jaccardSimilarity(a, b) {
+  if (!a.size || !b.size) return 0;
+  let intersection = 0;
+  const smaller = a.size <= b.size ? a : b;
+  const larger = a.size <= b.size ? b : a;
+  for (const value of smaller) {
+    if (larger.has(value)) intersection += 1;
+  }
+  return intersection / (a.size + b.size - intersection);
+}
+
 function wordCount(article) {
   const text = [
     article.title,
@@ -496,6 +534,27 @@ for (const article of articles) {
 
   if (!article.faq || article.faq.length < 3) {
     errors.push(`${article.slug}: at least three useful FAQ answers are required.`);
+  }
+}
+
+const fingerprintedArticles = articles.map((article) => ({
+  slug: article.slug,
+  type: article.type,
+  tokens: articleFingerprintTokens(article)
+}));
+
+for (let i = 0; i < fingerprintedArticles.length; i += 1) {
+  for (let j = i + 1; j < fingerprintedArticles.length; j += 1) {
+    const a = fingerprintedArticles[i];
+    const b = fingerprintedArticles[j];
+    if (a.type !== b.type) continue;
+
+    const similarity = jaccardSimilarity(a.tokens, b.tokens);
+    if (similarity >= 0.78) {
+      errors.push(
+        `Editorial duplication risk: ${a.slug} and ${b.slug} share ${Math.round(similarity * 100)}% five-word shingle similarity.`
+      );
+    }
   }
 }
 
