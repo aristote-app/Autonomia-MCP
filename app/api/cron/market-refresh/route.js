@@ -1,7 +1,8 @@
 import {
   runAutomatedMarketRefresh,
   runAutomatedFreelanceRefresh,
-  runAutomatedJobSignalRefresh
+  runAutomatedJobSignalRefresh,
+  runAutomatedExtendedDemandRefresh
 } from "../../../../lib/market/automatedRefresh.js";
 import { isAuthorizedMarketRefreshRequest } from "../../../../lib/security/marketRefreshAuth.js";
 import { runAutomatedTerritorySignalRefresh } from "../../../../lib/market/territorySignals.js";
@@ -18,6 +19,43 @@ export async function GET(request) {
   const mode = new URL(request.url).searchParams.get("mode") || "full";
   const publicOnly = mode === "public";
   const territoryOnly = mode === "territories";
+  const territoryProgramsOnly = mode === "territory-programs";
+
+  if (territoryProgramsOnly) {
+    try {
+      const extended = await runAutomatedExtendedDemandRefresh({
+        triggerMode: "scheduled",
+        includeWeb: true,
+        includeFranceTravail: false,
+        webKinds: ["territory_program"]
+      });
+
+      return Response.json({
+        ok: Boolean(extended.available),
+        mode,
+        completedAt: new Date().toISOString(),
+        territoryPrograms: extended.territoryPrograms || {
+          discoveredRows: 0,
+          persistedRows: 0,
+          error: null
+        },
+        web: extended.web || null
+      }, {
+        status: extended.available ? 200 : 502
+      });
+    } catch (error) {
+      return Response.json({
+        ok: false,
+        mode,
+        completedAt: new Date().toISOString(),
+        territoryPrograms: {
+          discoveredRows: 0,
+          persistedRows: 0,
+          error: error instanceof Error ? error.message : String(error)
+        }
+      }, { status: 502 });
+    }
+  }
 
   if (territoryOnly) {
     try {

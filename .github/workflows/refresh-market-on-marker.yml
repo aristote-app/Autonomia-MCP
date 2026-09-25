@@ -161,6 +161,57 @@ jobs:
           }, null, 2));
           NODE
 
+      - name: Refresh territory support programs
+        id: territory_programs
+        run: |
+          rm -f /tmp/autonomia-territory-programs.json
+
+          status="$(curl -sS \
+            --max-time 75 \
+            -o /tmp/autonomia-territory-programs.json \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer $MARKET_REFRESH_TOKEN" \
+            "https://cockpit.build-autonomia.com/api/cron/market-refresh?mode=territory-programs" || true)"
+
+          echo "Territory program refresh: HTTP $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+          if [ "$status" != "200" ]; then
+            cat /tmp/autonomia-territory-programs.json || true
+            echo "::error::Territory program refresh did not complete successfully."
+            exit 1
+          fi
+
+      - name: Report territory support programs
+        if: always() && steps.territory_programs.outputs.status != ''
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+
+          if (!fs.existsSync("/tmp/autonomia-territory-programs.json")) process.exit(0);
+          const payload = JSON.parse(
+            fs.readFileSync("/tmp/autonomia-territory-programs.json", "utf8")
+          );
+
+          console.log(JSON.stringify({
+            ok: Boolean(payload.ok),
+            mode: payload.mode ?? null,
+            territoryPrograms: {
+              discoveredRows: payload.territoryPrograms?.discoveredRows ?? 0,
+              persistedRows: payload.territoryPrograms?.persistedRows ?? 0,
+              error: payload.territoryPrograms?.error ?? null
+            },
+            webSearches: Array.isArray(payload.web?.searches)
+              ? payload.web.searches.map((row) => ({
+                  sourceId: row.sourceId,
+                  ok: row.ok,
+                  rawResults: row.rawResults ?? 0,
+                  results: row.results ?? 0
+                }))
+              : []
+          }, null, 2));
+          NODE
+
       - name: Refresh public and training market
         id: public_market
         run: |

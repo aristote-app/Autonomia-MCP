@@ -99,7 +99,8 @@ async function main() {
       result.extendedWeb = await runAutomatedExtendedDemandRefresh({
         triggerMode: "scheduled",
         includeWeb: true,
-        includeFranceTravail: false
+        includeFranceTravail: false,
+        webKinds: ["freelance", "training", "adoption", "territory"]
       });
       state.extendedWeb = new Date().toISOString();
     } catch (error) {
