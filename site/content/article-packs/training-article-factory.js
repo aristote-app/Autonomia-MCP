@@ -50,6 +50,20 @@ const trainingSourceSets = {
       url: "https://www.nist.gov/itl/ai-risk-management-framework"
     }
   ],
+  finance: [
+    {
+      label: "CNIL — Intelligence artificielle et protection des données",
+      url: "https://www.cnil.fr/fr/technologies/intelligence-artificielle-ia"
+    },
+    {
+      label: "Microsoft Learn — Vue d’ensemble du traitement de documents avec AI Builder",
+      url: "https://learn.microsoft.com/fr-fr/ai-builder/form-processing-model-overview"
+    },
+    {
+      label: "Microsoft Learn — Automatisation des documents avec AI Builder et Power Automate",
+      url: "https://learn.microsoft.com/fr-fr/ai-builder/doc-automation"
+    }
+  ],
   rh: [
     {
       label: "Commission européenne — cadre réglementaire européen sur l’intelligence artificielle",
@@ -87,6 +101,13 @@ const defaultTags = {
     "genai",
     "human_in_loop",
     "change_adoption"
+  ],
+  finance: [
+    "finance_ops",
+    "automation",
+    "files_documents",
+    "human_in_loop",
+    "process_integration"
   ],
   rh: [
     "change_adoption",
@@ -129,6 +150,14 @@ const trainingFamilyContext = {
     futureReviews: "prochains rendez-vous, opportunités et revues commerciales",
     evidenceDocument: "fiche compte, opportunité ou proposition",
     learningFrame: "préparer, personnaliser et vérifier"
+  },
+  finance: {
+    subject: "usage IA dans une fonction finance ou administrative",
+    participantRole: "professionnel des fonctions support",
+    reviewPlace: "revue de gestion, contrôle de processus ou atelier administratif",
+    futureReviews: "prochains reportings, contrôles et processus administratifs",
+    evidenceDocument: "tableau, pièce comptable ou dossier de gestion",
+    learningFrame: "extraire, contrôler et automatiser"
   },
   rh: {
     subject: "usage IA dans un processus RH",
