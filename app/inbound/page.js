@@ -110,13 +110,32 @@ export default async function InboundPage({ searchParams }) {
       ? context.membership.role !== "viewer"
       : Boolean(temporaryAccess && fallbackWorkspace?.id);
 
+  // Synchronize captured public leads before the access gate so a visitor
+  // opening /inbound never sees a false zero while leads are queued locally.
+  if (!hasSession && fallbackWorkspace?.id) {
+    await claimUnassignedPublicInboundLeads({
+      workspaceId: fallbackWorkspace.id
+    }).catch(() => 0);
+
+    await drainInboundSpool({
+      limit: 25,
+      timeoutMs: 5000
+    }).catch(() => ({ processed: 0, failed: 0 }));
+  }
+
   if (!hasSession && !temporaryAccess) {
-    const securedLeadCount = fallbackWorkspace?.id
-      ? await listInboundLeads({
-          workspaceId: fallbackWorkspace.id,
-          limit: 500
-        }).then((items) => items.length).catch(() => 0)
-      : 0;
+    const [persistedCount, queuedCount] = fallbackWorkspace?.id
+      ? await Promise.all([
+          listInboundLeads({
+            workspaceId: fallbackWorkspace.id,
+            limit: 500
+          }).then((items) => items.length).catch(() => 0),
+          listQueuedInboundLeads({ limit: 500 })
+            .then((items) => items.length)
+            .catch(() => 0)
+        ])
+      : [0, 0];
+    const securedLeadCount = persistedCount + queuedCount;
 
     return (
       <main>
