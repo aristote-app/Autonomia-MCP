@@ -55,9 +55,19 @@ assert.equal(
   "Health must report the SHA embedded in the running build"
 );
 assert.equal(
-  deployScript.includes('export const BUILD_SHA = "$REMOTE_SHA";'),
+  deployScript.includes('AUTONOMIA_DEPLOY_SHA="$REMOTE_SHA" npm run build'),
   true,
-  "o2switch deployment must embed the target SHA before build"
+  "o2switch deployment must inject the validated target SHA into the isolated candidate build"
+);
+assert.equal(
+  deployScript.includes('cp "$STAGE_ROOT/lib/runtime/buildStamp.generated.js" "$APP_ROOT/lib/runtime/buildStamp.generated.js"'),
+  true,
+  "o2switch deployment must publish the candidate build stamp only after a successful build"
+);
+assert.equal(
+  deployScript.includes('git archive "$REMOTE_SHA" | tar -x -C "$STAGE_ROOT"'),
+  true,
+  "o2switch deployment must build the target commit outside the live Passenger tree"
 );
 assert.equal(
   deployScript.includes('> .runtime/deployed-sha'),
