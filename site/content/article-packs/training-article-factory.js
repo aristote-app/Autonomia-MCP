@@ -22,6 +22,20 @@ const trainingSourceSets = {
       url: "https://oecd.ai/en/ai-principles"
     }
   ],
+  manager: [
+    {
+      label: "NIST — AI Risk Management Framework",
+      url: "https://www.nist.gov/itl/ai-risk-management-framework"
+    },
+    {
+      label: "OECD.AI — principes de l’OCDE sur l’intelligence artificielle",
+      url: "https://oecd.ai/en/ai-principles"
+    },
+    {
+      label: "Microsoft Learn — adoption et scénarios Copilot",
+      url: "https://learn.microsoft.com/en-us/copilot/"
+    }
+  ],
   commercial: [
     {
       label: "Microsoft Learn — Sales insights dans le récapitulatif de réunion",
@@ -60,6 +74,13 @@ const defaultTags = {
     "process_integration",
     "strategy"
   ],
+  manager: [
+    "change_adoption",
+    "human_in_loop",
+    "workflow_orchestration",
+    "process_integration",
+    "genai"
+  ],
   commercial: [
     "sales_automation",
     "crm",
@@ -84,9 +105,45 @@ function paragraph(value) {
   return clean(value);
 }
 
+const trainingFamilyContext = {
+  direction: {
+    subject: "projet IA",
+    participantRole: "dirigeant",
+    reviewPlace: "comité, revue d’investissement ou atelier métier",
+    futureReviews: "prochains dossiers, comités et échanges fournisseurs",
+    evidenceDocument: "business case",
+    learningFrame: "cadrer, challenger et décider"
+  },
+  manager: {
+    subject: "usage IA dans une équipe",
+    participantRole: "manager",
+    reviewPlace: "réunion d’équipe, revue de processus ou atelier métier",
+    futureReviews: "prochains briefs, rituels d’équipe et revues de processus",
+    evidenceDocument: "fiche de cadrage ou procédure d’équipe",
+    learningFrame: "organiser, superviser et transférer"
+  },
+  commercial: {
+    subject: "usage IA dans le cycle commercial",
+    participantRole: "commercial",
+    reviewPlace: "revue commerciale, préparation de rendez-vous ou atelier CRM",
+    futureReviews: "prochains rendez-vous, opportunités et revues commerciales",
+    evidenceDocument: "fiche compte, opportunité ou proposition",
+    learningFrame: "préparer, personnaliser et vérifier"
+  },
+  rh: {
+    subject: "usage IA dans un processus RH",
+    participantRole: "professionnel RH",
+    reviewPlace: "revue RH, atelier métier ou comité de gouvernance",
+    futureReviews: "prochains processus RH, ateliers et revues de pratiques",
+    evidenceDocument: "procédure, grille ou dossier RH",
+    learningFrame: "assister, documenter et encadrer"
+  }
+};
+
 export function buildTrainingArticle(spec) {
   const title = spec.title;
   const slug = slugify(title);
+  const context = trainingFamilyContext[spec.family] || trainingFamilyContext.direction;
   const keyword = spec.primaryKeyword || title.toLowerCase();
   const sources = spec.sources || trainingSourceSets[spec.family] || trainingSourceSets.direction;
   const audience = spec.audience || "dirigeants, managers et responsables de transformation";
@@ -107,8 +164,8 @@ export function buildTrainingArticle(spec) {
       heading: spec.problemHeading || "Former à décider avec l’IA, pas à admirer l’IA.",
       paragraphs: [
         paragraph(`Le point de départ de cette formation est une situation concrète : ${example}. Pour ${audience}, le risque n’est pas seulement de « ne pas connaître les outils ». Le risque est de prendre des décisions sur l’IA avec un vocabulaire trop flou : confondre automatisation et agent, traiter une démonstration comme une preuve de valeur, croire qu’un modèle génératif peut remplacer une règle métier ou encore considérer un chiffre de ROI comme certain alors qu’il repose sur des hypothèses. La compétence visée doit donc porter sur la décision et le cadrage.`),
-        paragraph(`L’objectif pédagogique est ${objective}. La formation n’essaie pas de transformer un dirigeant en ingénieur machine learning. Elle lui donne assez de structure pour poser les bonnes questions, reconnaître ce qui manque dans un projet et demander des preuves adaptées au niveau d’engagement. Le participant apprend à distinguer une possibilité technique, un prototype qui fonctionne sur quelques cas et un système réellement exploitable dans l’organisation.`),
-        paragraph(`Le fil conducteur est simple : tout projet IA doit pouvoir être ramené à ${decisionFrame}. Cette grille évite de commencer par la marque d’un outil ou par une promesse générale. Elle replace l’IA dans le système de travail : quel problème cherche-t-on à résoudre, quelles informations circulent, quelle décision reste humaine, qui porte la responsabilité, comment le système sera testé et que fera-t-on lorsque le cas sort du périmètre prévu ?`),
+        paragraph(`L’objectif pédagogique est ${objective}. La formation n’essaie pas de transformer un ${context.participantRole} en ingénieur machine learning. Elle lui donne assez de structure pour appliquer l’IA à son propre travail, reconnaître ce qui manque dans ${context.subject} et demander les preuves adaptées au niveau de responsabilité. Le participant apprend à distinguer une possibilité technique, un prototype qui fonctionne sur quelques cas et un système réellement exploitable dans l’organisation.`),
+        paragraph(`Le fil conducteur est simple : tout ${context.subject} doit pouvoir être ramené à ${decisionFrame}. Cette grille évite de commencer par la marque d’un outil ou par une promesse générale. Elle replace l’IA dans le système de travail : quel problème cherche-t-on à résoudre, quelles informations circulent, quelle décision reste humaine, qui porte la responsabilité, comment le système sera testé et que fera-t-on lorsque le cas sort du périmètre prévu ?`),
         paragraph(`La formation doit aussi créer un langage commun entre direction, métiers, DSI, data, juridique, achats et équipes de transformation. Lorsque chacun utilise les mêmes mots pour parler de données, de validation, d’autonomie, de mesure et de risque, la discussion devient plus rapide. Les arbitrages ne reposent plus uniquement sur le niveau d’enthousiasme ou de scepticisme d’un interlocuteur : ils peuvent être documentés.`)
       ]
     },
@@ -141,8 +198,8 @@ export function buildTrainingArticle(spec) {
       paragraphs: [
         paragraph(`Une décision IA peut être structurée en plusieurs portes successives. Porte 1 : le problème est-il suffisamment fréquent, coûteux ou stratégique pour justifier du travail ? Porte 2 : les données nécessaires existent-elles réellement et sont-elles accessibles ? Porte 3 : le résultat peut-il être défini assez précisément pour être testé ? Porte 4 : l’action proposée est-elle suffisamment réversible ou contrôlée ? Porte 5 : peut-on mesurer ce qui change sans fabriquer un ROI théorique ?`),
         paragraph(`Cette séquence permet de faire tomber beaucoup de faux débats. Un projet peut être techniquement possible mais inutile. Il peut être utile mais bloqué par l’accès aux données. Il peut disposer de données mais demander une autonomie excessive. Il peut encore être intéressant tout en nécessitant un pilote beaucoup plus étroit que ce qui était imaginé au départ. La méthode n’a donc pas pour fonction de dire oui ou non plus vite ; elle permet de décider avec de meilleures raisons.`),
-        paragraph(`Le participant apprend aussi à distinguer coût de construction, coût d’exploitation et coût d’organisation. Une intégration peut nécessiter peu de développement mais beaucoup de nettoyage documentaire. Une licence peut sembler faible tandis que la supervision, les validations ou les changements de processus représentent l’essentiel de l’effort. Le dossier doit rendre ces composantes visibles séparément.`),
-        paragraph(`Pour ${title.toLowerCase()}, la grille utilisée en formation garde une colonne « preuve disponible » et une colonne « prochaine preuve à obtenir ». Cela évite de transformer une hypothèse en fait simplement parce qu’elle a été répétée plusieurs fois. Le rôle du décideur est alors plus clair : décider du prochain niveau d’engagement en fonction du niveau de preuve déjà atteint.`)
+        paragraph(`Le participant apprend aussi à distinguer effort de préparation, coût d’outillage, coût d’intégration et charge de contrôle humain. Une intégration peut nécessiter peu de développement mais beaucoup de nettoyage documentaire. Une licence peut sembler faible tandis que la supervision, les validations ou les changements de processus représentent l’essentiel de l’effort. Le dossier doit rendre ces composantes visibles séparément.`),
+        paragraph(`Pour ${title.toLowerCase()}, la grille utilisée en formation garde une colonne « preuve disponible » et une colonne « prochaine preuve à obtenir ». Cela évite de transformer une hypothèse en fait simplement parce qu’elle a été répétée plusieurs fois. Le rôle du participant est alors plus clair : choisir la prochaine action ou le prochain niveau d’autonomie en fonction du niveau de preuve déjà atteint et de sa responsabilité.`)
       ]
     },
     {
@@ -153,7 +210,7 @@ export function buildTrainingArticle(spec) {
         paragraph(`Le garde-fou principal du parcours est le suivant : ${guardrail}. Cette règle est traduite en questions opérationnelles. Quelles données le système lit-il ? Qui peut voir la sortie ? L’outil peut-il écrire dans un CRM, envoyer un message ou modifier un document ? Quel événement nécessite une validation ? Qui peut désactiver le système ? Où retrouve-t-on l’historique d’une action ?`),
         paragraph(`Les sources de référence proposées avec ce guide — cadre européen sur l’IA, AI Risk Management Framework du NIST et principes de l’OCDE — ne remplacent pas l’analyse juridique ou réglementaire propre à l’organisation. Elles fournissent en revanche un vocabulaire utile pour parler de supervision humaine, gouvernance, responsabilité, robustesse et gestion des risques. La formation s’en sert comme points de repère plutôt que comme cours juridique exhaustif.`),
         paragraph(`Une erreur fréquente consiste à traiter la gouvernance comme un document rédigé après le prototype. Le parcours fait l’inverse : les règles apparaissent au moment où l’on dessine le système. Si une donnée ne doit pas être envoyée, on le décide avant de choisir le flux. Si une décision doit rester humaine, on place le contrôle dans l’architecture. Si une action doit être traçable, on prévoit la journalisation dès le pilote.`),
-        paragraph(`Cette approche aide aussi les dirigeants à poser des exigences réalistes. « Garantir zéro erreur » n’est pas un critère opérationnel. « Aucun envoi externe sans validation », « toute réponse documentaire doit citer sa source », « une donnée absente reste absente » ou « chaque action sensible doit être journalisée » sont des règles testables. La gouvernance devient alors observable.`)
+        paragraph(`Cette approche aide aussi les ${context.participantRole}s à poser des exigences réalistes dans leur périmètre. « Garantir zéro erreur » n’est pas un critère opérationnel. « Aucun envoi externe sans validation », « toute réponse documentaire doit citer sa source », « une donnée absente reste absente » ou « chaque action sensible doit être journalisée » sont des règles testables. La gouvernance devient alors observable.`)
       ]
     },
     {
@@ -164,7 +221,7 @@ export function buildTrainingArticle(spec) {
         paragraph(`L’évaluation finale consiste à ${assessment}. On donne au participant un cas différent de celui travaillé pendant l’atelier. Il doit reformuler le problème, identifier les informations manquantes, proposer un niveau d’expérimentation et écrire les critères qui lui permettraient d’accepter ou refuser l’étape suivante. Le formateur évalue la démarche et la qualité des questions plutôt qu’une réponse unique.`),
         paragraph(`Une grille d’évaluation peut porter sur quelques dimensions : distinction entre problème et solution, identification des données, niveau d’autonomie, contrôle humain, cas d’exception, méthode de mesure et capacité à documenter une hypothèse. Chaque dimension peut être observée dans le livrable. Le participant voit précisément ce qu’il maîtrise et ce qu’il doit encore renforcer.`),
         paragraph(`La formation peut également intégrer un exercice de détection des signaux faibles d’un mauvais dossier : promesse sans métrique, ROI présenté sans méthode, absence de propriétaire, dépendance à un accès non confirmé, modèle présenté comme solution complète, données supposées disponibles ou responsabilité humaine non définie. L’objectif n’est pas de rendre les participants méfiants envers tout projet, mais plus exigeants sur la qualité du cadrage.`),
-        paragraph(`L’évaluation à froid peut ensuite regarder l’usage réel de la grille : combien de projets ont été reformulés, combien ont demandé un pilote plus étroit, quelles informations sont désormais exigées dans un business case et quelles décisions ont été documentées différemment. Ces observations sont plus intéressantes qu’un simple score de satisfaction à chaud.`)
+        paragraph(`L’évaluation à froid peut ensuite regarder l’usage réel de la grille : combien de projets ont été reformulés, combien ont demandé un pilote plus étroit, quelles informations sont désormais exigées dans un ${context.evidenceDocument} et quelles décisions ou validations ont été documentées différemment. Ces observations sont plus intéressantes qu’un simple score de satisfaction à chaud.`)
       ]
     },
     {
@@ -172,10 +229,10 @@ export function buildTrainingArticle(spec) {
       kicker: "07 — TRANSFERT AU POSTE",
       heading: spec.transferHeading || "La formation doit modifier les réunions et les dossiers du lendemain.",
       paragraphs: [
-        paragraph(`Le transfert attendu est ${transfer}. Pour y parvenir, le participant repart avec des modèles utilisables : grille de qualification d’un cas d’usage, questions de revue, matrice d’autonomie, fiche de preuve, structure de pilote et trame de décision. Ces outils sont volontairement simples pour pouvoir être repris dans un comité, un rendez-vous fournisseur ou un atelier métier.`),
+        paragraph(`Le transfert attendu est ${transfer}. Pour y parvenir, le participant repart avec des modèles utilisables : grille de qualification d’un cas d’usage, questions de revue, matrice d’autonomie, fiche de preuve, structure de pilote et trame de décision. Ces outils sont volontairement simples pour pouvoir être repris dans une ${context.reviewPlace}.`),
         paragraph(`La semaine suivant la formation, chaque participant peut appliquer la grille à un projet réel. L’exercice produit une courte note : ce qui est déjà prouvé, ce qui reste hypothétique, ce qui manque et quelle serait la prochaine expérimentation raisonnable. Cette pratique permet de consolider la compétence en contexte plutôt que de laisser les concepts se dissoudre après la session.`),
         paragraph(`Pour l’organisation, les livrables peuvent devenir une méthode commune de revue des projets IA. Les équipes métiers gagnent un format pour exprimer leur besoin ; les équipes techniques disposent de critères plus clairs ; les achats savent quelles questions poser ; la direction peut comparer plusieurs projets selon une structure commune sans prétendre réduire toutes les décisions à un score automatique.`),
-        paragraph(`Le rôle d’Autonomia Academy est précisément de construire ce passage entre connaissance et capacité d’action. Les contenus peuvent être adaptés aux projets, aux outils, au secteur et aux règles internes de l’entreprise. Le parcours reste toutefois centré sur une compétence durable : savoir analyser et encadrer l’usage de l’IA même lorsque les produits et les interfaces changent.`)
+        paragraph(`Le rôle d’Autonomia Academy est précisément de construire ce passage entre connaissance et capacité d’action : ${context.learningFrame}. Les contenus peuvent être adaptés aux projets, aux outils, au secteur et aux règles internes de l’entreprise. Le parcours reste toutefois centré sur une compétence durable : savoir analyser et encadrer l’usage de l’IA même lorsque les produits et les interfaces changent.`)
       ]
     },
     {
@@ -183,8 +240,8 @@ export function buildTrainingArticle(spec) {
       kicker: "08 — PARCOURS POSSIBLE",
       heading: spec.programHeading || "Un parcours court peut déjà produire une méthode réutilisable.",
       paragraphs: [
-        paragraph(`Un premier bloc pose le langage commun : IA générative, automatisation, copilote, workflow, agent, RAG, donnée, règle, action et validation. Chaque notion est reliée à un exemple de travail. Le but n’est pas de multiplier les définitions mais d’éviter qu’un comité utilise le même mot pour désigner des systèmes très différents.`),
-        paragraph(`Le deuxième bloc applique la grille de décision à un cas réel. Le troisième confronte les participants à un dossier incomplet et à des affirmations difficiles à vérifier. Le quatrième traite données, droits, supervision et risques. Le cinquième construit ${deliverable}. Le dernier bloc prépare le transfert : comment utiliser la méthode dans les prochains dossiers, comités et échanges fournisseurs.`),
+        paragraph(`Un premier bloc pose le langage commun : IA générative, automatisation, copilote, workflow, agent, RAG, donnée, règle, action et validation. Chaque notion est reliée à un exemple de travail. Le but n’est pas de multiplier les définitions mais d’éviter que l’équipe utilise le même mot pour désigner des systèmes très différents.`),
+        paragraph(`Le deuxième bloc applique la grille de décision à un cas réel. Le troisième confronte les participants à un dossier incomplet et à des affirmations difficiles à vérifier. Le quatrième traite données, droits, supervision et risques. Le cinquième construit ${deliverable}. Le dernier bloc prépare le transfert : comment utiliser la méthode dans les ${context.futureReviews}.`),
         paragraph(`Les outils utilisés pendant la formation peuvent inclure ${tools}. Ils ne constituent pas l’objectif final. Une entreprise peut changer d’assistant ou de plateforme sans perdre la compétence acquise si les participants savent toujours formuler le problème, exiger une sortie vérifiable, distinguer règle et interprétation, définir le contrôle et tester sur des cas représentatifs.`),
         paragraph(`Ce design permet également de moduler la durée. Une sensibilisation exécutive peut se concentrer sur la grille et un atelier de décision. Un parcours plus long peut ajouter des démonstrations techniques, des ateliers par métier, une revue de projets réels et un accompagnement à la formalisation de la gouvernance. Le contenu reste relié à la même promesse : permettre à la direction d’avancer sans confondre vitesse et précipitation.`)
       ]
@@ -208,7 +265,7 @@ export function buildTrainingArticle(spec) {
         keyword,
         `${keyword} entreprise`,
         `${keyword} formation professionnelle`,
-        `${keyword} dirigeants`
+        `${keyword} ${spec.cluster.toLowerCase()}`
       ],
       demandEvidence: ["editorial_backlog", "commercial_intent"],
       observedAt: "2026-09-25"
@@ -226,7 +283,7 @@ export function buildTrainingArticle(spec) {
       ["Peut-on travailler sur nos propres projets IA ?", "Oui, lorsque les données et documents peuvent être utilisés dans le cadre de la formation. Un projet réel est souvent le meilleur support pour transformer les concepts en grille de décision réutilisable."],
       ["La formation donne-t-elle une méthode de gouvernance ?", `Elle fournit des repères, des questions et des modèles de décision. Le garde-fou central est : ${guardrail}. La gouvernance finale doit ensuite être adaptée aux responsabilités, outils et règles de l’organisation.`],
       ["Comment évaluer les acquis ?", `L’évaluation proposée consiste à ${assessment}. Elle vérifie la capacité à appliquer la méthode sur un cas différent de celui utilisé pendant l’atelier.`],
-      ["Quel résultat concret reste après la formation ?", `Le participant repart notamment avec ${deliverable}, ainsi qu’une grille qu’il peut réutiliser dans les projets et comités futurs.`]
+      ["Quel résultat concret reste après la formation ?", `Le participant repart notamment avec ${deliverable}, ainsi qu’une grille qu’il peut réutiliser dans ses ${context.futureReviews}.`]
     ],
     sections
   };
