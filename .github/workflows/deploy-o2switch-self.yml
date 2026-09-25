@@ -12,8 +12,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: autonomia-o2switch-deploy
-  cancel-in-progress: true
+  group: autonomia-o2switch-deploy-v2
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -21,10 +21,31 @@ jobs:
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
 
     steps:
+      - name: Confirm cockpit deploy target is still current
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          CURRENT_SHA="$(curl -fsS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/aristote-app/Autonomia-MCP/branches/main \
+            | python -c 'import json,sys; print(json.load(sys.stdin)["commit"]["sha"])')"
+
+          if [ "$CURRENT_SHA" = "$TARGET_SHA" ]; then
+            echo "Deploy target is current: $TARGET_SHA"
+            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping stale cockpit deploy target $TARGET_SHA; current main head is $CURRENT_SHA"
+            echo "should_deploy=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Probe cockpit deployment capability
+        if: steps.target.outputs.should_deploy == 'true'
         id: probe
         run: |
           echo "Production health before deploy:"
@@ -114,11 +135,11 @@ jobs:
           }
 
           echo "Waiting for background build + Passenger restart..."
-          for attempt in $(seq 1 18); do
+          for attempt in $(seq 1 36); do
             if verify_target; then
               exit 0
             fi
-            echo "Target not live yet (attempt $attempt/18)."
+            echo "Target not live yet (attempt $attempt/36)."
             sleep 10
           done
 
@@ -149,7 +170,7 @@ jobs:
             if verify_target; then
               exit 0
             fi
-            echo "Target still not live after retry (attempt $attempt/18)."
+            echo "Target still not live after retry (attempt $attempt/36)."
             sleep 10
           done
 
