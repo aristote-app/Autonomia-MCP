@@ -9,6 +9,7 @@ FORCE_DEPLOY="${FORCE_DEPLOY:-0}"
 TARGET_SHA="${AUTONOMIA_DEPLOY_SHA:-}"
 WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
 LOCK_DIR="$APP_ROOT/.runtime/self-deploy.lock"
+STAGE_ROOT=""
 
 mkdir -p "$APP_ROOT/.runtime"
 
@@ -67,7 +68,13 @@ on_deploy_error() {
   echo "Cockpit deploy failed at step=$CURRENT_STEP exit=$code" >&2
   exit "$code"
 }
-trap 'rm -rf "$LOCK_DIR"' EXIT
+cleanup_deploy() {
+  rm -rf "$LOCK_DIR"
+  if [ -n "$STAGE_ROOT" ] && [ -d "$STAGE_ROOT" ]; then
+    rm -rf "$STAGE_ROOT"
+  fi
+}
+trap cleanup_deploy EXIT
 trap on_deploy_error ERR
 
 # o2switch does not expose /dev/fd reliably under Passenger. Avoid Bash
@@ -118,36 +125,68 @@ if [ "$LOCAL_SHA" = "$REMOTE_SHA" ] && [ "$FORCE_DEPLOY" != "1" ] && [ -f .runti
   exit 0
 fi
 
-echo "Deploying validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
-CURRENT_STEP="git-sync"
-write_debug "syncing" "$LOCAL_SHA -> $REMOTE_SHA"
-git reset --hard "$REMOTE_SHA"
+echo "Preparing validated Autonomia cockpit: $LOCAL_SHA -> $REMOTE_SHA"
 
-cat > lib/runtime/buildStamp.generated.js <<EOF
-// Generated during o2switch deployment. Do not edit on the server.
-export const BUILD_SHA = "$REMOTE_SHA";
-EOF
+# Build the target commit outside the live Passenger tree. A failed Next build
+# must never mutate the currently served .next directory.
+CURRENT_STEP="prepare-candidate"
+write_debug "preparing-candidate" "$LOCAL_SHA -> $REMOTE_SHA"
+STAGE_ROOT="$APP_ROOT/.runtime/candidate-$REMOTE_SHA"
+rm -rf "$STAGE_ROOT"
+mkdir -p "$STAGE_ROOT"
+git archive "$REMOTE_SHA" | tar -x -C "$STAGE_ROOT"
 
-# Recent cockpit changes did not add runtime dependencies. Reuse the installed
-# Node tree when Next is present; fall back to npm install only if it is missing.
-if [ -x node_modules/.bin/next ]; then
-  echo "Reusing existing node_modules; skipping npm install."
+# Reuse the dependency tree only as an input to the isolated build. If the
+# target commit needs incompatible dependencies, the candidate build fails
+# without touching the live application.
+if [ -x "$APP_ROOT/node_modules/.bin/next" ]; then
+  ln -s "$APP_ROOT/node_modules" "$STAGE_ROOT/node_modules"
 else
-  echo "node_modules incomplete; installing dependencies."
+  echo "node_modules incomplete; installing dependencies before candidate build."
+  cd "$APP_ROOT"
   npm install --no-audit --no-fund --package-lock=false
+  ln -s "$APP_ROOT/node_modules" "$STAGE_ROOT/node_modules"
+fi
+
+if [ -f "$APP_ROOT/.env.production.local" ]; then
+  ln -s "$APP_ROOT/.env.production.local" "$STAGE_ROOT/.env.production.local"
 fi
 
 export NODE_ENV=production
 export NEXT_TELEMETRY_DISABLED=1
 
+echo "Building isolated cockpit candidate..."
+CURRENT_STEP="candidate-build"
+write_debug "building-candidate" "$REMOTE_SHA"
+cd "$STAGE_ROOT"
+AUTONOMIA_DEPLOY_SHA="$REMOTE_SHA" npm run build
+
+if [ ! -f "$STAGE_ROOT/.next/BUILD_ID" ]; then
+  echo "Refusing deploy: candidate Next build has no BUILD_ID." >&2
+  exit 1
+fi
+
+echo "Candidate build succeeded; switching live checkout and assets."
+cd "$APP_ROOT"
+CURRENT_STEP="git-sync"
+write_debug "syncing" "$LOCAL_SHA -> $REMOTE_SHA"
+git reset --hard "$REMOTE_SHA"
+
+# The build stamp is generated inside the isolated candidate. Copy it only
+# after the target commit is ready to become live.
+cp "$STAGE_ROOT/lib/runtime/buildStamp.generated.js" "$APP_ROOT/lib/runtime/buildStamp.generated.js"
+
+CURRENT_STEP="asset-switch"
+write_debug "switching-assets" "$REMOTE_SHA"
+rm -rf "$APP_ROOT/.next.previous"
+if [ -d "$APP_ROOT/.next" ]; then
+  mv "$APP_ROOT/.next" "$APP_ROOT/.next.previous"
+fi
+mv "$STAGE_ROOT/.next" "$APP_ROOT/.next"
+
 echo "Ensuring shared inbound lead token..."
 CURRENT_STEP="ensure-inbound-token"
 node scripts/ensure-inbound-token.mjs
-
-echo "Building cockpit Next.js..."
-CURRENT_STEP="next-build"
-write_debug "building" "$REMOTE_SHA"
-npm run build
 
 # Public site deployment is intentionally independent.
 # build-autonomia.com has its own validated o2switch self-deploy workflow.
