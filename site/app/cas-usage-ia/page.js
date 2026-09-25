@@ -13,6 +13,9 @@ export const metadata = {
 export default function UseCaseHub() {
   const publishedSlugs = new Set(publishedExecutionArticles.map((article) => article.slug));
   const clusters = [...new Set(executionBacklog.map((item) => item.cluster))];
+  const adoptionArticle = publishedExecutionArticles.find(
+    (article) => article.slug === "former-les-salaries-a-l-ia-quand-ils-n-ont-pas-le-temps"
+  );
 
   return (
     <main className="contentHub">
@@ -37,6 +40,23 @@ export default function UseCaseHub() {
           </p>
         </div>
       </section>
+
+      {adoptionArticle && (
+        <section className="hubEditorialSpotlight">
+          <div>
+            <p className="sectionIndex">À LIRE AVANT DE CHOISIR UN CAS D’USAGE</p>
+            <span className="hubEditorialTag">ADOPTION & COMPÉTENCES</span>
+            <h2>{adoptionArticle.title}</h2>
+            <p>{adoptionArticle.dek}</p>
+          </div>
+          <Link
+            className="hubEditorialLink"
+            href={`/cas-usage-ia/${adoptionArticle.slug}`}
+          >
+            Lire l’analyse complète →
+          </Link>
+        </section>
+      )}
 
       <LiveJobSignals tags={["automation", "agents", "rag", "n8n", "workflow_orchestration", "process_integration", "knowledge_management"]} />
       <div className="hubObservatoryLink">
