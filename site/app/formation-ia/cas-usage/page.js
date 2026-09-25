@@ -11,11 +11,39 @@ export const metadata = {
 };
 
 export default function TrainingUseCaseHub() {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com";
+  const trainingHubSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${base}/formation-ia/cas-usage#collection`,
+        url: `${base}/formation-ia/cas-usage`,
+        name: "Cas d’usage de formation IA en entreprise",
+        description:
+          "Bibliothèque Autonomia Academy de scénarios de formation IA construits autour de compétences professionnelles précises."
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: publishedTrainingArticles.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: article.title,
+          url: `${base}/formation-ia/cas-usage/${article.slug}`
+        }))
+      }
+    ]
+  };
+
   const publishedSlugs = new Set(publishedTrainingArticles.map((article) => article.slug));
   const clusters = [...new Set(trainingBacklog.map((item) => item.cluster))];
 
   return (
     <main className="contentHub trainingHub">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(trainingHubSchema) }}
+      />
       <section className="contentHubHero">
         <p className="eyebrow">AUTONOMIA ACADEMY — BIBLIOTHÈQUE</p>
         <h1>Ce que vos équipes peuvent apprendre à faire avec l’IA.</h1>
@@ -26,7 +54,7 @@ export default function TrainingUseCaseHub() {
       </section>
 
       <section className="contentHubIntro">
-        <p className="sectionIndex">200 SCÉNARIOS</p>
+        <p className="sectionIndex">{publishedTrainingArticles.length} SCÉNARIOS PUBLIÉS</p>
         <div>
           <h2>Un besoin métier = une compétence à transférer.</h2>
           <p>
