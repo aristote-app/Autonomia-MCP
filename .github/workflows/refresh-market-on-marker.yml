@@ -187,18 +187,18 @@ jobs:
 
             if [ "$status" = "200" ]; then
               success=1
-              node --input-type=module - "$file" "$query" <<'NODE' >> /tmp/autonomia-public-market.ndjson
-              import fs from "node:fs";
-              const [file, query] = process.argv.slice(2);
-              const raw = fs.readFileSync(file, "utf8");
-              let payload;
-              try {
-                payload = JSON.parse(raw);
-              } catch {
-                payload = { ok: false, mode: "public", query, raw_error: raw.slice(0, 500) };
-              }
-              process.stdout.write(JSON.stringify({ query, payload }) + "\n");
-              NODE
+              node --input-type=module -e '
+                import fs from "node:fs";
+                const [file, query] = process.argv.slice(1);
+                const raw = fs.readFileSync(file, "utf8");
+                let payload;
+                try {
+                  payload = JSON.parse(raw);
+                } catch {
+                  payload = { ok: false, mode: "public", query, raw_error: raw.slice(0, 500) };
+                }
+                process.stdout.write(JSON.stringify({ query, payload }) + "\n");
+              ' "$file" "$query" >> /tmp/autonomia-public-market.ndjson
             else
               echo "::warning::Public/training query '$query' returned HTTP $status."
             fi
