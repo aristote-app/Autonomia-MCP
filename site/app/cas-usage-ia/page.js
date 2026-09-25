@@ -30,7 +30,7 @@ export default function UseCaseHub() {
       </section>
 
       <section className="contentHubIntro">
-        <p className="sectionIndex">200 SCÉNARIOS</p>
+        <p className="sectionIndex">{publishedExecutionArticles.length} SCÉNARIOS PUBLIÉS</p>
         <div>
           <h2>Pas des idées abstraites. Des systèmes imaginables.</h2>
           <p>
