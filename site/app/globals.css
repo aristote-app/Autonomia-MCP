@@ -18026,3 +18026,279 @@ body {
     transition: none;
   }
 }
+
+
+/* START Editorial Reading UX V1 — premium, compact, readable */
+.articleLayout {
+  align-items: start;
+}
+
+.articleToc {
+  padding: 16px 14px 12px;
+  overflow: hidden;
+  border: 1px solid #e8e3d8;
+  border-radius: 18px;
+  background: rgba(255,253,248,.9);
+  box-shadow: 0 10px 26px rgba(11,21,48,.035);
+}
+
+.articleTocHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px 12px;
+}
+
+.articleTocHeader > span {
+  color: #0b1530;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.articleTocHeader > small {
+  color: #8a8d87;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.articleToc nav {
+  display: grid;
+  border-top: 1px solid #ece7dd;
+}
+
+.articleToc a {
+  display: grid;
+  grid-template-columns: 28px minmax(0,1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 2px;
+  border-bottom: 1px solid #eee9df;
+  color: #5f645f;
+  font-size: 12px;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.articleToc a:last-child {
+  border-bottom: 0;
+}
+
+.articleToc a:hover {
+  color: #0b1530;
+  transform: translateX(2px);
+}
+
+.articleTocIndex {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #f2efe7;
+  color: #7b7e79;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  transition: background .18s ease, color .18s ease;
+}
+
+.articleToc a:hover .articleTocIndex {
+  color: #0b1530;
+  background: var(--signal);
+}
+
+.articleTocLabel {
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.articleBody {
+  padding: 28px 30px 34px;
+  border-radius: 24px;
+  box-shadow: 0 14px 38px rgba(11,21,48,.045);
+}
+
+.articleSummary {
+  margin-bottom: 36px;
+}
+
+.articleSummaryExecution {
+  padding: 18px 20px 20px;
+  border: 1px solid #ead98e;
+  border-left: 1px solid #ead98e;
+  border-radius: 18px;
+  background: #fff9e7;
+}
+
+.articleSummaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(11,21,48,.1);
+}
+
+.articleSummaryHeader strong {
+  margin: 0;
+  color: #0b1530;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.articleSummaryHeader span {
+  color: #868982;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.articleSummaryGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.articleSummaryGrid > div {
+  min-width: 0;
+}
+
+.articleSummaryGrid small {
+  display: block;
+  margin-bottom: 7px;
+  color: #7b7f78;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.articleSummaryGrid p {
+  max-width: 620px;
+  margin: 0;
+  color: #20293d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.articleBody > section {
+  padding-bottom: 42px;
+  margin-bottom: 42px;
+}
+
+.articleBody .sectionIndex {
+  margin: 0 0 10px;
+  color: #0b1530;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.articleBody h2 {
+  max-width: 760px;
+  margin: 8px 0 20px;
+  font-size: clamp(30px, 4.25vw, 46px);
+  line-height: 1.025;
+  letter-spacing: -.042em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.articleBody section > p:not(.sectionIndex),
+.articleFaq details p,
+.articleSources p,
+.articleCta p {
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.68;
+}
+
+@media (min-width: 760px) {
+  .articleSummaryGrid {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 0;
+  }
+
+  .articleSummaryGrid > div {
+    padding-right: 20px;
+  }
+
+  .articleSummaryGrid > div + div {
+    padding-left: 20px;
+    padding-right: 0;
+    border-left: 1px solid rgba(11,21,48,.1);
+  }
+}
+
+@media (min-width: 1180px) {
+  .articleLayout {
+    grid-template-columns: 230px minmax(0, 900px);
+    gap: 44px;
+  }
+
+  .articleToc {
+    top: 94px;
+  }
+}
+
+@media (max-width: 759px) {
+  .articleLayout {
+    gap: 14px;
+  }
+
+  .articleToc {
+    padding: 14px 12px 10px;
+    border-radius: 16px;
+  }
+
+  .articleToc nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .articleToc a {
+    min-height: 42px;
+    padding-right: 8px;
+  }
+
+  .articleToc a:nth-child(odd) {
+    border-right: 1px solid #eee9df;
+  }
+
+  .articleBody {
+    padding: 22px 18px 28px;
+    border-radius: 20px;
+  }
+
+  .articleSummaryExecution {
+    padding: 16px;
+  }
+
+  .articleSummaryGrid {
+    gap: 16px;
+  }
+
+  .articleSummaryGrid > div + div {
+    padding-top: 16px;
+    border-top: 1px solid rgba(11,21,48,.1);
+  }
+
+  .articleBody h2 {
+    font-size: clamp(30px, 9vw, 42px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .articleToc a,
+  .articleTocIndex {
+    transition: none;
+  }
+}
+/* END Editorial Reading UX V1 */
