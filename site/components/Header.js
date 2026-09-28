@@ -18,7 +18,7 @@ export default function Header() {
       <header className="siteHeader">
         <Link className="brand" href="/" aria-label="Autonomia, accueil">
           <span className="brandMark" aria-hidden="true">
-            <AutonomiaMark size={38} />
+            <AutonomiaMark size={38} inverse />
           </span>
           <span className="brandLockup">
             <strong>AUTONOMIA</strong>
@@ -33,8 +33,8 @@ export default function Header() {
         </nav>
 
         <div className="headerActions">
-          <Link className="headerCta" href="/#solution-finder">
-            <span>Trouver ma solution</span>
+          <Link className="headerCta" href="/start">
+            <span>Commencer</span>
             <b aria-hidden="true">↗</b>
           </Link>
 
@@ -47,8 +47,8 @@ export default function Header() {
               {NAV_ITEMS.map(([label, href]) => (
                 <Link href={href} key={href} onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>{label}<span aria-hidden="true">↗</span></Link>
               ))}
-              <Link className="mobileMenuPrimary" href="/#solution-finder" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
-                Trouver ma solution <span aria-hidden="true">→</span>
+              <Link className="mobileMenuPrimary" href="/start" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
+                Commencer <span aria-hidden="true">→</span>
               </Link>
             </nav>
           </details>
@@ -56,7 +56,7 @@ export default function Header() {
       </header>
 
       <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/#solution-finder">Trouver ma solution</Link>
+        <Link href="/start">Commencer</Link>
         <Link href="/academy">Formations IA</Link>
       </nav>
     </>

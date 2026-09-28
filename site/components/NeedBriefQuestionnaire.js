@@ -80,7 +80,7 @@ function attribution() {
   };
 }
 
-export default function NeedBriefQuestionnaire() {
+export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
@@ -100,7 +100,7 @@ export default function NeedBriefQuestionnaire() {
     firstName: "",
     lastName: "",
     company: "",
-    email: "",
+    email: initialEmail,
     phone: "",
     marketingConsent: false
   });
