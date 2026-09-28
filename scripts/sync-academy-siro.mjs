@@ -87,7 +87,11 @@ async function getHeaderAndReader(response) {
   }
 
   const newline = text.indexOf("\n");
-  const headerText = (newline >= 0 ? text.slice(0, newline) : text).replace(/^\uFEFF/, "").replace(/\r$/, "");
+  const rawHeaderText = (newline >= 0 ? text.slice(0, newline) : text).replace(/^\uFEFF/, "").replace(/\r$/, "");
+  const headerText =
+    rawHeaderText.startsWith('"') && rawHeaderText.endsWith('"') && rawHeaderText.includes("|")
+      ? rawHeaderText.slice(1, -1).replace(/""/g, '"')
+      : rawHeaderText;
   const remainder = newline >= 0 ? text.slice(newline + 1) : "";
   const delimiter = detectDelimiter(headerText);
   const headers = parseCsvLine(headerText, delimiter).map((v) => String(v || "").trim());
@@ -279,8 +283,12 @@ async function main() {
       }
     };
 
-    for await (const row of parseRecords(parsed.chunks, parsed.delimiter)) {
+    for await (const parsedRow of parseRecords(parsed.chunks, parsed.delimiter)) {
       seen += 1;
+      const row =
+        parsedRow.length === 1 && String(parsedRow[0] || "").includes(parsed.delimiter)
+          ? parseCsvLine(String(parsedRow[0] || ""), parsed.delimiter)
+          : parsedRow;
       const siret = digits(row[siretIdx], 14);
       if (siret.length !== 14) continue;
 
