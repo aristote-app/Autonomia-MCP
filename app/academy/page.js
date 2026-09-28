@@ -266,14 +266,6 @@ export default async function AcademyPage({ searchParams }) {
         </section>
       )}
 
-      {siret.length === 14 && lookupState === "not_found" && (
-        <section className="emptyState">
-          <strong>SIRET {siret}</strong><br />
-          Ce SIRET n’apparaît pas dans le snapshot SIRO actuellement chargé et aucun autre établissement du même SIREN n’a fourni de rattachement exploitable.
-          L’absence dans SIRO ne signifie pas qu’aucun OPCO n’existe.
-        </section>
-      )}
-
       {siret.length === 14 && lookupState === "error" && (
         <section className="emptyState">
           <strong>La recherche du SIRET {siret} a échoué.</strong><br />
