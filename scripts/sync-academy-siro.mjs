@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const DATASET_API = "https://www.data.gouv.fr/api/1/datasets/table-siret-opco/";
-const BATCH_SIZE = 2500;
+const BATCH_SIZE = 1000;
 
 function needEnv(name, fallback) {
   const value = process.env[name] || (fallback ? process.env[fallback] : "");
@@ -265,16 +265,36 @@ async function main() {
 
     let batch = [];
 
-    const flush = async () => {
-      if (!batch.length) return;
+    const upsertRows = async (rows) => {
+      if (!rows.length) return;
       const { error } = await db
         .from("academy_siro")
-        .upsert(batch, { onConflict: "siret", ignoreDuplicates: false });
-      if (error) throw error;
-      upserted += batch.length;
-      batch = [];
+        .upsert(rows, { onConflict: "siret", ignoreDuplicates: false });
 
-      if (upserted % 25000 === 0) {
+      if (!error) {
+        upserted += rows.length;
+        return;
+      }
+
+      const message = String(error.message || error.details || error);
+      const retryable = /statement timeout|timeout|canceling statement/i.test(message);
+      if (retryable && rows.length > 100) {
+        const middle = Math.ceil(rows.length / 2);
+        await upsertRows(rows.slice(0, middle));
+        await upsertRows(rows.slice(middle));
+        return;
+      }
+
+      throw error;
+    };
+
+    const flush = async () => {
+      if (!batch.length) return;
+      const rows = batch;
+      batch = [];
+      await upsertRows(rows);
+
+      if (upserted % 25000 < BATCH_SIZE) {
         await db
           .from("academy_sync_runs")
           .update({ rows_seen: seen, rows_upserted: upserted })
