@@ -9,7 +9,7 @@ import {
   getAcademySummary,
   listAcademyOpcoCoverage
 } from "../../lib/db/academy.js";
-import { lookupCfaDockOpco } from "../../lib/academy/opcoFallback.js";
+import { resolveExternalOpco } from "../../lib/academy/opcoFallback.js";
 
 export const dynamic = "force-dynamic";
 
@@ -92,7 +92,7 @@ export default async function AcademyPage({ searchParams }) {
             company = fallback;
             lookupState = "found_siren";
           } else {
-            externalFallback = await lookupCfaDockOpco(siret);
+            externalFallback = await resolveExternalOpco(siret);
 
             if (externalFallback?.found) {
               company = {
@@ -103,7 +103,12 @@ export default async function AcademyPage({ searchParams }) {
                 idcc: externalFallback.idcc,
                 source_updated_at: null
               };
-              lookupState = "found_external";
+              lookupState =
+                externalFallback.resolution_path === "cfadock_siren"
+                  ? "found_external_siren"
+                  : externalFallback.resolution_path === "datagouv_idcc_to_cfadock"
+                    ? "found_external_idcc"
+                    : "found_external";
             } else {
               lookupState = "not_found";
             }
@@ -200,8 +205,12 @@ export default async function AcademyPage({ searchParams }) {
                 : lookupState === "found_siren"
                   ? "Le SIRET exact est absent de SIRO, mais un rattachement existe pour un autre établissement du même SIREN."
                   : lookupState === "found_external"
-                    ? "Rattachement trouvé via la recherche CFA Dock."
-                    : lookupState === "not_found"
+                    ? "Rattachement trouvé via CFA Dock à partir du SIRET."
+                    : lookupState === "found_external_siren"
+                      ? "Rattachement trouvé via CFA Dock à partir du SIREN."
+                      : lookupState === "found_external_idcc"
+                        ? "IDCC trouvé via data.gouv.fr, puis OPCO résolu via CFA Dock."
+                        : lookupState === "not_found"
                   ? "Aucun rattachement trouvé dans les données SIRO actuellement chargées."
                   : lookupState === "error"
                     ? "La recherche a rencontré une erreur."
@@ -209,7 +218,7 @@ export default async function AcademyPage({ searchParams }) {
             </p>
           </div>
 
-          {(lookupState === "found" || lookupState === "found_siren" || lookupState === "found_external") && company && (
+          {(lookupState === "found" || lookupState === "found_siren" || lookupState === "found_external" || lookupState === "found_external_siren" || lookupState === "found_external_idcc") && company && (
             <div className="commandGrid">
               <article>
                 <span>OPCO</span>
@@ -236,7 +245,7 @@ export default async function AcademyPage({ searchParams }) {
 
           {lookupState === "not_found" && (
             <div className="emptyState">
-              Aucun rattachement OPCO trouvé dans SIRO local, par SIREN, ni via CFA Dock pour ce SIRET.
+              Aucun rattachement OPCO trouvé dans SIRO local, par SIREN, via CFA Dock, ni via le jeu officiel siret2idcc de data.gouv.fr.
             </div>
           )}
 
