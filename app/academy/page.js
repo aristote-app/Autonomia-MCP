@@ -45,6 +45,7 @@ export default async function AcademyPage({ searchParams }) {
   let dataState = databaseReady ? "ready" : "database_missing";
   let lookupState = siret.length === 14 ? "pending" : "idle";
   let lookupError = null;
+  let sirenFallback = [];
   let summaryError = null;
   let coverageError = null;
   let coursesError = null;
@@ -80,7 +81,19 @@ export default async function AcademyPage({ searchParams }) {
     if (siret.length === 14) {
       try {
         company = await lookupAcademyCompanyBySiret(siret);
-        lookupState = company ? "found" : "not_found";
+
+        if (!company) {
+          sirenFallback = await lookupAcademyCompaniesBySiren(siret.slice(0, 9), { limit: 20 });
+          const fallback = sirenFallback.find((row) => row.opco_code || row.opco_name || row.idcc) || null;
+          if (fallback) {
+            company = fallback;
+            lookupState = "found_siren";
+          } else {
+            lookupState = "not_found";
+          }
+        } else {
+          lookupState = "found";
+        }
 
         if (company) {
           try {
