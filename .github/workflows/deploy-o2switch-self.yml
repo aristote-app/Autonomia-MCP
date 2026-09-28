@@ -185,6 +185,16 @@ jobs:
           echo
           echo "===== END COCKPIT O2SWITCH WORKER LOG ====="
 
+      - name: Verify Academy route
+        if: steps.probe.outputs.ready == 'true'
+        run: |
+          BODY="$(curl -fsS "https://cockpit.build-autonomia.com/academy" || true)"
+          if ! printf '%s' "$BODY" | grep -Fq "OPCO Intelligence"; then
+            echo "::error::Academy route is not live after deployment."
+            exit 1
+          fi
+          echo "Academy route is live."
+
       - name: Bootstrap consultant candidates once
         if: steps.probe.outputs.ready == 'true'
         env:
