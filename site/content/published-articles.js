@@ -346,7 +346,16 @@ const baseTrainingArticles = [
   }
 ];
 
-export const publishedExecutionArticles = [
+function uniqueArticlesBySlug(items) {
+  const bySlug = new Map();
+  for (const item of items) {
+    if (!item?.slug) continue;
+    bySlug.set(item.slug, item);
+  }
+  return [...bySlug.values()];
+}
+
+export const publishedExecutionArticles = uniqueArticlesBySlug([
   ...baseExecutionArticles,
   ...marketDemandExecutionArticles,
   ...marketDemandExecutionArticlesWave2,
@@ -378,9 +387,9 @@ export const publishedExecutionArticles = [
   ...marketDemandExecutionArticlesWave28,
   ...marketDemandExecutionArticlesWave29,
   ...marketDemandExecutionArticlesWave30
-];
+]);
 
-export const publishedTrainingArticles = [
+export const publishedTrainingArticles = uniqueArticlesBySlug([
   ...baseTrainingArticles,
   ...marketDemandTrainingArticles,
   ...marketDemandTrainingArticlesWave2,
@@ -412,7 +421,7 @@ export const publishedTrainingArticles = [
   ...marketDemandTrainingArticlesWave28,
   ...marketDemandTrainingArticlesWave29,
   ...marketDemandTrainingArticlesWave30
-];
+]);
 
 export function getPublishedExecutionArticle(slug) {
   return publishedExecutionArticles.find((article) => article.slug === slug) || null;
