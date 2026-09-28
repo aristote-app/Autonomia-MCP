@@ -56,6 +56,8 @@ export default function ExecutionMap({ map }) {
 
   const activeStep = map.steps[activeIndex];
   const progressPercent = Math.round(progress * 100);
+  const flowLabels = ["Événement", "Contexte", "Interprétation", "Décision", "Validation"];
+  const activeFlowLabel = flowLabels[Math.min(activeIndex, flowLabels.length - 1)];
   const setManualStep = (index) => {
     setActiveIndex(index);
     setProgress(map.steps.length > 1 ? index / (map.steps.length - 1) : 1);
@@ -150,10 +152,28 @@ export default function ExecutionMap({ map }) {
               ))}
             </div>
 
+            <div className="executionDataRail" aria-hidden="true">
+              <span className="executionDataRailLabel">FLUX ACTIF</span>
+              <div className="executionDataTrack">
+                <span className="executionDataTrackFill" />
+                {[0, 9, 18].map((offset, index) => (
+                  <span
+                    key={offset}
+                    className={`executionDataPacket packet${index + 1}`}
+                    style={{ left: `${Math.max(progressPercent - offset, 1)}%` }}
+                  />
+                ))}
+              </div>
+              <strong>{activeFlowLabel}</strong>
+            </div>
+
             <div className="executionStepDetail" id="execution-step-detail" aria-live="polite">
               <div className="executionStepDetailTop">
                 <span>{activeStep.kicker}</span>
-                <b>{String(activeIndex + 1).padStart(2, "0")} / {String(map.steps.length).padStart(2, "0")} · {progressPercent}%</b>
+                <div>
+                  <em>EN COURS · {activeFlowLabel}</em>
+                  <b>{String(activeIndex + 1).padStart(2, "0")} / {String(map.steps.length).padStart(2, "0")} · {progressPercent}%</b>
+                </div>
               </div>
               <div className="executionStepDetailGrid">
                 <div>
