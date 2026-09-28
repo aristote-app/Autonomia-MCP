@@ -314,8 +314,8 @@ export function buildTrainingArticle(spec) {
     dek: spec.dek || `${objective}. Un parcours Autonomia Academy pour ${audience}, construit autour d’un atelier réel, d’un livrable et d’une méthode de transfert au travail.`,
     summary: spec.summary || `Ce guide décrit une formation opérationnelle pour « ${title} ». Le participant apprend à analyser un cas concret, utiliser une grille de décision, challenger les hypothèses, définir les garde-fous et produire ${deliverable}. L’évaluation vérifie une capacité réutilisable au travail plutôt qu’une simple mémorisation des fonctionnalités d’un outil.`,
     readingTime: "18–24 min",
-    publishedAt: "2026-09-25",
-    modifiedAt: "2026-09-25",
+    publishedAt: spec.publishedAt || "2026-09-25",
+    modifiedAt: spec.modifiedAt || spec.publishedAt || "2026-09-25",
     jobSignalTags: spec.jobSignalTags || defaultTags[spec.family] || ["change_adoption", "human_in_loop", "ai_governance"],
     search: {
       primaryKeyword: keyword,
@@ -326,7 +326,7 @@ export function buildTrainingArticle(spec) {
         `${keyword} ${spec.cluster.toLowerCase()}`
       ],
       demandEvidence: ["editorial_backlog", "commercial_intent"],
-      observedAt: "2026-09-25"
+      observedAt: spec.observedAt || spec.publishedAt || "2026-09-25"
     },
     quickFacts: [
       ["PUBLIC", audience],
