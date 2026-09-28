@@ -337,12 +337,10 @@ async function main() {
 
     await flush();
 
-    const { error: cleanupError } = await db
-      .from("academy_siro")
-      .delete()
-      .neq("sync_token", syncToken);
-    if (cleanupError) throw cleanupError;
-
+    // Do not delete stale rows in one massive statement here: on the production
+    // SIRO table (~1.45M rows) that cleanup can exceed the database statement
+    // timeout and mark an otherwise successful import as failed. Stale-row
+    // cleanup is intentionally deferred to a separate maintenance step.
     const { error: finishError } = await db
       .from("academy_sync_runs")
       .update({
@@ -355,7 +353,8 @@ async function main() {
           resource_url: resource.url,
           sync_token: syncToken,
           delimiter: parsed.delimiter === "\t" ? "TAB" : parsed.delimiter,
-          headers
+          headers,
+          stale_cleanup: "deferred"
         }
       })
       .eq("id", run.id);
