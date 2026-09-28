@@ -4,6 +4,31 @@ import ExecutionMap from "@/components/ExecutionMap";
 import { getEditorialGraph } from "@/lib/editorialGraph";
 import { getRelatedGlossaryTermsForText } from "@/content/ai-glossary";
 
+const executionTocLabels = {
+  cadrage: "Le problème",
+  architecture: "Le flux",
+  donnees: "Données & décisions",
+  "regles-ia": "Rôle de l’IA",
+  humain: "Contrôle humain",
+  exceptions: "Exceptions",
+  mvp: "MVP",
+  mesure: "Mesure"
+};
+
+function getTocLabel(section, index, isExecution) {
+  if (isExecution && executionTocLabels[section.id]) {
+    return executionTocLabels[section.id];
+  }
+
+  const kicker = String(section.kicker || "").replace(/^\d+\s*[—-]\s*/, "").trim();
+  if (kicker && kicker.length <= 34) return kicker;
+
+  const heading = String(section.heading || "").trim();
+  if (heading.length <= 42) return heading;
+  return heading.slice(0, 39).trimEnd() + "…";
+}
+
+
 export default function EditorialArticle({ article }) {
   const isTraining = article.type === "training";
   const isTerritory = article.type === "territory";
@@ -98,21 +123,44 @@ export default function EditorialArticle({ article }) {
 
       <section className="articleLayout">
         <aside className="articleToc">
-          <span>Dans cette page</span>
+          <div className="articleTocHeader">
+            <span>Plan de lecture</span>
+            <small>{article.sections.length} étapes</small>
+          </div>
           <nav>
             {article.sections.map((section, index) => (
-              <a key={section.id} href={`#${section.id}`}>
-                {String(index + 1).padStart(2, "0")} — {section.heading}
+              <a key={section.id} href={`#${section.id}`} title={section.heading}>
+                <span className="articleTocIndex">{String(index + 1).padStart(2, "0")}</span>
+                <span className="articleTocLabel">{getTocLabel(section, index, article.type === "execution")}</span>
               </a>
             ))}
           </nav>
         </aside>
 
         <article className="articleBody">
-          <div className="articleSummary">
-            <strong>En bref</strong>
-            <p>{article.summary}</p>
-          </div>
+          {article.type === "execution" && article.executionMap ? (
+            <div className="articleSummary articleSummaryExecution">
+              <div className="articleSummaryHeader">
+                <strong>En bref</strong>
+                <span>Lecture rapide</span>
+              </div>
+              <div className="articleSummaryGrid">
+                <div>
+                  <small>OBJECTIF</small>
+                  <p>{article.dek}</p>
+                </div>
+                <div>
+                  <small>RÉSULTAT CIBLE</small>
+                  <p>{article.executionMap.after.text}</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="articleSummary">
+              <strong>En bref</strong>
+              <p>{article.summary}</p>
+            </div>
+          )}
 
           {glossaryTerms.length > 0 && (
             <nav className="articleEntities" aria-label="Concepts IA liés à ce guide">
