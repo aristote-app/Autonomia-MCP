@@ -6241,7 +6241,7 @@ button {
   z-index: 0;
   top: 52px;
   left: 7%;
-  width: calc(var(--execution-progress) * .86);
+  width: var(--execution-progress);
   max-width: 86%;
   height: 1px;
   background: var(--signal);
