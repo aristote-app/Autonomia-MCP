@@ -17326,3 +17326,183 @@ body {
     transition: none;
   }
 }
+
+/* START V12 — zero-scroll first step */
+/* Lead-first: first viewport must expose the complete first action without scrolling. */
+.startPageV11 {
+  margin-top:14px;
+  margin-bottom:24px;
+}
+
+.startHeroV11 {
+  gap:20px;
+  padding:22px;
+}
+
+.startHeroV11Copy {
+  padding:12px 8px;
+}
+
+.startHeroV11Copy h1 {
+  margin:8px 0 12px;
+  font-size:clamp(42px,4.65vw,68px);
+  line-height:.92;
+}
+
+.startHeroV11Copy > p:not(.eyebrow) {
+  max-width:540px;
+  font-size:14px;
+  line-height:1.45;
+}
+
+.startHeroV11Signals {
+  margin-top:14px;
+}
+
+.startHeroV11Email {
+  margin-top:12px;
+}
+
+.startHeroV11 .startBackLink {
+  margin-top:12px;
+}
+
+/* Remove the duplicate form title: the real step legend is the conversion headline. */
+.startHeroFormV11 .startHeroFormHead {
+  min-height:46px;
+  padding:10px 16px 8px;
+}
+
+.startHeroFormV11 .startHeroFormHead > div strong {
+  display:none;
+}
+
+.startHeroFormV11 .startHeroFormHead > div small {
+  margin:0;
+}
+
+.startHeroFormV11 .needBriefProgress {
+  padding:8px 14px 0;
+}
+
+.startHeroFormV11 .needBriefProgress button {
+  min-height:38px;
+  padding:7px 10px;
+}
+
+.startHeroFormV11 .needBriefProgress button strong {
+  font-size:10px;
+}
+
+.startHeroFormV11 .needBriefPane {
+  padding:12px 16px 14px;
+}
+
+.startHeroFormV11 .needBriefPane legend {
+  margin-bottom:3px;
+  font-size:clamp(22px,2vw,29px);
+  line-height:1;
+}
+
+.startHeroFormV11 .paneHelp {
+  margin:0 0 9px;
+  font-size:10px;
+}
+
+.startHeroFormV11 .needBriefStep1 .needCheckGrid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.startHeroFormV11 .needBriefStep1 .needCheckGrid button {
+  min-height:38px;
+  padding:6px 10px;
+  border-radius:11px;
+  font-size:10px;
+}
+
+.startHeroFormV11 .needBriefStep1 .needCheckGrid button > span {
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+}
+
+.startHeroFormV11 .needBriefStep1 .briefNext {
+  min-height:40px;
+  margin-top:10px;
+  padding:0 17px;
+}
+
+.startHeroFormV11 .needBriefStep1 .formError {
+  margin:8px 0 0;
+}
+
+/* Details now belong to step 2. */
+.startHeroFormV11 .needBriefContextFields {
+  margin:0 0 12px;
+}
+
+.startHeroFormV11 .needBriefContextFields textarea {
+  min-height:72px;
+}
+
+/* The reassurance strip was useful but consumed the conversion viewport. */
+.startReassuranceV11 {
+  display:none;
+}
+
+@media (min-width:1080px) and (min-height:720px) {
+  .startPageV11 {
+    min-height:calc(100svh - 94px);
+  }
+
+  .startHeroV11:has(.needBriefStep1) {
+    min-height:calc(100svh - 112px);
+    max-height:calc(100svh - 112px);
+    align-items:stretch;
+  }
+
+  .startHeroV11:has(.needBriefStep1) .startHeroFormV11 {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .startHeroV11:has(.needBriefStep1) .needBriefStep1,
+  .startHeroV11:has(.needBriefStep1) .needBriefStep1 .needBriefForm {
+    height:100%;
+  }
+
+  .startHeroV11:has(.needBriefStep1) .needBriefStep1 .needBriefForm {
+    display:flex;
+    flex-direction:column;
+  }
+
+  .startHeroV11:has(.needBriefStep1) .needBriefStep1 .needBriefPane {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .startHeroV11:has(.needBriefStep1) .needBriefStep1 .briefNext {
+    width:max-content;
+  }
+}
+
+@media (max-width:759px) {
+  .startHeroV11 {
+    padding:14px;
+  }
+
+  .startHeroV11Copy {
+    padding:6px 3px;
+  }
+
+  .startHeroV11Copy h1 {
+    font-size:clamp(38px,10.5vw,52px);
+  }
+
+  .startHeroFormV11 .needBriefStep1 .needCheckGrid {
+    grid-template-columns:1fr;
+  }
+}

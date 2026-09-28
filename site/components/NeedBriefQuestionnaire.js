@@ -172,8 +172,8 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
 
   function go(nextStep) {
     setError("");
-    if (step === 1 && data.areas.length === 0 && !data.organizationContext.trim()) {
-      setError("Cochez au moins une zone concernée ou décrivez brièvement votre contexte.");
+    if (step === 1 && data.areas.length === 0) {
+      setError("Choisissez au moins une zone concernée.");
       return;
     }
     if (step === 2 && data.pains.length === 0 && !data.processToday.trim()) {
@@ -294,7 +294,7 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
   }
 
   return (
-    <section className="needBriefSection" id="fiche-besoin">
+    <section className={`needBriefSection needBriefStep${step}`} id="fiche-besoin">
       <form className="needBriefForm" onSubmit={submit}>
         <div className="needBriefProgress" aria-label={`Étape ${step} sur 3`}>
           {[1, 2, 3].map((item) => (
@@ -306,7 +306,7 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
               disabled={item > step}
             >
               <span>0{item}</span>
-              <strong>{item === 1 ? "Organisation" : item === 2 ? "Irritants" : "Résultat"}</strong>
+              <strong>{item === 1 ? "Zone" : item === 2 ? "Contexte & irritants" : "Résultat & contact"}</strong>
             </button>
           ))}
         </div>
@@ -327,7 +327,17 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
                 </button>
               ))}
             </div>
-            <div className="needBriefFields twoCols">
+            {error && <p className="formError" role="alert">{error}</p>}
+            <button className="briefNext" type="button" onClick={() => go(2)}>Continuer →</button>
+          </fieldset>
+        )}
+
+        {step === 2 && (
+          <fieldset className="needBriefPane">
+            <legend>2. Qu’est-ce qui vous ralentit aujourd’hui ?</legend>
+            <p className="paneHelp">Cochez les problèmes concernés, même s’ils ne sont pas encore parfaitement définis.</p>
+
+            <div className="needBriefFields twoCols needBriefContextFields">
               <label>
                 <span>Taille approximative de l’organisation</span>
                 <select value={data.companySize} onChange={(e) => set("companySize", e.target.value)}>
@@ -342,22 +352,14 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
               <label>
                 <span>Votre contexte en quelques mots</span>
                 <textarea
-                  rows="4"
+                  rows="3"
                   value={data.organizationContext}
                   onChange={(e) => set("organizationContext", e.target.value)}
                   placeholder="Équipe concernée, activité, situation..."
                 />
               </label>
             </div>
-            {error && <p className="formError" role="alert">{error}</p>}
-            <button className="briefNext" type="button" onClick={() => go(2)}>Continuer vers les irritants →</button>
-          </fieldset>
-        )}
 
-        {step === 2 && (
-          <fieldset className="needBriefPane">
-            <legend>2. Qu’est-ce qui vous ralentit aujourd’hui ?</legend>
-            <p className="paneHelp">Cochez les problèmes concernés, même s’ils ne sont pas encore parfaitement définis.</p>
             <div className="needCheckGrid">
               {PAINS.map((item) => (
                 <button
