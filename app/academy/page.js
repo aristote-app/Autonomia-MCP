@@ -4,6 +4,7 @@ import {
   cleanSiret,
   lookupAcademyCompanyBySiret,
   lookupAcademyCompaniesBySiren,
+  lookupAcademyOpcoByIdcc,
   listAcademyFundingRules,
   listAcademyCourses,
   getAcademySummary,
@@ -110,6 +111,33 @@ export default async function AcademyPage({ searchParams }) {
                   : externalFallback.resolution_path === "datagouv_idcc_to_cfadock"
                     ? "found_external_idcc"
                     : "found_external";
+            } else if (externalFallback?.idcc) {
+              const opcoFromIdcc = await lookupAcademyOpcoByIdcc(externalFallback.idcc);
+              if (opcoFromIdcc) {
+                company = {
+                  siret,
+                  siren: siret.slice(0, 9),
+                  opco_code: opcoFromIdcc.opco_code,
+                  opco_name: opcoFromIdcc.opco_name,
+                  idcc: opcoFromIdcc.idcc,
+                  source_updated_at: null,
+                  resolution_source: "idcc_siro_corpus"
+                };
+                lookupState = "found_external_idcc";
+              } else if (externalFallback?.candidate) {
+                company = {
+                  siret,
+                  siren: externalFallback.company?.siren || siret.slice(0, 9),
+                  opco_code: externalFallback.candidate.opco_code,
+                  opco_name: externalFallback.candidate.opco_name,
+                  idcc: externalFallback.candidate.idcc,
+                  source_updated_at: null,
+                  resolution_source: "candidate"
+                };
+                lookupState = "candidate";
+              } else {
+                lookupState = "not_found";
+              }
             } else if (externalFallback?.candidate) {
               company = {
                 siret,
@@ -229,7 +257,7 @@ export default async function AcademyPage({ searchParams }) {
                     : lookupState === "found_external_siren"
                       ? "Rattachement trouvé via CFA Dock à partir du SIREN."
                       : lookupState === "found_external_idcc"
-                        ? "IDCC trouvé via data.gouv.fr, puis OPCO résolu via CFA Dock."
+                        ? "IDCC trouvé via data.gouv.fr, puis OPCO résolu à partir du corpus SIRO / CFA Dock."
                         : lookupState === "candidate"
                           ? "Aucun rattachement officiel n'est publié, mais un OPCO candidat peut être déduit de l'activité officielle."
                           : lookupState === "not_found"
