@@ -206,8 +206,12 @@ export default async function AcademyPage({ searchParams }) {
                     </div>
                   </div>
                   <div className="oppMeta">
+                    <span>
+                      Effectif : {rule.company_size_min ?? "—"}–{rule.company_size_max ?? "—"} salariés
+                    </span>
                     <span>Plafond horaire : {money(rule.hourly_ceiling)}</span>
                     <span>Plafond jour : {money(rule.day_ceiling)}</span>
+                    {rule.coverage_percent != null && <span>Prise en charge : {rule.coverage_percent}%</span>}
                     <span>Vérifié : {date(rule.verified_at)}</span>
                   </div>
                   {rule.notes && <p>{rule.notes}</p>}
