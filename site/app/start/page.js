@@ -13,31 +13,49 @@ export default async function StartPage({ searchParams }) {
   const initialEmail = typeof params?.email === "string" ? params.email : "";
 
   return (
-    <main className="startPageV10">
-      <section className="startHeroV10">
-        <div>
+    <main className="startPageV11">
+      <section className="startHeroV11">
+        <div className="startHeroV11Copy">
           <p className="eyebrow">AUTONOMIA START</p>
-          <h1>Décrivez votre besoin sans remplir un gros formulaire d’un coup.</h1>
+          <h1>Parlez-nous du problème.<br /><span>On structure la suite.</span></h1>
           <p>
-            Quelques étapes courtes pour comprendre où se situe le problème, ce qui vous ralentit
-            et le résultat recherché. La demande arrive ensuite chez Autonomia déjà structurée.
+            Experts IA, automatisation, RAG, agents IA ou Formation IA :
+            commencez simplement par ce qui vous ralentit aujourd’hui.
           </p>
-          {initialEmail && <span className="startEmailPill">{initialEmail}</span>}
+
+          <div className="startHeroV11Signals" aria-label="Parcours Autonomia">
+            <span>Besoin réel</span>
+            <span>Réponse structurée</span>
+            <span>Experts + Academy</span>
+          </div>
+
+          {initialEmail && (
+            <div className="startHeroV11Email">
+              <small>E-mail déjà repris</small>
+              <strong>{initialEmail}</strong>
+            </div>
+          )}
+
           <Link href="/" className="startBackLink">← Retour à la Home</Link>
         </div>
 
-        <aside className="startHeroCard">
-          <small>LE PRINCIPE</small>
-          <strong>Problème → contexte → résultat → contact.</strong>
-          <ol>
-            <li><span>01</span>Où se situe le besoin ?</li>
-            <li><span>02</span>Qu’est-ce qui vous ralentit ?</li>
-            <li><span>03</span>Quel résultat voulez-vous obtenir ?</li>
-          </ol>
-        </aside>
+        <div className="startHeroFormV11">
+          <div className="startHeroFormHead">
+            <div>
+              <small>COMMENÇONS</small>
+              <strong>Où se situe le besoin ?</strong>
+            </div>
+            <span>01 / 03</span>
+          </div>
+          <NeedBriefQuestionnaire initialEmail={initialEmail} />
+        </div>
       </section>
 
-      <NeedBriefQuestionnaire initialEmail={initialEmail} />
+      <section className="startReassuranceV11">
+        <span><b>01</b> Vous décrivez le problème.</span>
+        <span><b>02</b> Nous structurons le besoin.</span>
+        <span><b>03</b> Nous orientons vers l’expertise, la formation ou les deux.</span>
+      </section>
     </main>
   );
 }
