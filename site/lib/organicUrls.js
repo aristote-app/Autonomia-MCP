@@ -36,7 +36,7 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/territoires/accelerateur-ia-tpe-pme`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/territoires/urbanisme`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/territoires/conservatoire`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
-    { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-23" },
+    { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-28" },
     { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-23" },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
@@ -73,7 +73,7 @@ export function getIndexableUrlRecords(base) {
       kind: "ai-needs-landing",
       priority: 0.82,
       changeFrequency: "monthly",
-      lastModified: "2026-09-23"
+      lastModified: "2026-09-28"
     }));
 
   const problemLandingPages = problemSolutions.map((problem) => ({
