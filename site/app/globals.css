@@ -5434,3 +5434,742 @@ button {
     align-self: start;
   }
 }
+
+
+/* AUTONOMIA Execution Map — interactive use-case blueprint */
+.executionMap {
+  position: relative;
+  overflow: hidden;
+  padding: 70px 18px;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+    var(--ink);
+  background-size: 32px 32px, 32px 32px, auto;
+  color: var(--paper);
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.executionMap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.12) 50%, rgba(0,0,0,.34) 100%);
+}
+
+.executionMapGlow {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border-radius: 999px;
+  filter: blur(110px);
+  opacity: .16;
+  pointer-events: none;
+  background: var(--signal);
+}
+
+.executionMapGlowA {
+  top: -240px;
+  right: 5%;
+}
+
+.executionMapGlowB {
+  left: -260px;
+  bottom: 8%;
+  opacity: .08;
+}
+
+.executionMapInner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.executionMapHeader {
+  display: grid;
+  gap: 26px;
+  padding-bottom: 34px;
+  border-bottom: 1px solid rgba(255,255,255,.22);
+}
+
+.executionMapEyebrow {
+  margin: 0 0 16px;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.executionMapHeader h2 {
+  max-width: 920px;
+  margin: 0;
+  font-size: clamp(38px, 7vw, 74px);
+  line-height: .94;
+  letter-spacing: -.055em;
+  font-weight: 600;
+}
+
+.executionMapIntro {
+  max-width: 610px;
+  margin: 0;
+  color: rgba(243,241,233,.67);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.executionSnapshot {
+  display: grid;
+  margin: 30px 0 44px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.025);
+  backdrop-filter: blur(12px);
+}
+
+.executionSnapshot > div {
+  min-height: 118px;
+  padding: 18px;
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.executionSnapshot > div:last-child {
+  border-bottom: 0;
+}
+
+.executionSnapshot span,
+.executionRealityCard > span,
+.executionBottomGrid article > span,
+.executionExpertsHeader + span {
+  display: block;
+  margin-bottom: 12px;
+  color: rgba(243,241,233,.5);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.executionSnapshot strong {
+  display: block;
+  font-size: clamp(20px, 4vw, 28px);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.executionSnapshot small {
+  display: block;
+  margin-top: 9px;
+  color: rgba(243,241,233,.46);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.executionFlow {
+  display: grid;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.executionEndpoint {
+  position: relative;
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.18);
+  color: inherit;
+  text-decoration: none;
+  transition: transform .28s ease, border-color .28s ease, background .28s ease;
+}
+
+.executionEndpoint:hover {
+  transform: translateY(-4px);
+}
+
+.executionEndpointPain {
+  background: rgba(255,255,255,.045);
+}
+
+.executionEndpointResult {
+  color: var(--signal-ink);
+  background: var(--signal);
+  border-color: var(--signal);
+}
+
+.executionEndpoint span {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.executionEndpointPain span {
+  color: rgba(243,241,233,.52);
+}
+
+.executionEndpointResult span {
+  color: rgba(0,0,0,.56);
+}
+
+.executionEndpoint strong {
+  max-width: 260px;
+  margin-bottom: 12px;
+  font-size: clamp(25px, 5vw, 38px);
+  line-height: .94;
+  letter-spacing: -.045em;
+}
+
+.executionEndpoint p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.48;
+  opacity: .7;
+}
+
+.executionEndpoint b {
+  position: absolute;
+  right: -4px;
+  bottom: -22px;
+  font-size: 100px;
+  line-height: 1;
+  letter-spacing: -.08em;
+  opacity: .06;
+}
+
+.executionEndpointResult b {
+  opacity: .1;
+}
+
+.executionFlowCenter {
+  min-width: 0;
+}
+
+.executionFlowSteps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(112px, 1fr));
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 0 22px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.25) transparent;
+}
+
+.executionFlowSteps::before {
+  content: "";
+  position: absolute;
+  top: 52px;
+  left: 7%;
+  right: 7%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(243,241,233,.14), var(--signal), rgba(243,241,233,.14));
+  opacity: .72;
+}
+
+.executionStep {
+  position: relative;
+  z-index: 1;
+  min-width: 112px;
+  min-height: 150px;
+  padding: 0 10px 14px;
+  text-align: left;
+  color: var(--paper);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.16);
+  cursor: pointer;
+  transition: transform .24s ease, border-color .24s ease, background .24s ease;
+}
+
+.executionStep:hover,
+.executionStep.active {
+  border-color: var(--signal);
+  background: linear-gradient(180deg, transparent 0%, rgba(255,230,0,.045) 100%);
+}
+
+.executionStep.active {
+  transform: translateY(-4px);
+}
+
+.executionStepNumber {
+  display: block;
+  margin-bottom: 16px;
+  color: rgba(243,241,233,.44);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.executionStepDot {
+  display: block;
+  width: 13px;
+  height: 13px;
+  margin: 0 0 28px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  outline: 1px solid rgba(255,255,255,.45);
+  background: rgba(255,255,255,.62);
+  box-shadow: 0 0 0 0 rgba(255,230,0,0);
+  transition: background .24s ease, outline-color .24s ease, box-shadow .24s ease;
+}
+
+.executionStep.active .executionStepDot {
+  outline-color: var(--signal);
+  background: var(--signal);
+  box-shadow: 0 0 0 8px rgba(255,230,0,.09), 0 0 28px rgba(255,230,0,.28);
+}
+
+.executionStep small {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(243,241,233,.42);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.executionStep strong {
+  display: block;
+  font-size: 15px;
+  letter-spacing: -.02em;
+}
+
+.executionStepDetail {
+  position: relative;
+  overflow: hidden;
+  margin-top: 4px;
+  padding: 24px;
+  color: var(--signal-ink);
+  background: var(--signal);
+  box-shadow: 0 26px 60px rgba(0,0,0,.28);
+}
+
+.executionStepDetail::after {
+  content: "";
+  position: absolute;
+  top: -75px;
+  right: -20px;
+  width: 190px;
+  height: 190px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 50%;
+}
+
+.executionStepDetailTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0,0,0,.26);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.executionStepDetailGrid {
+  display: grid;
+  gap: 24px;
+  padding-top: 24px;
+}
+
+.executionStepDetail h3 {
+  max-width: 560px;
+  margin: 0 0 12px;
+  font-size: clamp(34px, 6vw, 58px);
+  line-height: .92;
+  letter-spacing: -.055em;
+  font-weight: 600;
+}
+
+.executionStepDetail p {
+  max-width: 720px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.executionStepDetailSide {
+  padding-top: 4px;
+}
+
+.executionStepDetailSide > span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.executionStepDetailSide p {
+  margin-bottom: 18px;
+  opacity: .72;
+}
+
+.executionStepDetailSide a {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 4px;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  border-bottom: 1px solid currentColor;
+}
+
+.executionSafetyGate {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 16px 18px;
+  color: var(--paper);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.15);
+  text-decoration: none;
+  transition: background .25s ease, border-color .25s ease;
+}
+
+.executionSafetyGate:hover {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,230,0,.45);
+}
+
+.executionSafetyGate span {
+  color: var(--signal);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.executionSafetyGate strong {
+  font-size: 15px;
+}
+
+.executionSafetyGate p {
+  margin: 0;
+  color: rgba(243,241,233,.57);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.executionSafetyGate b {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.executionRealityGrid {
+  display: grid;
+  gap: 1px;
+  margin-top: 54px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.executionRealityCard {
+  min-height: 260px;
+  padding: 24px;
+  background: #151713;
+}
+
+.executionRealityAi {
+  background: linear-gradient(150deg, rgba(255,230,0,.12), #151713 52%);
+}
+
+.executionRealityCard strong {
+  display: block;
+  max-width: 360px;
+  margin: 0 0 22px;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.executionRealityCard p {
+  margin: 0 0 12px;
+  color: rgba(243,241,233,.62);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.executionRealityCard p b {
+  color: var(--paper);
+}
+
+.executionRealityCard a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.executionExperts {
+  margin-top: 70px;
+  padding-top: 34px;
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+.executionExpertsHeader {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 28px;
+}
+
+.executionExpertsHeader h3 {
+  max-width: 780px;
+  margin: 0;
+  font-size: clamp(34px, 6vw, 62px);
+  line-height: .95;
+  letter-spacing: -.05em;
+  font-weight: 600;
+}
+
+.executionExpertsHeader > p {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(243,241,233,.57);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.executionExpertGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.executionExpertCard {
+  position: relative;
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  padding: 22px;
+  color: var(--paper);
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.14);
+  text-decoration: none;
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+
+.executionExpertCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--signal);
+  background: rgba(255,230,0,.055);
+}
+
+.executionExpertCard > span {
+  margin-bottom: 36px;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .13em;
+}
+
+.executionExpertCard strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 22px;
+  letter-spacing: -.03em;
+}
+
+.executionExpertCard p {
+  margin: 0 0 24px;
+  color: rgba(243,241,233,.58);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.executionExpertCard b {
+  margin-top: auto;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.executionBottomGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.executionBottomGrid article {
+  min-height: 250px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.026);
+}
+
+.executionBottomGrid h3 {
+  max-width: 500px;
+  margin: 0 0 22px;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: .98;
+  letter-spacing: -.045em;
+  font-weight: 600;
+}
+
+.executionBottomGrid ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.executionBottomGrid li {
+  position: relative;
+  padding: 9px 0 9px 18px;
+  color: rgba(243,241,233,.65);
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: 12px;
+}
+
+.executionBottomGrid li::before {
+  content: "↳";
+  position: absolute;
+  left: 0;
+  color: var(--signal);
+}
+
+.executionBottomGrid article > p {
+  max-width: 620px;
+  margin: 0;
+  color: rgba(243,241,233,.63);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.executionBottomGrid article > a {
+  display: inline-block;
+  margin-top: 22px;
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.executionEstimateNote {
+  max-width: 900px;
+  margin: 22px 0 0;
+  color: rgba(243,241,233,.38);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+@media (min-width: 760px) {
+  .executionMap {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .executionMapHeader {
+    grid-template-columns: minmax(0, 1.7fr) minmax(280px, .7fr);
+    align-items: end;
+  }
+
+  .executionSnapshot {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .executionSnapshot > div {
+    border-right: 1px solid rgba(255,255,255,.14);
+    border-bottom: 0;
+  }
+
+  .executionSnapshot > div:last-child {
+    border-right: 0;
+  }
+
+  .executionStepDetailGrid {
+    grid-template-columns: minmax(0, 1.6fr) minmax(220px, .7fr);
+  }
+
+  .executionRealityGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .executionExpertsHeader {
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, .6fr);
+    align-items: end;
+  }
+
+  .executionExpertGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .executionBottomGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1100px) {
+  .executionMap {
+    padding: 88px max(34px, calc((100vw - var(--max)) / 2));
+  }
+
+  .executionFlow {
+    grid-template-columns: minmax(205px, .8fr) minmax(0, 4.2fr) minmax(205px, .8fr);
+  }
+
+  .executionEndpoint {
+    min-height: 440px;
+  }
+
+  .executionFlowCenter {
+    display: flex;
+    min-height: 440px;
+    flex-direction: column;
+  }
+
+  .executionStepDetail {
+    flex: 1;
+  }
+}
+
+@media (max-width: 759px) {
+  .executionMap {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .executionSnapshot {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .executionSnapshot > div:nth-child(odd) {
+    border-right: 1px solid rgba(255,255,255,.14);
+  }
+
+  .executionSnapshot > div:last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .executionEndpoint {
+    min-height: 220px;
+  }
+
+  .executionFlowSteps {
+    margin-right: -18px;
+    padding-right: 18px;
+  }
+
+  .executionStepDetail {
+    padding: 20px;
+  }
+
+  .executionRealityCard,
+  .executionExpertCard,
+  .executionBottomGrid article {
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .executionEndpoint,
+  .executionStep,
+  .executionExpertCard {
+    transition: none;
+  }
+}
