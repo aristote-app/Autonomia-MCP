@@ -225,6 +225,141 @@ const familyCopy = {
   }
 };
 
+const executionDeliveryDefaults = {
+  email: {
+    effort: "3–5 jours expert",
+    complexity: "Intermédiaire",
+    stack: "Messagerie · IA · orchestration",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre le processus, les règles métier, les niveaux d’autonomie et la recette." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Conçoit l’interprétation IA, les sorties structurées et les critères de qualité." },
+      { title: "Consultant IA & automatisation", href: "/consultant-ia", text: "Connecte les outils, orchestre le workflow, les exceptions et la traçabilité." }
+    ]
+  },
+  drive: {
+    effort: "4–7 jours expert",
+    complexity: "Intermédiaire",
+    stack: "Documents · IA · orchestration",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre le flux documentaire, les règles de classement et la recette métier." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Structure l’extraction, la synthèse ou la classification des documents." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Relie les espaces documentaires, les droits et les actions automatisées." }
+    ]
+  },
+  crm: {
+    effort: "4–7 jours expert",
+    complexity: "Intermédiaire",
+    stack: "CRM · IA · workflow",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre la logique commerciale, les responsabilités et les critères de succès." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Interprète les signaux en texte libre et structure les données proposées." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Implémente les connexions CRM, les règles de routage et les contrôles." }
+    ]
+  },
+  meetings: {
+    effort: "4–6 jours expert",
+    complexity: "Intermédiaire",
+    stack: "Réunions · IA · tâches",
+    automation: "Assistée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Définit ce qui devient décision, action, responsable ou échéance." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Transforme notes ou transcriptions en informations structurées." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Orchestre la création de tâches, validations et traces dans les outils existants." }
+    ]
+  },
+  admin: {
+    effort: "5–8 jours expert",
+    complexity: "Structurante",
+    stack: "Dossiers · IA · workflow",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cartographie le processus, les règles de décision et les responsabilités." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Structure les contrôles, extractions et interprétations non déterministes." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Implémente l’orchestration, les exceptions, les validations et la journalisation." }
+    ]
+  },
+  reporting: {
+    effort: "4–7 jours expert",
+    complexity: "Intermédiaire",
+    stack: "Data · IA · reporting",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Définit les indicateurs, responsabilités, fréquence et critères de validation." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Produit des commentaires structurés sans confondre faits et interprétation." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Connecte les sources, consolide les flux et automatise la publication contrôlée." }
+    ]
+  },
+  support: {
+    effort: "5–8 jours expert",
+    complexity: "Structurante",
+    stack: "Support · IA · knowledge",
+    automation: "Supervisée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre SLA, escalades, responsabilités et limites d’autonomie." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Conçoit qualification, synthèse et assistance à la réponse." },
+      { title: "Consultant RAG", href: "/consultant-rag", text: "Relie les réponses aux connaissances autorisées lorsque le cas le nécessite." }
+    ]
+  },
+  rh: {
+    effort: "5–8 jours expert",
+    complexity: "Structurante",
+    stack: "RH · IA · contrôle humain",
+    automation: "Assistée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre le processus, les rôles, les risques et les décisions qui restent humaines." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Conçoit les synthèses et assistants sans déléguer les décisions individuelles." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Implémente droits, intégrations et workflows dans le périmètre autorisé." }
+    ]
+  },
+  finance: {
+    effort: "6–10 jours expert",
+    complexity: "Avancée",
+    stack: "Finance · documents · IA",
+    automation: "Supervisée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre les contrôles, la séparation des rôles et les critères de recette." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Structure extraction, contrôle et explication des informations financières." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Connecte ERP, tableurs, documents et validations avec traçabilité." }
+    ]
+  },
+  btp: {
+    effort: "5–9 jours expert",
+    complexity: "Structurante",
+    stack: "Chantier · IA · workflow",
+    automation: "Contrôlée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Traduit le processus chantier en règles, responsabilités et points de validation." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Structure les comptes rendus, réserves, actions et informations non structurées." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Relie messagerie, documents, tâches et outils chantier dans un flux traçable." }
+    ]
+  },
+  knowledge: {
+    effort: "7–12 jours expert",
+    complexity: "Avancée",
+    stack: "RAG · documents · permissions",
+    automation: "Assistée",
+    experts: [
+      { title: "Consultant RAG", href: "/consultant-rag", text: "Conçoit recherche, récupération, citations, indexation et contrôle des sources." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Conçoit la génération, l’évaluation et les garde-fous de réponse." },
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre les usages, droits, métriques de qualité et trajectoire d’adoption." }
+    ]
+  },
+  marketing: {
+    effort: "4–7 jours expert",
+    complexity: "Intermédiaire",
+    stack: "Contenu · IA · SEO/GEO",
+    automation: "Assistée",
+    experts: [
+      { title: "AI Project Manager", href: "/ai-project-manager", text: "Cadre objectifs, workflow éditorial, validations et critères de qualité." },
+      { title: "Consultant GenAI", href: "/consultant-genai", text: "Conçoit génération, déclinaisons, contrôles factuels et règles de marque." },
+      { title: "Consultant IA", href: "/consultant-ia", text: "Connecte CMS, données, recherche et orchestration du flux de production." }
+    ]
+  }
+};
+
 const specDefaults = {
   support: {
     trigger: "la création ou la mise à jour d’un ticket dans le périmètre support retenu",
@@ -423,6 +558,79 @@ export function buildExecutionArticle(spec) {
       ["SORTIE", spec.output],
       ["GARDE-FOU", spec.human]
     ],
+    executionMap: (() => {
+      const delivery = executionDeliveryDefaults[spec.family] || executionDeliveryDefaults.admin;
+      return {
+        effort: spec.effort || delivery.effort,
+        complexity: spec.complexity || delivery.complexity,
+        expertsLabel: `${delivery.experts.length} expertises`,
+        stack: spec.stack || delivery.stack,
+        automation: spec.automation || delivery.automation,
+        before: {
+          title: "Le travail se bloque ici.",
+          text: spec.example || spec.goal
+        },
+        after: {
+          title: "Un flux exploitable, traçable et contrôlé.",
+          text: spec.output
+        },
+        steps: [
+          {
+            id: "trigger",
+            kicker: "TRIGGER",
+            title: "Détecter",
+            detail: spec.trigger,
+            implementation: "Un déclencheur borné lance le workflow uniquement sur le périmètre retenu, afin d’éviter les traitements parasites.",
+            anchor: "architecture"
+          },
+          {
+            id: "data",
+            kicker: "DATA",
+            title: "Structurer",
+            detail: spec.inputs,
+            implementation: "Le système récupère seulement les informations nécessaires et conserve leur source pour rendre le traitement explicable.",
+            anchor: "donnees"
+          },
+          {
+            id: "ai",
+            kicker: "AI LAYER",
+            title: "Interpréter",
+            detail: spec.aiRole,
+            implementation: "L’IA traite la variabilité du texte et produit une sortie structurée ; les champs absents restent absents ou à vérifier.",
+            anchor: "regles-ia"
+          },
+          {
+            id: "workflow",
+            kicker: "WORKFLOW",
+            title: "Orchestrer",
+            detail: `${spec.rules}. Résultat attendu : ${spec.output}.`,
+            implementation: "Les règles déterministes encadrent le modèle, déclenchent les actions autorisées et journalisent chaque étape utile.",
+            anchor: "architecture"
+          },
+          {
+            id: "human",
+            kicker: "HUMAN CHECK",
+            title: "Superviser",
+            detail: spec.human,
+            implementation: "Les cas sensibles, ambigus ou engageants quittent l’automatisation et repassent explicitement sous contrôle humain.",
+            anchor: "humain"
+          }
+        ],
+        safety: spec.exceptions,
+        aiDoes: spec.aiRole,
+        humanKeeps: spec.human,
+        mvp: spec.mvp,
+        target: spec.advanced,
+        experts: delivery.experts,
+        requirements: [
+          "Accès aux outils et environnements concernés",
+          "Règles métier ou critères de décision existants",
+          "Exemples réels anonymisés ou autorisés pour la recette",
+          "Un référent métier capable de valider les cas limites"
+        ],
+        metrics: spec.measure
+      };
+    })(),
     sourceNote: `Les sources ci-dessous vérifient les briques techniques actuelles disponibles autour de ${family.tooling}. L’architecture décrite par Autonomia est un scénario de conception : les connecteurs, licences, permissions, politiques de données et règles métier doivent être vérifiés dans l’environnement réel avant mise en production.`,
     sources,
     faq: [
