@@ -1,0 +1,78 @@
+name: deploy-academy-o2switch
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/academy/**"
+      - "lib/academy/**"
+      - "lib/db/academy.js"
+      - "app/api/internal/academy-funding-sync/**"
+      - ".github/workflows/deploy-academy-o2switch.yml"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: autonomia-academy-direct-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Probe cockpit self-deploy
+        id: probe
+        run: |
+          HEALTH="$(curl -fsS "https://cockpit.build-autonomia.com/api/health")"
+          printf '%s\n' "$HEALTH"
+          MODE="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("selfDeployAuthMode", ""))')"
+          test "$MODE" = "github_oidc"
+
+      - name: Request GitHub OIDC identity
+        id: oidc
+        env:
+          AUDIENCE: autonomia-o2switch
+        run: |
+          RESPONSE="$(curl -fsS             -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN"             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          test -n "$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy current Academy SHA
+        env:
+          DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          HTTP_CODE="$(curl -sS             -o /tmp/academy-deploy.json             -w "%{http_code}"             -G "$DEPLOY_URL"             --data-urlencode "action=deploy"             --data-urlencode "sha=$TARGET_SHA"             -H "Authorization: Bearer $OIDC_TOKEN")"
+          cat /tmp/academy-deploy.json
+          echo
+          test "$HTTP_CODE" = "202"
+
+      - name: Verify production SHA
+        env:
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          for i in $(seq 1 30); do
+            HEALTH="$(curl -fsS "https://cockpit.build-autonomia.com/api/health" || true)"
+            DEPLOYED_SHA="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha", ""))' 2>/dev/null || true)"
+            echo "Attempt $i: deployed=$DEPLOYED_SHA target=$TARGET_SHA"
+            if [ "$DEPLOYED_SHA" = "$TARGET_SHA" ]; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Academy production did not switch to $TARGET_SHA"
+          exit 1
+
+      - name: Verify Academy page
+        run: |
+          BODY="$(curl -fsS "https://cockpit.build-autonomia.com/academy?siret=83302782400055")"
+          printf '%s' "$BODY" | grep -Fq "2800" || {
+            echo "::error::Atlas 0787 amount is not visible in production."
+            exit 1
+          }
