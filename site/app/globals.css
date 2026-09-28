@@ -17676,3 +17676,216 @@ body {
     transition: none;
   }
 }
+
+/* START V13 — six-screen no-scroll funnel */
+.startHeroFormV11 .needBriefProgressSix {
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:5px;
+  padding:8px 12px 0;
+}
+
+.startHeroFormV11 .needBriefProgressSix button {
+  min-width:0;
+  min-height:38px;
+  padding:6px 7px;
+  border-radius:10px 10px 0 0;
+}
+
+.startHeroFormV11 .needBriefProgressSix button span {
+  font-size:9px;
+}
+
+.startHeroFormV11 .needBriefProgressSix button strong {
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:8px;
+  line-height:1.1;
+}
+
+.startHeroFormV11 .needBriefPane {
+  padding:11px 16px 13px;
+}
+
+.startHeroFormV11 .needBriefPane legend {
+  margin-bottom:2px;
+  font-size:clamp(21px,1.85vw,28px);
+  line-height:1;
+}
+
+.startHeroFormV11 .paneHelp {
+  margin:0 0 8px;
+  font-size:9px;
+}
+
+.startHeroFormV11 .needCheckGrid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.startHeroFormV11 .needCheckGrid button {
+  min-height:37px;
+  padding:6px 9px;
+  border-radius:10px;
+  font-size:9.5px;
+  line-height:1.15;
+}
+
+.startHeroFormV11 .needCheckGrid button > span {
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+}
+
+.startHeroFormV11 .needBriefFields {
+  gap:8px;
+  margin-top:8px;
+}
+
+.startHeroFormV11 .needBriefFields.twoCols {
+  grid-template-columns:1fr 1fr;
+}
+
+.startHeroFormV11 .needBriefFields label > span,
+.startHeroFormV11 .fieldGridCompact label > span {
+  margin-bottom:4px;
+  font-size:8px;
+}
+
+.startHeroFormV11 .needBriefFields textarea {
+  min-height:64px;
+  max-height:82px;
+  padding:9px 10px;
+  font-size:11px;
+  line-height:1.35;
+}
+
+.startHeroFormV11 .needBriefFields select,
+.startHeroFormV11 .fieldGridCompact input {
+  min-height:39px;
+  padding:8px 10px;
+  font-size:11px;
+}
+
+.startHeroFormV11 .fieldGridCompact {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.startHeroFormV11 .fieldGridCompact .fullField {
+  grid-column:1 / -1;
+}
+
+.startHeroFormV11 .consentLineCompact {
+  margin-top:9px;
+  font-size:9px;
+  line-height:1.3;
+}
+
+.startHeroFormV11 .briefActions {
+  margin-top:9px;
+}
+
+.startHeroFormV11 .briefNext,
+.startHeroFormV11 .briefBack,
+.startHeroFormV11 .briefSubmit {
+  min-height:39px;
+  padding:0 15px;
+  font-size:10px;
+}
+
+.startHeroFormV11 .formError {
+  margin:7px 0 0;
+  font-size:9px;
+}
+
+.startHeroFormV11 .needBriefSuccessScreen {
+  min-height:100%;
+  display:grid;
+  place-items:center;
+}
+
+@media (min-width:1080px) and (min-height:700px) {
+  .startPageV11 {
+    min-height:calc(100svh - 88px);
+  }
+
+  .startHeroV11 {
+    min-height:calc(100svh - 105px);
+    max-height:calc(100svh - 105px);
+    align-items:stretch;
+  }
+
+  .startHeroFormV11 {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .startHeroFormV11 .needBriefSection,
+  .startHeroFormV11 .needBriefForm {
+    height:100%;
+  }
+
+  .startHeroFormV11 .needBriefForm {
+    display:flex;
+    flex-direction:column;
+  }
+
+  .startHeroFormV11 .needBriefPane {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+
+  .startHeroFormV11 .briefActions,
+  .startHeroFormV11 .needBriefPane > .briefNext {
+    margin-top:auto;
+  }
+
+  .startHeroFormV11 .needBriefStep2 .needCheckGrid,
+  .startHeroFormV11 .needBriefStep4 .needCheckGrid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .startHeroFormV11 .needBriefStep3 .needBriefFields {
+    margin-top:2px;
+  }
+
+  .startHeroFormV11 .needBriefStep5 .needBriefFields {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .startHeroFormV11 .needBriefStep5 .needBriefFields label:last-child {
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:759px) {
+  .startHeroFormV11 .needBriefProgressSix {
+    grid-template-columns:repeat(6,1fr);
+    overflow-x:auto;
+  }
+
+  .startHeroFormV11 .needBriefProgressSix button {
+    min-width:52px;
+  }
+
+  .startHeroFormV11 .needBriefProgressSix button strong {
+    display:none;
+  }
+
+  .startHeroFormV11 .needCheckGrid,
+  .startHeroFormV11 .needBriefFields.twoCols,
+  .startHeroFormV11 .fieldGridCompact {
+    grid-template-columns:1fr;
+  }
+
+  .startHeroFormV11 .fieldGridCompact .fullField {
+    grid-column:auto;
+  }
+}

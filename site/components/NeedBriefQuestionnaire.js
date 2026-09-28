@@ -41,6 +41,15 @@ const OUTCOMES = [
 
 const TIMELINES = ["Dès que possible", "< 1 mois", "1–3 mois", "3–6 mois", "À définir"];
 
+const STEP_LABELS = [
+  ["01", "Zone"],
+  ["02", "Irritants"],
+  ["03", "Contexte"],
+  ["04", "Résultat"],
+  ["05", "Détails"],
+  ["06", "Contact"]
+];
+
 function toggle(list, value) {
   return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 }
@@ -84,7 +93,6 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
-  const [briefReady, setBriefReady] = useState(false);
   const [solutionContext, setSolutionContext] = useState(null);
   const [data, setData] = useState({
     areas: [],
@@ -116,7 +124,6 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
         processToday: current.processToday || detail.pain || ""
       }));
       setStep(2);
-      setBriefReady(false);
     }
 
     try {
@@ -145,8 +152,7 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
           trainings.length ? `Formations proposées : ${trainings.join(", ")}` : null
         ].filter(Boolean).join("\n")
       }));
-      setStep(3);
-      setBriefReady(true);
+      setStep(4);
     }
 
     window.addEventListener("autonomia-usecase-selected", onUseCase);
@@ -172,36 +178,29 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
 
   function go(nextStep) {
     setError("");
+
     if (step === 1 && data.areas.length === 0) {
       setError("Choisissez au moins une zone concernée.");
       return;
     }
-    if (step === 2 && data.pains.length === 0 && !data.processToday.trim()) {
-      setError("Cochez au moins un irritant ou décrivez le processus qui vous pose problème.");
+
+    if (step === 2 && data.pains.length === 0) {
+      setError("Choisissez au moins un irritant.");
       return;
     }
+
+    if (step === 4 && data.outcomes.length === 0) {
+      setError("Choisissez au moins un résultat attendu.");
+      return;
+    }
+
     trackEvent("need_brief_step", { form_id: "home-need-brief", step: nextStep });
     setStep(nextStep);
-  }
-
-  function prepareBrief() {
-    if (data.outcomes.length === 0 && !data.desiredResult.trim()) {
-      setError("Cochez au moins un résultat attendu ou décrivez ce que vous aimeriez obtenir.");
-      return;
-    }
-    setError("");
-    setBriefReady(true);
-    trackEvent("need_brief_ready", { form_id: "home-need-brief", pain_count: data.pains.length });
   }
 
   async function submit(event) {
     event.preventDefault();
     setError("");
-
-    if (!briefReady) {
-      prepareBrief();
-      return;
-    }
 
     if (!data.firstName || !data.company || !data.email) {
       setError("Merci de renseigner votre prénom, votre entreprise et votre e-mail professionnel.");
@@ -280,7 +279,7 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
 
   if (status === "sent") {
     return (
-      <section className="needBriefSection" id="fiche-besoin">
+      <section className="needBriefSection needBriefSuccessScreen" id="fiche-besoin">
         <div className="needBriefSuccess" role="status">
           <span>✓</span>
           <div>
@@ -296,24 +295,27 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
   return (
     <section className={`needBriefSection needBriefStep${step}`} id="fiche-besoin">
       <form className="needBriefForm" onSubmit={submit}>
-        <div className="needBriefProgress" aria-label={`Étape ${step} sur 3`}>
-          {[1, 2, 3].map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={item === step ? "active" : item < step ? "done" : ""}
-              onClick={() => item < step && setStep(item)}
-              disabled={item > step}
-            >
-              <span>0{item}</span>
-              <strong>{item === 1 ? "Zone" : item === 2 ? "Contexte & irritants" : "Résultat & contact"}</strong>
-            </button>
-          ))}
+        <div className="needBriefProgress needBriefProgressSix" aria-label={`Étape ${step} sur 6`}>
+          {STEP_LABELS.map(([number, label], index) => {
+            const item = index + 1;
+            return (
+              <button
+                key={number}
+                type="button"
+                className={item === step ? "active" : item < step ? "done" : ""}
+                onClick={() => item < step && setStep(item)}
+                disabled={item > step}
+              >
+                <span>{number}</span>
+                <strong>{label}</strong>
+              </button>
+            );
+          })}
         </div>
 
         {step === 1 && (
           <fieldset className="needBriefPane">
-            <legend>1. Où le besoin se situe-t-il dans votre organisation ?</legend>
+            <legend>Où se situe le besoin dans votre organisation ?</legend>
             <p className="paneHelp">Plusieurs réponses possibles.</p>
             <div className="needCheckGrid">
               {AREAS.map((item) => (
@@ -334,32 +336,8 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
 
         {step === 2 && (
           <fieldset className="needBriefPane">
-            <legend>2. Qu’est-ce qui vous ralentit aujourd’hui ?</legend>
-            <p className="paneHelp">Cochez les problèmes concernés, même s’ils ne sont pas encore parfaitement définis.</p>
-
-            <div className="needBriefFields twoCols needBriefContextFields">
-              <label>
-                <span>Taille approximative de l’organisation</span>
-                <select value={data.companySize} onChange={(e) => set("companySize", e.target.value)}>
-                  <option value="">À préciser</option>
-                  <option value="1–10">1–10</option>
-                  <option value="11–50">11–50</option>
-                  <option value="51–200">51–200</option>
-                  <option value="201–1000">201–1000</option>
-                  <option value="1000+">1000+</option>
-                </select>
-              </label>
-              <label>
-                <span>Votre contexte en quelques mots</span>
-                <textarea
-                  rows="3"
-                  value={data.organizationContext}
-                  onChange={(e) => set("organizationContext", e.target.value)}
-                  placeholder="Équipe concernée, activité, situation..."
-                />
-              </label>
-            </div>
-
+            <legend>Qu’est-ce qui vous ralentit aujourd’hui ?</legend>
+            <p className="paneHelp">Choisissez les irritants les plus proches de votre situation.</p>
             <div className="needCheckGrid">
               {PAINS.map((item) => (
                 <button
@@ -372,132 +350,153 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
                 </button>
               ))}
             </div>
-            <div className="needBriefFields twoCols">
-              <label>
-                <span>Décrivez le processus aujourd’hui</span>
-                <textarea
-                  rows="5"
-                  value={data.processToday}
-                  onChange={(e) => set("processToday", e.target.value)}
-                  placeholder="Qui fait quoi, à quel moment, où ça bloque..."
-                />
-              </label>
-              <label>
-                <span>Quels outils utilisez-vous déjà ?</span>
-                <textarea
-                  rows="5"
-                  value={data.toolsToday}
-                  onChange={(e) => set("toolsToday", e.target.value)}
-                  placeholder="Ex. Outlook, Excel, CRM, Drive, logiciel métier..."
-                />
-              </label>
-            </div>
             {error && <p className="formError" role="alert">{error}</p>}
             <div className="briefActions">
               <button type="button" className="briefBack" onClick={() => setStep(1)}>← Retour</button>
-              <button type="button" className="briefNext" onClick={() => go(3)}>Continuer vers le résultat →</button>
+              <button type="button" className="briefNext" onClick={() => go(3)}>Continuer →</button>
             </div>
           </fieldset>
         )}
 
         {step === 3 && (
           <fieldset className="needBriefPane">
-            <legend>3. Où voulez-vous arriver ?</legend>
-            <p className="paneHelp">Nous utiliserons ces éléments pour préparer la première lecture du besoin.</p>
+            <legend>Quel est votre contexte actuel ?</legend>
+            <p className="paneHelp">Quelques informations suffisent pour comprendre le terrain.</p>
+            <div className="needBriefFields twoCols">
+              <label>
+                <span>Taille de l’organisation</span>
+                <select value={data.companySize} onChange={(e) => set("companySize", e.target.value)}>
+                  <option value="">À préciser</option>
+                  <option value="1–10">1–10</option>
+                  <option value="11–50">11–50</option>
+                  <option value="51–200">51–200</option>
+                  <option value="201–1000">201–1000</option>
+                  <option value="1000+">1000+</option>
+                </select>
+              </label>
+              <label>
+                <span>Votre contexte</span>
+                <textarea
+                  rows="3"
+                  value={data.organizationContext}
+                  onChange={(e) => set("organizationContext", e.target.value)}
+                  placeholder="Équipe concernée, activité, situation..."
+                />
+              </label>
+              <label>
+                <span>Processus aujourd’hui</span>
+                <textarea
+                  rows="3"
+                  value={data.processToday}
+                  onChange={(e) => set("processToday", e.target.value)}
+                  placeholder="Qui fait quoi, à quel moment, où ça bloque..."
+                />
+              </label>
+              <label>
+                <span>Outils déjà utilisés</span>
+                <textarea
+                  rows="3"
+                  value={data.toolsToday}
+                  onChange={(e) => set("toolsToday", e.target.value)}
+                  placeholder="Outlook, Excel, CRM, Drive, logiciel métier..."
+                />
+              </label>
+            </div>
+            <div className="briefActions">
+              <button type="button" className="briefBack" onClick={() => setStep(2)}>← Retour</button>
+              <button type="button" className="briefNext" onClick={() => go(4)}>Continuer →</button>
+            </div>
+          </fieldset>
+        )}
+
+        {step === 4 && (
+          <fieldset className="needBriefPane">
+            <legend>Quel résultat voulez-vous obtenir ?</legend>
+            <p className="paneHelp">Choisissez un ou plusieurs objectifs.</p>
             <div className="needCheckGrid outcomes">
               {OUTCOMES.map((item) => (
                 <button
                   type="button"
                   key={item}
                   className={data.outcomes.includes(item) ? "selected" : ""}
-                  onClick={() => { set("outcomes", toggle(data.outcomes, item)); setBriefReady(false); }}
+                  onClick={() => set("outcomes", toggle(data.outcomes, item))}
                 >
                   <span>{data.outcomes.includes(item) ? "✓" : "+"}</span>{item}
                 </button>
               ))}
             </div>
+            {error && <p className="formError" role="alert">{error}</p>}
+            <div className="briefActions">
+              <button type="button" className="briefBack" onClick={() => setStep(3)}>← Retour</button>
+              <button type="button" className="briefNext" onClick={() => go(5)}>Continuer →</button>
+            </div>
+          </fieldset>
+        )}
 
+        {step === 5 && (
+          <fieldset className="needBriefPane">
+            <legend>Précisez le résultat attendu.</legend>
+            <p className="paneHelp">Ces détails sont facultatifs mais améliorent la première lecture du besoin.</p>
             <div className="needBriefFields">
               <label>
-                <span>À quoi ressemblerait un bon résultat pour vous ?</span>
+                <span>À quoi ressemblerait un bon résultat ?</span>
                 <textarea
-                  rows="4"
+                  rows="3"
                   value={data.desiredResult}
-                  onChange={(e) => { set("desiredResult", e.target.value); setBriefReady(false); }}
+                  onChange={(e) => set("desiredResult", e.target.value)}
                   placeholder="Ex. traiter une demande en 5 minutes au lieu de 30..."
                 />
               </label>
               <label>
-                <span>Contraintes, données sensibles ou points de vigilance</span>
+                <span>Contraintes ou points de vigilance</span>
                 <textarea
-                  rows="4"
+                  rows="3"
                   value={data.constraints}
-                  onChange={(e) => { set("constraints", e.target.value); setBriefReady(false); }}
+                  onChange={(e) => set("constraints", e.target.value)}
                   placeholder="Sécurité, validation humaine, outils imposés, données..."
                 />
               </label>
               <label>
                 <span>Quand souhaitez-vous avancer ?</span>
-                <select value={data.timeline} onChange={(e) => { set("timeline", e.target.value); setBriefReady(false); }}>
+                <select value={data.timeline} onChange={(e) => set("timeline", e.target.value)}>
                   <option value="">À préciser</option>
                   {TIMELINES.map((item) => <option value={item} key={item}>{item}</option>)}
                 </select>
               </label>
             </div>
+            <div className="briefActions">
+              <button type="button" className="briefBack" onClick={() => setStep(4)}>← Retour</button>
+              <button type="button" className="briefNext" onClick={() => go(6)}>Continuer →</button>
+            </div>
+          </fieldset>
+        )}
 
-            {!briefReady && (
-              <>
-                {error && <p className="formError" role="alert">{error}</p>}
-                <div className="briefActions">
-                  <button type="button" className="briefBack" onClick={() => setStep(2)}>← Retour</button>
-                  <button type="button" className="briefNext" onClick={prepareBrief}>Préparer ma fiche besoin</button>
-                </div>
-              </>
-            )}
+        {step === 6 && (
+          <fieldset className="needBriefPane">
+            <legend>Où pouvons-nous vous répondre ?</legend>
+            <p className="paneHelp">Les champs marqués * sont nécessaires pour vous recontacter.</p>
 
-            {briefReady && (
-              <div className="needBriefPreview">
-                <div className="needBriefPreviewHead">
-                  <div>
-                    <p className="sectionIndex">FICHE BESOIN AUTONOMIA</p>
-                    <h3>Voici ce que nous recevrons.</h3>
-                  </div>
-                  <button type="button" onClick={() => setBriefReady(false)}>Modifier</button>
-                </div>
+            <div className="fieldGrid fieldGridCompact">
+              <label><span>Prénom *</span><input value={data.firstName} onChange={(e) => set("firstName", e.target.value)} autoComplete="given-name" /></label>
+              <label><span>Nom</span><input value={data.lastName} onChange={(e) => set("lastName", e.target.value)} autoComplete="family-name" /></label>
+              <label><span>Entreprise *</span><input value={data.company} onChange={(e) => set("company", e.target.value)} autoComplete="organization" /></label>
+              <label><span>E-mail professionnel *</span><input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" /></label>
+              <label className="fullField"><span>Téléphone</span><input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" /></label>
+            </div>
 
-                <dl>
-                  <div><dt>Zone concernée</dt><dd>{data.areas.join(", ") || "À préciser"}</dd></div>
-                  <div><dt>Contexte</dt><dd>{data.organizationContext || "À préciser pendant l’audit"}</dd></div>
-                  <div><dt>Irritants</dt><dd>{data.pains.join(" · ") || data.processToday || "À préciser"}</dd></div>
-                  <div><dt>Processus actuel</dt><dd>{data.processToday || "À préciser pendant l’audit"}</dd></div>
-                  <div><dt>Outils</dt><dd>{data.toolsToday || "À préciser"}</dd></div>
-                  <div><dt>Résultat attendu</dt><dd>{data.outcomes.join(" · ") || data.desiredResult || "À préciser"}</dd></div>
-                  <div><dt>Contraintes</dt><dd>{data.constraints || "Aucune indiquée à ce stade"}</dd></div>
-                  <div><dt>Timing</dt><dd>{data.timeline || "À définir"}</dd></div>
-                </dl>
+            <label className="consentLine consentLineCompact">
+              <input type="checkbox" checked={data.marketingConsent} onChange={(e) => set("marketingConsent", e.target.checked)} />
+              <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
+            </label>
 
-                <div className="briefContact">
-                  <h3>Où pouvons-nous vous répondre ?</h3>
-                  <div className="fieldGrid">
-                    <label><span>Prénom *</span><input value={data.firstName} onChange={(e) => set("firstName", e.target.value)} autoComplete="given-name" /></label>
-                    <label><span>Nom</span><input value={data.lastName} onChange={(e) => set("lastName", e.target.value)} autoComplete="family-name" /></label>
-                    <label><span>Entreprise *</span><input value={data.company} onChange={(e) => set("company", e.target.value)} autoComplete="organization" /></label>
-                    <label><span>E-mail professionnel *</span><input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} autoComplete="email" /></label>
-                    <label className="fullField"><span>Téléphone</span><input type="tel" value={data.phone} onChange={(e) => set("phone", e.target.value)} autoComplete="tel" /></label>
-                  </div>
+            {error && <p className="formError" role="alert">{error}</p>}
 
-                  <label className="consentLine">
-                    <input type="checkbox" checked={data.marketingConsent} onChange={(e) => set("marketingConsent", e.target.checked)} />
-                    <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
-                  </label>
-                  <p className="privacyNote">Les informations envoyées servent à analyser votre demande et à vous recontacter. Le consentement marketing est facultatif.</p>
-                  {error && <p className="formError" role="alert">{error}</p>}
-                  <button className="briefSubmit" type="submit" disabled={status === "sending"}>
-                    {status === "sending" ? "Envoi de la fiche…" : "Envoyer ma fiche besoin à Autonomia →"}
-                  </button>
-                </div>
-              </div>
-            )}
+            <div className="briefActions">
+              <button type="button" className="briefBack" onClick={() => setStep(5)}>← Retour</button>
+              <button className="briefSubmit" type="submit" disabled={status === "sending"}>
+                {status === "sending" ? "Envoi…" : "Envoyer ma demande →"}
+              </button>
+            </div>
           </fieldset>
         )}
       </form>

@@ -43,9 +43,9 @@ export default async function StartPage({ searchParams }) {
           <div className="startHeroFormHead">
             <div>
               <small>COMMENÇONS</small>
-              <strong>Où se situe le besoin ?</strong>
+              <strong>Un écran = une question.</strong>
             </div>
-            <span>01 / 03</span>
+            <span>6 ÉTAPES</span>
           </div>
           <NeedBriefQuestionnaire initialEmail={initialEmail} />
         </div>
