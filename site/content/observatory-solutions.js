@@ -245,6 +245,143 @@ export const observatoryTopics = [
       ["Synthèse direction", "Adapter le niveau de détail pour chaque comité.", "Produire différentes vues depuis la même base.", "Meilleure réutilisation."],
       ["Diffusion", "Envoyer manuellement fichiers et rappels.", "Orchestrer génération, validation et distribution.", "Cycle de reporting raccourci."]
     ]
+  },
+
+  {
+    slug: "reunions-comptes-rendus",
+    group: "taches",
+    title: "Réunions & comptes rendus",
+    short: "Ordre du jour, transcription, décisions, actions, relances et diffusion.",
+    headline: "Faire sortir le travail de la réunion avant que tout le monde passe à autre chose.",
+    intro: "Une réunion utile ne s’arrête pas au compte rendu. L’IA peut transformer le verbatim en décisions, actions, responsables, échéances et relances, avec validation humaine avant diffusion.",
+    prompt: "Ex. CODIR, réunion chantier, comité client, équipe projet, entretien…",
+    modules: [
+      ["Compte rendu", "Reprendre notes et verbatim pour rédiger après la réunion.", "Structurer automatiquement sujets, décisions et points à retenir.", "Un CR prêt à relire plutôt qu’à réécrire."],
+      ["Synthèse", "Relire une heure d’échange pour retrouver les vrais enjeux.", "Produire une synthèse courte par thème, risque et arbitrage.", "La décision devient lisible en quelques minutes."],
+      ["Décisions", "Mélanger discussions, hypothèses et arbitrages dans les notes.", "Isoler les décisions prises, celles à confirmer et leurs sources.", "Moins d’ambiguïté après la réunion."],
+      ["Plan d’action", "Recopier les actions dans un tableau séparé.", "Extraire action, responsable, date et dépendance puis préparer le suivi.", "Les engagements deviennent pilotables."],
+      ["Relances", "Vérifier manuellement ce qui n’a pas avancé.", "Détecter les actions en retard et préparer la relance contextualisée.", "Moins d’actions oubliées."],
+      ["Diffusion", "Réécrire le même contenu pour l’équipe, la direction et le client.", "Générer plusieurs niveaux de synthèse depuis la même réunion.", "Un seul travail source, plusieurs formats validables."]
+    ]
+  },
+  {
+    slug: "documents-connaissance-rag",
+    group: "taches",
+    title: "Documents & connaissance interne",
+    short: "Recherche RAG, extraction, comparaison, classement, contrôle et diffusion.",
+    headline: "Arrêter de chercher l’information comme si chaque document était isolé.",
+    intro: "Quand l’information est dispersée dans des PDF, Drive, GED ou procédures, un assistant documentaire peut retrouver, citer, comparer et préparer l’action sans supprimer les règles d’accès.",
+    prompt: "Ex. procédures, contrats, dossiers techniques, qualité, documentation interne…",
+    modules: [
+      ["Recherche sourcée", "Ouvrir plusieurs dossiers et faire des recherches mot par mot.", "Interroger les documents autorisés et afficher les passages utilisés.", "Une réponse retrouvée avec ses sources."],
+      ["Extraction", "Recopier dates, références, montants et clauses à la main.", "Transformer le document en champs structurés vérifiables.", "Moins de saisie et plus de données exploitables."],
+      ["Comparaison", "Mettre deux versions côte à côte et chercher les différences.", "Comparer versions, offres ou contrats et isoler les écarts importants.", "Les changements critiques ressortent rapidement."],
+      ["Contrôle", "Relire chaque document selon une checklist mentale.", "Appliquer des règles de contrôle et signaler les exceptions.", "Les dossiers à vérifier remontent en priorité."],
+      ["Classement", "Nommer, ranger et taguer les fichiers manuellement.", "Proposer catégorie, métadonnées et emplacement selon les règles.", "Une GED plus homogène."],
+      ["Cycle documentaire", "Envoyer, valider et archiver dans des étapes séparées.", "Orchestrer validation, rangement, diffusion et traçabilité.", "Le document suit un flux plutôt qu’une suite d’e-mails."]
+    ]
+  },
+  {
+    slug: "leads-qualification-commerciale",
+    group: "taches",
+    title: "Leads & qualification commerciale",
+    short: "Enrichissement, scoring, préparation, relance, pipeline et CRM.",
+    headline: "Savoir qui traiter, pourquoi, et avec quel contexte avant le premier contact.",
+    intro: "L’IA peut enrichir et prioriser les leads, préparer le contexte et structurer les prochaines actions. La relation commerciale et la décision de contacter restent humaines.",
+    prompt: "Ex. leads entrants, prospection B2B, comptes cibles, CRM, relances…",
+    modules: [
+      ["Qualification", "Lire le formulaire puis chercher soi-même si le prospect est pertinent.", "Croiser besoin, entreprise et signaux pour proposer un score explicable.", "Les leads chauds remontent en premier."],
+      ["Enrichissement", "Ouvrir site, LinkedIn, CRM et historique séparément.", "Préparer une fiche compte avec activité, contexte et signaux utiles.", "Le rendez-vous se prépare sur une seule vue."],
+      ["Pipeline", "Découvrir trop tard qu’une opportunité stagne.", "Détecter inactivité, blocage et prochaine action manquante.", "Les opportunités à risque deviennent visibles."],
+      ["Relance", "Réécrire une relance sans reprendre tout l’historique.", "Proposer un message à partir du dernier échange et du stade du deal.", "Relance plus pertinente, validation avant envoi."],
+      ["Préparation rendez-vous", "Relire les notes quelques minutes avant l’appel.", "Préparer enjeux, questions et points de preuve à vérifier.", "Rendez-vous mieux cadré."],
+      ["Mise à jour CRM", "Ressaisir compte rendu et next steps après l’échange.", "Préparer résumé, statut, prochaine action et champs à valider.", "CRM plus complet avec moins de ressaisie."]
+    ]
+  },
+  {
+    slug: "factures-depenses",
+    group: "taches",
+    title: "Factures & dépenses",
+    short: "Extraction, contrôle, rapprochement, validation, relances et pilotage.",
+    headline: "Traiter les factures comme un flux contrôlé plutôt qu’une pile de pièces jointes.",
+    intro: "L’IA et l’automatisation peuvent préparer l’extraction, les contrôles et le rapprochement. La validation comptable et le paiement restent dans les circuits autorisés.",
+    prompt: "Ex. factures fournisseurs, notes de frais, pièces manquantes, rapprochements…",
+    modules: [
+      ["Extraction facture", "Ouvrir la pièce et ressaisir fournisseur, date, référence et montant.", "Extraire les champs utiles et les présenter pour validation.", "La facture devient une donnée structurée."],
+      ["Contrôles", "Vérifier manuellement références, TVA et pièces associées.", "Appliquer les règles et signaler les incohérences.", "Les exceptions sont isolées avant validation."],
+      ["Rapprochement", "Chercher la facture correspondant à chaque paiement.", "Proposer les correspondances et laisser les cas ambigus à vérifier.", "Les cas simples sont traités plus vite."],
+      ["Validation", "Transférer la facture au bon valideur par e-mail.", "Router selon fournisseur, montant, centre de coût ou projet.", "Circuit d’approbation plus visible."],
+      ["Relances", "Suivre à la main les justificatifs ou avoirs manquants.", "Détecter l’élément absent et préparer la relance.", "Moins de dossiers bloqués silencieusement."],
+      ["Pilotage dépenses", "Consolider montants et anomalies dans un reporting séparé.", "Préparer une vue des dépenses, exceptions et échéances.", "Le suivi financier part des flux réels."]
+    ]
+  },
+  {
+    slug: "controle-dossiers-conformite",
+    group: "taches",
+    title: "Contrôle de dossiers & conformité",
+    short: "Complétude, cohérence, règles, exceptions, routage et traçabilité.",
+    headline: "Faire ressortir les exceptions sans relire tous les dossiers de la même façon.",
+    intro: "Un contrôle utile ne consiste pas à automatiser la décision sensible. Il consiste à appliquer des règles reproductibles, isoler les écarts et documenter ce qui doit être revu par un humain.",
+    prompt: "Ex. dossiers clients, inscriptions, conformité documentaire, pièces obligatoires…",
+    modules: [
+      ["Complétude", "Ouvrir chaque dossier pour vérifier les pièces présentes.", "Comparer le contenu à une checklist et signaler ce qui manque.", "Les dossiers incomplets sont visibles immédiatement."],
+      ["Extraction", "Chercher les données à contrôler dans plusieurs pièces.", "Extraire les champs utiles et les aligner dans une vue unique.", "Le contrôle se fait sur des données comparables."],
+      ["Classification", "Décider manuellement quel circuit appliquer à chaque dossier.", "Proposer une typologie et le flux correspondant.", "Les cas standards sont mieux orientés."],
+      ["Conformité", "Comparer le dossier au référentiel ligne par ligne.", "Mettre en évidence les écarts entre règle et document.", "Les points à vérifier sont explicites."],
+      ["Exceptions", "Faire circuler les cas atypiques par e-mail.", "Router l’exception vers le bon niveau de validation.", "Les cas sensibles ne se perdent plus dans le flux."],
+      ["Traçabilité", "Reconstituer après coup qui a contrôlé quoi.", "Conserver règles appliquées, anomalies et statut de validation.", "Une piste de contrôle plus claire."]
+    ]
+  },
+  {
+    slug: "appels-offres-reponses",
+    group: "taches",
+    title: "Appels d’offres & réponses",
+    short: "Lecture des pièces, exigences, planning, mémoire, contrôle et dépôt.",
+    headline: "Passer moins de temps à décortiquer les pièces, plus de temps à construire la réponse.",
+    intro: "L’IA peut transformer un dossier de consultation en exigences, échéances, matrice de réponse et points de vigilance. Les engagements et contenus finaux restent validés par l’équipe.",
+    prompt: "Ex. RC, CCTP, DPGF, mémoire technique, pièces administratives…",
+    modules: [
+      ["Lecture DCE", "Lire toutes les pièces avant de savoir où sont les contraintes critiques.", "Extraire échéances, obligations, critères et points de vigilance.", "Le dossier devient une vue structurée."],
+      ["Matrice exigences", "Construire manuellement la checklist de réponse.", "Transformer les exigences en matrice avec source et statut.", "Moins d’oubli entre les pièces."],
+      ["Écarts", "Vérifier tardivement si l’offre couvre chaque demande.", "Comparer la réponse préparée aux exigences du DCE.", "Les zones faibles ressortent avant dépôt."],
+      ["Mémoire technique", "Assembler des paragraphes à partir d’anciens dossiers.", "Préparer un draft depuis des contenus validés et le contexte du marché.", "Une première version plus rapide à retravailler."],
+      ["Orchestration", "Relancer les contributeurs au fil des e-mails.", "Piloter tâches, responsables, dépendances et dates.", "La réponse devient un projet visible."],
+      ["Contrôle dépôt", "Vérifier les pièces dans l’urgence juste avant l’envoi.", "Contrôler complétude, formats et champs attendus.", "Moins de risque d’oubli administratif."]
+    ]
+  },
+  {
+    slug: "planification-rendez-vous",
+    group: "taches",
+    title: "Planification & rendez-vous",
+    short: "Contraintes, affectation, confirmations, rappels, arbitrages et charge.",
+    headline: "Arrêter de résoudre les conflits de planning à coups d’appels et de tableaux.",
+    intro: "Quand un planning dépend de disponibilités, zones, priorités et compétences, l’IA peut préparer les meilleures options sans retirer l’arbitrage à l’équipe.",
+    prompt: "Ex. interventions, rendez-vous clients, visites, équipes terrain, disponibilités…",
+    modules: [
+      ["Créneaux", "Chercher manuellement un créneau compatible avec toutes les contraintes.", "Comparer disponibilités et contraintes pour proposer plusieurs options.", "Le choix démarre avec des solutions faisables."],
+      ["Affectation", "Décider qui envoyer en regardant plusieurs plannings.", "Proposer l’intervenant selon disponibilité, compétence et zone.", "Affectation plus rapide et explicable."],
+      ["Confirmation", "Envoyer séparément confirmation, adresse et consignes.", "Déclencher les messages après validation du créneau.", "Moins de coordination manuelle."],
+      ["Rappels", "Relancer de la même façon tous les rendez-vous.", "Adapter rappel et canal selon statut et risque d’absence.", "Moins de rendez-vous oubliés."],
+      ["Arbitrage", "Gérer les conflits au fil des appels entrants.", "Comparer plusieurs scénarios et afficher les compromis.", "Les choix difficiles deviennent visibles."],
+      ["Charge", "Découvrir les trous ou surcharges en fin de semaine.", "Synthétiser capacité, saturation et créneaux inutilisés.", "Planning plus facile à rééquilibrer."]
+    ]
+  },
+  {
+    slug: "veille-recherche",
+    group: "taches",
+    title: "Veille & recherche",
+    short: "Collecte, tri, regroupement, comparaison, synthèse et alertes.",
+    headline: "Transformer une pile de liens en signaux réellement exploitables.",
+    intro: "Une bonne veille ne consiste pas à collecter davantage. Elle consiste à filtrer, regrouper, comparer et faire remonter seulement ce qui peut changer une décision ou une action.",
+    prompt: "Ex. concurrence, réglementation, innovation, marchés, appels d’offres, tendances…",
+    modules: [
+      ["Collecte ciblée", "Vérifier manuellement les mêmes sources.", "Rassembler les nouvelles informations depuis une liste de sources autorisées.", "La collecte devient régulière."],
+      ["Tri", "Lire avant de savoir si l’information mérite du temps.", "Classer par sujet, nouveauté, impact et fiabilité de la source.", "Les signaux utiles passent devant le bruit."],
+      ["Regroupement", "Voir dix articles parler du même sujet comme dix informations différentes.", "Regrouper les signaux proches et dédupliquer les répétitions.", "Une seule fiche par sujet réel."],
+      ["Comparaison", "Se souvenir de ce qui a changé depuis la semaine précédente.", "Comparer offres, messages, règles ou positions entre deux périodes.", "Les changements deviennent visibles."],
+      ["Synthèse", "Préparer manuellement une note pour la direction.", "Produire une synthèse courte avec faits, sources et questions ouvertes.", "La veille devient directement lisible."],
+      ["Alertes", "Consulter le tableau même quand rien d’important n’a changé.", "Déclencher une alerte seulement sur les signaux correspondant aux règles.", "Moins de surveillance inutile."]
+    ]
   }
 ];
 
