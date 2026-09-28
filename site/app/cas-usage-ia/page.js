@@ -57,6 +57,33 @@ export default function UseCaseHub() {
         </p>
       </section>
 
+      <section className="hubDiscoveryDoors" aria-label="Explorer les cas d’usage IA">
+        <Link href="/cas-usage-ia/par-probleme">
+          <span>01</span>
+          <div>
+            <small>PARTIR DU PROBLÈME</small>
+            <strong>Je sais ce que je veux arrêter de faire à la main.</strong>
+          </div>
+          <b>→</b>
+        </Link>
+        <Link href="/cas-usage-ia/par-metier">
+          <span>02</span>
+          <div>
+            <small>PARTIR DU MÉTIER</small>
+            <strong>Je veux voir ce que l’IA peut changer dans ma fonction.</strong>
+          </div>
+          <b>→</b>
+        </Link>
+        <Link href="/cas-usage-ia/par-secteur">
+          <span>03</span>
+          <div>
+            <small>PARTIR DU SECTEUR</small>
+            <strong>Je cherche des usages adaptés à mon activité.</strong>
+          </div>
+          <b>→</b>
+        </Link>
+      </section>
+
       <section className="contentHubIntro">
         <p className="sectionIndex">{publishedExecutionArticles.length} SCÉNARIOS PUBLIÉS</p>
         <div>
