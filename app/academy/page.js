@@ -4,7 +4,9 @@ import {
   cleanSiret,
   lookupAcademyCompanyBySiret,
   listAcademyFundingRules,
-  listAcademyCourses
+  listAcademyCourses,
+  getAcademySummary,
+  listAcademyOpcoCoverage
 } from "../../lib/db/academy.js";
 
 export const dynamic = "force-dynamic";
@@ -37,11 +39,13 @@ export default async function AcademyPage({ searchParams }) {
   let company = null;
   let fundingRules = [];
   let courses = [];
+  let summary = { opcos: 0, fundingSources: 0, fundingRules: 0, siroRows: 0, latestSiroRun: null };
+  let opcoCoverage = [];
   let dataState = databaseReady ? "ready" : "database_missing";
 
   if (databaseReady) {
     try {
-      courses = await listAcademyCourses({ limit: 100 });
+      [courses, summary, opcoCoverage] = await Promise.all([\n        listAcademyCourses({ limit: 100 }),\n        getAcademySummary(),\n        listAcademyOpcoCoverage()\n      ]);
       if (siret.length === 14) {
         company = await lookupAcademyCompanyBySiret(siret);
         if (company) {
@@ -74,24 +78,24 @@ export default async function AcademyPage({ searchParams }) {
 
       <section className="territoryMetrics">
         <article>
-          <strong>1</strong>
-          <span>SIRET recherché</span>
+          <strong>{summary.opcos}</strong>
+          <span>OPCO référencés</span>
         </article>
         <article>
-          <strong>{company ? "OK" : "—"}</strong>
-          <span>OPCO identifié</span>
+          <strong>{summary.fundingSources}</strong>
+          <span>sources officielles 2026</span>
         </article>
         <article>
-          <strong>{fundingRules.length}</strong>
-          <span>règles de financement</span>
+          <strong>{summary.fundingRules}</strong>
+          <span>règles normalisées</span>
         </article>
         <article>
-          <strong>{courses.length}</strong>
-          <span>formations actives</span>
+          <strong>{new Intl.NumberFormat("fr-FR").format(summary.siroRows)}</strong>
+          <span>SIRET SIRO chargés</span>
         </article>
         <article>
-          <strong>SIRO</strong>
-          <span>référentiel cible</span>
+          <strong>{summary.latestSiroRun?.status || "—"}</strong>
+          <span>dernier import SIRO</span>
         </article>
       </section>
 
@@ -187,7 +191,7 @@ export default async function AcademyPage({ searchParams }) {
                     <div>
                       <div className="attentionLine">
                         <span className="attentionBucket">{rule.scheme || "Financement"}</span>
-                        <span>{rule.opco_name || rule.opco_code}</span>
+                        <span>{rule.opco_code}</span>
                         {rule.idcc && <span>IDCC {rule.idcc}</span>}
                       </div>
                       <h3>
@@ -218,6 +222,34 @@ export default async function AcademyPage({ searchParams }) {
           </section>
         </>
       )}
+
+      <section className="todaySection">
+        <div className="sectionTitle">
+          <div>
+            <p className="eyebrow">COUVERTURE OPCO 2026</p>
+            <h2>11 OPCO, sources officielles et règles normalisées</h2>
+          </div>
+          <p>
+            Les règles sont ajoutées uniquement lorsqu’un barème est explicitement vérifiable sur une source officielle.
+            Les autres OPCO restent reliés à leur source 2026 pour enrichissement par branche.
+          </p>
+        </div>
+
+        <div className="grid">
+          {opcoCoverage.map((opco) => (
+            <article className="card" key={opco.code}>
+              <small>{opco.code}</small>
+              <h3>{opco.short_name}</h3>
+              <p>{opco.funding_source_count} source{opco.funding_source_count > 1 ? "s" : ""} officielle{opco.funding_source_count > 1 ? "s" : ""} · {opco.verified_rule_count} règle{opco.verified_rule_count > 1 ? "s" : ""} vérifiée{opco.verified_rule_count > 1 ? "s" : ""}</p>
+              {opco.funding_sources?.[0] && (
+                <a href={opco.funding_sources[0].source_url} target="_blank" rel="noreferrer">
+                  Source 2026 ↗
+                </a>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section>
         <div className="sectionTitle">
