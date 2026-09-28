@@ -9,6 +9,7 @@ import {
   getAcademySummary,
   listAcademyOpcoCoverage
 } from "../../lib/db/academy.js";
+import { lookupCfaDockOpco } from "../../lib/academy/opcoFallback.js";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,7 @@ export default async function AcademyPage({ searchParams }) {
   let lookupState = siret.length === 14 ? "pending" : "idle";
   let lookupError = null;
   let sirenFallback = [];
+  let externalFallback = null;
   let summaryError = null;
   let coverageError = null;
   let coursesError = null;
@@ -85,11 +87,26 @@ export default async function AcademyPage({ searchParams }) {
         if (!company) {
           sirenFallback = await lookupAcademyCompaniesBySiren(siret.slice(0, 9), { limit: 20 });
           const fallback = sirenFallback.find((row) => row.opco_code || row.opco_name || row.idcc) || null;
+
           if (fallback) {
             company = fallback;
             lookupState = "found_siren";
           } else {
-            lookupState = "not_found";
+            externalFallback = await lookupCfaDockOpco(siret);
+
+            if (externalFallback?.found) {
+              company = {
+                siret,
+                siren: siret.slice(0, 9),
+                opco_code: externalFallback.opco_code,
+                opco_name: externalFallback.opco_name,
+                idcc: externalFallback.idcc,
+                source_updated_at: null
+              };
+              lookupState = "found_external";
+            } else {
+              lookupState = "not_found";
+            }
           }
         } else {
           lookupState = "found";
@@ -182,7 +199,9 @@ export default async function AcademyPage({ searchParams }) {
                 ? "Rattachement SIRO trouvé pour ce SIRET."
                 : lookupState === "found_siren"
                   ? "Le SIRET exact est absent de SIRO, mais un rattachement existe pour un autre établissement du même SIREN."
-                  : lookupState === "not_found"
+                  : lookupState === "found_external"
+                    ? "Rattachement trouvé via la recherche CFA Dock."
+                    : lookupState === "not_found"
                   ? "Aucun rattachement trouvé dans les données SIRO actuellement chargées."
                   : lookupState === "error"
                     ? "La recherche a rencontré une erreur."
@@ -190,7 +209,7 @@ export default async function AcademyPage({ searchParams }) {
             </p>
           </div>
 
-          {(lookupState === "found" || lookupState === "found_siren") && company && (
+          {(lookupState === "found" || lookupState === "found_siren" || lookupState === "found_external") && company && (
             <div className="commandGrid">
               <article>
                 <span>OPCO</span>
@@ -217,7 +236,7 @@ export default async function AcademyPage({ searchParams }) {
 
           {lookupState === "not_found" && (
             <div className="emptyState">
-              Aucun rattachement OPCO trouvé pour ce SIRET ni pour un autre établissement du même SIREN dans le snapshot SIRO actuellement chargé.
+              Aucun rattachement OPCO trouvé dans SIRO local, par SIREN, ni via CFA Dock pour ce SIRET.
             </div>
           )}
 
