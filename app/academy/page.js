@@ -158,8 +158,9 @@ export default async function AcademyPage({ searchParams }) {
         }
 
         if (company) {
+          let dbFundingRules = [];
           try {
-            fundingRules = await listAcademyFundingRules({
+            dbFundingRules = await listAcademyFundingRules({
               opcoCode: company.opco_code,
               idcc: company.idcc,
               limit: 50
@@ -168,13 +169,25 @@ export default async function AcademyPage({ searchParams }) {
             console.error("Academy funding rules error", error);
           }
 
-          if (!fundingRules.length) {
-            fundingRules = getStaticFundingRulesForCompany({
-              opcoCode: company.opco_code,
-              idcc: company.idcc,
-              limit: 50
-            });
-          }
+          const staticFundingRules = getStaticFundingRulesForCompany({
+            opcoCode: company.opco_code,
+            idcc: company.idcc,
+            limit: 50
+          });
+
+          const newestStaticDate = staticFundingRules.reduce(
+            (max, rule) => Math.max(max, Date.parse(rule.valid_from || rule.verified_at || 0) || 0),
+            0
+          );
+          const newestDbDate = dbFundingRules.reduce(
+            (max, rule) => Math.max(max, Date.parse(rule.valid_from || rule.verified_at || 0) || 0),
+            0
+          );
+
+          fundingRules =
+            staticFundingRules.length && newestStaticDate >= newestDbDate
+              ? staticFundingRules
+              : dbFundingRules;
         }
       } catch (error) {
         lookupState = "error";
