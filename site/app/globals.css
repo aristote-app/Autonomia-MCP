@@ -17506,3 +17506,173 @@ body {
     grid-template-columns:1fr;
   }
 }
+
+
+/* AUTONOMIA Execution Map V2 — scroll-driven storytelling */
+.executionMap {
+  --execution-progress: 0%;
+}
+
+.executionMapInner {
+  transform: translateY(10px);
+  opacity: .86;
+  transition: transform .65s cubic-bezier(.2,.8,.2,1), opacity .65s ease;
+}
+
+.executionMap.isEntered .executionMapInner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.executionScrollCue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 610px;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.16);
+  color: rgba(243,241,233,.44);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.executionScrollCue b {
+  color: var(--signal);
+  font-size: 11px;
+}
+
+.executionFlow {
+  position: relative;
+}
+
+.executionProgressTrack {
+  position: absolute;
+  z-index: 0;
+  top: -18px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255,255,255,.1);
+  pointer-events: none;
+}
+
+.executionProgressTrack span {
+  display: block;
+  width: var(--execution-progress);
+  height: 100%;
+  background: var(--signal);
+  box-shadow: 0 0 18px rgba(255,230,0,.55);
+  transition: width .18s linear;
+}
+
+.executionFlowSteps::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 52px;
+  left: 7%;
+  width: var(--execution-progress);
+  max-width: 86%;
+  height: 1px;
+  background: var(--signal);
+  box-shadow: 0 0 14px rgba(255,230,0,.55);
+  transition: width .2s linear;
+}
+
+.executionStep.complete {
+  border-color: rgba(255,230,0,.5);
+}
+
+.executionStep.complete .executionStepDot {
+  outline-color: var(--signal);
+  background: var(--signal);
+  box-shadow: 0 0 0 5px rgba(255,230,0,.06);
+}
+
+.executionStep.complete .executionStepNumber,
+.executionStep.complete small {
+  color: rgba(255,230,0,.68);
+}
+
+.executionStepDetail {
+  transition: box-shadow .35s ease, transform .35s ease;
+}
+
+.executionMap.isEntered .executionStepDetail {
+  box-shadow: 0 30px 90px rgba(0,0,0,.34), 0 0 42px rgba(255,230,0,.08);
+}
+
+.executionEndpoint {
+  opacity: .68;
+}
+
+.executionEndpoint.active {
+  opacity: 1;
+  border-color: rgba(255,230,0,.48);
+  box-shadow: 0 0 42px rgba(255,230,0,.07);
+}
+
+.executionEndpointResult {
+  opacity: .54;
+  filter: saturate(.72);
+}
+
+.executionEndpointResult.active {
+  opacity: 1;
+  filter: saturate(1);
+  box-shadow: 0 0 55px rgba(255,230,0,.2);
+}
+
+.executionEndpointResult.active::after {
+  content: "SYSTEM LIVE";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 8px;
+  color: var(--signal-ink);
+  border: 1px solid rgba(0,0,0,.36);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+@media (min-width: 1100px) {
+  .executionFlowCenter {
+    position: relative;
+  }
+
+  .executionStepDetail {
+    position: sticky;
+    top: 92px;
+  }
+}
+
+@media (max-width: 759px) {
+  .executionScrollCue {
+    margin-top: 16px;
+  }
+
+  .executionProgressTrack {
+    top: -12px;
+  }
+
+  .executionStep {
+    scroll-snap-align: center;
+  }
+
+  .executionFlowSteps {
+    scroll-snap-type: x proximity;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .executionMapInner,
+  .executionProgressTrack span,
+  .executionFlowSteps::after,
+  .executionStepDetail {
+    transition: none;
+  }
+}
