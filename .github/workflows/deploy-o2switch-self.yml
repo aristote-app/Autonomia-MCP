@@ -336,6 +336,39 @@ jobs:
             echo "::warning::Academy SIRO refresh returned HTTP $HTTP_CODE."
           fi
 
+      - name: Sync Academy OPCO funding corpus
+        if: always() && steps.probe.outputs.ready == 'true'
+        env:
+          ACADEMY_FUNDING_URL: https://cockpit.build-autonomia.com/api/internal/academy-funding-sync
+          OIDC_TOKEN: ${{ steps.academy_siro_oidc.outputs.token }}
+        run: |
+          HTTP_CODE="$(curl -sS \
+            --max-time 60 \
+            -o /tmp/autonomia-academy-funding.json \
+            -w "%{http_code}" \
+            "$ACADEMY_FUNDING_URL" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+
+          cat /tmp/autonomia-academy-funding.json
+          echo
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Academy funding sync returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
+      - name: Read Academy SIRO status
+        if: always() && steps.probe.outputs.ready == 'true'
+        env:
+          ACADEMY_SIRO_URL: https://cockpit.build-autonomia.com/api/internal/academy-siro-sync
+          OIDC_TOKEN: ${{ steps.academy_siro_oidc.outputs.token }}
+        run: |
+          STATUS="$(curl -fsS \
+            -G "$ACADEMY_SIRO_URL" \
+            --data-urlencode "action=status" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+          printf '%s\n' "$STATUS"
+
       - name: Verify cockpit SEO GEO connection
         if: always() && steps.probe.outputs.ready == 'true'
         env:
