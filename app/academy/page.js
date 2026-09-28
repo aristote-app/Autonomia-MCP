@@ -42,26 +42,64 @@ export default async function AcademyPage({ searchParams }) {
   let summary = { opcos: 0, fundingSources: 0, fundingRules: 0, siroRows: 0, latestSiroRun: null };
   let opcoCoverage = [];
   let dataState = databaseReady ? "ready" : "database_missing";
+  let lookupState = siret.length === 14 ? "pending" : "idle";
+  let lookupError = null;
+  let summaryError = null;
+  let coverageError = null;
+  let coursesError = null;
 
   if (databaseReady) {
-    try {
-      [courses, summary, opcoCoverage] = await Promise.all([
-        listAcademyCourses({ limit: 100 }),
-        getAcademySummary(),
-        listAcademyOpcoCoverage()
-      ]);
-      if (siret.length === 14) {
+    const [summaryResult, coverageResult, coursesResult] = await Promise.allSettled([
+      getAcademySummary(),
+      listAcademyOpcoCoverage(),
+      listAcademyCourses({ limit: 100 })
+    ]);
+
+    if (summaryResult.status === "fulfilled") {
+      summary = summaryResult.value;
+    } else {
+      summaryError = summaryResult.reason?.message || String(summaryResult.reason || "");
+      console.error("Academy summary error", summaryResult.reason);
+    }
+
+    if (coverageResult.status === "fulfilled") {
+      opcoCoverage = coverageResult.value;
+    } else {
+      coverageError = coverageResult.reason?.message || String(coverageResult.reason || "");
+      console.error("Academy coverage error", coverageResult.reason);
+    }
+
+    if (coursesResult.status === "fulfilled") {
+      courses = coursesResult.value;
+    } else {
+      coursesError = coursesResult.reason?.message || String(coursesResult.reason || "");
+      console.error("Academy courses error", coursesResult.reason);
+    }
+
+    if (siret.length === 14) {
+      try {
         company = await lookupAcademyCompanyBySiret(siret);
+        lookupState = company ? "found" : "not_found";
+
         if (company) {
-          fundingRules = await listAcademyFundingRules({
-            opcoCode: company.opco_code,
-            idcc: company.idcc,
-            limit: 50
-          });
+          try {
+            fundingRules = await listAcademyFundingRules({
+              opcoCode: company.opco_code,
+              idcc: company.idcc,
+              limit: 50
+            });
+          } catch (error) {
+            console.error("Academy funding rules error", error);
+          }
         }
+      } catch (error) {
+        lookupState = "error";
+        lookupError = error?.message || String(error);
+        console.error("Academy SIRET lookup error", error);
       }
-    } catch (error) {
-      console.error("Academy cockpit data error", error);
+    }
+
+    if (summaryError && coverageError && coursesError && lookupState === "error") {
       dataState = "schema_missing";
     }
   }
@@ -136,9 +174,18 @@ export default async function AcademyPage({ searchParams }) {
         </section>
       )}
 
-      {siret.length === 14 && dataState === "ready" && !company && (
+      {siret.length === 14 && lookupState === "not_found" && (
         <section className="emptyState">
-          Aucun rattachement SIRO trouvé pour le SIRET {siret}.
+          <strong>SIRET {siret}</strong><br />
+          Aucun rattachement OPCO n’est encore trouvé dans le référentiel SIRO chargé.
+          Le référentiel est en cours de synchronisation ; réessaye dans quelques minutes.
+        </section>
+      )}
+
+      {siret.length === 14 && lookupState === "error" && (
+        <section className="emptyState">
+          <strong>La recherche du SIRET {siret} a échoué.</strong><br />
+          {lookupError || "Erreur de lecture du référentiel SIRO."}
         </section>
       )}
 
@@ -288,7 +335,9 @@ export default async function AcademyPage({ searchParams }) {
           </div>
         ) : (
           <div className="emptyState">
-            Le catalogue Academy sera alimenté dans la base AUTONOMIA.
+            {coursesError
+              ? "Le catalogue Academy n’est pas encore disponible, mais cela ne bloque plus la recherche OPCO."
+              : "Le catalogue Academy sera alimenté dans la base AUTONOMIA."}
           </div>
         )}
       </section>
