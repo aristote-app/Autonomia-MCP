@@ -83,6 +83,55 @@ const contexts = {
     sources: ["ERP", "CRM", "Tableau financier"],
     routes: ["Direction", "Finance", "Opérations"],
     channels: ["COMEX", "Managers", "Équipe"]
+  },
+
+  "reunions-comptes-rendus": {
+    entities: ["CODIR · 28/09", "Projet Atlas · hebdo", "Comité client · S39"],
+    sources: ["Transcription", "Ordre du jour", "Notes partagées"],
+    routes: ["Direction", "Finance", "Opérations"],
+    channels: ["Compte rendu", "E-mail", "Teams", "CRM"]
+  },
+  "documents-connaissance-rag": {
+    entities: ["Procédure achats", "Contrat cadre", "Guide qualité"],
+    sources: ["GED", "Google Drive", "Base documentaire"],
+    routes: ["Opérations", "Juridique", "Qualité"],
+    channels: ["Assistant", "GED", "E-mail"]
+  },
+  "leads-qualification-commerciale": {
+    entities: ["Lead ACME · chaud", "Lead NOVA · à qualifier", "Lead ORBIT · dormant"],
+    sources: ["CRM", "Site entreprise", "Historique e-mails"],
+    routes: ["Business development", "Account Executive", "Direction commerciale"],
+    channels: ["CRM", "E-mail", "LinkedIn", "Téléphone"]
+  },
+  "factures-depenses": {
+    entities: ["FAC-26118", "FAC-26119", "NDF-26042"],
+    sources: ["Boîte factures", "ERP", "Banque"],
+    routes: ["Comptabilité fournisseurs", "Contrôle", "DAF"],
+    channels: ["ERP", "Validation", "E-mail"]
+  },
+  "controle-dossiers-conformite": {
+    entities: ["Dossier 26-184", "Dossier 26-185", "Dossier 26-186"],
+    sources: ["Checklist métier", "Pièces reçues", "Référentiel de contrôle"],
+    routes: ["Back-office", "Responsable", "Qualité"],
+    channels: ["Portail", "GED", "E-mail"]
+  },
+  "appels-offres-reponses": {
+    entities: ["AO Métropole · Lot 2", "Consultation Industrie · IA", "Marché Formation · 2027"],
+    sources: ["RC", "CCTP", "DPGF"],
+    routes: ["Commerce", "Technique", "Juridique"],
+    channels: ["Plateforme acheteur", "Drive", "E-mail"]
+  },
+  "planification-rendez-vous": {
+    entities: ["Intervention A · Paris", "RDV B · 11:30", "Visite C · urgente"],
+    sources: ["Agenda", "CRM", "Contraintes équipe"],
+    routes: ["Équipe A", "Équipe B", "Responsable planning"],
+    channels: ["Agenda", "SMS", "E-mail"]
+  },
+  "veille-recherche": {
+    entities: ["Signal concurrent", "Nouvelle réglementation", "Technologie émergente"],
+    sources: ["Sites suivis", "Newsletters", "Documents internes"],
+    routes: ["Direction", "Marketing", "Référent métier"],
+    channels: ["Digest", "E-mail", "Dashboard"]
   }
 };
 
@@ -424,7 +473,7 @@ const knowledgeTypes = new Set(["knowledge","account","maintenance","tender"]);
 const contentTypes = new Set(["content","document","brief","brand"]);
 const dataTypes = new Set(["invoice","reconcile","extract","table","catalog"]);
 const meetingTypes = new Set(["meeting","timeline","executive","report"]);
-const plannerTypes = new Set(["learning","calendar","site"]);
+const plannerTypes = new Set(["learning","calendar","site","schedule"]);
 const controlTypes = new Set(["control","classify","cluster"]);
 
 const specializedTypes = new Set([
