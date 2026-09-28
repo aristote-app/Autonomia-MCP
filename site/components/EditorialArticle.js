@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LiveJobSignals from "@/components/LiveJobSignals";
+import ExecutionMap from "@/components/ExecutionMap";
 import { getEditorialGraph } from "@/lib/editorialGraph";
 import { getRelatedGlossaryTermsForText } from "@/content/ai-glossary";
 
@@ -90,6 +91,10 @@ export default function EditorialArticle({ article }) {
           ))}
         </div>
       </header>
+
+      {article.type === "execution" && article.executionMap && (
+        <ExecutionMap map={article.executionMap} />
+      )}
 
       <section className="articleLayout">
         <aside className="articleToc">
