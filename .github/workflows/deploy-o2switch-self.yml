@@ -276,7 +276,7 @@ jobs:
             -o /tmp/autonomia-talent-bootstrap.json \
             -w "%{http_code}" \
             -X POST "$BOOTSTRAP_URL" \
-            -H "Authorization: Bearer $OIDC_TOKEN")"
+            -H "Authorization: Bearer $OIDC_TOKEN" || printf '000')"
 
           if [ "$HTTP_CODE" = "200" ]; then
             cat /tmp/autonomia-talent-bootstrap.json
