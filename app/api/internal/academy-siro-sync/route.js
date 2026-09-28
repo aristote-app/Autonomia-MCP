@@ -26,17 +26,21 @@ async function authorize(request) {
 
 async function statusPayload() {
   const db = getAutonomiaServerClient();
-  const [{ data: runs, error: runsError }, { count, error: countError }] = await Promise.all([
-    db.from("academy_sync_runs")
-      .select("id,status,resource_id,file_name,source_updated_at,rows_seen,rows_upserted,started_at,finished_at,error_message")
-      .eq("source", "SIRO")
-      .order("started_at", { ascending: false })
-      .limit(5),
-    db.from("academy_siro").select("siret", { count: "exact", head: true })
-  ]);
+  const { data: runs, error: runsError } = await db
+    .from("academy_sync_runs")
+    .select("id,status,resource_id,file_name,source_updated_at,rows_seen,rows_upserted,started_at,finished_at,error_message")
+    .eq("source", "SIRO")
+    .order("started_at", { ascending: false })
+    .limit(20);
+
   if (runsError) throw runsError;
-  if (countError) throw countError;
-  return { rows: count || 0, runs: runs || [] };
+
+  const rows = (runs || []).reduce(
+    (max, run) => Math.max(max, Number(run.rows_upserted) || 0),
+    0
+  );
+
+  return { rows, runs: (runs || []).slice(0, 5) };
 }
 
 export async function GET(request) {
