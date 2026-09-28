@@ -11,7 +11,7 @@ export default function ExecutionMap({ map }) {
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return undefined;
+    if (!section || !map?.steps?.length) return undefined;
 
     let frame = null;
 
@@ -50,7 +50,7 @@ export default function ExecutionMap({ map }) {
       window.removeEventListener("resize", onScroll);
       if (frame !== null) window.cancelAnimationFrame(frame);
     };
-  }, [hasEntered, map.steps.length]);
+  }, [hasEntered, map?.steps?.length]);
 
   if (!map?.steps?.length) return null;
 
