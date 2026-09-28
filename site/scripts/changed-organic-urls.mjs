@@ -49,6 +49,9 @@ for (const file of changed) {
   if (file === "site/content/published-articles.js" || file.startsWith("site/content/article-packs/")) {
     addAllArticles();
     add("/cas-usage-ia");
+    add("/cas-usage-ia/par-probleme");
+    add("/cas-usage-ia/par-metier");
+    add("/cas-usage-ia/par-secteur");
     add("/formation-ia/cas-usage");
     add("/feed.xml");
     continue;
@@ -64,6 +67,8 @@ for (const file of changed) {
 
   if (
     file === "site/content/editorial-backlog.js" ||
+    file === "site/content/use-case-discovery.js" ||
+    file === "site/components/UseCaseDiscoveryHub.js" ||
     file === "site/content/pillar-insights.js" ||
     file === "site/components/EditorialPillar.js"
   ) {
