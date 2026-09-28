@@ -142,7 +142,7 @@ export default async function AcademyPage({ searchParams }) {
       </section>
 
       <section className="territoryControls">
-        <form className="territorySearch" method="get" action="/academy">
+        <form className="territorySearch" method="get" action="/academy#academy-result">
           <input
             name="siret"
             inputMode="numeric"
@@ -155,6 +155,63 @@ export default async function AcademyPage({ searchParams }) {
           <button type="submit">Identifier l’OPCO</button>
         </form>
       </section>
+
+      {siret.length === 14 && (
+        <section id="academy-result" className="commandCenter" style={{ scrollMarginTop: "24px" }}>
+          <div className="sectionTitle">
+            <div>
+              <p className="eyebrow">RÉSULTAT OPCO</p>
+              <h2>SIRET {siret}</h2>
+            </div>
+            <p>
+              {lookupState === "found"
+                ? "Rattachement SIRO trouvé."
+                : lookupState === "not_found"
+                  ? "Aucun rattachement trouvé dans les données SIRO actuellement chargées."
+                  : lookupState === "error"
+                    ? "La recherche a rencontré une erreur."
+                    : "Recherche en cours."}
+            </p>
+          </div>
+
+          {lookupState === "found" && company && (
+            <div className="commandGrid">
+              <article>
+                <span>OPCO</span>
+                <strong>{company.opco_name || company.opco_code || "—"}</strong>
+                <p>{company.opco_code || "Code OPCO non renseigné"}</p>
+              </article>
+              <article>
+                <span>IDCC</span>
+                <strong>{company.idcc || "—"}</strong>
+                <p>Convention collective rattachée dans SIRO.</p>
+              </article>
+              <article>
+                <span>SIREN</span>
+                <strong>{company.siren || "—"}</strong>
+                <p>Établissement : {company.siret}</p>
+              </article>
+              <article>
+                <span>DONNÉE SIRO</span>
+                <strong>{date(company.source_updated_at)}</strong>
+                <p>Dernière date de source enregistrée.</p>
+              </article>
+            </div>
+          )}
+
+          {lookupState === "not_found" && (
+            <div className="emptyState">
+              Aucun rattachement OPCO trouvé pour ce SIRET dans le référentiel SIRO actuellement chargé.
+            </div>
+          )}
+
+          {lookupState === "error" && (
+            <div className="emptyState">
+              Erreur de recherche SIRO : {lookupError || "erreur inconnue"}.
+            </div>
+          )}
+        </section>
+      )}
 
       {dataState === "database_missing" && (
         <section className="emptyState">
