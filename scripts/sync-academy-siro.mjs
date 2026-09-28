@@ -63,7 +63,7 @@ function parseCsvLine(line, delimiter) {
 }
 
 function detectDelimiter(line) {
-  const candidates = [";", ",", "\t"];
+  const candidates = ["|", ";", ",", "\t"];
   let best = ";";
   let score = -1;
   for (const candidate of candidates) {
