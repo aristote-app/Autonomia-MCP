@@ -18362,3 +18362,521 @@ body {
 @media(max-width:1079px){.homeHeroV11,.homeMatchV11,.homeMethodTerritoryV11{grid-template-columns:1fr}.homeOffersV11{grid-template-columns:1fr}.homeProblemsGridV11{grid-template-columns:1fr 1fr}.homeFooterLinksV11{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:759px){.homeHeroV11,.homeOffersV11,.homeProblemsV11,.homeMatchV11,.homeMethodTerritoryV11,.homeFooterV11{width:calc(100% - 16px)}.homeHeroV11{margin-top:14px;padding:26px 18px;border-radius:28px}.homeHeroV11Copy h1{font-size:clamp(44px,12vw,62px)}.homeHeroV11Copy>p:not(.eyebrow){font-size:15px}.homeSectionHeadV11{grid-template-columns:1fr;gap:8px}.homeProblemsGridV11{grid-template-columns:1fr}.homeMatchV11{padding:18px;border-radius:26px}.homeMethodStepsV11{grid-template-columns:1fr}.homeFooterV11Top{display:grid;align-items:start}.homeFooterV11Top nav{justify-content:flex-start}.homeFooterLinksV11{grid-template-columns:1fr}}
 
+/* HOME V10R — restored content, refined blocks */
+
+/* Restore V10 content, but make the lower-half blocks lighter, tighter and more premium. */
+
+/* --- AI Match: product card, no giant empty white zone --- */
+.homeV10 .homeSolutionMatch {
+  display:grid;
+  grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+  gap:18px;
+  width:min(calc(100% - 28px),var(--max));
+  margin:18px auto 0;
+  padding:26px;
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(255,213,74,.12),transparent 26%),
+    linear-gradient(180deg,#101d42,#0b1530);
+  color:#fff;
+  box-shadow:0 26px 68px rgba(11,21,48,.13);
+}
+.homeV10 .homeSolutionMatchIntro {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:20px 18px;
+}
+.homeV10 .homeSolutionMatchIntro .sectionIndex {
+  color:#a6b4d1;
+}
+.homeV10 .homeSolutionMatchIntro h2 {
+  max-width:560px;
+  margin:10px 0 14px;
+  color:#fff;
+  font-size:clamp(34px,3.7vw,56px);
+  line-height:.96;
+  letter-spacing:-.052em;
+}
+.homeV10 .homeSolutionMatchIntro p:last-child {
+  max-width:520px;
+  margin:0;
+  color:#c9d3e6;
+  font-size:14px;
+  line-height:1.55;
+}
+.homeV10 .homeSolutionMatch .solutionFinder {
+  overflow:hidden;
+  margin:0;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:26px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  box-shadow:none;
+}
+.homeV10 .homeSolutionMatch .solutionFinderTopline {
+  min-height:40px;
+  padding:10px 14px;
+}
+.homeV10 .homeSolutionMatch .solutionFinderForm {
+  grid-template-columns:minmax(0,1fr) 220px;
+  grid-template-areas:
+    "label label"
+    "text submit";
+  gap:10px 12px;
+  padding:14px;
+}
+.homeV10 .homeSolutionMatch .solutionFinderForm label {
+  grid-area:label;
+  font-size:clamp(20px,2vw,28px);
+}
+.homeV10 .homeSolutionMatch .solutionFinderForm textarea {
+  grid-area:text;
+  min-height:104px;
+  max-height:132px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+}
+.homeV10 .homeSolutionMatch .solutionFinderSubmit {
+  grid-area:submit;
+  align-content:end;
+}
+.homeV10 .homeSolutionMatch .solutionFinderSubmit > span {
+  line-height:1.35;
+}
+.homeV10 .homeSolutionMatch .solutionFinderSubmit button {
+  min-height:52px;
+  border-radius:16px;
+}
+.homeV10 .homeSolutionMatch .solutionExamples {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px;
+  background:rgba(255,255,255,.12);
+}
+.homeV10 .homeSolutionMatch .solutionExamples button {
+  min-height:52px;
+  padding:11px 14px;
+  background:rgba(255,255,255,.055);
+  color:#d2dced;
+}
+.homeV10 .homeSolutionMatch .solutionExamples button:hover {
+  background:rgba(255,255,255,.1);
+  color:#fff;
+}
+
+/* --- Problems: denser editorial cards instead of giant empty tiles --- */
+.homeV10 .homeProblemStripV10 {
+  padding-top:72px;
+  padding-bottom:72px;
+}
+.homeV10 .homeProblemStripV10 .sectionHeading {
+  grid-template-columns:170px minmax(0,1fr);
+  align-items:end;
+  gap:24px;
+}
+.homeV10 .homeProblemStripV10 .sectionHeading h2 {
+  max-width:960px;
+  font-size:clamp(42px,5vw,70px);
+}
+.homeV10 .homeProblemSpotlight {
+  grid-template-columns:.95fr 1.05fr;
+  gap:16px;
+  padding:24px;
+  border-radius:30px;
+}
+.homeV10 .homeProblemSpotlight h3 {
+  font-size:clamp(32px,3.5vw,48px);
+}
+.homeV10 .homeProblemFlow {
+  min-height:180px;
+}
+.homeV10 .homeProblemGrid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:18px 0 18px;
+}
+.homeV10 .homeProblemGrid > a {
+  position:relative;
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  grid-template-areas:
+    "num meta arrow"
+    "title title title";
+  align-content:start;
+  min-height:156px;
+  padding:18px;
+  overflow:hidden;
+  border-radius:22px;
+  background:#fff;
+}
+.homeV10 .homeProblemGrid > a::after {
+  content:"";
+  position:absolute;
+  right:-34px;
+  bottom:-40px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:rgba(255,213,74,.12);
+}
+.homeV10 .homeProblemGrid > a:nth-child(3n+2) {
+  background:#eefaf8;
+}
+.homeV10 .homeProblemGrid > a:nth-child(3n+2)::after {
+  background:rgba(30,179,166,.12);
+}
+.homeV10 .homeProblemGrid > a:nth-child(3n+3) {
+  background:#fff8df;
+}
+.homeV10 .homeProblemGrid > a > span {
+  font-size:12px;
+}
+.homeV10 .homeProblemGrid > a > small {
+  align-self:center;
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.homeV10 .homeProblemGrid > a > strong {
+  grid-area:title;
+  align-self:end;
+  margin-top:34px;
+  max-width:90%;
+  font-size:21px;
+  line-height:1.08;
+  letter-spacing:-.025em;
+}
+.homeV10 .homeProblemGrid > a > b {
+  align-self:start;
+  font-size:11px;
+}
+
+/* --- Fiche besoin: compact intro + module treated as one premium object --- */
+.homeV10 .homeDiagnosticIntro {
+  grid-template-columns:150px minmax(0,1fr);
+  gap:26px;
+  width:min(calc(100% - 28px),var(--max));
+  margin:18px auto 0;
+  padding:34px 34px 26px;
+  border:0;
+  border-radius:30px 30px 0 0;
+  background:
+    linear-gradient(90deg,rgba(255,213,74,.08),transparent 36%),
+    #fffdf8;
+  box-shadow:0 18px 46px rgba(11,21,48,.05);
+}
+.homeV10 .homeDiagnosticIntro .sectionIndex {
+  padding-top:5px;
+}
+.homeV10 .homeDiagnosticIntro .auditKicker {
+  margin:0;
+  font-size:10px;
+}
+.homeV10 .homeDiagnosticIntro h2 {
+  max-width:850px;
+  margin:8px 0 10px;
+  font-size:clamp(38px,4.3vw,60px);
+  line-height:.97;
+}
+.homeV10 .homeDiagnosticIntro > div > p:last-child {
+  max-width:820px;
+  font-size:15px;
+  line-height:1.5;
+}
+.homeV10 > .needBriefSection {
+  width:min(calc(100% - 28px),var(--max));
+  margin:0 auto;
+  padding-top:0;
+  overflow:hidden;
+  border:0;
+  border-radius:0 0 30px 30px;
+  box-shadow:0 22px 52px rgba(11,21,48,.07);
+}
+.homeV10 > .needBriefSection .needBriefForm {
+  border-radius:0 0 30px 30px;
+}
+.homeV10 > .needBriefSection .needBriefProgressSix {
+  padding:12px 18px 0;
+}
+.homeV10 > .needBriefSection .needBriefPane {
+  padding:18px 22px 22px;
+}
+.homeV10 > .needBriefSection .needBriefPane legend {
+  font-size:clamp(28px,3vw,42px);
+}
+.homeV10 > .needBriefSection .needCheckGrid {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+/* --- Method: visual three-stage runway instead of a plain oversized card --- */
+.homeV10 .homeMethodV10 {
+  grid-template-columns:.72fr 1.28fr;
+  gap:22px;
+  margin-top:18px;
+  padding:34px;
+  overflow:hidden;
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 0 100%,rgba(30,179,166,.1),transparent 30%),
+    #fffdf8;
+}
+.homeV10 .homeMethodV10 .methodIntro {
+  align-self:center;
+}
+.homeV10 .homeMethodV10 .methodIntro h2 {
+  max-width:580px;
+  margin:10px 0 14px;
+  font-size:clamp(40px,4.4vw,62px);
+  line-height:.94;
+}
+.homeV10 .homeMethodV10 .methodIntro > p:last-child {
+  max-width:520px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  align-self:stretch;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps li {
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:230px;
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:#fff;
+  box-shadow:0 14px 30px rgba(11,21,48,.045);
+}
+.homeV10 .homeMethodV10 .homeMethodSteps li:nth-child(2) {
+  background:#eefaf8;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps li:nth-child(3) {
+  background:#fff8df;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps li > span {
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#0b1530;
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps strong {
+  font-size:24px;
+  letter-spacing:-.03em;
+}
+.homeV10 .homeMethodV10 .homeMethodSteps p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+/* --- Territories: keep content, reduce the visual weight --- */
+.homeV10 .homeTerritoryV10 {
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:28px;
+  min-height:0;
+  margin-top:18px;
+  padding:38px 42px;
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,213,74,.13),transparent 27%),
+    linear-gradient(180deg,#101d42,#0b1530);
+}
+.homeV10 .homeTerritoryV10 h2 {
+  max-width:900px;
+  margin:12px 0 22px;
+  color:#fff;
+  font-size:clamp(36px,4.2vw,58px);
+  line-height:.96;
+}
+.homeV10 .homeTerritoryV10 .territoryHomeKicker,
+.homeV10 .homeTerritoryV10 .sectionIndex {
+  color:#ffd54a;
+}
+.homeV10 .homeTerritoryV10 .secondaryButton {
+  min-height:44px;
+  padding:0 16px;
+  border-color:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+}
+.homeV10 .homeTerritoryV10 .territoryHomeTracks {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  align-self:center;
+  border-top:1px solid rgba(255,255,255,.14);
+}
+.homeV10 .homeTerritoryV10 .territoryHomeTracks span {
+  min-height:58px;
+  padding:0;
+  border-bottom:1px solid rgba(255,255,255,.14);
+  color:#fff;
+}
+.homeV10 .homeTerritoryV10 .territoryHomeTracks b {
+  color:#ffd54a;
+}
+
+/* --- Final CTA + footer: smaller, connected, not two oversized slabs --- */
+.homeV10 .homeFinalStart {
+  grid-template-columns:minmax(0,1fr) minmax(360px,.72fr);
+  gap:24px;
+  align-items:center;
+  margin-top:18px;
+  margin-bottom:0;
+  padding:30px 34px;
+  border-radius:30px 30px 0 0;
+  background:linear-gradient(90deg,#ffd54a,#ffe17a);
+}
+.homeV10 .homeFinalStart h2 {
+  max-width:650px;
+  font-size:clamp(34px,4vw,54px);
+}
+.homeV10 .homeFinalStart .homeStartEmail.compact .homeStartEmailFields {
+  min-width:0;
+}
+.homeV10 > .siteFooter {
+  width:min(calc(100% - 28px),var(--max));
+  margin:0 auto 24px;
+  padding:28px 34px 30px;
+  border:0;
+  border-radius:0 0 30px 30px;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  background:#0b1530;
+}
+.homeV10 > .siteFooter .brand {
+  grid-column:1;
+}
+.homeV10 > .siteFooter > p {
+  grid-column:1;
+}
+.homeV10 > .siteFooter nav {
+  grid-column:2;
+  grid-row:1 / span 2;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:10px 18px;
+  max-width:650px;
+  color:#d5def0;
+}
+.homeV10 > .siteFooter nav a {
+  font-size:11px;
+}
+
+/* Keep the SEO-heavy Experts and Academy directories, but tighten their rhythm. */
+.homeV10 .homeRoleDirectory,
+.homeV10 .homeAcademyDirectory {
+  margin-top:18px;
+}
+.homeV10 .homeRoleDirectory .sectionHeading,
+.homeV10 .homeAcademyDirectory .sectionHeading {
+  padding-top:44px;
+  padding-bottom:30px;
+}
+.homeV10 .homeRoleDirectory .sectionHeading h2,
+.homeV10 .homeAcademyDirectory .sectionHeading h2 {
+  font-size:clamp(38px,4.6vw,60px);
+}
+.homeV10 .homeRoleDirectory .roleChip {
+  min-height:68px;
+}
+.homeV10 .homeAcademyDirectory .topicGrid a {
+  min-height:60px;
+}
+
+@media (max-width:1079px) {
+  .homeV10 .homeSolutionMatch,
+  .homeV10 .homeMethodV10,
+  .homeV10 .homeTerritoryV10 {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionFinderForm {
+    grid-template-columns:1fr;
+    grid-template-areas:"label" "text" "submit";
+  }
+
+  .homeV10 .homeProblemGrid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .homeV10 > .needBriefSection .needCheckGrid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .homeV10 .homeFinalStart,
+  .homeV10 > .siteFooter {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 > .siteFooter nav {
+    grid-column:1;
+    grid-row:auto;
+    justify-content:flex-start;
+  }
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeSolutionMatch,
+  .homeV10 .homeDiagnosticIntro,
+  .homeV10 > .needBriefSection,
+  .homeV10 .homeRoleDirectory,
+  .homeV10 .homeAcademyDirectory,
+  .homeV10 .homeMethodV10,
+  .homeV10 .homeTerritoryV10,
+  .homeV10 .homeFinalStart,
+  .homeV10 > .siteFooter {
+    width:calc(100% - 16px);
+  }
+
+  .homeV10 .homeSolutionMatch,
+  .homeV10 .homeMethodV10,
+  .homeV10 .homeTerritoryV10,
+  .homeV10 .homeFinalStart {
+    padding:22px 18px;
+  }
+
+  .homeV10 .homeProblemGrid {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeProblemGrid > a {
+    min-height:138px;
+  }
+
+  .homeV10 .homeProblemStripV10 .sectionHeading,
+  .homeV10 .homeDiagnosticIntro {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamples,
+  .homeV10 > .needBriefSection .needCheckGrid,
+  .homeV10 .homeMethodV10 .homeMethodSteps {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeMethodV10 .homeMethodSteps li {
+    min-height:160px;
+  }
+
+  .homeV10 .homeFinalStart {
+    border-radius:26px 26px 0 0;
+  }
+
+  .homeV10 > .siteFooter {
+    border-radius:0 0 26px 26px;
+    padding:24px 20px;
+  }
+}
