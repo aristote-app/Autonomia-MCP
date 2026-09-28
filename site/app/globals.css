@@ -17889,3 +17889,140 @@ body {
     grid-column:auto;
   }
 }
+
+
+/* AUTONOMIA Execution Map V3 — readable live data flow */
+.executionDataRail {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 40px;
+  margin: -6px 0 12px;
+  padding: 0 2px;
+  color: rgba(243,241,233,.52);
+}
+
+.executionDataRailLabel {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .15em;
+  white-space: nowrap;
+}
+
+.executionDataRail > strong {
+  min-width: 86px;
+  color: var(--paper);
+  font-size: 10px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.executionDataTrack {
+  position: relative;
+  height: 10px;
+}
+
+.executionDataTrack::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255,255,255,.13);
+}
+
+.executionDataTrackFill {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: var(--execution-progress);
+  height: 1px;
+  background: rgba(255,230,0,.72);
+  box-shadow: 0 0 10px rgba(255,230,0,.18);
+  transition: width .18s linear;
+}
+
+.executionDataPacket {
+  position: absolute;
+  z-index: 2;
+  top: 1px;
+  width: 7px;
+  height: 7px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgba(255,230,0,.07);
+  transition: left .18s linear, opacity .18s ease, transform .18s ease;
+}
+
+.executionDataPacket.packet2 {
+  width: 5px;
+  height: 5px;
+  top: 2px;
+  opacity: .58;
+}
+
+.executionDataPacket.packet3 {
+  width: 4px;
+  height: 4px;
+  top: 3px;
+  opacity: .3;
+}
+
+.executionStepDetailTop > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.executionStepDetailTop em {
+  padding: 5px 7px;
+  color: rgba(0,0,0,.72);
+  border: 1px solid rgba(0,0,0,.28);
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: .11em;
+  white-space: nowrap;
+}
+
+.executionStepDetailTop b {
+  white-space: nowrap;
+}
+
+@media (max-width: 759px) {
+  .executionDataRail {
+    grid-template-columns: auto 1fr;
+    gap: 8px 10px;
+    margin-top: -2px;
+  }
+
+  .executionDataTrack {
+    min-width: 0;
+  }
+
+  .executionDataRail > strong {
+    grid-column: 1 / -1;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .executionStepDetailTop {
+    align-items: flex-start;
+  }
+
+  .executionStepDetailTop > div {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .executionDataTrackFill,
+  .executionDataPacket {
+    transition: none;
+  }
+}
