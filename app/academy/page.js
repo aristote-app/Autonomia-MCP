@@ -111,6 +111,15 @@ export default async function AcademyPage({ searchParams }) {
                     ? "found_external_idcc"
                     : "found_external";
             } else if (externalFallback?.candidate) {
+              company = {
+                siret,
+                siren: externalFallback.company?.siren || siret.slice(0, 9),
+                opco_code: externalFallback.candidate.opco_code,
+                opco_name: externalFallback.candidate.opco_name,
+                idcc: externalFallback.candidate.idcc,
+                source_updated_at: null,
+                resolution_source: "candidate"
+              };
               lookupState = "candidate";
             } else {
               lookupState = "not_found";
@@ -339,7 +348,11 @@ export default async function AcademyPage({ searchParams }) {
                 <p className="eyebrow">ENTREPRISE</p>
                 <h2>{company.opco_name || company.opco_code || "OPCO identifié"}</h2>
               </div>
-              <p>Rattachement issu du référentiel SIRO chargé dans AUTONOMIA.</p>
+              <p>
+                {company.resolution_source === "candidate"
+                  ? "Rattachement candidat déduit de sources publiques ; à confirmer."
+                  : "Rattachement issu du référentiel SIRO chargé dans AUTONOMIA."}
+              </p>
             </div>
 
             <div className="commandGrid">
@@ -356,7 +369,11 @@ export default async function AcademyPage({ searchParams }) {
               <article>
                 <span>IDCC</span>
                 <strong>{company.idcc || "—"}</strong>
-                <p>Convention collective issue du référentiel SIRO.</p>
+                <p>
+                  {company.resolution_source === "candidate"
+                    ? "IDCC candidat à confirmer."
+                    : "Convention collective issue du référentiel SIRO."}
+                </p>
               </article>
               <article>
                 <span>DONNÉE SIRO</span>
