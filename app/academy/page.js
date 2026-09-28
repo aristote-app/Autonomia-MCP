@@ -179,8 +179,10 @@ export default async function AcademyPage({ searchParams }) {
             </div>
             <p>
               {lookupState === "found"
-                ? "Rattachement SIRO trouvé."
-                : lookupState === "not_found"
+                ? "Rattachement SIRO trouvé pour ce SIRET."
+                : lookupState === "found_siren"
+                  ? "Le SIRET exact est absent de SIRO, mais un rattachement existe pour un autre établissement du même SIREN."
+                  : lookupState === "not_found"
                   ? "Aucun rattachement trouvé dans les données SIRO actuellement chargées."
                   : lookupState === "error"
                     ? "La recherche a rencontré une erreur."
@@ -188,7 +190,7 @@ export default async function AcademyPage({ searchParams }) {
             </p>
           </div>
 
-          {lookupState === "found" && company && (
+          {(lookupState === "found" || lookupState === "found_siren") && company && (
             <div className="commandGrid">
               <article>
                 <span>OPCO</span>
@@ -215,7 +217,7 @@ export default async function AcademyPage({ searchParams }) {
 
           {lookupState === "not_found" && (
             <div className="emptyState">
-              Aucun rattachement OPCO trouvé pour ce SIRET dans le référentiel SIRO actuellement chargé.
+              Aucun rattachement OPCO trouvé pour ce SIRET ni pour un autre établissement du même SIREN dans le snapshot SIRO actuellement chargé.
             </div>
           )}
 
@@ -248,8 +250,8 @@ export default async function AcademyPage({ searchParams }) {
       {siret.length === 14 && lookupState === "not_found" && (
         <section className="emptyState">
           <strong>SIRET {siret}</strong><br />
-          Aucun rattachement OPCO n’est encore trouvé dans le référentiel SIRO chargé.
-          Le référentiel est en cours de synchronisation ; réessaye dans quelques minutes.
+          Ce SIRET n’apparaît pas dans le snapshot SIRO actuellement chargé et aucun autre établissement du même SIREN n’a fourni de rattachement exploitable.
+          L’absence dans SIRO ne signifie pas qu’aucun OPCO n’existe.
         </section>
       )}
 
