@@ -45,7 +45,11 @@ export default async function AcademyPage({ searchParams }) {
 
   if (databaseReady) {
     try {
-      [courses, summary, opcoCoverage] = await Promise.all([\n        listAcademyCourses({ limit: 100 }),\n        getAcademySummary(),\n        listAcademyOpcoCoverage()\n      ]);
+      [courses, summary, opcoCoverage] = await Promise.all([
+        listAcademyCourses({ limit: 100 }),
+        getAcademySummary(),
+        listAcademyOpcoCoverage()
+      ]);
       if (siret.length === 14) {
         company = await lookupAcademyCompanyBySiret(siret);
         if (company) {
