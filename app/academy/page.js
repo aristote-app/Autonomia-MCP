@@ -3,6 +3,7 @@ import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 import {
   cleanSiret,
   lookupAcademyCompanyBySiret,
+  lookupAcademyCompaniesBySiren,
   listAcademyFundingRules,
   listAcademyCourses,
   getAcademySummary,
