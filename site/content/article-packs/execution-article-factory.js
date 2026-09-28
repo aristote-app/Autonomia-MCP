@@ -403,8 +403,8 @@ export function buildExecutionArticle(spec) {
     dek,
     summary,
     readingTime: "18–24 min",
-    publishedAt: "2026-09-25",
-    modifiedAt: "2026-09-25",
+    publishedAt: spec.publishedAt || "2026-09-25",
+    modifiedAt: spec.modifiedAt || spec.publishedAt || "2026-09-25",
     jobSignalTags: spec.jobSignalTags || defaultTags[spec.family],
     search: {
       primaryKeyword: keyword,
@@ -415,7 +415,7 @@ export function buildExecutionArticle(spec) {
         `${keyword} workflow IA`
       ],
       demandEvidence: ["editorial_backlog", "commercial_intent"],
-      observedAt: "2026-09-25"
+      observedAt: spec.observedAt || spec.publishedAt || "2026-09-25"
     },
     quickFacts: [
       ["DÉCLENCHEUR", spec.trigger],
