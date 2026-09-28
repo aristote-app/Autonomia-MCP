@@ -62,6 +62,21 @@ export const executionSourceSets = {
     { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" },
     { label: "Google Drive API — Search query terms and operators", url: "https://developers.google.com/workspace/drive/api/guides/ref-search-terms" }
   ],
+  legal: [
+    { label: "Microsoft Learn — Document Intelligence layout model", url: "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/layout?view=doc-intel-4.0.0" },
+    { label: "Microsoft Learn — Document Intelligence overview", url: "https://learn.microsoft.com/fr-fr/azure/ai-services/document-intelligence/overview" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" }
+  ],
+  logistics: [
+    { label: "Google for Developers — Search and filter Gmail messages", url: "https://developers.google.com/workspace/gmail/api/guides/filtering" },
+    { label: "Google for Developers — Manage Gmail threads", url: "https://developers.google.com/workspace/gmail/api/guides/threads" },
+    { label: "Google for Developers — Read and write Google Sheets values", url: "https://developers.google.com/workspace/sheets/api/guides/values" }
+  ],
+  consulting: [
+    { label: "Google Docs API — Create a document", url: "https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/create" },
+    { label: "Google for Developers — Search for files and folders in Drive", url: "https://developers.google.com/workspace/drive/api/guides/search-files" },
+    { label: "Google for Developers — Read and write Google Sheets values", url: "https://developers.google.com/workspace/sheets/api/guides/values" }
+  ],
   marketing: [
     { label: "Google Search Central — Search appearance overview", url: "https://developers.google.com/search/docs/appearance" },
     { label: "Google Search Central — Article structured data", url: "https://developers.google.com/search/docs/appearance/structured-data/article" },
@@ -81,6 +96,9 @@ const defaultTags = {
   finance: ["automation", "files_documents", "data", "human_in_loop"],
   btp: ["automation", "workflow_orchestration", "files_documents", "human_in_loop"],
   knowledge: ["rag", "knowledge_management", "files_documents", "process_integration"],
+  legal: ["automation", "files_documents", "knowledge_management", "human_in_loop"],
+  logistics: ["automation", "workflow_orchestration", "files_documents", "process_integration"],
+  consulting: ["automation", "knowledge_management", "files_documents", "human_in_loop"],
   marketing: ["automation", "marketing_content", "seo", "process_integration"]
 };
 
@@ -172,6 +190,30 @@ const familyCopy = {
     control: "réponses limitées aux sources accessibles avec citation et refus explicite lorsqu’aucune preuve suffisante n’est trouvée",
     data: "documents, métadonnées, droits, versions, texte indexé, extraits, labels, dates et propriétaires",
     tooling: "Google Drive, SharePoint, moteur de recherche hybride, base vectorielle, RAG et couche de contrôle des permissions"
+  },
+  legal: {
+    noun: "document juridique",
+    system: "processus documentaire juridique et conformité",
+    verb: "extraire, comparer et sourcer",
+    control: "validation par un juriste ou responsable conformité avant toute interprétation engageante ou modification d’un document de référence",
+    data: "contrats, clauses, versions, dates, parties, obligations, annexes, métadonnées, commentaires et règles internes",
+    tooling: "Document Intelligence, Google Drive, SharePoint, moteur de recherche documentaire et orchestrateur"
+  },
+  logistics: {
+    noun: "incident logistique",
+    system: "chaîne logistique et suivi transport",
+    verb: "détecter, structurer et suivre",
+    control: "validation opérationnelle avant qualification définitive, réclamation fournisseur ou modification d’un statut de livraison",
+    data: "e-mails transporteurs, références de commande, expéditions, dates, statuts, bons de livraison, pièces jointes, fournisseur et historique",
+    tooling: "Gmail, Google Sheets, Drive, TMS ou ERP, n8n, Make, Power Automate ou orchestrateur équivalent"
+  },
+  consulting: {
+    noun: "élément de mission",
+    system: "production de mission de conseil",
+    verb: "structurer, synthétiser et capitaliser",
+    control: "validation par le consultant ou chef de mission avant diffusion au client ou réutilisation comme position d’expertise",
+    data: "notes d’entretien, verbatims, cadrage, documents client, décisions, hypothèses, livrables passés, actions et sources",
+    tooling: "Google Docs, Drive, Sheets, Microsoft 365, base documentaire et orchestrateur"
   },
   marketing: {
     noun: "contenu",
