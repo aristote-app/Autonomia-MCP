@@ -109,6 +109,8 @@ export default async function AcademyPage({ searchParams }) {
                   : externalFallback.resolution_path === "datagouv_idcc_to_cfadock"
                     ? "found_external_idcc"
                     : "found_external";
+            } else if (externalFallback?.candidate) {
+              lookupState = "candidate";
             } else {
               lookupState = "not_found";
             }
@@ -210,7 +212,9 @@ export default async function AcademyPage({ searchParams }) {
                       ? "Rattachement trouvé via CFA Dock à partir du SIREN."
                       : lookupState === "found_external_idcc"
                         ? "IDCC trouvé via data.gouv.fr, puis OPCO résolu via CFA Dock."
-                        : lookupState === "not_found"
+                        : lookupState === "candidate"
+                          ? "Aucun rattachement officiel n'est publié, mais un OPCO candidat peut être déduit de l'activité officielle."
+                          : lookupState === "not_found"
                   ? "Aucun rattachement trouvé dans les données SIRO actuellement chargées."
                   : lookupState === "error"
                     ? "La recherche a rencontré une erreur."
@@ -243,9 +247,45 @@ export default async function AcademyPage({ searchParams }) {
             </div>
           )}
 
+
+          {lookupState === "candidate" && externalFallback?.candidate && (
+            <div className="commandGrid">
+              <article>
+                <span>ENTREPRISE</span>
+                <strong>{externalFallback.company?.name || "—"}</strong>
+                <p>APE {externalFallback.company?.naf || "—"}</p>
+              </article>
+              <article>
+                <span>OPCO CANDIDAT</span>
+                <strong>{externalFallback.candidate.opco_name}</strong>
+                <p>À confirmer — pas de rattachement officiel SIRO/DSN disponible.</p>
+              </article>
+              <article>
+                <span>IDCC CANDIDAT</span>
+                <strong>{externalFallback.candidate.idcc}</strong>
+                <p>{externalFallback.candidate.branch_label}</p>
+              </article>
+              <article>
+                <span>NIVEAU DE PREUVE</span>
+                <strong>À confirmer</strong>
+                <p>Déduction fondée sur l'activité officielle et les sources de branche.</p>
+              </article>
+            </div>
+          )}
+
+          {lookupState === "candidate" && externalFallback?.candidate && (
+            <div className="emptyState">
+              <strong>Pourquoi SIRO ne trouve rien ?</strong><br />
+              France compétences indique qu'un SIRET actif peut être absent de SIRO lorsqu'aucune DSN n'a encore été traitée,
+              lorsqu'une première DSN est trop récente, ou lorsqu'une anomalie d'IDCC empêche le rattachement.
+              Ici, aucun IDCC officiel exploitable n'est publié pour cet établissement.<br /><br />
+              <strong>Déduction à confirmer :</strong> {externalFallback.candidate.reason}
+            </div>
+          )}
+
           {lookupState === "not_found" && (
             <div className="emptyState">
-              Aucun rattachement OPCO trouvé dans SIRO local, par SIREN, via CFA Dock, ni via le jeu officiel siret2idcc de data.gouv.fr.
+              Aucun rattachement OPCO officiel trouvé dans SIRO local, par SIREN, via CFA Dock, ni via le jeu officiel siret2idcc de data.gouv.fr.
             </div>
           )}
 
