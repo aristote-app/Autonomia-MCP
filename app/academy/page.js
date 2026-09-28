@@ -10,6 +10,7 @@ import {
   listAcademyOpcoCoverage
 } from "../../lib/db/academy.js";
 import { resolveExternalOpco } from "../../lib/academy/opcoFallback.js";
+import { getStaticFundingRulesForCompany } from "../../lib/academy/fundingRuntime.js";
 
 export const dynamic = "force-dynamic";
 
@@ -128,6 +129,14 @@ export default async function AcademyPage({ searchParams }) {
             });
           } catch (error) {
             console.error("Academy funding rules error", error);
+          }
+
+          if (!fundingRules.length) {
+            fundingRules = getStaticFundingRulesForCompany({
+              opcoCode: company.opco_code,
+              idcc: company.idcc,
+              limit: 50
+            });
           }
         }
       } catch (error) {
@@ -403,7 +412,7 @@ export default async function AcademyPage({ searchParams }) {
                 </article>
               )) : (
                 <div className="emptyState">
-                  Aucune règle de financement vérifiée n’est encore enregistrée pour cet OPCO / IDCC.
+                  Aucune règle de financement 2026 n’est encore disponible pour cet OPCO / IDCC.
                 </div>
               )}
             </div>
