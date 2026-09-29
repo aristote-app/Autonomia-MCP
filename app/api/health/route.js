@@ -1,8 +1,11 @@
 import { BUILD_SHA } from "../../../lib/runtime/buildStamp.generated.js";
 import { listQueuedInboundLeads } from "../../../lib/inbound/spool.js";
 import { getAutonomiaWorkspace, listInboundLeads } from "../../../lib/db/inboundLeads.js";
+import { runtimeIntegrationStatus } from "../../../lib/runtime/integrationSettings.js";
 
 export async function GET() {
+  const runtimeState = await runtimeIntegrationStatus().catch(() => null);
+
   let inbound = {
     workspaceReady: false,
     persistedLeads: null,
@@ -46,10 +49,13 @@ export async function GET() {
     accountResearchConfigured:
       process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
-    kasprConfigured: Boolean(process.env.KASPR_API_KEY),
-    kasprEnrichmentConfigured: Boolean(process.env.KASPR_API_KEY),
-    waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY),
-    waalaxyReplyWebhookConfigured: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
+    kasprConfigured: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
+    kasprEnrichmentConfigured: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
+    waalaxyConfigured: Boolean(process.env.WAALAXY_API_KEY || runtimeState?.configured?.WAALAXY_API_KEY),
+    waalaxyReplyWebhookConfigured: Boolean(
+      process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ||
+      runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN
+    ),
     selfDeployConfigured: true,
     selfDeployAuthMode: "github_oidc",
     legacySelfDeployConfigured:
