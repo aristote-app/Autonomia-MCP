@@ -2,6 +2,7 @@ import Link from "next/link";
 import SolutionFinder from "@/components/SolutionFinder";
 import HomeStartEmail from "@/components/HomeStartEmail";
 import AutonomiaMark from "@/components/AutonomiaMark";
+import { academyTrainings } from "@/content/academy-trainings";
 
 const expertRoles = [
   { label: "AI Project Manager", slug: "ai-project-manager" },
@@ -127,6 +128,28 @@ export default function Home() {
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{role.label}</strong>
               <b aria-hidden="true">↗</b>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="academySection homeAcademyDirectory">
+        <div className="sectionHeading">
+          <div className="homeAcademyIntroV21">
+            <h2>Vous savez déjà ce que vos équipes doivent apprendre ?</h2>
+            <p>
+              Toutes les Formations IA restent reliées depuis la Home pour conserver le maillage interne,
+              tout en donnant une vraie identité visuelle à AUTONOMIA ACADEMY.
+            </p>
+          </div>
+        </div>
+
+        <div className="topicGrid">
+          {academyTrainings.map((training, index) => (
+            <Link href={"/formation-ia/" + training.slug} key={training.slug}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{training.homeTitle}</strong>
+              <b>↗</b>
             </Link>
           ))}
         </div>

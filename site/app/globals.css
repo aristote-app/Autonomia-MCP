@@ -20438,3 +20438,62 @@ body {
     font-size:15px;
   }
 }
+
+/* HOME V21 — restore Academy, keep sections without chapter labels */
+
+/* Sections remain; only the numbered chapter labels are removed. */
+.homeV10 .homeSolutionMatch,
+.homeV10 .homeRoleDirectory,
+.homeV10 .homeAcademyDirectory,
+.homeV10 .homeTerritoryV10 {
+  display:block;
+}
+
+/* Métiers + Academy intros use the full section width. */
+.homeV10 .homeRoleDirectory .sectionHeading,
+.homeV10 .homeAcademyDirectory .sectionHeading {
+  display:block;
+  padding:54px 38px 34px;
+}
+
+.homeV10 .homeRoleDirectory .homeRoleIntroV20,
+.homeV10 .homeAcademyDirectory .homeAcademyIntroV21 {
+  width:100%;
+  max-width:none;
+}
+
+.homeV10 .homeAcademyDirectory .homeAcademyIntroV21 h2 {
+  max-width:1180px;
+  margin:0 0 16px;
+  color:#fff;
+  font-size:clamp(46px,5.7vw,76px);
+  line-height:.96;
+  letter-spacing:-.055em;
+}
+
+.homeV10 .homeAcademyDirectory .homeAcademyIntroV21 p {
+  max-width:980px;
+  margin:0;
+  color:#d9fff9;
+  font-size:17px;
+  line-height:1.55;
+}
+
+.homeV10 .homeAcademyDirectory .topicGrid {
+  padding-top:8px;
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeRoleDirectory .sectionHeading,
+  .homeV10 .homeAcademyDirectory .sectionHeading {
+    padding:36px 20px 24px;
+  }
+
+  .homeV10 .homeAcademyDirectory .homeAcademyIntroV21 h2 {
+    font-size:clamp(38px,11vw,56px);
+  }
+
+  .homeV10 .homeAcademyDirectory .homeAcademyIntroV21 p {
+    font-size:15px;
+  }
+}
