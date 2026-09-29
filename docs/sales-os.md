@@ -40,9 +40,10 @@ The system must remain explainable, source-grounded and economical. It must not 
 ### Kaspr
 - official-profile REST adapter prepared for the documented `POST /profile/linkedin` endpoint;
 - accepts standard LinkedIn profile URLs only;
-- live enrichment remains deliberately gated until the exact provider `dataToGet` field identifiers are configured;
-- enrichment must occur only after a person and role have been verified;
-- do not enrich entire account lists by default because Kaspr consumes credits according to requested data and successful calls.
+- current profile endpoint uses `id`, `name` and `isPhoneRequired`;
+- Autonomia stores professional email and phone only and deliberately ignores personal/direct emails;
+- enrichment occurs only after a person and role have been verified;
+- do not enrich entire account lists by default because Kaspr consumes credits.
 
 ## Scheduled collection budget
 
@@ -97,9 +98,10 @@ Implemented server-side:
 
 ## Kaspr
 
-The product architecture and readiness flag are implemented, but live Kaspr enrichment is intentionally
-not wired until the current official request/response contract is verified. Do not guess the API payload.
-When connected, enrichment must remain a deliberate action on a verified contact to preserve credits.
+The current Kaspr request/response contract is wired from the verified profile endpoint.
+A verified contact can be enriched directly from the cockpit after KASPR_API_KEY is configured.
+Autonomia requests phones and stores professional email / phone only; personal/direct emails are ignored.
+Enrichment remains a deliberate action on a verified contact to preserve credits.
 
 ## Learning loop
 
