@@ -1,0 +1,48 @@
+name: kaspr-v2-smoke-once
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/kaspr-v2-smoke-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Wait for production diagnostic and verify Kaspr
+        env:
+          DIAGNOSTIC_URL: https://cockpit.build-autonomia.com/api/internal/kaspr-diagnostic?t=diag-7f8e51c1e2bb4a6c9f102f0c5c4d8a31
+        run: |
+          for attempt in $(seq 1 60); do
+            HTTP_CODE="$(curl -sS --max-time 20 -o /tmp/kaspr.json -w "%{http_code}" "$DIAGNOSTIC_URL" || true)"
+            if [ "$HTTP_CODE" = "200" ]; then
+              python - <<'PY'
+import json
+from pathlib import Path
+
+data = json.loads(Path("/tmp/kaspr.json").read_text())
+safe = {
+    "ok": data.get("ok"),
+    "connected": data.get("connected"),
+    "hit": data.get("hit"),
+    "attempts": data.get("attempts"),
+    "credits_before": data.get("credits_before"),
+    "credits_after": data.get("credits_after"),
+}
+print(json.dumps(safe, ensure_ascii=False, indent=2))
+if not data.get("ok") or not data.get("connected"):
+    raise SystemExit("Kaspr diagnostic did not confirm connectivity")
+PY
+              exit 0
+            fi
+            echo "Kaspr diagnostic not live yet (attempt $attempt/60, HTTP $HTTP_CODE)."
+            sleep 15
+          done
+          echo "::error::Kaspr production diagnostic never became available."
+          exit 1
