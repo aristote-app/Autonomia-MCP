@@ -1,8 +1,8 @@
-import { validTemporaryIntegrationsCode } from "../../../../../lib/integrations/access.js";
+import { validTemporaryIntegrationsCode } from "../../../../lib/integrations/access.js";
 import {
   enrichKasprLinkedInProfile,
   extractKasprContactData
-} from "../../../../../lib/integrations/kaspr.js";
+} from "../../../../lib/integrations/kaspr.js";
 
 function clean(value, max = 500) {
   return String(value || "").trim().slice(0, max);
