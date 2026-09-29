@@ -98,10 +98,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
     process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
     Boolean(process.env.BRAVE_SEARCH_API_KEY);
   const kasprConfigured = Boolean(process.env.KASPR_API_KEY);
-  const kasprEnrichmentConfigured = Boolean(
-    process.env.KASPR_API_KEY &&
-    String(process.env.KASPR_DATA_TO_GET || "").trim()
-  );
+  const kasprEnrichmentConfigured = Boolean(process.env.KASPR_API_KEY);
   const waalaxyConfigured = Boolean(process.env.WAALAXY_API_KEY);
   const accountWatch = hasWorkspaceSession
     ? await getAccountWatch({
