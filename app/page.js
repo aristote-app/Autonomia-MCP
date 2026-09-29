@@ -317,10 +317,7 @@ export default async function Home({ searchParams }) {
           accountWatchAlerts: hasWorkspaceSession ? accountWatchAlerts : [],
           kasprReady:
             hasWorkspaceSession &&
-            Boolean(
-              process.env.KASPR_API_KEY &&
-              String(process.env.KASPR_DATA_TO_GET || "").trim()
-            ),
+            Boolean(process.env.KASPR_API_KEY),
           waalaxyReady:
             hasWorkspaceSession &&
             Boolean(process.env.WAALAXY_API_KEY),
