@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { getCurrentWorkspaceMembership, canManageWorkspace } from "../../lib/auth/access.js";
 import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
+import { hasTemporaryIntegrationsAccess } from "../../lib/integrations/access.js";
 import { saveIntegrationSettings } from "../actions/integration-settings.js";
+import { unlockIntegrationsAccessAction } from "./access-actions.js";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +15,8 @@ function State({ ready, label }) {
   );
 }
 
-export default async function IntegrationsPage() {
+export default async function IntegrationsPage({ searchParams }) {
+  const params = await searchParams;
   const context = await getCurrentWorkspaceMembership().catch(() => ({
     configured: false,
     claims: null,
@@ -24,10 +27,12 @@ export default async function IntegrationsPage() {
     context?.membership &&
     canManageWorkspace(context.membership.role)
   );
-  const connectHref = canManage
-    ? "#connection-settings"
-    : "/login?next=%2Fintegrations%3Fsetup%3D1";
-  const runtimeState = canManage
+  const temporaryAccess = !canManage
+    ? await hasTemporaryIntegrationsAccess().catch(() => false)
+    : false;
+  const canConfigure = canManage || temporaryAccess;
+  const connectHref = "#connection-settings";
+  const runtimeState = canConfigure
     ? await runtimeIntegrationStatus().catch(() => null)
     : null;
   const states = {
@@ -66,23 +71,31 @@ export default async function IntegrationsPage() {
         </div>
       </header>
 
-      {!canManage && (
+      {!canConfigure && (
         <section className="integrationConnectGate" id="connection-settings">
           <div>
             <p className="eyebrow">CONNEXIONS SÉCURISÉES</p>
             <h2>Brancher Kaspr et Waalaxy</h2>
             <p>
-              Les clés API sont des secrets serveur. Le formulaire apparaît uniquement après
-              connexion avec un compte administrateur ou direction du workspace Autonomia.
+              Utilise le code temporaire Autonomia pour ouvrir le formulaire sécurisé sur cet appareil.
+              L'accès expire automatiquement après 24 heures.
             </p>
           </div>
-          <Link className="integrationConnectButton" href={connectHref}>
-            Se connecter pour brancher →
-          </Link>
+          <form action={unlockIntegrationsAccessAction} className="integrationUnlockForm">
+            <input
+              name="access_code"
+              type="password"
+              autoComplete="one-time-code"
+              placeholder="Code d'accès temporaire"
+              required
+            />
+            <button type="submit">Ouvrir les intégrations</button>
+            {params?.access === "invalid" && <small>Code incorrect.</small>}
+          </form>
         </section>
       )}
 
-      {canManage && (
+      {canConfigure && (
         <section className="integrationSettingsPanel" id="connection-settings">
           <div className="sectionTitle">
             <div>
