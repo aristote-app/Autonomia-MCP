@@ -120,16 +120,38 @@ async function loadLiveData() {
       return !isPublicProcurement || item.actionability_state === "open_by_deadline";
     });
 
+    const allSignals = [...freelanceSignals.items, ...trainingSignals.items];
+
+    const accountIntelligence = buildAccountIntelligence({
+      opportunities: visibleOpportunities,
+      jobSignals: allSignals
+    });
+
+    // AUTONOMIA EXPERTS: the commercial queue only surfaces end-client demand.
+    // Marketplace / ESN / staffing intermediaries stay available as market intelligence,
+    // but never enter the actionable Experts queue.
+    const intermediaryNames = new Set(
+      accountIntelligence
+        .filter((account) => account.intermediary_risk)
+        .map((account) => String(account.name || "").trim().toLowerCase())
+        .filter(Boolean)
+    );
+
+    const directFreelanceSignals = freelanceSignals.items.filter((signal) => {
+      const source = String(signal.source_id || "").toLowerCase();
+      const company = String(signal.company_name || "").trim().toLowerCase();
+
+      const directSource = ["linkedin", "indeed", "france_travail_jobs"].includes(source);
+      return directSource && company && !intermediaryNames.has(company);
+    });
+
     const today = buildUnifiedTodayQueue({
       opportunities: visibleOpportunities,
-      jobSignals: [...freelanceSignals.items, ...trainingSignals.items],
+      jobSignals: [...directFreelanceSignals, ...trainingSignals.items],
       limit: 200
     });
 
-    const accounts = buildAccountIntelligence({
-      opportunities: visibleOpportunities,
-      jobSignals: [...freelanceSignals.items, ...trainingSignals.items]
-    })
+    const accounts = accountIntelligence
       .filter((account) => !account.intermediary_risk)
       .slice(0, 6);
 
