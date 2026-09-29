@@ -104,7 +104,6 @@ export default function Home() {
 
       <section className="homeSolutionMatch" id="solution-finder">
         <div className="homeSolutionMatchIntro">
-          <p className="sectionIndex homeJourneyIndex"><span>04</span><b>AI MATCH</b></p>
           <h2>Vous avez le problème, mais pas encore le bon expert, la bonne solution ou la bonne formation ?</h2>
           <p>Décrivez le besoin en langage naturel. Autonomia rapproche la demande des trois leviers : EXPERTS, BUILD et ACADEMY.</p>
         </div>
@@ -113,8 +112,7 @@ export default function Home() {
 
       <section className="roleSection homeRoleDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex homeJourneyIndex"><span>05</span><b>MÉTIERS IA</b></p>
-          <div>
+          <div className="homeRoleIntroV20">
             <h2>Vous savez déjà quel profil vous cherchez ?</h2>
             <p>
               Toutes les portes d’entrée métiers restent accessibles : responsabilités, livrables, compétences,
@@ -140,7 +138,6 @@ export default function Home() {
 
       <section className="territoryHomePromo homeTerritoryCompact homeTerritoryV10">
         <div>
-          <p className="sectionIndex homeJourneyIndex"><span>06</span><b>TERRITOIRES</b></p>
           <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
           <h2>Experts, Build et Formations IA adaptés aux collectivités et aux entreprises du territoire.</h2>
           <Link className="secondaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>

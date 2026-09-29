@@ -20374,3 +20374,67 @@ body {
     min-height:132px;
   }
 }
+
+/* HOME V20 — remove chapter badges and widen role intro */
+
+/* Remove obsolete chapter badges from the simplified Home. */
+.homeV10 .homeSolutionMatchIntro > .homeJourneyIndex,
+.homeV10 .homeRoleDirectory .homeJourneyIndex,
+.homeV10 .homeTerritoryV10 .homeJourneyIndex {
+  display:none !important;
+}
+
+/* Métiers IA: use the whole section width instead of a left metadata column. */
+.homeV10 .homeRoleDirectory .sectionHeading {
+  display:block;
+  padding:54px 38px 34px;
+}
+
+.homeV10 .homeRoleDirectory .homeRoleIntroV20 {
+  width:100%;
+  max-width:none;
+}
+
+.homeV10 .homeRoleDirectory .homeRoleIntroV20 h2 {
+  max-width:1180px;
+  margin:0 0 16px;
+  font-size:clamp(46px,5.7vw,76px);
+  line-height:.96;
+  letter-spacing:-.055em;
+  color:#fff;
+}
+
+.homeV10 .homeRoleDirectory .homeRoleIntroV20 p {
+  max-width:980px;
+  margin:0;
+  color:#b7c5df;
+  font-size:17px;
+  line-height:1.55;
+}
+
+.homeV10 .homeRoleDirectory .roleMarquee {
+  padding-top:8px;
+}
+
+/* AI Match and Territories no longer reserve visual room for a chapter badge. */
+.homeV10 .homeSolutionMatchIntro {
+  padding-top:4px;
+}
+
+.homeV10 .homeTerritoryV10 > div:first-child {
+  padding-top:0;
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeRoleDirectory .sectionHeading {
+    padding:36px 20px 24px;
+  }
+
+  .homeV10 .homeRoleDirectory .homeRoleIntroV20 h2 {
+    font-size:clamp(38px,11vw,56px);
+  }
+
+  .homeV10 .homeRoleDirectory .homeRoleIntroV20 p {
+    font-size:15px;
+  }
+}
