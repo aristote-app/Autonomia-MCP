@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getCurrentWorkspaceMembership, canManageWorkspace } from "../../lib/auth/access.js";
 import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
 import { hasTemporaryIntegrationsAccess } from "../../lib/integrations/access.js";
-import { saveIntegrationSettings } from "../actions/integration-settings.js";
 import { unlockIntegrationsAccessAction } from "./access-actions.js";
 
 export const dynamic = "force-dynamic";
@@ -94,6 +93,7 @@ export default async function IntegrationsPage({ searchParams }) {
             />
             <button type="submit">Ouvrir les intégrations</button>
             {params?.access === "invalid" && <small>Code incorrect.</small>}
+            {params?.access === "required" && <small>Accès temporaire expiré. Saisis à nouveau le code.</small>}
           </form>
         </section>
       )}
@@ -104,8 +104,16 @@ export default async function IntegrationsPage({ searchParams }) {
             <div className="integrationSaveSuccess">
               <strong>Enregistré côté serveur.</strong>
               <span>
-                {states.kaspr ? "Kaspr est connecté au cockpit." : "Les réglages ont été enregistrés."}
+                {params?.kaspr === "ready"
+                  ? "Clé Kaspr enregistrée. Le cockpit est prêt pour un test d'enrichissement."
+                  : "Les réglages ont été enregistrés."}
               </span>
+            </div>
+          )}
+          {params?.save_error && (
+            <div className="integrationSaveError">
+              <strong>Enregistrement impossible.</strong>
+              <span>{params.save_error}</span>
             </div>
           )}
           <div className="sectionTitle">
@@ -119,7 +127,7 @@ export default async function IntegrationsPage({ searchParams }) {
             </p>
           </div>
 
-          <form action={saveIntegrationSettings} className="integrationSettingsForm">
+          <form action="/integrations/save" method="post" className="integrationSettingsForm">
             <fieldset>
               <legend>Kaspr</legend>
               <label>
