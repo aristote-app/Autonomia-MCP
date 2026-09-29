@@ -37,10 +37,7 @@ export default async function IntegrationsPage() {
       process.env.FRANCE_TRAVAIL_CLIENT_SECRET
     ),
     kaspr: Boolean(process.env.KASPR_API_KEY),
-    kasprEnrichment: Boolean(
-      process.env.KASPR_API_KEY &&
-      String(process.env.KASPR_DATA_TO_GET || "").trim()
-    ),
+    kasprEnrichment: Boolean(process.env.KASPR_API_KEY),
     waalaxy: Boolean(process.env.WAALAXY_API_KEY),
     waalaxyReply: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
     decisionDiscovery:
@@ -108,13 +105,6 @@ export default async function IntegrationsPage() {
                   name="KASPR_API_KEY"
                   autoComplete="new-password"
                   placeholder={runtimeState?.configured?.KASPR_API_KEY ? "Configurée · laisser vide pour conserver" : "À renseigner"}
-                />
-              </label>
-              <label>
-                <span>Champs Kaspr autorisés</span>
-                <input
-                  name="KASPR_DATA_TO_GET"
-                  placeholder={runtimeState?.configured?.KASPR_DATA_TO_GET ? "Configurés · laisser vide pour conserver" : "IDs/champs autorisés selon ton compte Kaspr"}
                 />
               </label>
               <label className="integrationClear">
