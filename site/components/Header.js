@@ -5,11 +5,11 @@ import AutonomiaMark from "@/components/AutonomiaMark";
 
 const NAV_ITEMS = [
   ["Experts", "/experts"],
+  ["Build", "/solutions-ia"],
   ["Academy", "/academy"],
   ["Territoires", "/territoires"],
   ["Cas d’usage", "/cas-usage-ia"],
-  ["Explorer les besoins IA", "/observatoire-ia"],
-  ["Méthode", "/#methode"]
+  ["Observatoire", "/observatoire-ia"]
 ];
 
 export default function Header() {
@@ -55,9 +55,10 @@ export default function Header() {
         </div>
       </header>
 
-      <nav className="mobileDock" aria-label="Actions rapides">
-        <Link href="/start">Commencer</Link>
-        <Link href="/academy">Formations IA</Link>
+      <nav className="mobileDock mobileDockV12" aria-label="Trois piliers Autonomia">
+        <Link href="/experts">Experts</Link>
+        <Link href="/solutions-ia">Build</Link>
+        <Link href="/academy">Academy</Link>
       </nav>
     </>
   );

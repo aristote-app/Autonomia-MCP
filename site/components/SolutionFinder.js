@@ -29,7 +29,8 @@ const EXAMPLES = [
 function routeLabel(route) {
   if (route === "academy") return "AUTONOMIA ACADEMY";
   if (route === "experts") return "AUTONOMIA EXPERTS";
-  return "EXPERT + FORMATION";
+  if (route === "build") return "AUTONOMIA BUILD";
+  return "EXPERT + BUILD + FORMATION";
 }
 
 export default function SolutionFinder() {
@@ -238,7 +239,7 @@ export default function SolutionFinder() {
           rows={5}
         />
         <div className="solutionFinderSubmit">
-          <span>Un métier expert · une formation · un brief transmis</span>
+          <span>Un expert · une piste BUILD · une Formation IA</span>
           <button type="submit" disabled={status === "loading"}>
             {status === "loading" ? "Analyse en cours…" : "Trouver la bonne réponse →"}
           </button>
@@ -277,6 +278,15 @@ export default function SolutionFinder() {
                 <Link href={"/metiers-ia/" + recommendedRole.slug}>
                   Voir le métier →
                 </Link>
+              </article>
+            )}
+
+            {result.route !== "academy" && (
+              <article className="solutionAnswerCard solutionAnswerBuild">
+                <small>AUTONOMIA BUILD</small>
+                <h3>Transformer ce besoin en solution réellement utilisable</h3>
+                <p>Agents IA, automatisations, workflows, RAG, outils internes ou mini-applications selon le problème métier.</p>
+                <Link href="/solutions-ia">Voir les solutions BUILD →</Link>
               </article>
             )}
 
