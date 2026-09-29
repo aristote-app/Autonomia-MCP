@@ -500,13 +500,14 @@ try {
     apiKey: "test-kaspr",
     linkedinUrl: "https://www.linkedin.com/in/jane-doe-ai",
     name: "Jane Doe",
-    isPhoneRequired: true
+    dataToGet: ["workEmail", "phone"],
+    requiredData: ["workEmail"]
   });
   assert.equal(kaspr.profile.name, "Jane Doe");
 
   const parsedKaspr = extractKasprContactData({
     profile: {
-      professionalEmail: "jane@acme.test",
+      starryWorkEmail: "jane@acme.test",
       personalEmail: "jane.private@example.test",
       phones: ["+33601020304"]
     }
@@ -522,8 +523,10 @@ try {
   const kasprBody = JSON.parse(kasprCall.options.body);
   assert.equal(kasprBody.name, "Jane Doe");
   assert.equal(kasprBody.id, "jane-doe-ai");
-  assert.equal(kasprBody.isPhoneRequired, true);
+  assert.deepEqual(kasprBody.dataToGet, ["workEmail", "phone"]);
+  assert.deepEqual(kasprBody.requiredData, ["workEmail"]);
   assert.equal(kasprCall.options.headers.Authorization, "Bearer test-kaspr");
+  assert.equal(kasprCall.options.headers["accept-version"], "v2.0");
 
   const imported = await importWaalaxyProspects({
     apiKey: "test-waalaxy",
