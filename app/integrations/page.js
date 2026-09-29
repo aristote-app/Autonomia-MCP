@@ -41,15 +41,18 @@ export default async function IntegrationsPage({ searchParams }) {
       process.env.FRANCE_TRAVAIL_CLIENT_ID &&
       process.env.FRANCE_TRAVAIL_CLIENT_SECRET
     ),
-    kaspr: Boolean(process.env.KASPR_API_KEY),
-    kasprEnrichment: Boolean(process.env.KASPR_API_KEY),
-    waalaxy: Boolean(process.env.WAALAXY_API_KEY),
-    waalaxyReply: Boolean(process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN),
+    kaspr: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
+    kasprEnrichment: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
+    waalaxy: Boolean(process.env.WAALAXY_API_KEY || runtimeState?.configured?.WAALAXY_API_KEY),
+    waalaxyReply: Boolean(
+      process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ||
+      runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN
+    ),
     decisionDiscovery:
-      process.env.AUTONOMIA_DECISION_DISCOVERY_ENABLED === "true" &&
+      Boolean(runtimeState?.flags?.decision_discovery) &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
     accountResearch:
-      process.env.AUTONOMIA_ACCOUNT_RESEARCH_ENABLED === "true" &&
+      Boolean(runtimeState?.flags?.account_research) &&
       Boolean(process.env.BRAVE_SEARCH_API_KEY),
     selfDeploy: true
   };
@@ -97,6 +100,14 @@ export default async function IntegrationsPage({ searchParams }) {
 
       {canConfigure && (
         <section className="integrationSettingsPanel" id="connection-settings">
+          {params?.saved === "1" && (
+            <div className="integrationSaveSuccess">
+              <strong>Enregistré côté serveur.</strong>
+              <span>
+                {states.kaspr ? "Kaspr est connecté au cockpit." : "Les réglages ont été enregistrés."}
+              </span>
+            </div>
+          )}
           <div className="sectionTitle">
             <div>
               <p className="eyebrow">CONNEXIONS SERVEUR</p>
