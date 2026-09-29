@@ -158,15 +158,15 @@ export async function enrichVerifiedContactWithKaspr(formData) {
     const providerResult = await enrichKasprLinkedInProfile({
       linkedinUrl: contact.linkedin_url,
       name: contactName,
-      dataToGet: ["workEmail", "phone"],
+      dataToGet: ["workEmail"],
       requiredData: ["workEmail"]
     });
 
     let extracted = extractKasprContactData(providerResult);
+    let requestedFields = ["workEmail"];
 
-    // A contact can have a phone but no work email. Kaspr's requiredData
-    // intentionally suppresses charges when the required field is absent,
-    // so retry only the phone pool when the first pass returns no business data.
+    // Preserve finite phone credits: try the unlimited B2B email pool first,
+    // then request a phone only when no professional email is available.
     if (!extracted.found) {
       const phoneResult = await enrichKasprLinkedInProfile({
         linkedinUrl: contact.linkedin_url,
@@ -175,6 +175,7 @@ export async function enrichVerifiedContactWithKaspr(formData) {
         requiredData: ["phone"]
       });
       extracted = extractKasprContactData(phoneResult);
+      requestedFields = ["workEmail", "phone"];
     }
 
     await applySalesContactKasprResult({
@@ -182,7 +183,7 @@ export async function enrichVerifiedContactWithKaspr(formData) {
       actorUserId: context.claims.sub,
       contactId,
       extracted,
-      requestedFields: ["workEmail", "phone"],
+      requestedFields,
       providerStatus: "success"
     });
   } catch (error) {
