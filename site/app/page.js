@@ -49,13 +49,15 @@ export default function Home() {
             <span>Transformer les usages en performance.</span>
           </h1>
 
-          <p className="homeHeroMinimalLeadV13">
-            Autonomia accompagne les organisations de bout en bout : trouver les bonnes compétences,
-            construire les solutions IA utiles et former les équipes pour les intégrer réellement dans leur travail.
-          </p>
+          <div className="homeHeroMinimalBottomV14">
+            <p className="homeHeroMinimalLeadV13">
+              Autonomia accompagne les organisations de bout en bout : trouver les bonnes compétences,
+              construire les solutions IA utiles et former les équipes pour les intégrer réellement dans leur travail.
+            </p>
 
-          <div className="homeHeroMinimalStartV13">
-            <HomeStartEmail origin="home_hero" compact />
+            <div className="homeHeroMinimalStartV13">
+              <HomeStartEmail origin="home_hero" compact />
+            </div>
           </div>
 
           <nav className="homeHeroMinimalPillarsV13" aria-label="Les trois piliers Autonomia">
@@ -70,7 +72,7 @@ export default function Home() {
 
       <section className="homeExecutionChainV12" id="experts-academy">
         <div className="homeExecutionChainIntroV12">
-          <p className="sectionIndex">01 — TROUVER · 02 — CONSTRUIRE · 03 — FORMER</p>
+          <p className="sectionIndex homeJourneyIndex homeJourneyIndexPillars"><span>01–03</span><b>TROUVER · CONSTRUIRE · FORMER</b></p>
           <div>
             <h2>Une chaîne d’exécution complète.</h2>
             <p><strong>Les bons experts.</strong> Les bonnes solutions IA. Des équipes capables de les utiliser.</p>
@@ -142,7 +144,7 @@ export default function Home() {
 
       <section className="homeProblemStrip homeProblemStripV10" id="problems">
         <div className="sectionHeading">
-          <p className="sectionIndex">03 — PROBLÈMES PRÉCIS</p>
+          <p className="sectionIndex homeJourneyIndex"><span>04</span><b>PROBLÈMES PRÉCIS</b></p>
           <div>
             <h2>Vous savez déjà ce que vous voulez arrêter de faire à la main ?</h2>
             <p>
@@ -194,7 +196,7 @@ export default function Home() {
 
       <section className="homeSolutionMatch" id="solution-finder">
         <div className="homeSolutionMatchIntro">
-          <p className="sectionIndex">04 — AI MATCH</p>
+          <p className="sectionIndex homeJourneyIndex"><span>05</span><b>AI MATCH</b></p>
           <h2>Vous avez le problème, mais pas encore le bon expert, la bonne solution ou la bonne formation ?</h2>
           <p>Décrivez le besoin en langage naturel. Autonomia rapproche la demande des trois leviers : EXPERTS, BUILD et ACADEMY.</p>
         </div>
@@ -202,7 +204,7 @@ export default function Home() {
       </section>
 
       <section className="homeDiagnosticIntro" id="diagnostic-ia">
-        <p className="sectionIndex">05 — FICHE BESOIN</p>
+        <p className="sectionIndex homeJourneyIndex"><span>06</span><b>FICHE BESOIN</b></p>
         <div>
           <p className="auditKicker">VOUS VOULEZ NOUS TRANSMETTRE PLUS DE CONTEXTE ?</p>
           <h2>Structurez votre besoin avant l’échange.</h2>
@@ -217,7 +219,7 @@ export default function Home() {
 
       <section className="roleSection homeRoleDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex">06 — MÉTIERS IA</p>
+          <p className="sectionIndex homeJourneyIndex"><span>07</span><b>MÉTIERS IA</b></p>
           <div>
             <h2>Vous savez déjà quel profil vous cherchez ?</h2>
             <p>
@@ -240,7 +242,7 @@ export default function Home() {
 
       <section className="academySection homeAcademyDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex">07 — FORMATIONS IA</p>
+          <p className="sectionIndex homeJourneyIndex"><span>08</span><b>FORMATIONS IA</b></p>
           <div>
             <h2>Vous savez déjà ce que vos équipes doivent apprendre ?</h2>
             <p>
@@ -263,7 +265,7 @@ export default function Home() {
 
       <section className="homeMethod homeMethodCompact homeMethodV10" id="methode">
         <div className="methodIntro">
-          <p className="sectionIndex">08 — COMMENT NOUS TRAVAILLONS</p>
+          <p className="sectionIndex homeJourneyIndex"><span>09</span><b>COMMENT NOUS TRAVAILLONS</b></p>
           <h2>Besoin → Trouver → Construire → Former.</h2>
           <p>
             Nous partons du résultat que l’organisation doit obtenir, puis nous activons les compétences,
@@ -281,7 +283,7 @@ export default function Home() {
 
       <section className="territoryHomePromo homeTerritoryCompact homeTerritoryV10">
         <div>
-          <p className="sectionIndex">09 — TERRITOIRES</p>
+          <p className="sectionIndex homeJourneyIndex"><span>10</span><b>TERRITOIRES</b></p>
           <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
           <h2>Experts, Build et Formations IA adaptés aux collectivités et aux entreprises du territoire.</h2>
           <Link className="secondaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>

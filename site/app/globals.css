@@ -19782,3 +19782,201 @@ body {
     display:none;
   }
 }
+
+/* HOME V14 — wider hero and visible journey markers */
+
+/* Hero: use the entire available width without adding visual noise. */
+.homeV10 .homeHeroMinimalInnerV13 {
+  max-width:none;
+  width:100%;
+  padding:64px 58px 42px;
+}
+
+.homeV10 .homeHeroMinimalV13 h1 {
+  max-width:1320px;
+  font-size:clamp(60px,7.25vw,112px);
+}
+
+.homeV10 .homeHeroMinimalBottomV14 {
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(440px,1.1fr);
+  gap:48px;
+  align-items:end;
+  margin-top:28px;
+  padding-top:24px;
+  border-top:1px solid rgba(255,255,255,.10);
+}
+
+.homeV10 .homeHeroMinimalLeadV13 {
+  max-width:700px;
+  margin:0;
+}
+
+.homeV10 .homeHeroMinimalStartV13 {
+  max-width:none;
+  margin:0;
+}
+
+.homeV10 .homeHeroMinimalStartV13 .homeStartEmailFields {
+  width:100%;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 {
+  width:100%;
+  margin-top:22px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.10);
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a {
+  flex:1 1 0;
+  min-width:190px;
+  padding:11px 15px;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 > i {
+  flex:0 0 auto;
+}
+
+/* Clear visual sequence through the Home. */
+.homeV10 .homeJourneyIndex {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:max-content;
+  max-width:100%;
+  margin:0;
+  color:var(--ink);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.08em;
+  line-height:1;
+}
+
+.homeV10 .homeJourneyIndex span {
+  display:grid;
+  place-items:center;
+  min-width:52px;
+  height:52px;
+  padding:0 10px;
+  border-radius:16px;
+  background:var(--signal);
+  color:var(--ink);
+  font-size:16px;
+  font-weight:950;
+  letter-spacing:0;
+  box-shadow:0 10px 24px rgba(187,145,12,.14);
+}
+
+.homeV10 .homeJourneyIndex b {
+  display:block;
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:.10em;
+  white-space:nowrap;
+}
+
+/* 01–03 deserves the same visibility but indicates a three-part chain. */
+.homeV10 .homeJourneyIndexPillars span {
+  min-width:70px;
+  background:#0b1530;
+  color:#fff;
+}
+
+.homeV10 .homeExecutionChainIntroV12 {
+  grid-template-columns:220px minmax(0,1fr);
+}
+
+.homeV10 .homeProblemStripV10 .sectionHeading {
+  grid-template-columns:220px minmax(0,1fr);
+}
+
+.homeV10 .homeDiagnosticIntro {
+  grid-template-columns:220px minmax(0,1fr);
+}
+
+.homeV10 .homeSolutionMatchIntro .homeJourneyIndex {
+  margin-bottom:18px;
+}
+
+/* Dark / colored sections: keep the chapter marker very legible. */
+.homeV10 .homeRoleDirectory .homeJourneyIndex,
+.homeV10 .homeAcademyDirectory .homeJourneyIndex,
+.homeV10 .homeTerritoryV10 .homeJourneyIndex {
+  color:#fff;
+}
+
+.homeV10 .homeRoleDirectory .homeJourneyIndex span,
+.homeV10 .homeAcademyDirectory .homeJourneyIndex span,
+.homeV10 .homeTerritoryV10 .homeJourneyIndex span {
+  background:var(--signal);
+  color:var(--ink);
+}
+
+.homeV10 .homeMethodV10 .homeJourneyIndex {
+  margin-bottom:16px;
+}
+
+.homeV10 .homeTerritoryV10 .homeJourneyIndex {
+  margin-bottom:14px;
+}
+
+/* The section markers now read as chapters, not tiny metadata. */
+.homeV10 .sectionHeading > .homeJourneyIndex,
+.homeV10 .homeDiagnosticIntro > .homeJourneyIndex {
+  align-self:start;
+  margin-top:2px;
+}
+
+@media (max-width:1079px) {
+  .homeV10 .homeHeroMinimalBottomV14 {
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  .homeV10 .homeHeroMinimalStartV13 {
+    max-width:760px;
+  }
+
+  .homeV10 .homeExecutionChainIntroV12,
+  .homeV10 .homeProblemStripV10 .sectionHeading,
+  .homeV10 .homeDiagnosticIntro {
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeHeroMinimalInnerV13 {
+    padding:36px 20px 26px;
+  }
+
+  .homeV10 .homeHeroMinimalBottomV14 {
+    margin-top:20px;
+    padding-top:18px;
+  }
+
+  .homeV10 .homeHeroMinimalPillarsV13 {
+    padding-top:16px;
+  }
+
+  .homeV10 .homeJourneyIndex {
+    gap:9px;
+  }
+
+  .homeV10 .homeJourneyIndex span {
+    min-width:44px;
+    height:44px;
+    border-radius:13px;
+    font-size:14px;
+  }
+
+  .homeV10 .homeJourneyIndexPillars span {
+    min-width:62px;
+  }
+
+  .homeV10 .homeJourneyIndex b {
+    font-size:11px;
+    white-space:normal;
+    line-height:1.15;
+  }
+}
