@@ -20190,3 +20190,187 @@ body {
   overflow:hidden !important;
   border:0 !important;
 }
+
+/* AI MATCH V19 — clearer example affordance */
+
+/* AI Match: make examples look and behave like suggestions, not static rows. */
+.homeV10 .homeSolutionMatch .solutionFinder {
+  overflow:hidden;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderForm {
+  grid-template-columns:minmax(0,1fr) 210px;
+  align-items:end;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:0;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 small {
+  display:block;
+  color:#aebbd5;
+  font-size:9px;
+  font-weight:900;
+  line-height:1.2;
+  letter-spacing:.11em;
+  text-align:center;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 button {
+  width:100%;
+  min-height:58px;
+  padding:0 16px;
+  font-size:12px;
+  line-height:1.15;
+}
+
+.solutionExamplesWrapV19 {
+  border-top:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.025);
+}
+
+.solutionExamplesHeadV19 {
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:end;
+  padding:16px 18px 12px;
+}
+
+.solutionExamplesHeadV19 > div {
+  display:grid;
+  gap:4px;
+}
+
+.solutionExamplesHeadV19 small {
+  color:#ffd54a;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.solutionExamplesHeadV19 strong {
+  color:#fff;
+  font-size:15px;
+  line-height:1.15;
+}
+
+.solutionExamplesHeadV19 > span {
+  color:#8fa1c4;
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:0 18px 18px;
+  background:transparent;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button {
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  min-height:150px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  text-align:left;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+  cursor:pointer;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button:hover {
+  transform:translateY(-3px);
+  border-color:rgba(255,213,74,.42);
+  background:rgba(255,255,255,.09);
+  box-shadow:0 16px 30px rgba(0,0,0,.12);
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button:focus-visible {
+  outline:2px solid var(--signal);
+  outline-offset:2px;
+}
+
+.solutionExampleMetaV19 {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.solutionExampleMetaV19 small {
+  color:#9fb0d2;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.solutionExampleMetaV19 b {
+  display:grid;
+  place-items:center;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:rgba(255,213,74,.13);
+  color:#ffd54a;
+  font-size:11px;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button > strong {
+  margin-top:9px;
+  color:#fff;
+  font-size:16px;
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button > p {
+  margin:7px 0 12px;
+  color:#aebbd5;
+  font-size:11px;
+  line-height:1.4;
+}
+
+.solutionExampleActionV19 {
+  color:#ffd54a;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeSolutionMatch .solutionFinderForm {
+    grid-template-columns:1fr;
+  }
+
+  .solutionExamplesHeadV19 {
+    display:grid;
+    align-items:start;
+  }
+
+  .solutionExamplesHeadV19 > span {
+    white-space:normal;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamplesV19 {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamplesV19 button {
+    min-height:132px;
+  }
+}

@@ -14,16 +14,32 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   }
 }
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
 
 const EXAMPLES = [
-  "Automatiser nos comptes rendus de réunion et envoyer les actions aux équipes",
-  "Créer un assistant qui répond à partir de nos documents internes",
-  "Former nos managers à ChatGPT et à l’IA générative",
-  "Automatiser la qualification de nos leads et notre reporting commercial"
+  {
+    category: "RÉUNIONS",
+    title: "Comptes rendus & actions",
+    text: "Automatiser nos comptes rendus de réunion et envoyer les actions aux équipes"
+  },
+  {
+    category: "DOCUMENTS",
+    title: "Assistant documentaire",
+    text: "Créer un assistant qui répond à partir de nos documents internes"
+  },
+  {
+    category: "FORMATION",
+    title: "Managers & IA générative",
+    text: "Former nos managers à ChatGPT et à l’IA générative"
+  },
+  {
+    category: "COMMERCIAL",
+    title: "Leads & reporting",
+    text: "Automatiser la qualification de nos leads et notre reporting commercial"
+  }
 ];
 
 function routeLabel(route) {
@@ -34,6 +50,7 @@ function routeLabel(route) {
 }
 
 export default function SolutionFinder() {
+  const queryRef = useRef(null);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("idle");
   const [result, setResult] = useState(null);
@@ -97,16 +114,22 @@ export default function SolutionFinder() {
       });
     } catch {
       setStatus("error");
-      setError("L’orientation n’a pas pu être générée. Vous pouvez réessayer ou utiliser la fiche besoin.");
+      setError("L’orientation n’a pas pu être générée. Vous pouvez réessayer ou démarrer depuis un autre exemple.");
     }
   }
 
   function chooseExample(example) {
-    setQuery(example);
+    setQuery(example.text);
     setError("");
+    window.requestAnimationFrame(() => {
+      queryRef.current?.focus();
+      const length = example.text.length;
+      queryRef.current?.setSelectionRange?.(length, length);
+    });
     trackEvent("solution_finder_example", {
       form_id: "home-solution-finder",
-      example
+      example: example.text,
+      category: example.category
     });
   }
 
@@ -232,14 +255,15 @@ export default function SolutionFinder() {
       <form className="solutionFinderForm" onSubmit={search}>
         <label htmlFor="autonomia-solution-query">Décrivez ce que vous voulez résoudre</label>
         <textarea
+          ref={queryRef}
           id="autonomia-solution-query"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Ex. Nous perdons du temps à faire les comptes rendus de réunion, identifier les décisions et relancer les actions…"
           rows={5}
         />
-        <div className="solutionFinderSubmit">
-          <span>Un expert · une piste BUILD · une Formation IA</span>
+        <div className="solutionFinderSubmit solutionFinderSubmitV19">
+          <small>EXPERTS · BUILD · ACADEMY</small>
           <button type="submit" disabled={status === "loading"}>
             {status === "loading" ? "Analyse en cours…" : "Trouver la bonne réponse →"}
           </button>
@@ -247,13 +271,34 @@ export default function SolutionFinder() {
       </form>
 
       {!result && (
-        <div className="solutionExamples" aria-label="Exemples de demandes">
-          {EXAMPLES.map((example) => (
-            <button type="button" key={example} onClick={() => chooseExample(example)}>
-              {example}
-            </button>
-          ))}
-        </div>
+        <section className="solutionExamplesWrapV19" aria-label="Exemples de demandes">
+          <div className="solutionExamplesHeadV19">
+            <div>
+              <small>BESOIN D’INSPIRATION ?</small>
+              <strong>Cliquez sur un exemple pour préremplir votre demande.</strong>
+            </div>
+            <span>4 idées pour démarrer</span>
+          </div>
+
+          <div className="solutionExamples solutionExamplesV19">
+            {EXAMPLES.map((example) => (
+              <button
+                type="button"
+                key={example.text}
+                onClick={() => chooseExample(example)}
+                aria-label={`Utiliser l’exemple : ${example.text}`}
+              >
+                <span className="solutionExampleMetaV19">
+                  <small>{example.category}</small>
+                  <b>↗</b>
+                </span>
+                <strong>{example.title}</strong>
+                <p>{example.text}</p>
+                <span className="solutionExampleActionV19">Utiliser cet exemple →</span>
+              </button>
+            ))}
+          </div>
+        </section>
       )}
 
       {error && <p className="solutionFinderError" role="alert">{error}</p>}
@@ -392,7 +437,7 @@ export default function SolutionFinder() {
                   <button type="submit" disabled={leadStatus === "sending"}>
                     {leadStatus === "sending" ? "Envoi…" : "Envoyer ma demande →"}
                   </button>
-                  <a href="#fiche-besoin">J’ai besoin d’un cadrage plus détaillé</a>
+                  <Link href="/start">J’ai besoin d’un cadrage plus détaillé</Link>
                 </div>
               </form>
             )}
