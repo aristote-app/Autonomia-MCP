@@ -27,7 +27,19 @@ export async function GET(request) {
       requiredData: ["workEmail"]
     });
 
-    const extracted = extractKasprContactData(provider);
+    let extracted = extractKasprContactData(provider);
+    let fallback = null;
+
+    if (!extracted.found) {
+      fallback = await enrichKasprLinkedInProfile({
+        linkedinUrl: "https://fr.linkedin.com/in/ebnou222",
+        name: "Moustapha Ebnou",
+        dataToGet: ["phone"],
+        requiredData: ["phone"]
+      });
+      extracted = extractKasprContactData(fallback);
+    }
+
     const creditsAfter = await getKasprRemainingCredits().catch((error) => ({
       error: error instanceof Error ? error.message : String(error)
     }));
@@ -37,6 +49,7 @@ export async function GET(request) {
       found: extracted.found,
       email_b2b: extracted.email_b2b,
       phone: extracted.phone,
+      fallback_used: Boolean(fallback),
       credits_before: creditsBefore,
       credits_after: creditsAfter
     }, { headers: { "Cache-Control": "no-store" } });
