@@ -19980,3 +19980,187 @@ body {
     line-height:1.15;
   }
 }
+
+/* HOME V15 — NAS-like simplification */
+
+/* 1. Hero: same message, far better use of width, no secondary pillar UI. */
+.homeV10 .homeHeroMinimalInnerV13 {
+  padding:58px 58px 38px;
+}
+
+.homeV10 .homeHeroMinimalV13 h1 {
+  max-width:none;
+  width:100%;
+  font-size:clamp(56px,6.35vw,98px);
+}
+
+.homeV10 .homeHeroMinimalV13 h1 .homeHeroPrimaryLineV15 {
+  display:block;
+  color:#fff;
+  white-space:nowrap;
+}
+
+.homeV10 .homeHeroMinimalV13 h1 > span:last-child {
+  display:block;
+  color:#6fd7ce;
+}
+
+.homeV10 .homeHeroMinimalBottomV14 {
+  grid-template-columns:minmax(0,.9fr) minmax(480px,1.1fr);
+  margin-top:24px;
+  padding-top:20px;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 {
+  display:none !important;
+}
+
+/* 2. Execution chain: neutral premium shell, no yellow section background. */
+.homeExecutionChainV12 {
+  padding:38px 28px 30px;
+  background:
+    linear-gradient(rgba(11,21,48,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,21,48,.025) 1px,transparent 1px),
+    #f8f6f1;
+  background-size:30px 30px,30px 30px,auto;
+  box-shadow:0 18px 46px rgba(11,21,48,.055);
+}
+
+.homeExecutionChainV12::before {
+  opacity:.12;
+}
+
+.homeExecutionChainIntroSimpleV15 {
+  display:block;
+  margin-bottom:28px;
+}
+
+.homeExecutionChainIntroSimpleV15 > div {
+  max-width:900px;
+  margin:0 auto;
+  text-align:center;
+}
+
+.homeExecutionChainIntroSimpleV15 h2 {
+  margin:0 0 7px;
+  font-size:clamp(38px,4.2vw,60px);
+}
+
+.homeExecutionChainIntroSimpleV15 p {
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.executionPillarV12.build {
+  border-color:rgba(11,21,48,.12);
+  background:
+    radial-gradient(circle at 50% 0,rgba(255,213,74,.16),transparent 32%),
+    linear-gradient(180deg,#fffdf8,#f6f1e5);
+  color:#0b1530;
+  box-shadow:0 24px 58px rgba(11,21,48,.10);
+}
+
+.executionPillarV12.build .executionPillarHeadV12 > span {
+  background:#0b1530;
+  color:#fff;
+}
+
+.executionPillarV12.build .executionStickerCloudV12 span:nth-child(2n) {
+  background:#0b1530;
+  color:#fff;
+}
+
+.executionBuildFlowV12 {
+  background:#fff;
+}
+
+.homeExecutionPathV12 {
+  display:none !important;
+}
+
+/* 3. AI Match is the single guided discovery tool kept on the Home. */
+.homeV10 .homeSolutionMatch {
+  margin-top:18px;
+}
+
+.homeV10 .homeSolutionMatchIntro h2 {
+  font-size:clamp(34px,3.3vw,52px);
+}
+
+/* 4. Fewer chapters = stronger chapter markers. */
+.homeV10 .homeJourneyIndex {
+  gap:10px;
+}
+
+.homeV10 .homeJourneyIndex span {
+  min-width:58px;
+  height:58px;
+  border-radius:18px;
+  font-size:18px;
+}
+
+.homeV10 .homeJourneyIndex b {
+  font-size:14px;
+}
+
+/* 5. The remaining lower sections breathe more because the redundant ones are gone. */
+.homeV10 .homeRoleDirectory {
+  margin-top:18px;
+}
+
+.homeV10 .homeTerritoryV10 {
+  margin-top:18px;
+}
+
+.homeV10 .homeFinalStart {
+  margin-top:18px;
+}
+
+/* Explicitly hide legacy blocks if old CSS still targets them. */
+.homeV10 .homeProblemStripV10,
+.homeV10 .homeDiagnosticIntro,
+.homeV10 > .needBriefSection,
+.homeV10 .homeAcademyDirectory,
+.homeV10 .homeMethodV10 {
+  display:none !important;
+}
+
+@media (max-width:1180px) {
+  .homeV10 .homeHeroMinimalV13 h1 .homeHeroPrimaryLineV15 {
+    white-space:normal;
+  }
+
+  .homeV10 .homeHeroMinimalBottomV14 {
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeHeroMinimalInnerV13 {
+    padding:34px 20px 26px;
+  }
+
+  .homeV10 .homeHeroMinimalV13 h1 {
+    font-size:clamp(44px,12vw,62px);
+  }
+
+  .homeExecutionChainV12 {
+    padding:26px 16px 22px;
+  }
+
+  .homeExecutionChainIntroSimpleV15 > div {
+    text-align:left;
+  }
+
+  .homeV10 .homeJourneyIndex span {
+    min-width:46px;
+    height:46px;
+    border-radius:14px;
+    font-size:14px;
+  }
+
+  .homeV10 .homeJourneyIndex b {
+    font-size:11px;
+  }
+}

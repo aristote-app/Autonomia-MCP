@@ -1,27 +1,7 @@
 import Link from "next/link";
-import NeedBriefQuestionnaire from "@/components/NeedBriefQuestionnaire";
 import SolutionFinder from "@/components/SolutionFinder";
 import HomeStartEmail from "@/components/HomeStartEmail";
 import AutonomiaMark from "@/components/AutonomiaMark";
-import { academyTrainings } from "@/content/academy-trainings";
-import { problemSolutions } from "@/content/problem-solutions";
-import ProblemLink from "@/components/ProblemLink";
-
-const homeProblemSlugs = [
-  "automatiser-comptes-rendus-reunion",
-  "assistant-documentaire-ia-rag",
-  "automatiser-reporting",
-  "qualification-automatique-leads",
-  "trier-router-emails-ia",
-  "controle-factures-ia",
-  "reponse-appel-offres-ia",
-  "assistant-service-client-ia",
-  "assistant-rh-interne-ia"
-];
-
-const homeProblems = homeProblemSlugs
-  .map((slug) => problemSolutions.find((item) => item.slug === slug))
-  .filter(Boolean);
 
 const expertRoles = [
   { label: "AI Project Manager", slug: "ai-project-manager" },
@@ -45,7 +25,7 @@ export default function Home() {
           <p className="eyebrow">PARTENAIRE OPÉRATIONNEL DE L’ADOPTION IA</p>
 
           <h1>
-            Accélérer l’adoption de l’IA.
+            <span className="homeHeroPrimaryLineV15">Accélérer l’adoption de l’IA.</span>
             <span>Transformer les usages en performance.</span>
           </h1>
 
@@ -60,19 +40,12 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="homeHeroMinimalPillarsV13" aria-label="Les trois piliers Autonomia">
-            <Link href="/experts"><span>01</span><b>TROUVER</b><small>Experts IA</small></Link>
-            <i>→</i>
-            <Link href="/solutions-ia"><span>02</span><b>CONSTRUIRE</b><small>Solutions IA</small></Link>
-            <i>→</i>
-            <Link href="/academy"><span>03</span><b>FORMER</b><small>Adoption & compétences</small></Link>
-          </nav>
+
         </div>
       </section>
 
       <section className="homeExecutionChainV12" id="experts-academy">
-        <div className="homeExecutionChainIntroV12">
-          <p className="sectionIndex homeJourneyIndex homeJourneyIndexPillars"><span>01–03</span><b>TROUVER · CONSTRUIRE · FORMER</b></p>
+        <div className="homeExecutionChainIntroV12 homeExecutionChainIntroSimpleV15">
           <div>
             <h2>Une chaîne d’exécution complète.</h2>
             <p><strong>Les bons experts.</strong> Les bonnes solutions IA. Des équipes capables de les utiliser.</p>
@@ -131,95 +104,23 @@ export default function Home() {
           </article>
         </div>
 
-        <div className="homeExecutionPathV12" aria-label="Chaîne Autonomia">
-          <span><b>BESOIN MÉTIER</b><small>Un problème réel à résoudre</small></span>
-          <i>→</i>
-          <span><b>EXPERTS</b><small>Les bonnes compétences</small></span>
-          <i>→</i>
-          <span><b>BUILD</b><small>La solution construite</small></span>
-          <i>→</i>
-          <span><b>ACADEMY</b><small>L’adoption et l’autonomie</small></span>
-        </div>
+
       </section>
 
-      <section className="homeProblemStrip homeProblemStripV10" id="problems">
-        <div className="sectionHeading">
-          <p className="sectionIndex homeJourneyIndex"><span>04</span><b>PROBLÈMES PRÉCIS</b></p>
-          <div>
-            <h2>Vous savez déjà ce que vous voulez arrêter de faire à la main ?</h2>
-            <p>
-              AUTONOMIA BUILD part directement de la tâche. Chaque page montre le flux, les points de contrôle
-              et les briques nécessaires pour passer du problème à une solution réellement actionnable.
-            </p>
-          </div>
-        </div>
 
-        <div className="homeProblemSpotlight">
-          <div>
-            <small>CAS D’USAGE PHARE</small>
-            <h3>Automatiser les comptes rendus sans perdre les décisions.</h3>
-            <p>Notes ou transcript → résumé → décisions → actions → responsables → échéances → relances.</p>
-            <ProblemLink href="/solutions-ia/automatiser-comptes-rendus-reunion" problemSlug="automatiser-comptes-rendus-reunion" problemCluster="Réunions & gestion de projet" surface="home_problem_spotlight">
-              Construire ce cas d’usage →
-            </ProblemLink>
-          </div>
-          <div className="homeProblemFlow" aria-hidden="true">
-            <span><small>ENTRÉE</small><b>Notes / transcript</b></span>
-            <i>→</i>
-            <span><small>IA + RÈGLES</small><b>Structure & contrôle</b></span>
-            <i>→</i>
-            <span><small>SORTIE</small><b>Actions exploitables</b></span>
-          </div>
-        </div>
-
-        <div className="homeProblemGrid">
-          {homeProblems.map((item, index) => (
-            <ProblemLink
-              href={"/solutions-ia/" + item.slug}
-              problemSlug={item.slug}
-              problemCluster={item.cluster}
-              surface="home_problem_strip"
-              key={item.slug}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <small>{item.cluster}</small>
-              <strong>{item.title}</strong>
-              <b>Tester ↗</b>
-            </ProblemLink>
-          ))}
-        </div>
-
-        <ProblemLink className="secondaryButton" href="/solutions-ia" surface="home_problem_strip_all">
-          Voir toutes les solutions par problème
-        </ProblemLink>
-      </section>
 
       <section className="homeSolutionMatch" id="solution-finder">
         <div className="homeSolutionMatchIntro">
-          <p className="sectionIndex homeJourneyIndex"><span>05</span><b>AI MATCH</b></p>
+          <p className="sectionIndex homeJourneyIndex"><span>04</span><b>AI MATCH</b></p>
           <h2>Vous avez le problème, mais pas encore le bon expert, la bonne solution ou la bonne formation ?</h2>
           <p>Décrivez le besoin en langage naturel. Autonomia rapproche la demande des trois leviers : EXPERTS, BUILD et ACADEMY.</p>
         </div>
         <SolutionFinder />
       </section>
 
-      <section className="homeDiagnosticIntro" id="diagnostic-ia">
-        <p className="sectionIndex homeJourneyIndex"><span>06</span><b>FICHE BESOIN</b></p>
-        <div>
-          <p className="auditKicker">VOUS VOULEZ NOUS TRANSMETTRE PLUS DE CONTEXTE ?</p>
-          <h2>Structurez votre besoin avant l’échange.</h2>
-          <p>
-            En trois volets, vous nous indiquez où se situe le besoin, ce qui vous ralentit et le résultat recherché.
-            Vous obtenez une fiche besoin structurée avant de nous l’envoyer.
-          </p>
-        </div>
-      </section>
-
-      <NeedBriefQuestionnaire />
-
       <section className="roleSection homeRoleDirectory">
         <div className="sectionHeading">
-          <p className="sectionIndex homeJourneyIndex"><span>07</span><b>MÉTIERS IA</b></p>
+          <p className="sectionIndex homeJourneyIndex"><span>05</span><b>MÉTIERS IA</b></p>
           <div>
             <h2>Vous savez déjà quel profil vous cherchez ?</h2>
             <p>
@@ -240,50 +141,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="academySection homeAcademyDirectory">
-        <div className="sectionHeading">
-          <p className="sectionIndex homeJourneyIndex"><span>08</span><b>FORMATIONS IA</b></p>
-          <div>
-            <h2>Vous savez déjà ce que vos équipes doivent apprendre ?</h2>
-            <p>
-              Toutes les Formations IA restent reliées depuis la Home pour conserver le maillage interne,
-              tout en donnant une vraie identité visuelle à AUTONOMIA ACADEMY.
-            </p>
-          </div>
-        </div>
 
-        <div className="topicGrid">
-          {academyTrainings.map((training, index) => (
-            <Link href={"/formation-ia/" + training.slug} key={training.slug}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{training.homeTitle}</strong>
-              <b>↗</b>
-            </Link>
-          ))}
-        </div>
-      </section>
 
-      <section className="homeMethod homeMethodCompact homeMethodV10" id="methode">
-        <div className="methodIntro">
-          <p className="sectionIndex homeJourneyIndex"><span>09</span><b>COMMENT NOUS TRAVAILLONS</b></p>
-          <h2>Besoin → Trouver → Construire → Former.</h2>
-          <p>
-            Nous partons du résultat que l’organisation doit obtenir, puis nous activons les compétences,
-            la construction et la montée en autonomie nécessaires pour y arriver.
-          </p>
-        </div>
 
-        <ol className="homeMethodSteps homeMethodStepsV12">
-          <li><span>01</span><div><strong>Cadrer</strong><p>Comprendre le problème métier, les contraintes et le résultat attendu.</p></div></li>
-          <li><span>02</span><div><strong>Trouver</strong><p>Mobiliser les bons experts IA selon le besoin.</p></div></li>
-          <li><span>03</span><div><strong>Construire</strong><p>Concevoir l’agent, l’automatisation, le workflow ou l’outil utile.</p></div></li>
-          <li><span>04</span><div><strong>Former</strong><p>Transférer les méthodes et rendre l’usage durable dans l’organisation.</p></div></li>
-        </ol>
-      </section>
 
       <section className="territoryHomePromo homeTerritoryCompact homeTerritoryV10">
         <div>
-          <p className="sectionIndex homeJourneyIndex"><span>10</span><b>TERRITOIRES</b></p>
+          <p className="sectionIndex homeJourneyIndex"><span>06</span><b>TERRITOIRES</b></p>
           <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
           <h2>Experts, Build et Formations IA adaptés aux collectivités et aux entreprises du territoire.</h2>
           <Link className="secondaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>
