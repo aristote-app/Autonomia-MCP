@@ -24,6 +24,9 @@ export default async function IntegrationsPage() {
     context?.membership &&
     canManageWorkspace(context.membership.role)
   );
+  const connectHref = canManage
+    ? "#connection-settings"
+    : "/login?next=%2Fintegrations%3Fsetup%3D1";
   const runtimeState = canManage
     ? await runtimeIntegrationStatus().catch(() => null)
     : null;
@@ -66,8 +69,24 @@ export default async function IntegrationsPage() {
         </div>
       </header>
 
+      {!canManage && (
+        <section className="integrationConnectGate" id="connection-settings">
+          <div>
+            <p className="eyebrow">CONNEXIONS SÉCURISÉES</p>
+            <h2>Brancher Kaspr et Waalaxy</h2>
+            <p>
+              Les clés API sont des secrets serveur. Le formulaire apparaît uniquement après
+              connexion avec un compte administrateur ou direction du workspace Autonomia.
+            </p>
+          </div>
+          <Link className="integrationConnectButton" href={connectHref}>
+            Se connecter pour brancher →
+          </Link>
+        </section>
+      )}
+
       {canManage && (
-        <section className="integrationSettingsPanel">
+        <section className="integrationSettingsPanel" id="connection-settings">
           <div className="sectionTitle">
             <div>
               <p className="eyebrow">CONNEXIONS SERVEUR</p>
@@ -187,22 +206,32 @@ export default async function IntegrationsPage() {
           </p>
         </article>
 
-        <article>
+        <article className={states.kasprEnrichment ? "" : "integrationActionCard"}>
           <State ready={states.kasprEnrichment} label="Kaspr" />
           <h2>Enrichissement sélectif</h2>
           <p>
-            La clé seule ne suffit pas : Autonomia exige aussi une liste explicite des champs payants autorisés.
-            L'enrichissement reste manuel, réservé aux contacts vérifiés et ne se lance jamais en masse.
+            Email B2B et téléphone peuvent remonter directement dans le cockpit depuis Kaspr.
+            Les crédits sont consommés uniquement sur les contacts validés.
           </p>
+          {!states.kasprEnrichment && (
+            <Link className="integrationCardAction" href={connectHref}>
+              Brancher Kaspr →
+            </Link>
+          )}
         </article>
 
-        <article>
+        <article className={states.waalaxy ? "" : "integrationActionCard"}>
           <State ready={states.waalaxy} label="Waalaxy" />
           <h2>Exécution commerciale</h2>
           <p>
-            Le connecteur API Autonomia est prêt pour importer un profil LinkedIn dans une liste
-            Waalaxy et, si choisi, l'inscrire à une campagne.
+            Le connecteur API Autonomia peut importer un profil LinkedIn dans une liste Waalaxy
+            puis l'inscrire à une campagne choisie.
           </p>
+          {!states.waalaxy && (
+            <Link className="integrationCardAction" href={connectHref}>
+              Brancher Waalaxy →
+            </Link>
+          )}
         </article>
 
         <article>
