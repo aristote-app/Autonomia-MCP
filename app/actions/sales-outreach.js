@@ -162,7 +162,20 @@ export async function enrichVerifiedContactWithKaspr(formData) {
       requiredData: ["workEmail"]
     });
 
-    const extracted = extractKasprContactData(providerResult);
+    let extracted = extractKasprContactData(providerResult);
+
+    // A contact can have a phone but no work email. Kaspr's requiredData
+    // intentionally suppresses charges when the required field is absent,
+    // so retry only the phone pool when the first pass returns no business data.
+    if (!extracted.found) {
+      const phoneResult = await enrichKasprLinkedInProfile({
+        linkedinUrl: contact.linkedin_url,
+        name: contactName,
+        dataToGet: ["phone"],
+        requiredData: ["phone"]
+      });
+      extracted = extractKasprContactData(phoneResult);
+    }
 
     await applySalesContactKasprResult({
       workspaceId: context.membership.workspace_id,
