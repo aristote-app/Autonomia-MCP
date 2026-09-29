@@ -16,8 +16,7 @@ import {
 } from "../../lib/integrations/waalaxy.js";
 import {
   enrichKasprLinkedInProfile,
-  extractKasprContactData,
-  kasprRequestedFields
+  extractKasprContactData
 } from "../../lib/integrations/kaspr.js";
 import {
   evaluateKasprGuard,
@@ -120,13 +119,6 @@ export async function enrichVerifiedContactWithKaspr(formData) {
     throw new Error("Kaspr is not configured");
   }
 
-  const requestedFields = kasprRequestedFields();
-  if (!requestedFields.length) {
-    throw new Error(
-      "Kaspr fields are not configured. Set KASPR_DATA_TO_GET before spending enrichment credits."
-    );
-  }
-
   const contactId = clean(formData.get("contact_id"), 80);
   const accountKey = clean(formData.get("account_key"), 120);
 
@@ -166,7 +158,7 @@ export async function enrichVerifiedContactWithKaspr(formData) {
     const providerResult = await enrichKasprLinkedInProfile({
       linkedinUrl: contact.linkedin_url,
       name: contactName,
-      dataToGet: requestedFields
+      isPhoneRequired: true
     });
 
     const extracted = extractKasprContactData(providerResult);
@@ -176,7 +168,7 @@ export async function enrichVerifiedContactWithKaspr(formData) {
       actorUserId: context.claims.sub,
       contactId,
       extracted,
-      requestedFields,
+      requestedFields: ["professionalEmail", "phones"],
       providerStatus: "success"
     });
   } catch (error) {
