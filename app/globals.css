@@ -555,8 +555,42 @@ h3 { margin: 0 0 8px; }
 .integrationReady { background:#111; color:#fff; }
 .integrationMissing { border-style:dashed; color:#677068; }
 
+.integrationActionCard { position:relative; }
+.integrationActionCard:hover { border-color:#111; box-shadow:0 8px 24px rgba(17,17,17,.06); }
+.integrationCardAction,
+.integrationConnectButton {
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  align-items:center;
+  justify-content:center;
+  padding:10px 13px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:900;
+}
+.integrationCardAction:hover,
+.integrationConnectButton:hover { background:#fff; color:#111; }
+.integrationConnectGate {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  margin:26px 0 0;
+  padding:22px 24px;
+  border:1px solid #d9ddd7;
+  background:#fff7d8;
+}
+.integrationConnectGate h2 { margin:4px 0 8px; }
+.integrationConnectGate p { margin:0; max-width:720px; color:#555d56; font-size:12px; line-height:1.55; }
+.integrationSettingsPanel { scroll-margin-top:24px; }
+
 @media (max-width:720px) {
   .integrationGrid { grid-template-columns:1fr; }
+  .integrationConnectGate { align-items:flex-start; flex-direction:column; }
 }
 
 
