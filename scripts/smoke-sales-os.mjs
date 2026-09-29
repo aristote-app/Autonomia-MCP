@@ -12,8 +12,7 @@ import {
 import {
   enrichKasprLinkedInProfile,
   standardLinkedInProfileId,
-  extractKasprContactData,
-  kasprRequestedFields
+  extractKasprContactData
 } from "../lib/integrations/kaspr.js";
 import {
   discoverDecisionMakers,
@@ -501,26 +500,21 @@ try {
     apiKey: "test-kaspr",
     linkedinUrl: "https://www.linkedin.com/in/jane-doe-ai",
     name: "Jane Doe",
-    dataToGet: ["provider-field-id"]
+    isPhoneRequired: true
   });
   assert.equal(kaspr.profile.name, "Jane Doe");
 
   const parsedKaspr = extractKasprContactData({
     profile: {
-      workEmail: "jane@acme.test",
-      directEmail: "jane.private@example.test",
-      mobilePhone: "+33601020304"
+      professionalEmail: "jane@acme.test",
+      personalEmail: "jane.private@example.test",
+      phones: ["+33601020304"]
     }
   });
   assert.equal(parsedKaspr.email_b2b, "jane@acme.test");
-  assert.equal(parsedKaspr.email_direct, "jane.private@example.test");
+  assert.equal(parsedKaspr.email_direct, null);
   assert.equal(parsedKaspr.phone, "+33601020304");
   assert.equal(parsedKaspr.found, true);
-  assert.deepEqual(
-    kasprRequestedFields("work-email, phone, work-email"),
-    ["work-email", "phone"]
-  );
-
   const kasprCall = calls.find((call) =>
     call.url.includes("api.developers.kaspr.io/profile/linkedin")
   );
@@ -528,9 +522,8 @@ try {
   const kasprBody = JSON.parse(kasprCall.options.body);
   assert.equal(kasprBody.name, "Jane Doe");
   assert.equal(kasprBody.id, "jane-doe-ai");
-  assert.deepEqual(kasprBody.dataToGet, ["provider-field-id"]);
+  assert.equal(kasprBody.isPhoneRequired, true);
   assert.equal(kasprCall.options.headers.Authorization, "test-kaspr");
-  assert.equal(kasprCall.options.headers.version, "v2");
 
   const imported = await importWaalaxyProspects({
     apiKey: "test-waalaxy",
