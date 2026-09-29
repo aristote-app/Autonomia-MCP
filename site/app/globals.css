@@ -20497,3 +20497,10 @@ body {
     font-size:15px;
   }
 }
+
+/* HOME V22 — force Academy directory visible */
+.homeV10 .homeAcademyDirectory {
+  display:block !important;
+  width:min(calc(100% - 28px),var(--max));
+  margin:18px auto 0;
+}
