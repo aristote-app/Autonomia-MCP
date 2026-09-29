@@ -588,6 +588,20 @@ h3 { margin: 0 0 8px; }
 .integrationConnectGate p { margin:0; max-width:720px; color:#555d56; font-size:12px; line-height:1.55; }
 .integrationSettingsPanel { scroll-margin-top:24px; }
 
+.integrationSaveSuccess {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 18px;
+  padding:12px 14px;
+  border:1px solid #111;
+  background:#eef8ee;
+  color:#111;
+  font-size:12px;
+}
+.integrationSaveSuccess strong { font-weight:900; }
+.integrationSaveSuccess span { color:#4b554d; }
+
 .integrationUnlockForm {
   display:grid;
   grid-template-columns:minmax(220px,320px) auto;
