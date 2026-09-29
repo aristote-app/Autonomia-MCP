@@ -1,8 +1,7 @@
 "use server";
 
-import { mkdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { requireWorkspaceAdmin } from "../../lib/auth/access.js";
 import { hasTemporaryIntegrationsAccess } from "../../lib/integrations/access.js";
 import { saveRuntimeIntegrationSettings } from "../../lib/runtime/integrationSettings.js";
@@ -24,16 +23,6 @@ async function requireAdminOrTemporaryAccess() {
     claims: null,
     membership: null
   };
-}
-
-async function requestPassengerRestart() {
-  const dir = join(process.cwd(), "tmp");
-  await mkdir(dir, { recursive: true });
-  await writeFile(
-    join(dir, "restart.txt"),
-    "Autonomia runtime integrations updated " + new Date().toISOString() + "\n",
-    "utf8"
-  );
 }
 
 export async function saveIntegrationSettings(formData) {
@@ -68,5 +57,6 @@ export async function saveIntegrationSettings(formData) {
   revalidatePath("/integrations");
   revalidatePath("/");
   revalidatePath("/accounts");
-  await requestPassengerRestart();
+
+  redirect("/integrations?saved=1#connection-settings");
 }
