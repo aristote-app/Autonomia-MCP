@@ -523,7 +523,7 @@ try {
   assert.equal(kasprBody.name, "Jane Doe");
   assert.equal(kasprBody.id, "jane-doe-ai");
   assert.equal(kasprBody.isPhoneRequired, true);
-  assert.equal(kasprCall.options.headers.Authorization, "test-kaspr");
+  assert.equal(kasprCall.options.headers.Authorization, "Bearer test-kaspr");
 
   const imported = await importWaalaxyProspects({
     apiKey: "test-waalaxy",
