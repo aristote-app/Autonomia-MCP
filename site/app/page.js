@@ -40,86 +40,31 @@ const expertRoles = [
 export default function Home() {
   return (
     <main className="homeV10">
-      <section className="homeHeroV10" id="top">
-        <div className="homeHeroV10Copy">
-          <p className="eyebrow">AUTONOMIA — TROUVER · CONSTRUIRE · FORMER</p>
-          <h1>
-            Construire l’IA utile.
-            <span>Transmettre les compétences.</span>
-          </h1>
-          <div className="homeHeroTriadV12" aria-label="Les trois piliers Autonomia">
-            <span><b>TROUVER</b><small>les bonnes compétences IA</small></span>
-            <i>→</i>
-            <span><b>CONSTRUIRE</b><small>la solution réellement utilisable</small></span>
-            <i>→</i>
-            <span><b>FORMER</b><small>les équipes pour l’adopter</small></span>
-          </div>
+      <section className="homeHeroV10 homeHeroMinimalV13" id="top">
+        <div className="homeHeroMinimalInnerV13">
+          <p className="eyebrow">PARTENAIRE OPÉRATIONNEL DE L’ADOPTION IA</p>
 
-          <p className="homeHeroV10Lead">
-            À partir d’un problème métier, Autonomia trouve les bonnes compétences IA, conçoit et construit
-            la solution utile, puis forme les équipes pour qu’elle soit réellement utilisée.
+          <h1>
+            Accélérer l’adoption de l’IA.
+            <span>Transformer les usages en performance.</span>
+          </h1>
+
+          <p className="homeHeroMinimalLeadV13">
+            Autonomia accompagne les organisations de bout en bout : trouver les bonnes compétences,
+            construire les solutions IA utiles et former les équipes pour les intégrer réellement dans leur travail.
           </p>
 
-          <HomeStartEmail origin="home_hero" />
-
-          <div className="homeHeroV10Links">
-            <Link href="/experts">Trouver un expert IA</Link>
-            <Link href="/solutions-ia">Construire une solution IA</Link>
-            <Link href="/academy">Voir les Formations IA</Link>
+          <div className="homeHeroMinimalStartV13">
+            <HomeStartEmail origin="home_hero" compact />
           </div>
 
-          <div className="homeHeroV10Meta" aria-label="Chaîne d’exécution Autonomia">
-            <span>EXPERTS — les bonnes compétences</span>
-            <span>BUILD — agents, automatisations, outils</span>
-            <span>ACADEMY — adoption & montée en compétence</span>
-          </div>
-        </div>
-
-        <aside className="homeHeroSceneV10" aria-label="Exemple de parcours Autonomia">
-          <div className="homeSceneTop">
-            <div>
-              <small>START — EXEMPLE DE PARCOURS</small>
-              <strong>Un problème métier. Trois leviers pour aller jusqu’à l’usage réel.</strong>
-            </div>
-            <span>PRESQUE PRÊT À INTÉGRER</span>
-          </div>
-
-          <div className="homeScenePrompt">
-            <small>EXEMPLE DE BESOIN ENTRANT</small>
-            <p>“Nous voulons automatiser les comptes rendus, construire un assistant documentaire et former les managers à l’utiliser.”</p>
-          </div>
-
-          <div className="homeSceneRoutes homeSceneRoutesV12">
-            <article>
-              <small>01 — TROUVER</small>
-              <strong>EXPERTS</strong>
-              <p>AI Engineers · Data · RAG · Agents IA · Product · Automation.</p>
-            </article>
-            <article className="build">
-              <small>02 — CONSTRUIRE</small>
-              <strong>BUILD</strong>
-              <p>Agents · automatisations · workflows · assistants métier · mini-apps.</p>
-            </article>
-            <article>
-              <small>03 — FORMER</small>
-              <strong>ACADEMY</strong>
-              <p>Cas d’usage métier · agents IA · workflows · adoption · intra / inter.</p>
-            </article>
-          </div>
-
-          <div className="homeSceneSteps homeSceneStepsV12">
-            <span><b>01</b>Besoin métier</span>
-            <span><b>02</b>Experts</span>
-            <span><b>03</b>Build</span>
-            <span><b>04</b>Adoption</span>
-          </div>
-        </aside>
-
-        <div className="homeHeroMatrix homeHeroMatrixV12">
-          <article><small>01 — TROUVER</small><strong>AUTONOMIA EXPERTS</strong><p>Les bonnes compétences IA, au bon moment, pour le bon besoin.</p></article>
-          <article className="build"><small>02 — CONSTRUIRE</small><strong>AUTONOMIA BUILD</strong><p>Du problème métier à l’agent, au workflow ou à l’outil réellement utilisable.</p></article>
-          <article><small>03 — FORMER</small><strong>AUTONOMIA ACADEMY</strong><p>Des équipes capables d’utiliser l’IA dans leurs tâches et leurs métiers.</p></article>
-          <article><small>START</small><strong>Partir du besoin</strong><p>Un e-mail puis un parcours court pour qualifier le contexte.</p></article>
+          <nav className="homeHeroMinimalPillarsV13" aria-label="Les trois piliers Autonomia">
+            <Link href="/experts"><span>01</span><b>TROUVER</b><small>Experts IA</small></Link>
+            <i>→</i>
+            <Link href="/solutions-ia"><span>02</span><b>CONSTRUIRE</b><small>Solutions IA</small></Link>
+            <i>→</i>
+            <Link href="/academy"><span>03</span><b>FORMER</b><small>Adoption & compétences</small></Link>
+          </nav>
         </div>
       </section>
 

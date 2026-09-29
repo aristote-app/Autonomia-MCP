@@ -19590,3 +19590,195 @@ body {
     grid-template-columns:1fr;
   }
 }
+
+/* HOME V13 — ultra simple hero */
+.homeV10 .homeHeroMinimalV13 {
+  display:block;
+  width:min(calc(100% - 28px),var(--max));
+  min-height:0;
+  margin:28px auto 0;
+  padding:0;
+  overflow:hidden;
+  border-radius:38px;
+  background:
+    radial-gradient(circle at 92% 5%,rgba(255,213,74,.12),transparent 28%),
+    radial-gradient(circle at 4% 100%,rgba(30,179,166,.14),transparent 30%),
+    linear-gradient(180deg,#101d42,#0b1530);
+  box-shadow:0 32px 86px rgba(11,21,48,.18);
+}
+
+.homeV10 .homeHeroMinimalV13::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+}
+
+.homeV10 .homeHeroMinimalInnerV13 {
+  position:relative;
+  z-index:1;
+  max-width:1180px;
+  padding:66px 58px 46px;
+}
+
+.homeV10 .homeHeroMinimalV13 .eyebrow {
+  margin:0 0 18px;
+  color:#a8b7d5;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.15em;
+}
+
+.homeV10 .homeHeroMinimalV13 h1 {
+  max-width:1120px;
+  margin:0;
+  color:#fff;
+  font-size:clamp(58px,7.2vw,104px);
+  line-height:.91;
+  letter-spacing:-.065em;
+}
+
+.homeV10 .homeHeroMinimalV13 h1 span {
+  display:block;
+  color:#6fd7ce;
+}
+
+.homeV10 .homeHeroMinimalLeadV13 {
+  max-width:820px;
+  margin:24px 0 0;
+  color:#cbd5e9;
+  font-size:clamp(16px,1.5vw,20px);
+  line-height:1.55;
+}
+
+.homeV10 .homeHeroMinimalStartV13 {
+  max-width:760px;
+  margin-top:28px;
+}
+
+.homeV10 .homeHeroMinimalStartV13 .homeStartEmail {
+  margin:0;
+}
+
+.homeV10 .homeHeroMinimalStartV13 .homeStartEmailFields {
+  grid-template-columns:minmax(0,1fr) auto;
+  min-width:0;
+}
+
+.homeV10 .homeHeroMinimalStartV13 .homeStartEmail input {
+  min-height:58px;
+  border-radius:18px;
+  border-color:rgba(255,255,255,.16);
+}
+
+.homeV10 .homeHeroMinimalStartV13 .homeStartEmail button {
+  min-height:58px;
+  min-width:150px;
+  border-radius:18px;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:28px;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a {
+  display:grid;
+  grid-template-columns:auto auto;
+  grid-template-areas:
+    "num title"
+    "num meta";
+  column-gap:8px;
+  align-items:center;
+  min-height:50px;
+  padding:9px 13px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  color:#fff;
+  transition:background .2s ease,transform .2s ease;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a:hover {
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.08);
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a span {
+  grid-area:num;
+  color:#ffd54a;
+  font-size:9px;
+  font-weight:900;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a b {
+  grid-area:title;
+  font-size:11px;
+  letter-spacing:.08em;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 a small {
+  grid-area:meta;
+  color:#8fa2c7;
+  font-size:9px;
+}
+
+.homeV10 .homeHeroMinimalPillarsV13 > i {
+  color:#ffd54a;
+  font-size:14px;
+  font-style:normal;
+  font-weight:900;
+}
+
+/* Old V10/V12 hero systems are intentionally removed from layout. */
+.homeV10 .homeHeroMinimalV13 .homeHeroV10Copy,
+.homeV10 .homeHeroMinimalV13 .homeHeroSceneV10,
+.homeV10 .homeHeroMinimalV13 .homeHeroMatrix {
+  display:none;
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeHeroMinimalV13 {
+    width:calc(100% - 16px);
+    margin-top:14px;
+    border-radius:28px;
+  }
+
+  .homeV10 .homeHeroMinimalInnerV13 {
+    padding:36px 20px 28px;
+  }
+
+  .homeV10 .homeHeroMinimalV13 h1 {
+    font-size:clamp(46px,13vw,66px);
+  }
+
+  .homeV10 .homeHeroMinimalLeadV13 {
+    margin-top:18px;
+    font-size:15px;
+  }
+
+  .homeV10 .homeHeroMinimalStartV13 .homeStartEmailFields {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeHeroMinimalStartV13 .homeStartEmail button {
+    min-width:0;
+  }
+
+  .homeV10 .homeHeroMinimalPillarsV13 {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:7px;
+  }
+
+  .homeV10 .homeHeroMinimalPillarsV13 > i {
+    display:none;
+  }
+}
