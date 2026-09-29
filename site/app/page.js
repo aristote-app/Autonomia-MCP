@@ -45,13 +45,6 @@ export default function Home() {
       </section>
 
       <section className="homeExecutionChainV12" id="experts-academy">
-        <div className="homeExecutionChainIntroV12 homeExecutionChainIntroSimpleV15">
-          <div>
-            <h2>Une chaîne d’exécution complète.</h2>
-            <p><strong>Les bons experts.</strong> Les bonnes solutions IA. Des équipes capables de les utiliser.</p>
-          </div>
-        </div>
-
         <div className="homeExecutionRailV12">
           <article className="executionPillarV12 experts">
             <div className="executionPillarHeadV12">

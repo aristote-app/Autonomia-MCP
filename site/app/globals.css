@@ -20164,3 +20164,18 @@ body {
     font-size:11px;
   }
 }
+
+/* HOME V16 — direct pillars only */
+.homeExecutionChainV12 {
+  padding-top:28px;
+}
+
+.homeExecutionChainIntroV12,
+.homeExecutionChainIntroSimpleV15,
+.homeExecutionPathV12 {
+  display:none !important;
+}
+
+.homeExecutionRailV12 {
+  margin-top:0;
+}
