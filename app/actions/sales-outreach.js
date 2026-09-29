@@ -158,7 +158,8 @@ export async function enrichVerifiedContactWithKaspr(formData) {
     const providerResult = await enrichKasprLinkedInProfile({
       linkedinUrl: contact.linkedin_url,
       name: contactName,
-      isPhoneRequired: true
+      dataToGet: ["workEmail", "phone"],
+      requiredData: ["workEmail"]
     });
 
     const extracted = extractKasprContactData(providerResult);
@@ -168,7 +169,7 @@ export async function enrichVerifiedContactWithKaspr(formData) {
       actorUserId: context.claims.sub,
       contactId,
       extracted,
-      requestedFields: ["professionalEmail", "phones"],
+      requestedFields: ["workEmail", "phone"],
       providerStatus: "success"
     });
   } catch (error) {
