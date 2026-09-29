@@ -177,14 +177,6 @@ jobs:
           echo "::error::o2switch accepted the deploy twice but production never switched to the target version."
           exit 1
 
-      - name: One-time Kaspr diagnostic
-        if: steps.probe.outputs.ready == 'true'
-        run: |
-          echo "===== KASPR DIAGNOSTIC ====="
-          curl -fsS --max-time 25 "https://cockpit.build-autonomia.com/api/internal/kaspr-diagnostic?t=diag-7f8e51c1e2bb4a6c9f102f0c5c4d8a31"
-          echo
-          echo "===== END KASPR DIAGNOSTIC ====="
-
       - name: Dump cockpit o2switch worker log on failure
         if: failure()
         run: |
