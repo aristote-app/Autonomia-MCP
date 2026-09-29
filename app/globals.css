@@ -602,6 +602,19 @@ h3 { margin: 0 0 8px; }
 .integrationSaveSuccess strong { font-weight:900; }
 .integrationSaveSuccess span { color:#4b554d; }
 
+.integrationSaveError {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 18px;
+  padding:12px 14px;
+  border:1px solid #9b2c2c;
+  background:#fff1f1;
+  color:#6b1f1f;
+  font-size:12px;
+}
+.integrationSaveError strong { font-weight:900; }
+
 .integrationUnlockForm {
   display:grid;
   grid-template-columns:minmax(220px,320px) auto;
