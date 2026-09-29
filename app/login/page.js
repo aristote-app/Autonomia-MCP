@@ -31,6 +31,12 @@ export default async function LoginPage({ searchParams }) {
   const error = params?.error || null;
   const nextPath = params?.next || "/";
 
+  // Integrations can be configured through the temporary secure access flow
+  // while full cockpit authentication is not enabled.
+  if (!authConfigured() && String(nextPath).startsWith("/integrations")) {
+    redirect("/integrations#connection-settings");
+  }
+
   return (
     <main className="loginShell">
       <section className="loginCard">
