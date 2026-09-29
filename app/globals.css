@@ -588,9 +588,40 @@ h3 { margin: 0 0 8px; }
 .integrationConnectGate p { margin:0; max-width:720px; color:#555d56; font-size:12px; line-height:1.55; }
 .integrationSettingsPanel { scroll-margin-top:24px; }
 
+.integrationUnlockForm {
+  display:grid;
+  grid-template-columns:minmax(220px,320px) auto;
+  gap:8px;
+  align-items:center;
+}
+.integrationUnlockForm input {
+  min-height:42px;
+  padding:9px 11px;
+  border:1px solid #111;
+  background:#fff;
+  font:inherit;
+}
+.integrationUnlockForm button {
+  min-height:42px;
+  padding:9px 13px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+  font:inherit;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+.integrationUnlockForm small {
+  grid-column:1/-1;
+  color:#9b2c2c;
+  font-size:10px;
+}
+
 @media (max-width:720px) {
   .integrationGrid { grid-template-columns:1fr; }
   .integrationConnectGate { align-items:flex-start; flex-direction:column; }
+  .integrationUnlockForm { grid-template-columns:1fr; width:100%; }
 }
 
 
