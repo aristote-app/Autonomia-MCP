@@ -22,23 +22,7 @@ jobs:
           for attempt in $(seq 1 60); do
             HTTP_CODE="$(curl -sS --max-time 20 -o /tmp/kaspr.json -w "%{http_code}" "$DIAGNOSTIC_URL" || true)"
             if [ "$HTTP_CODE" = "200" ]; then
-              python - <<'PY'
-import json
-from pathlib import Path
-
-data = json.loads(Path("/tmp/kaspr.json").read_text())
-safe = {
-    "ok": data.get("ok"),
-    "connected": data.get("connected"),
-    "hit": data.get("hit"),
-    "attempts": data.get("attempts"),
-    "credits_before": data.get("credits_before"),
-    "credits_after": data.get("credits_after"),
-}
-print(json.dumps(safe, ensure_ascii=False, indent=2))
-if not data.get("ok") or not data.get("connected"):
-    raise SystemExit("Kaspr diagnostic did not confirm connectivity")
-PY
+              python -c 'import json; d=json.load(open("/tmp/kaspr.json")); safe={"ok":d.get("ok"),"connected":d.get("connected"),"hit":d.get("hit"),"attempts":d.get("attempts"),"credits_before":d.get("credits_before"),"credits_after":d.get("credits_after")}; print(json.dumps(safe,ensure_ascii=False,indent=2)); assert d.get("ok") and d.get("connected"), "Kaspr diagnostic did not confirm connectivity"'
               exit 0
             fi
             echo "Kaspr diagnostic not live yet (attempt $attempt/60, HTTP $HTTP_CODE)."
