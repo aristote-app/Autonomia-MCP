@@ -4,16 +4,26 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { revalidatePath } from "next/cache";
 import { requireWorkspaceAdmin } from "../../lib/auth/access.js";
+import { hasTemporaryIntegrationsAccess } from "../../lib/integrations/access.js";
 import { saveRuntimeIntegrationSettings } from "../../lib/runtime/integrationSettings.js";
 
 function value(formData, name, max = 4000) {
   return String(formData.get(name) || "").trim().slice(0, max);
 }
 
-async function requireAdmin() {
+async function requireAdminOrTemporaryAccess() {
   const context = await requireWorkspaceAdmin();
-  if (!context.authorized) throw new Error("Workspace admin access required");
-  return context;
+  if (context.authorized) return context;
+
+  const temporaryAccess = await hasTemporaryIntegrationsAccess().catch(() => false);
+  if (!temporaryAccess) throw new Error("Integrations access required");
+
+  return {
+    authorized: true,
+    temporary: true,
+    claims: null,
+    membership: null
+  };
 }
 
 async function requestPassengerRestart() {
@@ -27,7 +37,7 @@ async function requestPassengerRestart() {
 }
 
 export async function saveIntegrationSettings(formData) {
-  await requireAdmin();
+  await requireAdminOrTemporaryAccess();
 
   const updates = {
     AUTONOMIA_ACCOUNT_RESEARCH_ENABLED:
