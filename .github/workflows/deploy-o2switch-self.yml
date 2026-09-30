@@ -195,17 +195,34 @@ jobs:
           fi
           echo "Academy route is live."
 
+      - name: Refresh GitHub OIDC identity for Opportunity Hunter
+        if: steps.probe.outputs.ready == 'true'
+        id: opportunity_hunter_oidc
+        env:
+          AUDIENCE: autonomia-o2switch
+        run: |
+          RESPONSE="$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          if [ -z "$TOKEN" ]; then
+            echo "::error::GitHub OIDC token is empty."
+            exit 1
+          fi
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: One-time refresh LinkedIn Indeed opportunity hunter
         if: steps.probe.outputs.ready == 'true'
         env:
           HUNTER_URL: https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh
-          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+          OIDC_TOKEN: ${{ steps.opportunity_hunter_oidc.outputs.token }}
         run: |
           HTTP_CODE="$(curl -sS \
-            --max-time 180 \
+            --max-time 300 \
             -o /tmp/autonomia-opportunity-hunter.json \
             -w "%{http_code}" \
-            "$HUNTER_URL" \
+            -G "$HUNTER_URL" \
+            --data-urlencode "mode=recent" \
             -H "Authorization: Bearer $OIDC_TOKEN")"
 
           cat /tmp/autonomia-opportunity-hunter.json
