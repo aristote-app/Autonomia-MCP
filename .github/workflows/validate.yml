@@ -100,3 +100,9 @@ jobs:
         run: npm run smoke:talent-intelligence
       - name: Smoke test no admin view gates
         run: npm run smoke:no-admin-gates
+
+      - name: One-time live Kaspr email-first smoke
+        run: |
+          RESPONSE="$(curl -fsS 'https://cockpit.build-autonomia.com/api/internal/kaspr-smoke?t=ksmoke-4d3e99c2a71f4b85')"
+          printf '%s\n' "$RESPONSE"
+          printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True; e=d.get("email") or {}; assert e.get("ok") is True, e.get("error"); print("Kaspr live email-first smoke OK:", e.get("email_b2b"))'
