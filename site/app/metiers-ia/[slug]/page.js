@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { aiRoles, getAiRole, getAiRoleStaticParams } from "@/content/ai-roles";
 import { getRoleEnhancement } from "@/content/ai-role-enhancements";
 import ConsultantLivePanel from "@/components/ConsultantLivePanel";
+import QuickContactForm from "@/components/QuickContactForm";
 
 export function generateStaticParams() {
   return getAiRoleStaticParams();
@@ -117,7 +118,7 @@ export default async function AiRolePage({ params }) {
           <h1>{role.title}</h1>
           <p className="roleDek">{role.dek}</p>
           <div className="roleHeroActions">
-            <Link className="primaryButton" href="/#fiche-besoin">Décrire mon besoin</Link>
+            <Link className="primaryButton" href="#contact-expert">Décrire mon besoin</Link>
             <Link className="secondaryButton" href="/experts">Voir Autonomia Experts</Link>
           </div>
         </div>
@@ -367,14 +368,31 @@ export default async function AiRolePage({ params }) {
               doit devenir permanent car il porte un produit ou une plateforme durable. Le bon dispositif dépend
               donc autant de la trajectoire de l’organisation que de la compétence recherchée aujourd’hui.
             </p>
-            <Link className="primaryButton" href="/#fiche-besoin">
+            <Link className="primaryButton" href="#contact-expert">
               Décrire mon besoin de {role.title}
             </Link>
           </div>
         </section>
 
+        <section className="roleContact" id="contact-expert">
+          <div className="roleContactCopy">
+            <p className="sectionIndex">09 — CONTACT</p>
+            <h2>Parlons de votre besoin en {role.title}.</h2>
+            <p>
+              Décrivez le contexte, le livrable attendu ou le point de blocage. Cette page transmet automatiquement
+              le métier consulté avec votre demande.
+            </p>
+          </div>
+          <QuickContactForm
+            mode="experts"
+            formId={`expert-${role.slug}`}
+            requestedService={role.slug}
+            subjectLabel={`Besoin en ${role.title}`}
+          />
+        </section>
+
         <section className="roleFaq" id="faq">
-          <p className="sectionIndex">09 — FAQ</p>
+          <p className="sectionIndex">10 — FAQ</p>
           <div>
             <h2>Questions fréquentes sur le métier de {role.title}.</h2>
             <div className="faqList">
@@ -389,7 +407,7 @@ export default async function AiRolePage({ params }) {
         </section>
 
         <section className="roleSourcesMethod">
-          <p className="sectionIndex">10 — MÉTHODE ÉDITORIALE</p>
+          <p className="sectionIndex">11 — MÉTHODE ÉDITORIALE</p>
           <div className="roleReading">
             <h2>Pourquoi nous nous appuyons sur les offres d’emploi.</h2>
             <p>
@@ -412,7 +430,7 @@ export default async function AiRolePage({ params }) {
 
         <section className="roleExplore">
           <div className="roleExploreIntro">
-            <p className="sectionIndex">11 — MÉTIERS VOISINS</p>
+            <p className="sectionIndex">12 — MÉTIERS VOISINS</p>
             <h2>Les rôles à mobiliser autour du {role.title}.</h2>
             <p>
               Un projet IA mobilise rarement un seul métier. Cette sélection montre les rôles qui complètent le plus
