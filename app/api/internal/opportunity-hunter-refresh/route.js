@@ -32,12 +32,12 @@ export async function GET(request) {
     const jobSignals = await runAutomatedJobSignalRefresh({
       triggerMode: mode === "full" ? "on_demand_backfill" : "on_demand",
       freshness: mode === "full" ? "pm" : "pw",
-      maxPages: mode === "full" ? 8 : 3
+      maxPages: mode === "full" ? 2 : 1
     });
 
     const opportunityHunter = await runOpportunityHunter({
-      maxAccounts: mode === "full" ? 25 : 10,
-      maxPhoneFallbacks: 2
+      maxAccounts: mode === "full" ? 6 : 3,
+      maxPhoneFallbacks: mode === "full" ? 2 : 1
     });
 
     return Response.json({
