@@ -2,15 +2,15 @@ import { DEFAULT_JOB_DISCOVERY_QUERIES } from "../lib/collectors/jobDiscovery.js
 import { WEB_DEMAND_QUERY_SPECS } from "../lib/collectors/webDemandDiscovery.js";
 
 const recentRunsPerDay = 24 / 12;
-const backfillRunsPerDay = 24 / 24;
+const backfillRunsPerDay = 24 / 168;
 const extendedRunsPerDay = 24 / 48;
 
-const recentRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 2;
+const recentRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 1;
 const backfillRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 2;
 
-// Opportunity Hunter resolves at most 6 direct-client accounts every 12h and searches one
+// Opportunity Hunter resolves at most 6 direct-client accounts every 24h and searches one
 // decision-maker role per account.
-const opportunityHunterRequestsPerDay = (24 / 12) * 6;
+const opportunityHunterRequestsPerDay = (24 / 24) * 6;
 
 const estimatedDailySearchRequests =
   recentRequestsPerRun * recentRunsPerDay +
