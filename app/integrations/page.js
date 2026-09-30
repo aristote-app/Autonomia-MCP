@@ -3,6 +3,10 @@ import { getCurrentWorkspaceMembership, canManageWorkspace } from "../../lib/aut
 import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
 import { hasTemporaryIntegrationsAccess } from "../../lib/integrations/access.js";
 import { unlockIntegrationsAccessAction } from "./access-actions.js";
+import {
+  getWaalaxyProspectLists,
+  getWaalaxyCampaigns
+} from "../../lib/integrations/waalaxy.js";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +38,46 @@ export default async function IntegrationsPage({ searchParams }) {
   const runtimeState = canConfigure
     ? await runtimeIntegrationStatus().catch(() => null)
     : null;
+  let waalaxyOptions = null;
+  const waalaxyConfigured = Boolean(
+    process.env.WAALAXY_API_KEY || runtimeState?.configured?.WAALAXY_API_KEY
+  );
+
+  if (canConfigure && waalaxyConfigured) {
+    waalaxyOptions = await Promise.all([
+      getWaalaxyProspectLists(),
+      getWaalaxyCampaigns()
+    ])
+      .then(([listsPayload, campaignsPayload]) => {
+        const lists =
+          Array.isArray(listsPayload)
+            ? listsPayload
+            : Array.isArray(listsPayload?.prospectLists)
+              ? listsPayload.prospectLists
+              : Array.isArray(listsPayload?.lists)
+                ? listsPayload.lists
+                : Array.isArray(listsPayload?.data)
+                  ? listsPayload.data
+                  : [];
+        const campaigns =
+          Array.isArray(campaignsPayload)
+            ? campaignsPayload
+            : Array.isArray(campaignsPayload?.campaigns)
+              ? campaignsPayload.campaigns
+              : Array.isArray(campaignsPayload?.data)
+                ? campaignsPayload.data
+                : [];
+
+        return { available: true, lists, campaigns, error: null };
+      })
+      .catch((error) => ({
+        available: false,
+        lists: [],
+        campaigns: [],
+        error: error instanceof Error ? error.message : String(error)
+      }));
+  }
+
   const states = {
     brave: Boolean(process.env.BRAVE_SEARCH_API_KEY),
     franceTravail: Boolean(
@@ -42,7 +86,7 @@ export default async function IntegrationsPage({ searchParams }) {
     ),
     kaspr: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
     kasprEnrichment: Boolean(process.env.KASPR_API_KEY || runtimeState?.configured?.KASPR_API_KEY),
-    waalaxy: Boolean(process.env.WAALAXY_API_KEY || runtimeState?.configured?.WAALAXY_API_KEY),
+    waalaxy: waalaxyConfigured && waalaxyOptions?.available !== false,
     waalaxyReply: Boolean(
       process.env.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ||
       runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN
@@ -104,9 +148,11 @@ export default async function IntegrationsPage({ searchParams }) {
             <div className="integrationSaveSuccess">
               <strong>Enregistré côté serveur.</strong>
               <span>
-                {params?.kaspr === "ready"
-                  ? "Clé Kaspr enregistrée. Le cockpit est prêt pour un test d'enrichissement."
-                  : "Les réglages ont été enregistrés."}
+                {params?.waalaxy === "ready"
+                  ? "Clé Waalaxy enregistrée. Le cockpit peut maintenant charger les listes et campagnes."
+                  : params?.kaspr === "ready"
+                    ? "Clé Kaspr enregistrée. Le cockpit est prêt pour un test d'enrichissement."
+                    : "Les réglages ont été enregistrés."}
               </span>
             </div>
           )}
@@ -156,13 +202,56 @@ export default async function IntegrationsPage({ searchParams }) {
                   placeholder={runtimeState?.configured?.WAALAXY_API_KEY ? "Configurée · laisser vide pour conserver" : "À renseigner"}
                 />
               </label>
+
+              {waalaxyConfigured && waalaxyOptions?.available && (
+                <>
+                  <label>
+                    <span>Liste par défaut</span>
+                    <select
+                      name="WAALAXY_DEFAULT_LIST_ID"
+                      defaultValue={process.env.WAALAXY_DEFAULT_LIST_ID || ""}
+                    >
+                      <option value="">Choisir à chaque envoi</option>
+                      {waalaxyOptions.lists.map((list) => (
+                        <option key={list._id || list.id} value={list._id || list.id}>
+                          {list.name || list.label || list._id || list.id}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span>Campagne par défaut</span>
+                    <select
+                      name="WAALAXY_DEFAULT_CAMPAIGN_ID"
+                      defaultValue={process.env.WAALAXY_DEFAULT_CAMPAIGN_ID || ""}
+                    >
+                      <option value="">Liste uniquement / choisir plus tard</option>
+                      {waalaxyOptions.campaigns.map((campaign) => (
+                        <option key={campaign._id || campaign.id} value={campaign._id || campaign.id}>
+                          {campaign.name || campaign.label || campaign._id || campaign.id}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <small>
+                    API Waalaxy joignable · {waalaxyOptions.lists.length} liste(s) · {waalaxyOptions.campaigns.length} campagne(s).
+                  </small>
+                </>
+              )}
+
+              {waalaxyConfigured && waalaxyOptions && !waalaxyOptions.available && (
+                <small>
+                  Connexion Waalaxy à vérifier : {waalaxyOptions.error}
+                </small>
+              )}
+
               <label>
                 <span>Token webhook réponses</span>
                 <input
                   type="password"
                   name="AUTONOMIA_WAALAXY_WEBHOOK_TOKEN"
                   autoComplete="new-password"
-                  placeholder={runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ? "Configuré · laisser vide pour conserver" : "Secret fort choisi pour le webhook"}
+                  placeholder={runtimeState?.configured?.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN ? "Configuré automatiquement · laisser vide pour conserver" : "Généré automatiquement à la connexion"}
                 />
               </label>
               <label className="integrationClear">
@@ -246,9 +335,14 @@ export default async function IntegrationsPage({ searchParams }) {
           <State ready={states.waalaxy} label="Waalaxy" />
           <h2>Exécution commerciale</h2>
           <p>
-            Le connecteur API Autonomia peut importer un profil LinkedIn dans une liste Waalaxy
-            puis l'inscrire à une campagne choisie.
+            Import des profils LinkedIn validés, routage vers une liste/campagne Waalaxy et suivi
+            des réponses dans le cockpit. Aucun envoi automatique sans contact validé.
           </p>
+          {waalaxyConfigured && waalaxyOptions?.available && (
+            <small>
+              Connecté · {waalaxyOptions.lists.length} liste(s) · {waalaxyOptions.campaigns.length} campagne(s)
+            </small>
+          )}
           {!states.waalaxy && (
             <Link className="integrationCardAction" href={connectHref}>
               Brancher Waalaxy →
