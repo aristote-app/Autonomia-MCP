@@ -86,7 +86,7 @@ async function main() {
       result.linkedinIndeed = await runAutomatedJobSignalRefresh({
         triggerMode: "scheduled",
         freshness: "pw",
-        maxPages: 3
+        maxPages: 1
       });
       state.linkedinIndeed = new Date().toISOString();
     } catch (error) {
@@ -105,7 +105,7 @@ async function main() {
       result.linkedinIndeedBackfill = await runAutomatedJobSignalRefresh({
         triggerMode: "scheduled_backfill",
         freshness: "pm",
-        maxPages: 8
+        maxPages: 5
       });
       state.linkedinIndeedBackfill = new Date().toISOString();
     } catch (error) {
