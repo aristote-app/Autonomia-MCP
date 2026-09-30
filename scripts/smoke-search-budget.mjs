@@ -1,18 +1,20 @@
 import { DEFAULT_JOB_DISCOVERY_QUERIES } from "../lib/collectors/jobDiscovery.js";
 import { WEB_DEMAND_QUERY_SPECS } from "../lib/collectors/webDemandDiscovery.js";
 
-const coreRunsPerDay = 24 / 12;
+const recentRunsPerDay = 24 / 12;
+const backfillRunsPerDay = 24 / 96;
 const extendedRunsPerDay = 24 / 48;
 
-const coreRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.reduce(
-  (sum, spec) => sum + Math.min(Math.max(Number(spec.maxPages) || 1, 1), 10),
-  0
-);
+const recentRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 1;
+const backfillRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 2;
 
-const opportunityHunterRequestsPerDay = 5;
+// Opportunity Hunter resolves at most 3 accounts every 6h and searches one
+// decision-maker role per account.
+const opportunityHunterRequestsPerDay = (24 / 6) * 3;
 
 const estimatedDailySearchRequests =
-  coreRequestsPerRun * coreRunsPerDay +
+  recentRequestsPerRun * recentRunsPerDay +
+  backfillRequestsPerRun * backfillRunsPerDay +
   WEB_DEMAND_QUERY_SPECS.length * extendedRunsPerDay +
   opportunityHunterRequestsPerDay;
 
@@ -27,9 +29,11 @@ if (estimatedDailySearchRequests > 70) {
 }
 
 console.log("SEARCH_BUDGET", {
-  coreQueryFamilies: DEFAULT_JOB_DISCOVERY_QUERIES.length,
-  coreRequestsPerRun,
-  coreRunsPerDay,
+  jobQueries: DEFAULT_JOB_DISCOVERY_QUERIES.length,
+  recentRequestsPerRun,
+  recentRunsPerDay,
+  backfillRequestsPerRun,
+  backfillRunsPerDay,
   extendedQueries: WEB_DEMAND_QUERY_SPECS.length,
   extendedRunsPerDay,
   opportunityHunterRequestsPerDay,
