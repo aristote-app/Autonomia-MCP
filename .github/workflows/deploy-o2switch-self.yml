@@ -211,7 +211,7 @@ jobs:
           fi
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: One-time refresh LinkedIn Indeed opportunity hunter
+      - name: One-time full LinkedIn Indeed opportunity hunter
         if: steps.probe.outputs.ready == 'true'
         env:
           HUNTER_URL: https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh
@@ -222,7 +222,7 @@ jobs:
             -o /tmp/autonomia-opportunity-hunter.json \
             -w "%{http_code}" \
             -G "$HUNTER_URL" \
-            --data-urlencode "mode=recent" \
+            --data-urlencode "mode=full" \
             -H "Authorization: Bearer $OIDC_TOKEN")"
 
           cat /tmp/autonomia-opportunity-hunter.json
