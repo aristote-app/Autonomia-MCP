@@ -9,7 +9,7 @@ const coreRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.reduce(
   0
 );
 
-const opportunityHunterRequestsPerDay = 6;
+const opportunityHunterRequestsPerDay = 5;
 
 const estimatedDailySearchRequests =
   coreRequestsPerRun * coreRunsPerDay +
