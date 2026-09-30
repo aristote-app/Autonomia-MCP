@@ -6,6 +6,7 @@ import {
   runAutomatedExtendedDemandRefresh
 } from "../lib/market/automatedRefresh.js";
 import { refreshAllAccountWatches } from "../lib/db/accountWatches.js";
+import { runOpportunityHunter } from "../lib/market/opportunityHunter.js";
 
 const STATE_FILE = resolve(process.cwd(), ".runtime", "job-refresh-state.json");
 const HOUR = 60 * 60 * 1000;
@@ -14,7 +15,8 @@ const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
   linkedinIndeed: 12 * HOUR,
-  extendedWeb: 48 * HOUR
+  extendedWeb: 48 * HOUR,
+  opportunityHunter: 24 * HOUR
 });
 
 async function readState() {
@@ -113,6 +115,24 @@ async function main() {
     result.extendedWeb = { available: true, skipped: true, reason: "throttled" };
   }
 
+
+  if (due(state, "opportunityHunter", INTERVALS.opportunityHunter, force)) {
+    try {
+      result.opportunityHunter = await runOpportunityHunter({
+        maxAccounts: 3,
+        maxPhoneFallbacks: 1
+      });
+      state.opportunityHunter = new Date().toISOString();
+    } catch (error) {
+      result.opportunityHunter = {
+        available: false,
+        error: error instanceof Error ? error.message : String(error)
+      };
+    }
+  } else {
+    result.opportunityHunter = { available: true, skipped: true, reason: "throttled" };
+  }
+
   try {
     result.accountWatches = await refreshAllAccountWatches();
   } catch (error) {
@@ -129,6 +149,7 @@ async function main() {
     franceTravailHours: 0.5,
     linkedinIndeedHours: 12,
     extendedWebHours: 48,
+    opportunityHunterHours: 24,
     forceFullRefresh: force
   };
   result.completedAt = new Date().toISOString();
@@ -138,7 +159,8 @@ async function main() {
     result.freelance,
     result.franceTravail,
     result.linkedinIndeed,
-    result.extendedWeb
+    result.extendedWeb,
+    result.opportunityHunter
   ].filter((item) => !item?.skipped);
 
   if (attempted.length && attempted.every((item) => item?.available === false)) {
