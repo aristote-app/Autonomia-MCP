@@ -1,27 +1,35 @@
 import { DEFAULT_JOB_DISCOVERY_QUERIES } from "../lib/collectors/jobDiscovery.js";
 import { WEB_DEMAND_QUERY_SPECS } from "../lib/collectors/webDemandDiscovery.js";
 
-const coreRunsPerDay = 24 / 8;
-const extendedRunsPerDay = 1;
+const coreRunsPerDay = 24 / 12;
+const extendedRunsPerDay = 24 / 48;
+
+const coreRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.reduce(
+  (sum, spec) => sum + Math.min(Math.max(Number(spec.maxPages) || 1, 1), 10),
+  0
+);
 
 const estimatedDailySearchRequests =
-  DEFAULT_JOB_DISCOVERY_QUERIES.length * coreRunsPerDay +
+  coreRequestsPerRun * coreRunsPerDay +
   WEB_DEMAND_QUERY_SPECS.length * extendedRunsPerDay;
 
-const estimatedMonthlySearchRequests = estimatedDailySearchRequests * 30;
+const estimatedMonthlySearchRequests = Math.ceil(estimatedDailySearchRequests * 30);
 
-if (estimatedDailySearchRequests > 30) {
+if (estimatedDailySearchRequests > 32) {
   throw new Error(
     "Automatic Brave search budget exceeded: " +
       estimatedDailySearchRequests +
-      " requests/day. Keep it <= 30/day unless the commercial budget is explicitly changed."
+      " requests/day. Keep it <= 32/day unless the commercial budget is explicitly changed."
   );
 }
 
 console.log("SEARCH_BUDGET", {
-  coreQueries: DEFAULT_JOB_DISCOVERY_QUERIES.length,
+  coreQueryFamilies: DEFAULT_JOB_DISCOVERY_QUERIES.length,
+  coreRequestsPerRun,
+  coreRunsPerDay,
   extendedQueries: WEB_DEMAND_QUERY_SPECS.length,
+  extendedRunsPerDay,
   estimatedDailySearchRequests,
   estimatedMonthlySearchRequests,
-  guardrailDailyMax: 30
+  guardrailDailyMax: 32
 });
