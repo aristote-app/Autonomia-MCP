@@ -864,7 +864,11 @@ export default async function AccountDetailPage({ params, searchParams }) {
                                 <select
                                   name="prospect_list_id"
                                   required
-                                  defaultValue={waalaxyRouting?.lists?.recommended?._id || ""}
+                                  defaultValue={
+                                    process.env.WAALAXY_DEFAULT_LIST_ID ||
+                                    waalaxyRouting?.lists?.recommended?._id ||
+                                    ""
+                                  }
                                 >
                                   <option value="" disabled>Choisir une liste</option>
                                   {(waalaxyRouting?.lists?.ranked || waalaxyOptions.lists).map((list) => (
@@ -879,7 +883,11 @@ export default async function AccountDetailPage({ params, searchParams }) {
                                 <span>Campagne (optionnel)</span>
                                 <select
                                   name="campaign_id"
-                                  defaultValue={waalaxyRouting?.campaigns?.recommended?._id || ""}
+                                  defaultValue={
+                                    process.env.WAALAXY_DEFAULT_CAMPAIGN_ID ||
+                                    waalaxyRouting?.campaigns?.recommended?._id ||
+                                    ""
+                                  }
                                 >
                                   <option value="">Liste uniquement</option>
                                   {(waalaxyRouting?.campaigns?.ranked || waalaxyOptions.campaigns).map((campaign) => (
