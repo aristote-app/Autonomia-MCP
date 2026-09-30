@@ -14,9 +14,10 @@ const HOUR = 60 * 60 * 1000;
 const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
-  linkedinIndeed: 12 * HOUR,
+  linkedinIndeed: 4 * HOUR,
+  linkedinIndeedBackfill: 24 * HOUR,
   extendedWeb: 48 * HOUR,
-  opportunityHunter: 24 * HOUR
+  opportunityHunter: 4 * HOUR
 });
 
 async function readState() {
@@ -83,7 +84,9 @@ async function main() {
   if (due(state, "linkedinIndeed", INTERVALS.linkedinIndeed, force)) {
     try {
       result.linkedinIndeed = await runAutomatedJobSignalRefresh({
-        triggerMode: "scheduled"
+        triggerMode: "scheduled",
+        freshness: "pw",
+        maxPages: 3
       });
       state.linkedinIndeed = new Date().toISOString();
     } catch (error) {
@@ -94,6 +97,25 @@ async function main() {
     }
   } else {
     result.linkedinIndeed = { available: true, skipped: true, reason: "throttled" };
+  }
+
+
+  if (due(state, "linkedinIndeedBackfill", INTERVALS.linkedinIndeedBackfill, force)) {
+    try {
+      result.linkedinIndeedBackfill = await runAutomatedJobSignalRefresh({
+        triggerMode: "scheduled_backfill",
+        freshness: "pm",
+        maxPages: 8
+      });
+      state.linkedinIndeedBackfill = new Date().toISOString();
+    } catch (error) {
+      result.linkedinIndeedBackfill = {
+        available: false,
+        error: error instanceof Error ? error.message : String(error)
+      };
+    }
+  } else {
+    result.linkedinIndeedBackfill = { available: true, skipped: true, reason: "throttled" };
   }
 
   if (due(state, "extendedWeb", INTERVALS.extendedWeb, force)) {
@@ -119,7 +141,7 @@ async function main() {
   if (due(state, "opportunityHunter", INTERVALS.opportunityHunter, force)) {
     try {
       result.opportunityHunter = await runOpportunityHunter({
-        maxAccounts: 5,
+        maxAccounts: 25,
         maxPhoneFallbacks: 2
       });
       state.opportunityHunter = new Date().toISOString();
@@ -147,9 +169,10 @@ async function main() {
   result.schedule = {
     freeworkHours: 1,
     franceTravailHours: 0.5,
-    linkedinIndeedHours: 12,
+    linkedinIndeedHours: 4,
+    linkedinIndeedBackfillHours: 24,
     extendedWebHours: 48,
-    opportunityHunterHours: 24,
+    opportunityHunterHours: 4,
     forceFullRefresh: force
   };
   result.completedAt = new Date().toISOString();
@@ -159,6 +182,7 @@ async function main() {
     result.freelance,
     result.franceTravail,
     result.linkedinIndeed,
+    result.linkedinIndeedBackfill,
     result.extendedWeb,
     result.opportunityHunter
   ].filter((item) => !item?.skipped);
