@@ -4,6 +4,7 @@ import AttributionCapture from "@/components/AttributionCapture";
 import ConsentAnalytics from "@/components/ConsentAnalytics";
 import WebVitalsReporter from "@/components/WebVitalsReporter";
 import ConsultantSelectionDrawer from "@/components/ConsultantSelectionDrawer";
+import SiteFooter from "@/components/SiteFooter";
 
 const isPreview = process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production";
 
@@ -84,6 +85,7 @@ export default function RootLayout({ children }) {
         <WebVitalsReporter />
         <Header />
         {children}
+        <SiteFooter />
         <ConsultantSelectionDrawer />
       </body>
     </html>
