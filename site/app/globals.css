@@ -20504,3 +20504,335 @@ body {
   width:min(calc(100% - 28px),var(--max));
   margin:18px auto 0;
 }
+
+
+/* AUTONOMIA CONTACT CONVERSION V1 */
+.quickContactForm {
+  width: 100%;
+  padding: 22px;
+  border: 1px solid rgba(16, 23, 23, .16);
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(10, 11, 11, .08);
+}
+
+.quickContactSubject {
+  display: grid;
+  gap: 7px;
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.quickContactSubject span,
+.quickContactGrid label > span {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.quickContactSubject span {
+  color: #8d6200;
+}
+
+.quickContactSubject strong {
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.quickContactGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.quickContactGrid label {
+  display: grid;
+  gap: 7px;
+}
+
+.quickContactFull {
+  grid-column: 1 / -1;
+}
+
+.quickContactGrid input,
+.quickContactGrid textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  outline: 0;
+}
+
+.quickContactGrid input {
+  min-height: 48px;
+}
+
+.quickContactGrid textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.quickContactGrid input:focus,
+.quickContactGrid textarea:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(10, 11, 11, .06);
+}
+
+.quickContactConsent {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 9px;
+  align-items: start;
+  margin-top: 16px;
+  color: #555955;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.quickContactConsent input {
+  margin-top: 2px;
+}
+
+.quickContactPrivacy,
+.quickContactError {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.quickContactPrivacy {
+  color: #737873;
+}
+
+.quickContactError {
+  color: #8b1d1d;
+  font-weight: 800;
+}
+
+.quickContactForm > button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 16px;
+  padding: 0 18px;
+  border: 1px solid var(--signal);
+  border-radius: 999px;
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.quickContactForm > button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.quickContactSuccess {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.quickContactSuccess > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--signal);
+  font-weight: 900;
+}
+
+.quickContactSuccess strong {
+  font-size: 18px;
+}
+
+.quickContactSuccess p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.trainingContactSection {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(360px, .72fr);
+  gap: clamp(34px, 6vw, 90px);
+  align-items: start;
+}
+
+.trainingContactCopy .secondaryButton {
+  display: inline-flex;
+  margin-top: 28px;
+  color: #fff;
+  border-color: rgba(255, 255, 255, .55);
+}
+
+.trainingContactForm {
+  width: 100%;
+  max-width: 680px;
+  justify-self: end;
+}
+
+.roleContact {
+  display: grid !important;
+  grid-template-columns: minmax(0, .9fr) minmax(360px, .72fr);
+  gap: clamp(34px, 6vw, 90px) !important;
+  align-items: start;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.roleContactCopy h2 {
+  max-width: 900px;
+  margin: 0 0 18px;
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: .98;
+  letter-spacing: -.05em;
+  font-weight: 600;
+}
+
+.roleContactCopy > p:not(.sectionIndex) {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(243, 241, 233, .72);
+  font-size: 18px;
+  line-height: 1.62;
+}
+
+.globalSiteFooter {
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 1px solid var(--line-dark);
+}
+
+.globalFooterContact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, .78fr);
+  gap: clamp(34px, 6vw, 90px);
+  align-items: start;
+  padding: 72px 18px;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.globalFooterContactCopy h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(42px, 7vw, 82px);
+  line-height: .94;
+  letter-spacing: -.055em;
+  font-weight: 600;
+}
+
+.globalFooterContactCopy > p:not(.eyebrow) {
+  max-width: 760px;
+  margin: 22px 0 0;
+  color: rgba(243, 241, 233, .68);
+  font-size: 18px;
+  line-height: 1.62;
+}
+
+.globalFooterDirect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.globalFooterDirect a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid rgba(255,255,255,.38);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.globalFooterForm {
+  width: 100%;
+  max-width: 680px;
+  justify-self: end;
+}
+
+.globalFooterBottom {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) minmax(0, 2fr);
+  gap: 20px;
+  align-items: center;
+  padding: 34px 18px 54px;
+}
+
+.globalFooterBottom > p {
+  margin: 0;
+  color: rgba(243,241,233,.56);
+}
+
+.globalFooterBottom nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 18px;
+}
+
+.globalFooterBottom nav a {
+  color: rgba(243,241,233,.72);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+@media (max-width: 900px) {
+  .trainingContactSection,
+  .roleContact,
+  .globalFooterContact {
+    grid-template-columns: 1fr;
+  }
+
+  .trainingContactForm,
+  .globalFooterForm {
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .globalFooterBottom {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .globalFooterBottom nav {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .quickContactForm {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .quickContactGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .quickContactFull {
+    grid-column: auto;
+  }
+
+  .globalFooterContact {
+    padding-top: 54px;
+    padding-bottom: 54px;
+  }
+}
