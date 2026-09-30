@@ -4,7 +4,7 @@ import { verifyGitHubDeploymentToken } from "../../../../lib/deploy/githubOidc.j
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 180;
+export const maxDuration = 300;
 
 async function authorize(request) {
   const authorization = request.headers.get("authorization") || "";
@@ -25,21 +25,26 @@ export async function GET(request) {
   }
 
   const startedAt = new Date().toISOString();
+  const url = new URL(request.url);
+  const mode = url.searchParams.get("mode") === "full" ? "full" : "recent";
 
   try {
     const jobSignals = await runAutomatedJobSignalRefresh({
-      triggerMode: "on_demand"
+      triggerMode: mode === "full" ? "on_demand_backfill" : "on_demand",
+      freshness: mode === "full" ? "pm" : "pw",
+      maxPages: mode === "full" ? 8 : 3
     });
 
     const opportunityHunter = await runOpportunityHunter({
-      maxAccounts: 3,
-      maxPhoneFallbacks: 1
+      maxAccounts: mode === "full" ? 25 : 10,
+      maxPhoneFallbacks: 2
     });
 
     return Response.json({
       ok: true,
       startedAt,
       completedAt: new Date().toISOString(),
+      mode,
       jobSignals,
       opportunityHunter
     }, {
