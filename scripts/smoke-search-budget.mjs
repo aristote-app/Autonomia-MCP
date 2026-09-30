@@ -9,17 +9,20 @@ const coreRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.reduce(
   0
 );
 
+const opportunityHunterRequestsPerDay = 6;
+
 const estimatedDailySearchRequests =
   coreRequestsPerRun * coreRunsPerDay +
-  WEB_DEMAND_QUERY_SPECS.length * extendedRunsPerDay;
+  WEB_DEMAND_QUERY_SPECS.length * extendedRunsPerDay +
+  opportunityHunterRequestsPerDay;
 
 const estimatedMonthlySearchRequests = Math.ceil(estimatedDailySearchRequests * 30);
 
-if (estimatedDailySearchRequests > 32) {
+if (estimatedDailySearchRequests > 40) {
   throw new Error(
     "Automatic Brave search budget exceeded: " +
       estimatedDailySearchRequests +
-      " requests/day. Keep it <= 32/day unless the commercial budget is explicitly changed."
+      " requests/day. Keep it <= 40/day unless the commercial budget is explicitly changed."
   );
 }
 
@@ -29,7 +32,8 @@ console.log("SEARCH_BUDGET", {
   coreRunsPerDay,
   extendedQueries: WEB_DEMAND_QUERY_SPECS.length,
   extendedRunsPerDay,
+  opportunityHunterRequestsPerDay,
   estimatedDailySearchRequests,
   estimatedMonthlySearchRequests,
-  guardrailDailyMax: 32
+  guardrailDailyMax: 40
 });
