@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import QuickContactForm from "@/components/QuickContactForm";
 import {
   academyTrainings,
   academyPricing,
@@ -138,7 +139,7 @@ export default async function TrainingPage({ params }) {
           </div>
 
           <div className="trainingHeroActions">
-            <Link className="primaryButton" href="/#fiche-besoin">Demander un devis</Link>
+            <Link className="primaryButton" href="#contact-formation">Demander un devis</Link>
             <a className="secondaryButton" href={pdfUrl}>Télécharger le programme PDF</a>
           </div>
         </div>
@@ -332,14 +333,14 @@ export default async function TrainingPage({ params }) {
             <strong>1 800 € HT</strong>
             <b>par jour / groupe</b>
             <p>Dans votre entreprise ou à distance. Programme adaptable à vos outils, cas d’usage et niveau.</p>
-            <Link href="/#fiche-besoin">Demander un devis intra →</Link>
+            <Link href="#contact-formation">Demander un devis intra →</Link>
           </article>
           <article>
             <span>INTER-ENTREPRISES</span>
             <strong>990 € HT</strong>
             <b>par jour / participant</b>
             <p>Session ouverte sous réserve de programmation et d’un nombre suffisant de participants.</p>
-            <Link href="/#contact">Nous appeler / demander la prochaine session →</Link>
+            <Link href="#contact-formation">Nous appeler / demander la prochaine session →</Link>
           </article>
         </div>
 
@@ -390,18 +391,23 @@ export default async function TrainingPage({ params }) {
         </div>
       </section>
 
-      <section className="trainingFinalCta">
-        <div>
+      <section className="trainingFinalCta trainingContactSection" id="contact-formation">
+        <div className="trainingContactCopy">
           <p className="eyebrow">AUTONOMIA ACADEMY</p>
           <h2>Vous voulez adapter cette formation à vos équipes ?</h2>
           <p>
-            Décrivez le public, les outils, le niveau et les cas d’usage. Nous pourrons cadrer le bon parcours
-            entre initiation, opérationnel et expert.
+            Envoyez votre demande directement depuis cette page. Le sujet de la formation est transmis avec le
+            formulaire afin que nous puissions vous répondre sans vous faire recommencer le parcours.
           </p>
-        </div>
-        <div>
-          <Link className="primaryButton" href="/#fiche-besoin">Préciser mon besoin</Link>
           <a className="secondaryButton" href={pdfUrl}>Télécharger le programme PDF</a>
+        </div>
+        <div className="trainingContactForm">
+          <QuickContactForm
+            mode="academy"
+            formId={`training-${training.slug}`}
+            requestedService={training.slug}
+            subjectLabel={training.title}
+          />
         </div>
       </section>
 
