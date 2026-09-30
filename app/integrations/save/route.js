@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "../../../lib/auth/access.js";
 import { hasTemporaryIntegrationsAccess } from "../../../lib/integrations/access.js";
@@ -36,6 +37,8 @@ export async function POST(request) {
     const optionalFields = [
       "KASPR_API_KEY",
       "WAALAXY_API_KEY",
+      "WAALAXY_DEFAULT_LIST_ID",
+      "WAALAXY_DEFAULT_CAMPAIGN_ID",
       "AUTONOMIA_WAALAXY_WEBHOOK_TOKEN",
       "AUTONOMIA_INBOUND_TOKEN"
     ];
@@ -50,12 +53,25 @@ export async function POST(request) {
       if (submitted) updates[key] = submitted;
     }
 
+    if (
+      updates.WAALAXY_API_KEY &&
+      !updates.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN &&
+      formData.get("clear_AUTONOMIA_WAALAXY_WEBHOOK_TOKEN") !== "on"
+    ) {
+      updates.AUTONOMIA_WAALAXY_WEBHOOK_TOKEN = randomBytes(32).toString("hex");
+    }
+
     const state = await saveRuntimeIntegrationSettings(updates);
     const kasprSaved = Boolean(state?.configured?.KASPR_API_KEY);
+    const waalaxySaved = Boolean(state?.configured?.WAALAXY_API_KEY);
 
     return NextResponse.redirect(
       new URL(
-        "/integrations?saved=1&kaspr=" + (kasprSaved ? "ready" : "missing") + "#connection-settings",
+        "/integrations?saved=1&kaspr=" +
+          (kasprSaved ? "ready" : "missing") +
+          "&waalaxy=" +
+          (waalaxySaved ? "ready" : "missing") +
+          "#connection-settings",
         request.url
       ),
       { status: 303 }
