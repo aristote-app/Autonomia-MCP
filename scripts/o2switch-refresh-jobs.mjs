@@ -15,9 +15,9 @@ const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
   linkedinIndeed: 12 * HOUR,
-  linkedinIndeedBackfill: 96 * HOUR,
+  linkedinIndeedBackfill: 24 * HOUR,
   extendedWeb: 48 * HOUR,
-  opportunityHunter: 6 * HOUR
+  opportunityHunter: 12 * HOUR
 });
 
 async function readState() {
@@ -86,7 +86,7 @@ async function main() {
       result.linkedinIndeed = await runAutomatedJobSignalRefresh({
         triggerMode: "scheduled",
         freshness: "pw",
-        maxPages: 1
+        maxPages: 2
       });
       state.linkedinIndeed = new Date().toISOString();
     } catch (error) {
@@ -141,8 +141,8 @@ async function main() {
   if (due(state, "opportunityHunter", INTERVALS.opportunityHunter, force)) {
     try {
       result.opportunityHunter = await runOpportunityHunter({
-        maxAccounts: 3,
-        maxPhoneFallbacks: 1
+        maxAccounts: 6,
+        maxPhoneFallbacks: 2
       });
       state.opportunityHunter = new Date().toISOString();
     } catch (error) {
@@ -170,9 +170,9 @@ async function main() {
     freeworkHours: 1,
     franceTravailHours: 0.5,
     linkedinIndeedHours: 12,
-    linkedinIndeedBackfillHours: 96,
+    linkedinIndeedBackfillHours: 24,
     extendedWebHours: 48,
-    opportunityHunterHours: 6,
+    opportunityHunterHours: 12,
     forceFullRefresh: force
   };
   result.completedAt = new Date().toISOString();
