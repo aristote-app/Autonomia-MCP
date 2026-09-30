@@ -1,0 +1,49 @@
+name: run-opportunity-hunter-once
+
+on:
+  push:
+    paths:
+      - .github/workflows/run-opportunity-hunter-once.yml
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Wait for cockpit deployment
+        env:
+          TARGET_SHA: ${{ github.sha }}
+        run: |
+          for attempt in $(seq 1 90); do
+            HEALTH="$(curl -fsS https://cockpit.build-autonomia.com/api/health || true)"
+            DEPLOYED="$(printf '%s' "$HEALTH" | python -c 'import json,sys; print(json.load(sys.stdin).get("deployedSha",""))' 2>/dev/null || true)"
+            if [ "$DEPLOYED" = "$TARGET_SHA" ]; then
+              echo "Cockpit is live at $TARGET_SHA"
+              exit 0
+            fi
+            echo "Waiting for production SHA ($attempt/90): $DEPLOYED"
+            sleep 10
+          done
+          echo "::error::Cockpit deployment did not reach $TARGET_SHA"
+          exit 1
+
+      - name: Request GitHub OIDC identity
+        id: oidc
+        env:
+          AUDIENCE: autonomia-o2switch
+        run: |
+          RESPONSE="$(curl -fsS             -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN"             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}")"
+          TOKEN="$(printf '%s' "$RESPONSE" | python -c 'import json,sys; print(json.load(sys.stdin)["value"])')"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Run recent LinkedIn Indeed pipeline
+        env:
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: |
+          RESPONSE="$(curl -fsS --max-time 300             -H "Authorization: Bearer $OIDC_TOKEN"             "https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh?mode=recent")"
+          printf '%s\n' "$RESPONSE" | tee /tmp/opportunity-hunter.json
+          printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True, d; print("discovered", d["jobSignals"].get("discoveredRows")); print("persisted", d["jobSignals"].get("persistedRows")); print("directEmployerCandidates", d["opportunityHunter"].get("directEmployerCandidates")); print("endClientsVerified", d["opportunityHunter"].get("endClientsVerified")); print("kasprEmailsFound", d["opportunityHunter"].get("kasprEmailsFound")); print("kasprPhonesFound", d["opportunityHunter"].get("kasprPhonesFound"))'
