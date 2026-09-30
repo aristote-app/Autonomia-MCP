@@ -13,8 +13,8 @@ const HOUR = 60 * 60 * 1000;
 const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
-  linkedinIndeed: 8 * HOUR,
-  extendedWeb: 24 * HOUR
+  linkedinIndeed: 12 * HOUR,
+  extendedWeb: 48 * HOUR
 });
 
 async function readState() {
@@ -127,8 +127,8 @@ async function main() {
   result.schedule = {
     freeworkHours: 1,
     franceTravailHours: 0.5,
-    linkedinIndeedHours: 8,
-    extendedWebHours: 24,
+    linkedinIndeedHours: 12,
+    extendedWebHours: 48,
     forceFullRefresh: force
   };
   result.completedAt = new Date().toISOString();
