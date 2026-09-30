@@ -14,9 +14,9 @@ const HOUR = 60 * 60 * 1000;
 const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
-  linkedinIndeed: 12 * HOUR,
+  linkedinIndeed: 2 * HOUR,
   extendedWeb: 48 * HOUR,
-  opportunityHunter: 24 * HOUR
+  opportunityHunter: 2 * HOUR
 });
 
 async function readState() {
@@ -119,8 +119,8 @@ async function main() {
   if (due(state, "opportunityHunter", INTERVALS.opportunityHunter, force)) {
     try {
       result.opportunityHunter = await runOpportunityHunter({
-        maxAccounts: 3,
-        maxPhoneFallbacks: 1
+        maxAccounts: 20,
+        maxPhoneFallbacks: 3
       });
       state.opportunityHunter = new Date().toISOString();
     } catch (error) {
@@ -147,9 +147,9 @@ async function main() {
   result.schedule = {
     freeworkHours: 1,
     franceTravailHours: 0.5,
-    linkedinIndeedHours: 12,
+    linkedinIndeedHours: 2,
     extendedWebHours: 48,
-    opportunityHunterHours: 24,
+    opportunityHunterHours: 2,
     forceFullRefresh: force
   };
   result.completedAt = new Date().toISOString();
