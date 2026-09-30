@@ -51,8 +51,13 @@ export async function sendVerifiedContactToWaalaxy(formData) {
 
   const contactId = clean(formData.get("contact_id"), 80);
   const accountKey = clean(formData.get("account_key"), 120);
-  const prospectListId = clean(formData.get("prospect_list_id"), 160);
-  const campaignId = clean(formData.get("campaign_id"), 160) || null;
+  const prospectListId =
+    clean(formData.get("prospect_list_id"), 160) ||
+    clean(process.env.WAALAXY_DEFAULT_LIST_ID, 160);
+  const campaignId =
+    clean(formData.get("campaign_id"), 160) ||
+    clean(process.env.WAALAXY_DEFAULT_CAMPAIGN_ID, 160) ||
+    null;
 
   if (!contactId || !accountKey || !prospectListId) {
     throw new Error("Contact, account and Waalaxy list are required");
