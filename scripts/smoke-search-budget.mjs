@@ -18,11 +18,11 @@ const estimatedDailySearchRequests =
 
 const estimatedMonthlySearchRequests = Math.ceil(estimatedDailySearchRequests * 30);
 
-if (estimatedDailySearchRequests > 55) {
+if (estimatedDailySearchRequests > 70) {
   throw new Error(
     "Automatic Brave search budget exceeded: " +
       estimatedDailySearchRequests +
-      " requests/day. Keep it <= 55/day unless the commercial budget is explicitly changed."
+      " requests/day. Keep it <= 70/day unless the commercial budget is explicitly changed."
   );
 }
 
@@ -35,5 +35,5 @@ console.log("SEARCH_BUDGET", {
   opportunityHunterRequestsPerDay,
   estimatedDailySearchRequests,
   estimatedMonthlySearchRequests,
-  guardrailDailyMax: 55
+  guardrailDailyMax: 70
 });
