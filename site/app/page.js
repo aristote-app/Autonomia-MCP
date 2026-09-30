@@ -1,7 +1,6 @@
 import Link from "next/link";
 import SolutionFinder from "@/components/SolutionFinder";
 import HomeStartEmail from "@/components/HomeStartEmail";
-import AutonomiaMark from "@/components/AutonomiaMark";
 import { academyTrainings } from "@/content/academy-trainings";
 
 const expertRoles = [
@@ -180,23 +179,6 @@ export default function Home() {
         <HomeStartEmail origin="home_bottom" compact />
       </section>
 
-      <footer className="siteFooter">
-        <div className="brand footerBrand">
-          <span className="brandMark" aria-hidden="true"><AutonomiaMark size={38} inverse /></span>
-          <span>AUTONOMIA</span>
-        </div>
-        <p>La force d’exécution IA.</p>
-        <nav aria-label="Liens de pied de page">
-          <Link href="/experts">Experts</Link>
-          <Link href="/solutions-ia">Build</Link>
-          <Link href="/academy">Academy</Link>
-          <Link href="/territoires">Territoires</Link>
-          <Link href="/cas-usage-ia">Cas d’usage</Link>
-          <Link href="/observatoire-ia">Observatoire</Link>
-          <Link href="/a-propos">À propos</Link>
-          <Link href="/methodologie/politique-editoriale">Politique éditoriale</Link>
-        </nav>
-      </footer>
     </main>
   );
 }
