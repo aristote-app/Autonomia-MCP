@@ -195,6 +195,27 @@ jobs:
           fi
           echo "Academy route is live."
 
+      - name: One-time refresh LinkedIn Indeed opportunity hunter
+        if: steps.probe.outputs.ready == 'true'
+        env:
+          HUNTER_URL: https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh
+          OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: |
+          HTTP_CODE="$(curl -sS \
+            --max-time 180 \
+            -o /tmp/autonomia-opportunity-hunter.json \
+            -w "%{http_code}" \
+            "$HUNTER_URL" \
+            -H "Authorization: Bearer $OIDC_TOKEN")"
+
+          cat /tmp/autonomia-opportunity-hunter.json
+          echo
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Opportunity Hunter refresh returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
       - name: Refresh GitHub OIDC identity for Academy SIRO sync
         if: always() && steps.probe.outputs.ready == 'true'
         id: academy_siro_oidc
