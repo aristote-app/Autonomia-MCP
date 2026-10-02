@@ -206,11 +206,12 @@ export async function GET(request) {
 
   try {
     const data = await listConsultantsWithSkills({
-      status: "active",
+      status: null,
       limit: 500
     });
 
     const ranked = (data || [])
+      .filter((row) => row.status !== "rejected")
       .map((row) => ({ row, score: scoreConsultant(row, role) }))
       .filter((item) => item.score >= 40)
       .sort((a, b) => b.score - a.score)
