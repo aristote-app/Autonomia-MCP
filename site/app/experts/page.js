@@ -39,7 +39,7 @@ export default function ExpertsPage() {
             les bonnes compétences pour le résultat attendu.
           </p>
           <div className="heroActions">
-            <Link className="primaryButton" href="/#diagnostic-ia">Décrire mon besoin</Link>
+            <Link className="primaryButton" href="/start">Exprimer mon besoin</Link>
             <a className="secondaryButton" href="#metiers">Voir les métiers IA</a>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function ExpertsPage() {
           <p className="eyebrow">BESOIN D’UN EXPERT IA ?</p>
           <h2>Décrivez le problème. Nous traduirons le besoin en compétences.</h2>
         </div>
-        <Link className="primaryButton" href="/#diagnostic-ia">Faire le diagnostic IA</Link>
+        <Link className="primaryButton" href="/start">Exprimer mon besoin</Link>
       </section>
     </main>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 function money(value, currency = "EUR") {
   if (value == null) return "TJM à confirmer";
@@ -23,7 +24,7 @@ function relativeTime(value) {
   return new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "short" }).format(new Date(value));
 }
 
-export default function ConsultantLivePanel({ roleSlug, roleTitle }) {
+export default function ConsultantLivePanel({ roleSlug, roleTitle, fallbackHref = "/start" }) {
   const [state, setState] = useState({ status: "loading", profiles: [], generatedAt: null });
 
   useEffect(() => {
@@ -96,13 +97,17 @@ export default function ConsultantLivePanel({ roleSlug, roleTitle }) {
 
       {state.status === "error" && (
         <div className="consultantFeedEmpty">
-          Le flux consultants est momentanément indisponible. La fiche métier reste accessible normalement.
+          <strong>Le flux consultants est momentanément indisponible.</strong>
+          <p>Vous pouvez tout de même décrire votre besoin : Autonomia lancera une sélection ciblée.</p>
+          <Link className="secondaryButton" href={fallbackHref}>Exprimer mon besoin →</Link>
         </div>
       )}
 
       {state.status === "ready" && state.profiles.length === 0 && (
         <div className="consultantFeedEmpty">
-          Aucun profil suffisamment proche n’est remonté pour le moment. Le pool est actualisé automatiquement.
+          <strong>Aucun profil suffisamment proche n’est remonté pour le moment.</strong>
+          <p>Le pool est actualisé automatiquement. Vous pouvez aussi nous transmettre le besoin pour lancer une sélection ciblée.</p>
+          <Link className="secondaryButton" href={fallbackHref}>Exprimer mon besoin →</Link>
         </div>
       )}
 

@@ -134,7 +134,7 @@ export default async function AiRolePage({ params }) {
         <a href="#faq">FAQ</a>
       </nav>
 
-      <ConsultantLivePanel roleSlug={role.slug} roleTitle={role.title} />
+      <ConsultantLivePanel roleSlug={role.slug} roleTitle={role.title} fallbackHref="#contact-expert" />
 
       <article className="roleArticle">
         <section className="roleSectionLong" id="definition">

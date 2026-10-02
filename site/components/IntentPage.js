@@ -2,10 +2,22 @@ import Link from "next/link";
 import LeadForm from "@/components/LeadForm";
 import QualiopiProof from "@/components/QualiopiProof";
 import AutonomiaScan from "@/components/AutonomiaScan";
+import ConsultantLivePanel from "@/components/ConsultantLivePanel";
+
+const EXPERT_PAGE_ROLE = {
+  "consultant-ia": { role: "ai-project-manager", label: "Consultant IA / AI Project Manager" },
+  "freelance-ia": { role: "genai-engineer", label: "Freelance IA / GenAI Engineer" },
+  "expert-ia": { role: "genai-engineer", label: "Expert IA / GenAI Engineer" },
+  "consultant-genai": { role: "genai-engineer", label: "GenAI Engineer" },
+  "consultant-rag": { role: "rag-engineer", label: "RAG Engineer" },
+  "consultant-agent-ia": { role: "ai-agent-engineer", label: "AI Agent Engineer" },
+  "ai-project-manager": { role: "ai-project-manager", label: "AI Project Manager" }
+};
 
 export default function IntentPage({ page }) {
   const isExpert = page.mode === "experts";
   const isAcademy = page.mode === "academy";
+  const liveExpert = isExpert ? EXPERT_PAGE_ROLE[page.slug] || null : null;
 
   return (
     <main className={`intentPage theme-${page.theme || "dark"}`}>
@@ -25,7 +37,10 @@ export default function IntentPage({ page }) {
           </div>
         </div>
 
-        <div className="heroFormCard">
+        <div
+          className="heroFormCard"
+          id={page.mode === "diagnostic" ? undefined : "exprimer-besoin"}
+        >
           {page.mode === "diagnostic" ? (
             <div className="diagnosticTeaser">
               <p className="formKicker">AUTONOMIA SCAN</p>
@@ -48,6 +63,14 @@ export default function IntentPage({ page }) {
           )}
         </div>
       </section>
+
+      {liveExpert && (
+        <ConsultantLivePanel
+          roleSlug={liveExpert.role}
+          roleTitle={liveExpert.label}
+          fallbackHref="#exprimer-besoin"
+        />
+      )}
 
       {page.mode === "diagnostic" && (
         <section className="intentDiagnostic" id="diagnostic">
@@ -174,7 +197,12 @@ export default function IntentPage({ page }) {
       <section className="closingCta">
         <p className="eyebrow">AUTONOMIA</p>
         <h2>{isExpert ? "Votre projet a besoin d’une compétence précise." : isAcademy ? "Vos équipes ont besoin d’une trajectoire claire." : "Votre prochain choix IA peut être clarifié."}</h2>
-        <Link href={page.mode === "diagnostic" ? "#diagnostic" : "#top"} className="primaryButton">{page.cta}</Link>
+        <Link
+          href={page.mode === "diagnostic" ? "#diagnostic" : "#exprimer-besoin"}
+          className="primaryButton"
+        >
+          {page.cta}
+        </Link>
       </section>
     </main>
   );
