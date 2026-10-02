@@ -2,6 +2,7 @@ import { listConsultantsWithSkills } from "../../../../lib/db/consultants.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// consultant-feed-v2: canonical cockpit reader + deploy health check
 
 const ROLE_MAP = {
   "ai-project-manager": {
