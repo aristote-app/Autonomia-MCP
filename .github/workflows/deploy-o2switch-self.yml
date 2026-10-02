@@ -195,6 +195,18 @@ jobs:
           fi
           echo "Academy route is live."
 
+      - name: Verify public consultant feed
+        if: steps.probe.outputs.ready == 'true'
+        run: |
+          FEED="$(curl -fsS "https://cockpit.build-autonomia.com/api/public/consultants?role=ai-project-manager&limit=3")"
+          printf '%s\n' "$FEED"
+          OK="$(printf '%s' "$FEED" | python -c 'import json,sys; d=json.load(sys.stdin); print(str(bool(d.get("ok")) and isinstance(d.get("profiles"), list)).lower())')"
+          if [ "$OK" != "true" ]; then
+            echo "::error::Public consultant feed is not healthy after deployment."
+            exit 1
+          fi
+          echo "Public consultant feed is healthy."
+
       - name: Refresh GitHub OIDC identity for Opportunity Hunter
         if: steps.probe.outputs.ready == 'true'
         id: opportunity_hunter_oidc

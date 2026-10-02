@@ -1,4 +1,4 @@
-import { getAutonomiaServerClient } from "../../../../lib/db/supabase.js";
+import { listConsultantsWithSkills } from "../../../../lib/db/consultants.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -137,7 +137,7 @@ function scoreConsultant(row, role) {
   const headline = lower(row.metadata?.headline || row.notes);
   const skills = unique([
     ...(row.metadata?.discovered_skills || []),
-    ...(row.consultant_skills || []).map((item) => item.skills?.name)
+    ...(row.skills || [])
   ]);
   const haystack = [headline, ...skills.map(lower)].join(" ");
 
@@ -155,7 +155,7 @@ function scoreConsultant(row, role) {
 
 function publicProfile(row) {
   const skills = unique([
-    ...(row.consultant_skills || []).map((item) => redactSourceNames(item.skills?.name)),
+    ...(row.skills || []).map(redactSourceNames),
     ...(row.metadata?.discovered_skills || []).map(redactSourceNames)
   ]);
 
@@ -204,15 +204,10 @@ export async function GET(request) {
   }
 
   try {
-    const client = getAutonomiaServerClient();
-    const { data, error } = await client
-      .from("consultants")
-      .select("id,display_name,status,available_from,tjm,currency,remote,locations,years_experience,notes,metadata,updated_at,consultant_skills(skills(name))")
-      .neq("status", "rejected")
-      .order("updated_at", { ascending: false })
-      .limit(500);
-
-    if (error) throw error;
+    const data = await listConsultantsWithSkills({
+      status: "active",
+      limit: 500
+    });
 
     const ranked = (data || [])
       .map((row) => ({ row, score: scoreConsultant(row, role) }))
