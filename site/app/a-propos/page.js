@@ -196,7 +196,7 @@ export default function AboutPage() {
             <div className="aboutMarketingPersonTop">
               <div>
                 <small className="aboutExpertName">DÉBORAH DIAN GOLDCHER</small>
-                <span>TRANSFORMATION · IA · DIGITAL · FORMATION</span>
+                <span>DIGITAL · MARKETING · TRANSFORMATION · IA · FORMATION</span>
               </div>
               <a
                 className="aboutLinkedIn"
@@ -212,31 +212,34 @@ export default function AboutPage() {
               </a>
             </div>
 
-            <h3>Transformer une stratégie en usages qui performent.</h3>
+            <h3>Du digital à l’IA : transformer les usages en performance.</h3>
             <p className="aboutExpertIntro">
-              Plus de 20 ans d’expérience en acquisition digitale, SEO/SEA, webmarketing, pilotage,
-              entrepreneuriat et formation professionnelle. Son parcours combine vision business,
-              compréhension des usages et capacité à structurer des dispositifs opérationnels.
+              Plus de 20 ans d’expérience au croisement du marketing digital, de la technologie,
+              de la gestion de projet et de la formation. Déborah a d’abord construit son expertise
+              sur l’acquisition, le SEO/SEA, l’analytics, l’UX et les projets web en interface avec les DSI,
+              avant de diriger des organismes de formation. Aujourd’hui, ce parcours converge naturellement
+              vers la transformation IA des organisations.
             </p>
 
             <div className="aboutExpertSplit">
               <div>
                 <small>EXPERTISES</small>
                 <ul>
-                  <li><strong>IA & automatisation</strong><span>Cadrage de cas d’usage, agents, automatisations, adoption et transformation des processus.</span></li>
-                  <li><strong>Transformation digitale</strong><span>Diagnostic des usages, structuration de projets et accompagnement du changement.</span></li>
-                  <li><strong>SEO / SEA / acquisition</strong><span>Stratégie d’acquisition, audit SEO, contenu, Google Ads, analytics et pilotage des KPI.</span></li>
-                  <li><strong>Formation & transmission</strong><span>Conception et déploiement de formations digitales, bureautiques et IA en entreprise et dans l’enseignement supérieur.</span></li>
-                  <li><strong>Pilotage business</strong><span>Direction de structures, conception d’offres, développement et gestion de partenaires.</span></li>
+                  <li><strong>Marketing digital</strong><span>SEO/GEO, SEA, webmarketing multicanal, analytics, UX, contenus et pilotage des KPI.</span></li>
+                  <li><strong>Digital & Tech</strong><span>Cahiers des charges fonctionnels, expression des besoins, coordination avec les DSI, recette et évolution d’outils digitaux.</span></li>
+                  <li><strong>Transformation IA</strong><span>Identification de cas d’usage, automatisation, agents IA, adoption et évolution des processus métier.</span></li>
+                  <li><strong>Formation & L&D</strong><span>Ingénierie pédagogique, co-construction de programmes, animation, qualité et montée en compétences.</span></li>
+                  <li><strong>Pilotage opérationnel</strong><span>Direction de structures, staffing, recrutement, réponses aux appels d’offres, CRM et conduite de projets de bout en bout.</span></li>
                 </ul>
               </div>
 
-              <div className="aboutExpertMarkers">
-                <small>REPÈRES DE PARCOURS</small>
-                <p><strong>6 ans</strong> Responsable Acquisition chez ADL Performance.</p>
-                <p><strong>4 ans</strong> chez Effinity / Effiliation en SEA et acquisition B2B.</p>
-                <p><strong>Depuis 2017</strong> direction d’organismes de formation et conseil digital.</p>
-                <p><strong>Enseignement</strong> UPEC, ESCG, EDC Paris, Pigier, EfreiTech.</p>
+              <div className="aboutExpertMarkers aboutExpertTimeline">
+                <small>DU DIGITAL À L’IA</small>
+                <p><strong>2006–2011 · Effiliation / Effinity</strong><span>Search, acquisition B2B, stratégies webmarketing multicanal et premiers projets d’outils digitaux.</span></p>
+                <p><strong>2011–2016 · ADLPartner</strong><span>Responsable Acquisition : SEO, Google Ads, analytics, UX, refonte d’outils et coordination avec la DSI.</span></p>
+                <p><strong>2016–2018 · Enseignement</strong><span>SEO/SEM, webmarketing et e-commerce à l’UPEC, EDC, EfreiTech, Pigier et ESCG.</span></p>
+                <p><strong>2018–2026 · Direction & formation</strong><span>Direction d’organismes de formation, ingénierie pédagogique, recrutement, staffing, qualité et pilotage opérationnel.</span></p>
+                <p className="aboutExpertNow"><strong>Aujourd’hui · Transformation IA</strong><span>Mettre cette culture digitale, métier et pédagogique au service de l’adoption de l’IA dans les organisations.</span></p>
               </div>
             </div>
           </article>
