@@ -21977,3 +21977,104 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .aboutExpertSplit{grid-template-columns:1fr}
   .aboutExpertSplit li{grid-template-columns:1fr;gap:4px}
 }
+
+
+/* ABOUT TYPOGRAPHY V3 — harmonised readability */
+.aboutMarketing .sectionIndex,
+.aboutMarketing .eyebrow{
+  font-size:12px;
+  line-height:1.25;
+  letter-spacing:.13em;
+}
+.aboutMarketingTopline{
+  font-size:11px;
+  line-height:1.35;
+  letter-spacing:.11em;
+}
+.aboutMarketingHeroCopy>p{
+  font-size:17px;
+  line-height:1.62;
+}
+.aboutMarketingHeroCopy .aboutMarketingLead{
+  font-size:20px;
+  line-height:1.48;
+}
+.aboutMarketingProof span{
+  font-size:13px;
+  line-height:1.45;
+}
+.aboutMarketingHeading>div>p,
+.aboutMarketingClosing>div>p:last-child{
+  font-size:16px;
+  line-height:1.62;
+}
+.aboutMarketingPillars small,
+.aboutMarketingValueGrid small{
+  font-size:11px;
+  line-height:1.3;
+  letter-spacing:.11em;
+}
+.aboutMarketingPillars p{
+  font-size:15px;
+  line-height:1.55;
+}
+.aboutMarketingLegal{
+  font-size:12px;
+  line-height:1.55;
+}
+.aboutMarketingValueGrid article>span{
+  font-size:11px;
+}
+.aboutMarketingValueGrid p{
+  font-size:14px;
+  line-height:1.55;
+}
+.aboutMarketingPersonTop small{
+  font-size:12px;
+  line-height:1.35;
+}
+.aboutMarketingPersonTop span{
+  font-size:11px;
+  line-height:1.4;
+  letter-spacing:.08em;
+}
+.aboutExpertIntro{
+  font-size:15px!important;
+  line-height:1.62!important;
+}
+.aboutExpertSplit>div>small,
+.aboutExpertMarkers>small{
+  font-size:10.5px;
+  line-height:1.35;
+  letter-spacing:.11em;
+}
+.aboutExpertSplit li strong{
+  font-size:13px;
+  line-height:1.4;
+}
+.aboutExpertSplit li span{
+  font-size:13px;
+  line-height:1.55;
+}
+.aboutExpertMarkers p{
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+.aboutLinkedIn{
+  font-size:12px;
+}
+.aboutMarketingClosing .primaryButton,
+.aboutMarketingClosing .secondaryButton,
+.aboutMarketingActions .primaryButton,
+.aboutMarketingActions .secondaryButton{
+  font-size:13px;
+}
+@media(max-width:760px){
+  .aboutMarketingTopline{font-size:10px}
+  .aboutMarketingHeroCopy>p{font-size:16px}
+  .aboutMarketingHeroCopy .aboutMarketingLead{font-size:18px}
+  .aboutMarketingProof span{font-size:12px}
+  .aboutExpertSplit li strong,
+  .aboutExpertSplit li span,
+  .aboutExpertMarkers p{font-size:13px!important}
+}
