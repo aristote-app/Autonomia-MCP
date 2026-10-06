@@ -6802,7 +6802,7 @@ button {
   width:3px;
   height:34px;
   border-radius:999px;
-  background:linear-gradient(180deg,var(--signal),rgba(255,213,74,.15));
+  background:linear-gradient(180deg,var(--signal),rgba(61,226,208,.15));
 }
 
 .articleBody .sectionIndex {
