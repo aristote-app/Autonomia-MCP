@@ -21384,3 +21384,49 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:820px){
   .referenceGridPublic{grid-template-columns:repeat(2,minmax(120px,1fr))}
 }
+
+
+/* REFERENCES V5 — Roumois + school logos */
+.referencePremiumLogoRoumois{
+  min-height:74px;
+}
+.referencePremiumLogoRoumois img{
+  filter:brightness(0) invert(1) !important;
+  opacity:1 !important;
+  max-width:190px !important;
+  max-height:58px !important;
+}
+.referenceGridEducation{
+  grid-template-columns:repeat(5,minmax(140px,1fr));
+}
+.referencePremiumLogoSchool{
+  min-height:68px;
+}
+.referencePremiumLogoSchool img{
+  filter:none;
+  opacity:1;
+  max-width:155px;
+  max-height:52px;
+}
+.referenceGridEducation .referencePremiumLogoSchool:nth-child(1) img{
+  filter:brightness(0) invert(1);
+}
+.referenceGridEducation .referencePremiumLogoSchool:nth-child(2) img{
+  filter:brightness(0) invert(1);
+}
+.referenceGridEducation .referencePremiumLogoSchool:nth-child(4) img{
+  filter:brightness(0) invert(1);
+}
+.escgFallback{
+  min-height:68px;
+  font-size:20px;
+  letter-spacing:.10em;
+}
+@media(max-width:1100px){
+  .referenceGridEducation{grid-template-columns:repeat(3,minmax(140px,1fr))}
+}
+@media(max-width:820px){
+  .referencePremiumLogoRoumois img{max-width:160px !important;max-height:50px !important}
+  .referenceGridEducation{grid-template-columns:repeat(2,minmax(120px,1fr))}
+  .referencePremiumLogoSchool img{max-width:132px;max-height:44px}
+}
