@@ -274,16 +274,18 @@ function buildPdf(profile, roleTitle) {
     p.roundedRect(x+4, top-9, 4, 18, 1, C.blue);
   }
   function iconMail(p, x, top) {
-    // clean navy envelope, visually matched with phone icon
-    p.roundedRect(x-9, top-6.5, 18, 13, 2.4, null, C.blue, 1.8);
-    p.line(x-8, top-5.2, x, top+1.2, C.blue, 1.5);
-    p.line(x+8, top-5.2, x, top+1.2, C.blue, 1.5);
+    // matched contact icon: pale blue circle + simple navy envelope
+    p.circle(x, top, 10.5, [.90,.95,1]);
+    p.roundedRect(x-6.8, top-4.6, 13.6, 9.2, 1.8, null, C.blue, 1.35);
+    p.line(x-6, top-3.6, x, top+0.9, C.blue, 1.15);
+    p.line(x+6, top-3.6, x, top+0.9, C.blue, 1.15);
   }
   function iconPhone(p, x, top) {
-    // slim navy handset, harmonious with the outlined envelope
-    p.curve(x-7.5, top-7.5, x-9, top-2, x-2.5, top+6.5, x+5.5, top+8.5, C.blue, 2.1);
-    p.roundedRect(x-9.2, top-9.2, 4.8, 7.6, 2.2, C.blue);
-    p.roundedRect(x+4.4, top+4.8, 4.8, 7.6, 2.2, C.blue);
+    // matched contact icon: pale blue circle + compact handset
+    p.circle(x, top, 10.5, [.90,.95,1]);
+    p.curve(x-5.8, top-5.6, x-6.6, top-1.2, x-1.4, top+5.6, x+5.2, top+5.7, C.blue, 1.9);
+    p.roundedRect(x-7.0, top-7.0, 4.1, 5.8, 2.0, C.blue);
+    p.roundedRect(x+3.4, top+3.2, 4.1, 5.8, 2.0, C.blue);
   }
   function iconAutonomiaMark(p, x, top) {
     // Autonomia favicon / mark only
