@@ -10,7 +10,7 @@
   --signal-ink: #07111f;
   --academy: #18756d;
   --academy-ink: #ffffff;
-  --territory: #a66a3f;
+  --territory: #237e91;
   --white: #ffffff;
   --radius: 10px;
   --max: 1440px;
@@ -4030,7 +4030,7 @@ button {
 }
 .territoryBuyerGrid span { color:var(--muted); font-size:9px; }
 .territoryBuyerGrid strong { margin-top:auto; font-size:16px; line-height:1.2; }
-.territoryLeadSection { background:#f7f6f1; }
+.territoryLeadSection { background:#f3f7fa; }
 .territoryLeadIntro { display:grid; gap:18px; margin-bottom:10px; }
 
 .territoryHomePromo {
@@ -4971,7 +4971,7 @@ button {
 }
 
 .needBriefProgress button.done span {
-  color: #9b6a00;
+  color: #087f78;
 }
 
 .needBriefPane {
@@ -5035,12 +5035,12 @@ button {
 }
 
 .needCheckGrid button.selected {
-  border-color: #c48a0a;
+  border-color: #28bfae;
   background: rgba(255,200,87,.16);
 }
 
 .needCheckGrid button.selected > span {
-  border-color: #c48a0a;
+  border-color: #28bfae;
   background: var(--signal);
   color: var(--signal-ink);
 }
@@ -5114,7 +5114,7 @@ button {
 .briefSubmit {
   background: var(--signal);
   color: var(--signal-ink);
-  border-color: #d79d20;
+  border-color: #28bfae;
 }
 
 .briefSubmit {
@@ -5450,7 +5450,7 @@ button {
 .roleMarketSignals span,
 .roleLifecycleGrid > article > span,
 .roleCaseGrid > article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
   letter-spacing: .08em;
@@ -5517,7 +5517,7 @@ button {
 
 .roleResponsibilities li > span,
 .roleQuestions li > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 14px;
   font-weight: 900;
 }
@@ -5770,7 +5770,7 @@ button {
 }
 
 .roleCrossLinks span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -6662,7 +6662,7 @@ button {
   height: 8px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #b49142;
+  background: #3de2d0;
 }
 
 .consultantAvailability.available > span {
@@ -6760,7 +6760,7 @@ button {
 
 .consultantLiveCard > button:hover {
   background: var(--signal);
-  border-color: #d79d20;
+  border-color: #28bfae;
   color: var(--signal-ink);
 }
 
@@ -7037,7 +7037,7 @@ button {
   min-height: 52px;
   margin-top: 16px;
   padding: 0 15px;
-  border: 1px solid #d79d20;
+  border: 1px solid #28bfae;
   border-radius: 8px;
   background: var(--signal);
   color: var(--signal-ink);
@@ -7150,7 +7150,7 @@ button {
   border-bottom: 1px solid var(--line);
 }
 .roleResponsibilityList li > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -7481,11 +7481,11 @@ button {
   letter-spacing: .08em;
 }
 .pillarHeroMeta span { color: var(--muted); }
-.pillarHeroMeta strong { color: #a36b00; }
+.pillarHeroMeta strong { color: #087f78; }
 .pillarHeroAcademy .pillarHeroMeta span,
 .pillarHeroAcademy .pillarHeroMeta small { color: rgba(255,255,255,.62); }
 .pillarHeroAcademy .pillarHeroMeta strong,
-.pillarHeroAcademy .eyebrow { color: #ffd16a; }
+.pillarHeroAcademy .eyebrow { color: #3de2d0; }
 .pillarHeroCopy {
   max-width: 1100px;
 }
@@ -7569,7 +7569,7 @@ button {
   background: #fff;
 }
 .pillarStrengthGrid article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -7602,7 +7602,7 @@ button {
   border-bottom: 1px solid var(--line);
 }
 .pillarProcess li > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -7624,7 +7624,7 @@ button {
   background: var(--ink);
   color: #fff;
 }
-.pillarDark .sectionIndex { color: #ffd16a; }
+.pillarDark .sectionIndex { color: #3de2d0; }
 .pillarDarkPoints {
   display: grid;
   gap: 1px;
@@ -7665,7 +7665,7 @@ button {
   background: rgba(23,32,51,.045);
 }
 .pillarDirectoryGrid a > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -7697,7 +7697,7 @@ button {
   background: var(--academy);
   color: #fff;
 }
-.academyFinalCta .eyebrow { color: #ffd16a; }
+.academyFinalCta .eyebrow { color: #3de2d0; }
 .academyFinalCta > div > p:not(.eyebrow) { color: rgba(255,255,255,.72); }
 .academyFinalCta .primaryButton {
   background: #fff;
@@ -7842,7 +7842,7 @@ button {
 }
 
 .pillarFactBar > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .08em;
@@ -7964,7 +7964,7 @@ button {
   background: #fff;
 }
 .obsHubIntro > span {
-  color: #9b6a00;
+  color: #087f78;
   font-weight: 900;
 }
 .obsHubIntro strong {
@@ -8065,7 +8065,7 @@ button {
   background: rgba(255,255,255,.04);
 }
 .obsMiniModules article > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 11px;
   font-weight: 900;
 }
@@ -8085,7 +8085,7 @@ button {
 .obsMiniModules small {
   display: block;
   margin-top: 10px;
-  color: #ffd16a;
+  color: #3de2d0;
   line-height: 1.4;
 }
 .obsPreviewActions {
@@ -8251,7 +8251,7 @@ button {
   background: #fff;
 }
 .obsTransformationGrid article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 12px;
   font-weight: 900;
 }
@@ -8297,7 +8297,7 @@ button {
   background: var(--ink-2);
 }
 .obsAB article > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-weight: 900;
 }
 .obsAB strong {
@@ -8496,7 +8496,7 @@ button {
 .territoryFlagshipGrid article > span,
 .territoryOtherGrid article > span,
 .territoryOfferGrid article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 12px;
   font-weight: 900;
 }
@@ -8563,7 +8563,7 @@ button {
   gap: 5px;
 }
 .territoryDemoTopline span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: .07em;
@@ -8644,7 +8644,7 @@ button {
   cursor: pointer;
 }
 .adsQueue button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
 }
 .adsQueue button > span {
   display: grid;
@@ -8660,7 +8660,7 @@ button {
   color: var(--ink);
 }
 .adsDetail > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 11px;
   font-weight: 900;
 }
@@ -8742,7 +8742,7 @@ button {
 }
 .configEmpty span,
 .generatedDemo > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 11px;
   font-weight: 900;
 }
@@ -8809,7 +8809,7 @@ button {
   border-radius: 12px;
 }
 .territoryAcademyPrice span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 11px;
   font-weight: 900;
 }
@@ -8826,7 +8826,7 @@ button {
   background: #fff;
 }
 .territoryReferencePlaceholder span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 12px;
   font-weight: 900;
 }
@@ -8959,7 +8959,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.04);
 }
 .obsHeroIndex > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: .08em;
@@ -9029,7 +9029,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   box-shadow: inset 4px 0 0 var(--signal);
 }
 .miniModuleNav span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 11px;
   font-weight: 900;
 }
@@ -9047,7 +9047,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .miniModuleContext > span,
 .miniDemoInput > span,
 .miniDemoOutput > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .08em;
@@ -9112,9 +9112,9 @@ body:has(.territoryCampaignPage) .desktopNav {
   margin: 12px 0;
 }
 .miniDemoChecks button.active {
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
-  border-color: #ffd16a;
+  border-color: #3de2d0;
 }
 .miniDemoOutput {
   opacity: .72;
@@ -9136,7 +9136,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .miniDemoOutput small {
   display: block;
   margin-top: 12px;
-  color: #ffd16a;
+  color: #3de2d0;
   line-height: 1.4;
 }
 .miniDemoRows {
@@ -9155,7 +9155,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.05);
 }
 .miniDemoRows p b {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .miniDemoRows p small {
   margin: 0;
@@ -9188,7 +9188,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   padding: 10px;
   border-radius: 7px;
   background: rgba(255,209,106,.14);
-  color: #ffd16a;
+  color: #3de2d0;
   font-weight: 800;
 }
 
@@ -9208,7 +9208,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: var(--paper);
 }
 .obsBuildGrid article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 11px;
   font-weight: 900;
 }
@@ -9345,7 +9345,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: #fff;
 }
 .territoryStartGrid article > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: .06em;
@@ -9455,11 +9455,11 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowModuleTabs button.active {
   border-color: var(--ink);
-  box-shadow: inset 4px 0 0 #ffd16a, 0 8px 24px rgba(23,32,51,.06);
+  box-shadow: inset 4px 0 0 #3de2d0, 0 8px 24px rgba(23,32,51,.06);
 }
 .wowModuleTabs button > span {
   grid-area: num;
-  color: #9b6a00;
+  color: #087f78;
   font-size: 11px;
   font-weight: 900;
 }
@@ -9503,7 +9503,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   border-radius: 50%;
   background: rgba(255,255,255,.35);
 }
-.wowProductTopbar i:nth-child(2) { background: #ffd16a; }
+.wowProductTopbar i:nth-child(2) { background: #3de2d0; }
 .wowProductTopbar > span {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9514,7 +9514,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   letter-spacing: .05em;
 }
 .wowProductTopbar > b {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   letter-spacing: .08em;
 }
@@ -9558,7 +9558,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowPaneLabel,
 .wowAppHeader > span {
   margin: 0;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
   letter-spacing: .09em;
@@ -9588,7 +9588,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowControlPane input[type="range"] {
   width: 100%;
-  accent-color: #ffd16a;
+  accent-color: #3de2d0;
 }
 .wowControlPane textarea,
 .wowControlPane select {
@@ -9607,7 +9607,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   padding: 0 13px;
   border: 0;
   border-radius: 8px;
-  background: #ffd16a;
+  background: #3de2d0;
   color: #07111f;
   font-weight: 900;
   cursor: pointer;
@@ -9645,7 +9645,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.035);
 }
 .wowRanking article > b {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 10px;
 }
 .wowRanking article > div:not(.wowBar) {
@@ -9676,16 +9676,16 @@ body:has(.territoryCampaignPage) .desktopNav {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg,#ffd16a,#fff2b6);
+  background: linear-gradient(90deg,#3de2d0,#c9fff8);
 }
 .wowInsight {
   margin-top: 12px;
   padding: 11px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .wowInsight span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -9713,11 +9713,11 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .wowQueue button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .wowQueue button > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -9769,7 +9769,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowResultCard > small {
   padding: 9px 10px;
-  color: #ffd16a;
+  color: #3de2d0;
 }
 
 .wowSources,
@@ -9802,7 +9802,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowCanvasTop > span,
 .wowRawDoc > span,
 .wowTranscript + span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -9835,7 +9835,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   text-align: left;
 }
 .wowCitationList button b {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .wowCitationList small {
   color: rgba(255,255,255,.46);
@@ -9851,7 +9851,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: rgba(255,255,255,.56);
 }
 .wowConfidence strong {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 
 .wowToggleRow {
@@ -9870,7 +9870,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .wowToggleRow button.active {
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
 }
 .wowCanvas {
@@ -9892,11 +9892,11 @@ body:has(.territoryCampaignPage) .desktopNav {
   margin-top: 12px;
   padding: 15px;
   border-radius: 9px;
-  background: #f6f2e9;
+  background: #f3f7fa;
   color: var(--ink);
 }
 .wowRawDoc > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 9px;
   font-weight: 900;
 }
@@ -9946,7 +9946,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 12px;
 }
 .wowTranscript b {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .wowDecisionBoard {
   display: grid;
@@ -9959,7 +9959,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.035);
 }
 .wowDecisionBoard article > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -9980,7 +9980,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: rgba(255,255,255,.72);
 }
 .wowSwitch input {
-  accent-color: #ffd16a;
+  accent-color: #3de2d0;
 }
 .wowPlannerScore {
   padding: 13px;
@@ -10013,7 +10013,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.035);
 }
 .wowPlan b {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .wowPlan small {
   color: rgba(255,255,255,.42);
@@ -10034,7 +10034,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.04);
 }
 .wowRuleList input {
-  accent-color: #ffd16a;
+  accent-color: #3de2d0;
 }
 .wowControlScore {
   display: grid;
@@ -10076,7 +10076,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowStatus.warning {
   background: rgba(255,209,106,.12);
-  color: #ffd16a;
+  color: #3de2d0;
 }
 
 .wowValueStrip {
@@ -10157,7 +10157,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .territoryConstraintPanel input[type="range"] {
   width: 100%;
-  accent-color: #ffd16a;
+  accent-color: #3de2d0;
 }
 .territoryOptimizationScore {
   margin-top: 16px;
@@ -10167,7 +10167,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .territoryOptimizationScore span {
   display: block;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -10252,7 +10252,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   align-items: baseline;
 }
 .generatedDemoHead > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 9px;
   font-weight: 900;
 }
@@ -10283,7 +10283,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .generatedGuardrail {
   padding: 10px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
   color: rgba(255,255,255,.72);
   font-size: 12px;
@@ -10330,9 +10330,9 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowToggleRow button.active,
 .wowClusterBtn.active,
 .wowLotBtn.active {
-  background:#ffd16a;
+  background:#3de2d0;
   color:var(--ink);
-  border-color:#ffd16a;
+  border-color:#3de2d0;
 }
 .wowControlPane select {
   width:100%;
@@ -10371,7 +10371,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowCampaignMock > span,
 .wowBrandPreview > span,
 .wowMaintenanceGauge > span {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:10px;
   font-weight:900;
   letter-spacing:.08em;
@@ -10491,7 +10491,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background:rgba(255,255,255,.04);
 }
 .wowReconTable article.matched { box-shadow: inset 3px 0 0 #4fd1a8; }
-.wowReconTable article.review { box-shadow: inset 3px 0 0 #ffd16a; }
+.wowReconTable article.review { box-shadow: inset 3px 0 0 #3de2d0; }
 .wowReconTable small {
   color:rgba(255,255,255,.58);
 }
@@ -10511,7 +10511,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowTimeline button.active,
 .wowSequence button.active {
-  border-color:#ffd16a;
+  border-color:#3de2d0;
   background:rgba(255,209,106,.08);
 }
 .wowTimeline button > span,
@@ -10525,7 +10525,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowTimeline em {
   grid-column:2 / -1;
-  color:#ffd16a;
+  color:#3de2d0;
   font-style:normal;
   font-size:12px;
 }
@@ -10559,7 +10559,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor:pointer;
 }
 .wowBubbleArea button.active {
-  background:#ffd16a;
+  background:#3de2d0;
   color:var(--ink);
 }
 .wowBubbleArea button strong {
@@ -10597,12 +10597,12 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowStockGrid {
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
-.wowStockGrid article.warning { box-shadow: inset 0 3px 0 #ffd16a; }
+.wowStockGrid article.warning { box-shadow: inset 0 3px 0 #3de2d0; }
 .wowStockGrid article.danger { box-shadow: inset 0 3px 0 #ff7a7a; }
 .wowStockGrid article > small {
   display:block;
   margin-top:8px;
-  color:#ffd16a;
+  color:#3de2d0;
   font-weight:800;
 }
 .wowReserveCard {
@@ -10653,7 +10653,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background:rgba(255,255,255,.04);
 }
 .wowCalendarGrid article > span {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:10px;
   font-weight:900;
 }
@@ -10673,7 +10673,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   grid-template-columns:repeat(2,minmax(0,1fr));
 }
 .wowBrandChecks article.ok b { color:#4fd1a8; }
-.wowBrandChecks article.warning b { color:#ffd16a; }
+.wowBrandChecks article.warning b { color:#3de2d0; }
 .wowBrandChecks small {
   color:rgba(255,255,255,.52);
 }
@@ -10699,7 +10699,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   flex:1;
   min-height:12px;
   border-radius:5px 5px 0 0;
-  background:linear-gradient(180deg,#ffd16a,rgba(255,209,106,.28));
+  background:linear-gradient(180deg,#3de2d0,rgba(255,209,106,.28));
 }
 .wowDropzone {
   display:grid;
@@ -10766,7 +10766,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   gap:5px;
 }
 .wowImpactIntro > span {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:10px;
   font-weight:900;
   letter-spacing:.08em;
@@ -10803,7 +10803,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowImpactResult > span {
   display:block;
-  color:#9b6a00;
+  color:#087f78;
   font-size:10px;
   font-weight:900;
   letter-spacing:.08em;
@@ -10847,7 +10847,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   padding:14px;
 }
 .wowTalentGrid article.top {
-  box-shadow: inset 0 3px 0 #ffd16a;
+  box-shadow: inset 0 3px 0 #3de2d0;
 }
 .wowTalentHead {
   display:grid;
@@ -10874,7 +10874,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   color:rgba(255,255,255,.52);
 }
 .wowTalentHead > b {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:20px;
 }
 .wowSkillCloud {
@@ -10894,7 +10894,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .wowSkillCloud i.hit {
   background:rgba(255,209,106,.14);
-  color:#ffd16a;
+  color:#3de2d0;
 }
 .wowTalentFoot {
   display:grid;
@@ -10939,7 +10939,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-weight:800;
 }
 .wowDecisionMatrix article > b {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:20px;
 }
 .wowDecisionMatrix .wowBar {
@@ -10951,7 +10951,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .wowPipelineBoard article {
   padding:13px;
 }
-.wowPipelineBoard article.warning { box-shadow: inset 0 3px 0 #ffd16a; }
+.wowPipelineBoard article.warning { box-shadow: inset 0 3px 0 #3de2d0; }
 .wowPipelineBoard article.danger { box-shadow: inset 0 3px 0 #ff7a7a; }
 .wowPipelineBoard article > div {
   display:flex;
@@ -10966,7 +10966,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size:15px;
 }
 .wowPipelineBoard article > small {
-  color:#ffd16a;
+  color:#3de2d0;
 }
 .wowPipelineBoard article > p {
   margin:12px 0 8px;
@@ -10996,7 +10996,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background:rgba(255,255,255,.22);
 }
 .wowSignalFeed i.hot { background:#ff7a7a; box-shadow:0 0 0 5px rgba(255,122,122,.09); }
-.wowSignalFeed i.warm { background:#ffd16a; box-shadow:0 0 0 5px rgba(255,209,106,.08); }
+.wowSignalFeed i.warm { background:#3de2d0; box-shadow:0 0 0 5px rgba(255,209,106,.08); }
 .wowSignalFeed article > div {
   display:grid;
   gap:3px;
@@ -11010,7 +11010,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-weight:800;
 }
 .wowSignalFeed article > b {
-  color:#ffd16a;
+  color:#3de2d0;
   text-align:right;
 }
 .wowQualityList article {
@@ -11020,19 +11020,19 @@ body:has(.territoryCampaignPage) .desktopNav {
   align-items:center;
   padding:12px;
 }
-.wowQualityList article.warning { box-shadow: inset 3px 0 0 #ffd16a; }
+.wowQualityList article.warning { box-shadow: inset 3px 0 0 #3de2d0; }
 .wowQualityList article > span {
   color:rgba(255,255,255,.52);
   font-size:10px;
 }
 .wowQualityList article > b {
-  color:#ffd16a;
+  color:#3de2d0;
   font-size:18px;
   text-align:right;
 }
 .wowQualityList article > small {
   grid-column:1 / -1;
-  color:#ffd16a;
+  color:#3de2d0;
 }
 .wowQualityList article > .wowBar {
   grid-column:1 / -1;
@@ -11465,11 +11465,11 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemDemoTabs button.active {
   border-color: var(--ink);
-  box-shadow: inset 4px 0 0 #ffd16a, 0 8px 24px rgba(23,32,51,.07);
+  box-shadow: inset 4px 0 0 #3de2d0, 0 8px 24px rgba(23,32,51,.07);
 }
 .problemDemoTabs button > span {
   grid-area: num;
-  color: #9b6a00;
+  color: #087f78;
   font-size: 14px;
   font-weight: 900;
 }
@@ -11513,7 +11513,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.35);
 }
 .problemProductTop i:nth-child(2) {
-  background: #ffd16a;
+  background: #3de2d0;
 }
 .problemProductTop > span,
 .problemProductTop > b {
@@ -11529,7 +11529,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemProductTop > b {
   grid-column: 2;
-  color: #ffd16a;
+  color: #3de2d0;
   letter-spacing: .04em;
 }
 .problemProductBody {
@@ -11560,7 +11560,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemReserve span,
 .problemMaintenance > span {
   margin: 0;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .05em;
@@ -11605,12 +11605,12 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemControls input[type="range"] {
   width: 100%;
-  accent-color: #ffd16a;
+  accent-color: #3de2d0;
 }
 .problemControls > button {
   width: 100%;
   margin-top: 13px;
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
 }
 .problemAppHeader {
@@ -11655,7 +11655,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 15px;
 }
 .problemTranscript b {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .problemActionBoard {
   display: grid;
@@ -11672,13 +11672,13 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemActionBoard article.warning {
   border-color: rgba(255,209,106,.42);
-  box-shadow: inset 3px 0 0 #ffd16a;
+  box-shadow: inset 3px 0 0 #3de2d0;
 }
 .problemActionBoard span,
 .problemExecutiveBrief > span,
 .problemMeetingFooter > div > span {
   display: block;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -11717,10 +11717,10 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemMeetingFooter > button {
   min-height: 46px;
   padding: 0 14px;
-  border: 1px solid #ffd16a;
+  border: 1px solid #3de2d0;
   border-radius: 9px;
   background: transparent;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 16px;
   font-weight: 900;
   cursor: pointer;
@@ -11801,7 +11801,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 14px;
 }
 .problemCoverage > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-weight: 900;
 }
 .problemCoverage > div {
@@ -11815,7 +11815,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: #ffd16a;
+  background: #3de2d0;
 }
 .problemSourceRail {
   display: grid;
@@ -11835,7 +11835,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemSourceRail button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemSourceRail span {
@@ -11853,7 +11853,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-style: normal;
 }
 .problemSourceRail em {
-  color: #ffd16a;
+  color: #3de2d0;
   font-weight: 900;
 }
 .problemSourcePreview {
@@ -11863,7 +11863,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: linear-gradient(135deg,rgba(255,209,106,.07),rgba(255,255,255,.025));
 }
 .problemSourcePreview > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -11953,7 +11953,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemFieldList button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemFieldList span {
@@ -11969,7 +11969,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   white-space: nowrap;
 }
 .problemFieldList em {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-style: normal;
   font-weight: 900;
@@ -11990,7 +11990,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemScoreList article > b,
 .problemScoreList article > em {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 16px;
   font-style: normal;
   font-weight: 900;
@@ -12020,7 +12020,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemSourceStatus > span,
 .problemNarrative > span {
   display: block;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12062,17 +12062,17 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemRouteAction {
   min-height: 46px;
-  border: 1px solid #ffd16a;
+  border: 1px solid #3de2d0;
   border-radius: 9px;
   background: transparent;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 16px;
   font-weight: 900;
   cursor: pointer;
 }
 .problemPreparedAction {
   padding: 14px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemPreparedAction strong {
@@ -12110,7 +12110,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: #62d99b;
 }
 .problemSourceStatus i.warning {
-  background: #ffd16a;
+  background: #3de2d0;
 }
 .problemSignalList {
   display: grid;
@@ -12130,7 +12130,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemSignalList button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.07);
 }
 .problemSignalList span {
@@ -12138,7 +12138,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-weight: 800;
 }
 .problemSignalList strong {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 17px;
 }
 .problemSignalList small {
@@ -12149,7 +12149,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemNarrative {
   margin-top: 10px;
   padding: 14px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemScoreList article > div,
@@ -12169,7 +12169,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: #ffd16a;
+  background: #3de2d0;
 }
 .problemQueue button {
   display: grid;
@@ -12183,11 +12183,11 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemQueue button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemQueue button span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 13px;
   font-weight: 900;
 }
@@ -12214,7 +12214,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   font-size: 14px;
 }
 .problemRouteCard em {
-  color: #ffd16a;
+  color: #3de2d0;
   font-style: normal;
 }
 .problemDocument {
@@ -12279,7 +12279,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemReviewRules button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemReviewRules button > span {
@@ -12291,7 +12291,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemReviewRules button.missing > span,
 .problemReviewRules button.conflict > span {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .problemReviewRules button > strong {
   min-width: 0;
@@ -12335,7 +12335,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemEvidenceCard.missing,
 .problemEvidenceCard.conflict {
   border-color: rgba(255,209,106,.4);
-  box-shadow: inset 3px 0 0 #ffd16a;
+  box-shadow: inset 3px 0 0 #3de2d0;
 }
 .problemEvidenceHead {
   display: flex;
@@ -12344,7 +12344,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   align-items: center;
 }
 .problemEvidenceHead > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12384,9 +12384,9 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemReviewActions button {
   min-height: 46px;
   padding: 0 13px;
-  border: 1px solid #ffd16a;
+  border: 1px solid #3de2d0;
   border-radius: 9px;
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
   font-size: 16px;
   font-weight: 900;
@@ -12394,7 +12394,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemReviewActions button.secondary {
   background: transparent;
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .problemToggle {
   display: flex;
@@ -12414,8 +12414,8 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemToggle button.active {
-  border-color: #ffd16a;
-  background: #ffd16a;
+  border-color: #3de2d0;
+  background: #3de2d0;
   color: var(--ink);
 }
 .problemBars {
@@ -12432,7 +12432,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   flex: 1;
   min-height: 12px;
   border-radius: 5px 5px 0 0;
-  background: linear-gradient(180deg,#ffd16a,rgba(255,209,106,.25));
+  background: linear-gradient(180deg,#3de2d0,rgba(255,209,106,.25));
   transition: opacity .18s ease, transform .18s ease;
 }
 .problemBars i:not(.active) {
@@ -12461,7 +12461,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   cursor: pointer;
 }
 .problemSequence button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
 }
 .problemSequence button.done {
   opacity: .68;
@@ -12477,12 +12477,12 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemSequenceDetail {
   margin-top: 10px;
   padding: 14px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemSequenceDetail > span {
   display: block;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12516,7 +12516,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemCompare article > b,
 .problemQuality article > b {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 18px;
 }
 .problemCompare article.top {
@@ -12525,7 +12525,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemCompare article > small {
   grid-column: 1 / -1;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 850;
 }
@@ -12542,7 +12542,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemCompareHeader > span,
 .problemCompareExplain > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12553,7 +12553,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemCompareExplain {
   margin-top: 10px;
   padding: 14px;
-  border-left: 3px solid #ffd16a;
+  border-left: 3px solid #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemCompareExplain p {
@@ -12563,11 +12563,11 @@ body:has(.territoryCampaignPage) .desktopNav {
   line-height: 1.5;
 }
 .problemQuality article.warning {
-  box-shadow: inset 3px 0 0 #ffd16a;
+  box-shadow: inset 3px 0 0 #3de2d0;
 }
 .problemQuality small {
   grid-column: 1 / -1;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 13px;
 }
 .problemDraft {
@@ -12586,7 +12586,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   padding: 7px 9px;
   border-radius: 999px;
   background: rgba(255,209,106,.1);
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 13px;
 }
 .problemOutputWorkspace {
@@ -12604,7 +12604,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.035);
 }
 .problemOutputToolbar > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12613,7 +12613,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   padding: 6px 8px;
   border-radius: 999px;
   background: rgba(255,209,106,.1);
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 13px;
 }
 .problemOutputBlocks {
@@ -12652,16 +12652,16 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemOutputReady {
   min-height: 46px;
-  border: 1px solid #ffd16a;
+  border: 1px solid #3de2d0;
   border-radius: 9px;
   background: transparent;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 16px;
   font-weight: 900;
   cursor: pointer;
 }
 .problemOutputReady.active {
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
 }
 .problemOutputFoot {
@@ -12680,7 +12680,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.04);
 }
 .problemTender span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -12719,7 +12719,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   border-radius: 9px;
   background: rgba(255,255,255,.04);
 }
-.problemStock article.warning { box-shadow: inset 0 3px 0 #ffd16a; }
+.problemStock article.warning { box-shadow: inset 0 3px 0 #3de2d0; }
 .problemStock article.danger { box-shadow: inset 0 3px 0 #ff7a7a; }
 .problemStock article span,
 .problemStock article small {
@@ -12731,7 +12731,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemStock article b {
   display: block;
   margin-top: 5px;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 28px;
 }
 .problemMaintenance {
@@ -12775,18 +12775,18 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemQuality button.active,
 .problemTender button.active {
-  border-color: #ffd16a;
+  border-color: #3de2d0;
   background: rgba(255,209,106,.08);
 }
 .problemQuality button.warning {
-  box-shadow: inset 3px 0 0 #ffd16a;
+  box-shadow: inset 3px 0 0 #3de2d0;
 }
 .problemQuality button > span {
   color: rgba(255,255,255,.6);
   font-size: 14px;
 }
 .problemQuality button > b {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 18px;
   text-align: right;
 }
@@ -12805,7 +12805,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: #ffd16a;
+  background: #3de2d0;
 }
 .problemReviewCard,
 .problemTenderDetail,
@@ -12818,7 +12818,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemReviewCard > span,
 .problemTenderDetail > span,
 .problemProcedureCard > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .04em;
@@ -12851,7 +12851,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemReviewCard em,
 .problemTenderDetail em,
 .problemSiteCard em {
-  color: #ffd16a;
+  color: #3de2d0;
   font-style: normal;
   text-align: right;
 }
@@ -12859,7 +12859,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   grid-template-columns: 34px minmax(0,1fr) auto;
 }
 .problemTender button > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -12894,7 +12894,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: rgba(255,255,255,.04);
 }
 .problemSeoBacklog article > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -12918,7 +12918,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemSeoBacklog article em {
   margin-left: auto;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 20px;
   font-style: normal;
   font-weight: 900;
@@ -12943,7 +12943,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemSitePhoto > span {
   align-self: start;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -12964,7 +12964,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemSitePhoto > i:nth-of-type(1) { top: 42%; left: 20%; }
 .problemSitePhoto > i:nth-of-type(2) { top: 53%; left: 42%; width: 66px; transform: rotate(11deg); }
 .problemSiteCard > span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -12977,10 +12977,10 @@ body:has(.territoryCampaignPage) .desktopNav {
   width: 100%;
   min-height: 44px;
   margin-top: 12px;
-  border: 1px solid #ffd16a;
+  border: 1px solid #3de2d0;
   border-radius: 9px;
   background: transparent;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 15px;
   font-weight: 900;
   cursor: pointer;
@@ -13019,7 +13019,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemCauseList article > span,
 .problemCauseList article > b {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 14px;
   font-weight: 900;
 }
@@ -13059,7 +13059,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemLabBridge span,
 .wowLabBridge span {
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 13px;
   font-weight: 900;
   letter-spacing: .05em;
@@ -13085,7 +13085,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   justify-content: center;
   padding: 0 14px;
   border-radius: 9px;
-  background: #ffd16a;
+  background: #3de2d0;
   color: var(--ink);
   font-size: 15px;
   font-weight: 900;
@@ -13109,7 +13109,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   background: var(--paper);
 }
 .problemDeliverables span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 14px;
   font-weight: 900;
 }
@@ -13242,7 +13242,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: var(--ink);
 }
 .problemHubGroup a small {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
 }
@@ -13513,7 +13513,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .homeProblemGrid > a > span {
   grid-area: num;
-  color: #9b6a00;
+  color: #087f78;
   font-size: 14px;
   font-weight: 900;
 }
@@ -13573,7 +13573,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 }
 .problemFlowFitGrid article > span,
 .problemHumanGate > span {
-  color: #9b6a00;
+  color: #087f78;
   font-size: 13px;
   font-weight: 900;
   letter-spacing: .05em;
@@ -13615,7 +13615,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   color: #fff;
 }
 .problemHumanGate > span {
-  color: #ffd16a;
+  color: #3de2d0;
 }
 .problemHumanGate > strong {
   max-width: 900px;
@@ -13625,7 +13625,7 @@ body:has(.territoryCampaignPage) .desktopNav {
 .problemHumanGate > a {
   width: fit-content;
   margin-top: 4px;
-  color: #ffd16a;
+  color: #3de2d0;
   font-size: 15px;
   font-weight: 900;
   text-decoration: underline;
@@ -15089,7 +15089,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   --signal-ink: #0b1530;
   --academy: #14988d;
   --academy-ink: #ffffff;
-  --territory: #a66a3f;
+  --territory: #237e91;
   --white: #ffffff;
   --radius: 24px;
 }
