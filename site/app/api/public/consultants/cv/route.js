@@ -274,15 +274,16 @@ function buildPdf(profile, roleTitle) {
     p.roundedRect(x+4, top-9, 4, 18, 1, C.blue);
   }
   function iconMail(p, x, top) {
-    p.roundedRect(x-8, top-6, 16, 12, 2, C.blue);
-    p.line(x-8, top-5, x, top+1, C.white, .8);
-    p.line(x+8, top-5, x, top+1, C.white, .8);
+    // clean navy envelope, visually matched with phone icon
+    p.roundedRect(x-9, top-6.5, 18, 13, 2.4, null, C.blue, 1.8);
+    p.line(x-8, top-5.2, x, top+1.2, C.blue, 1.5);
+    p.line(x+8, top-5.2, x, top+1.2, C.blue, 1.5);
   }
   function iconPhone(p, x, top) {
-    // cleaner handset icon
-    p.curve(x-7, top-7, x-9, top-2, x-2, top+7, x+5, top+9, C.blue, 2.6);
-    p.roundedRect(x-9, top-9, 5, 8, 2, C.blue);
-    p.roundedRect(x+4, top+5, 5, 8, 2, C.blue);
+    // slim navy handset, harmonious with the outlined envelope
+    p.curve(x-7.5, top-7.5, x-9, top-2, x-2.5, top+6.5, x+5.5, top+8.5, C.blue, 2.1);
+    p.roundedRect(x-9.2, top-9.2, 4.8, 7.6, 2.2, C.blue);
+    p.roundedRect(x+4.4, top+4.8, 4.8, 7.6, 2.2, C.blue);
   }
   function iconAutonomiaMark(p, x, top) {
     // Autonomia favicon / mark only
