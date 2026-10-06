@@ -1,4 +1,4 @@
-import HomeLeadSwitch from "@/components/HomeLeadSwitch";
+import QuickContactForm from "@/components/QuickContactForm";
 
 export const metadata = {
   title: "Contact — Parler de votre projet IA",
@@ -44,8 +44,8 @@ export default function ContactPage() {
           <p className="eyebrow">VOTRE BESOIN</p>
           <h2>Quelques informations suffisent pour commencer.</h2>
           <p>
-            Le formulaire ci-contre reprend le même parcours de contact que celui utilisé sur
-            les pages Autonomia. Votre demande est ensuite enregistrée dans le cockpit Inbound.
+            Le formulaire reprend le même parcours de contact que celui du pied de page Autonomia.
+            Votre demande conserve le contexte utile pour être traitée dans le cockpit Inbound.
           </p>
           <div className="contactDirect">
             <strong>Déborah Dian Goldcher</strong>
@@ -53,7 +53,15 @@ export default function ContactPage() {
             <a href="tel:+33609746240">06 09 74 62 40</a>
           </div>
         </div>
-        <HomeLeadSwitch />
+
+        <div className="globalFooterForm">
+          <QuickContactForm
+            mode="contact"
+            formId="contact-page"
+            requestedService="contact-autonomia"
+            subjectLabel="Contact depuis la page Contact Autonomia"
+          />
+        </div>
       </section>
     </main>
   );
