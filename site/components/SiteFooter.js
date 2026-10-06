@@ -53,6 +53,7 @@ export default function SiteFooter() {
           <Link href="/cas-usage-ia">Cas d’usage</Link>
           <Link href="/observatoire-ia">Observatoire</Link>
           <Link href="/a-propos">À propos</Link>
+          <Link href="/contact">Contact</Link>
           <Link href="/methodologie/politique-editoriale">Politique éditoriale</Link>
         </nav>
       </div>
