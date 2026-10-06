@@ -21870,3 +21870,110 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .aboutMarketingPersonTop{display:grid}
   .aboutMarketingPersonTop span{text-align:left}
 }
+
+
+/* ABOUT EXPERT PROFILES — precise expertise + LinkedIn */
+.aboutMarketingPeopleGridExpert{
+  grid-template-columns:1fr 1fr;
+}
+.aboutExpertCard{
+  padding:30px!important;
+}
+.aboutMarketingPersonTop>div{
+  display:grid;
+  gap:6px;
+}
+.aboutLinkedIn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:38px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#0A66C2;
+  color:#fff;
+  font-size:11px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.aboutLinkedIn svg{
+  width:17px;
+  height:17px;
+  fill:currentColor;
+}
+.aboutExpertIntro{
+  margin-bottom:24px!important;
+}
+.aboutExpertSplit{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(220px,.8fr);
+  gap:24px;
+  padding-top:20px;
+  border-top:1px solid #dce5eb;
+}
+.aboutExpertSplit>div>small{
+  display:block;
+  margin-bottom:12px;
+  color:#159f94;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.aboutExpertSplit ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.aboutExpertSplit li{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid #dfe6ea;
+}
+.aboutExpertSplit li:first-child{padding-top:0}
+.aboutExpertSplit li strong{
+  font-size:12px;
+  line-height:1.35;
+}
+.aboutExpertSplit li span{
+  color:#687582;
+  font-size:12px;
+  line-height:1.5;
+}
+.aboutExpertMarkers{
+  padding:18px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid #dce5eb;
+  align-self:start;
+}
+.aboutExpertMarkers p{
+  margin:0!important;
+  padding:11px 0;
+  border-bottom:1px solid #e4eaee;
+  color:#5f6d79!important;
+  font-size:12px!important;
+  line-height:1.5!important;
+}
+.aboutExpertMarkers p:last-child{
+  border-bottom:0;
+  padding-bottom:0;
+}
+.aboutExpertMarkers p:first-of-type{
+  padding-top:0;
+}
+.aboutExpertMarkers strong{
+  color:#18212b;
+}
+@media(max-width:1150px){
+  .aboutMarketingPeopleGridExpert{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .aboutMarketingPersonTop{
+    display:flex!important;
+    align-items:flex-start;
+  }
+  .aboutExpertSplit{grid-template-columns:1fr}
+  .aboutExpertSplit li{grid-template-columns:1fr;gap:4px}
+}
