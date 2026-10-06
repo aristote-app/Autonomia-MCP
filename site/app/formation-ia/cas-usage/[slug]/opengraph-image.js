@@ -25,14 +25,14 @@ export default async function Image({ params }) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "64px",
-          background: "#F3F1E9",
+          background: "#F3F7FA",
           color: "#121313",
           fontFamily: "Arial, sans-serif"
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24 }}>
           <span>AUTONOMIA ACADEMY</span>
-          <span style={{ background: "#C9FF55", padding: "8px 12px" }}>CAPACITÉ INTERNE</span>
+          <span style={{ background: "#3DE2D0", padding: "8px 12px" }}>CAPACITÉ INTERNE</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 24, letterSpacing: 2 }}>{kicker}</div>
