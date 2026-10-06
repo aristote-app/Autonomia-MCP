@@ -93,6 +93,23 @@ const pages = {
         activation: "Parcours automatisation avec ateliers métier"
       }
     ],
+    relatedLinks: [
+      {
+        href: "/formation-ia/ia-generative-entreprise",
+        kicker: "PARCOURS",
+        label: "Formation IA générative en entreprise"
+      },
+      {
+        href: "/formation-ai-act",
+        kicker: "GOUVERNANCE",
+        label: "Formation Gouvernance IA & AI Act"
+      },
+      {
+        href: "/formation-ia/cas-usage",
+        kicker: "CAS MÉTIER",
+        label: "Explorer les scénarios de formation IA"
+      }
+    ],
     faq: [
       ["Les formations sont-elles sur mesure ?", "Les parcours peuvent être adaptés aux métiers, aux niveaux, aux outils et aux cas d’usage réellement retenus par l’entreprise."],
       ["Peut-on partir de nos propres tâches ?", "Oui. Le cadrage peut partir des situations de travail afin de relier chaque apprentissage à un usage concret."],
