@@ -6505,7 +6505,7 @@ button {
 }
 
 .articleTocHeader > span {
-  color: #0b1530;
+  color: #07111f;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .14em;
@@ -6544,7 +6544,7 @@ button {
 }
 
 .articleToc a:hover {
-  color: #0b1530;
+  color: #07111f;
   transform: translateX(2px);
 }
 
@@ -6563,7 +6563,7 @@ button {
 }
 
 .articleToc a:hover .articleTocIndex {
-  color: #0b1530;
+  color: #07111f;
   background: var(--signal);
 }
 
@@ -6602,7 +6602,7 @@ button {
 
 .articleSummaryHeader strong {
   margin: 0;
-  color: #0b1530;
+  color: #07111f;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .13em;
@@ -6650,7 +6650,7 @@ button {
 
 .articleBody .sectionIndex {
   margin: 0 0 10px;
-  color: #0b1530;
+  color: #07111f;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .14em;
@@ -6817,7 +6817,7 @@ button {
 .articleBody h2 {
   max-width:820px;
   margin:6px 0 20px;
-  color:#0b1530;
+  color:#07111f;
   font-size:clamp(30px,3.55vw,43px);
   line-height:1.03;
   letter-spacing:-.04em;
