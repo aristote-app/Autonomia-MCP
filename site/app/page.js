@@ -128,7 +128,7 @@ export default function Home() {
                 { name: "Mercure", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mercure%20Hotels%20Logo%20neu.svg" },
                 { name: "Novotel", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Novotel%20logo%20%282016%29.svg" },
                 { name: "Franprix", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Franprix%20-%202015.svg" }
-              ].flatMap((item) => [item, item]).map((item, index) => (
+              ].map((item, index) => (
                 <span className="referenceLogoItem" key={`company-${item.name}-${index}`}>
                   <img src={item.src} alt={item.name} loading="lazy" />
                 </span>
@@ -145,7 +145,7 @@ export default function Home() {
                 { name: "CNFPT", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo-CNFPT-2024-RVB.png" },
                 { name: "Ville de Bobigny", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20bobigny.png" },
                 { name: "Ville de Clichy", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Clichy-la-Garenne.svg" }
-              ].flatMap((item) => [item, item, item, item]).map((item, index) => (
+              ].map((item, index) => (
                 <span className="referenceLogoItem referenceLogoInstitution" key={`public-${item.name}-${index}`}>
                   <img src={item.src} alt={item.name} loading="lazy" />
                 </span>
