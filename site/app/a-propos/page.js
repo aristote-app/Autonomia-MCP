@@ -47,6 +47,103 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="collectiveSection">
+        <div className="sectionHeading">
+          <p className="sectionIndex">LE COLLECTIF</p>
+          <div>
+            <h2>Trois structures. Une même capacité d’exécution.</h2>
+            <p>
+              AUTONOMIA est une marque commune qui réunit des expertises complémentaires en intelligence
+              artificielle, transformation, marchés publics et formation professionnelle.
+            </p>
+          </div>
+        </div>
+
+        <div className="collectiveGrid">
+          <article>
+            <span>01</span>
+            <h3>DDG GROUPE</h3>
+            <p>IA, transformation, conseil, pilotage de projets et développement des offres AUTONOMIA.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>ODEXIS</h3>
+            <p>Marchés publics, secteur public, conseil, formation et assistance à maîtrise d’ouvrage depuis 2008.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>MAJY ME</h3>
+            <p>Formation professionnelle, IA et développement des compétences, avec certification Qualiopi.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="foundersSection">
+        <div className="sectionHeading">
+          <p className="sectionIndex">EXPÉRIENCE</p>
+          <div>
+            <h2>Des parcours construits avant AUTONOMIA.</h2>
+            <p>
+              La marque est récente. Les compétences, les références et l’expérience réunies derrière elle
+              ont été construites au fil de missions, d’entreprises, de collectivités et d’établissements
+              d’enseignement supérieur.
+            </p>
+          </div>
+        </div>
+
+        <div className="founderGrid">
+          <article>
+            <small>DÉBORAH DIAN GOLDCHER</small>
+            <h3>Transformation · IA · Digital · Formation</h3>
+            <p>
+              Près de 20 ans de parcours professionnel entre acquisition digitale, SEO/SEA, transformation,
+              entrepreneuriat et formation. Interventions auprès d’entreprises, collectivités, écoles de commerce
+              et universités.
+            </p>
+          </article>
+          <article>
+            <small>SYLVAIN LE TURCQ</small>
+            <h3>Commande publique · Marchés publics · AMO</h3>
+            <p>
+              Fondateur d’ODEXIS, structure créée en 2008 et spécialisée dans l’accompagnement, le conseil
+              et la formation autour des marchés publics et de la commande publique.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section className="aboutReferences">
+        <div className="sectionHeading">
+          <p className="sectionIndex">RÉFÉRENCES</p>
+          <div>
+            <h2>Des expériences auprès d’organisations de premier plan.</h2>
+            <p>
+              Ces références ont été acquises par les dirigeants et les structures qui portent aujourd’hui
+              AUTONOMIA. Elles sont rattachées à leur contexte contractuel d’origine.
+            </p>
+          </div>
+        </div>
+
+        <div className="referenceFamilies">
+          <article>
+            <small>GRANDS GROUPES & MARQUES</small>
+            <p>Air France Industries · BNP Paribas Personal Finance · Symrise · KRYS · Wesco · Westcon · Mercure · Novotel · Franprix</p>
+          </article>
+          <article>
+            <small>TECH & SERVICES</small>
+            <p>OROLIA · Spectracom · OZITEM · Garantme · Equinoxe IT · Fuzzy Logic Robotics · TILLI · Active International</p>
+          </article>
+          <article>
+            <small>SECTEUR PUBLIC</small>
+            <p>Ville de Bobigny · Ville de Clichy · Roumoiseine · CNFPT</p>
+          </article>
+          <article>
+            <small>ENSEIGNEMENT SUPÉRIEUR</small>
+            <p>Université Paris-Est Créteil · EDC Paris · ESCG · Pigier · EfreiTech</p>
+          </article>
+        </div>
+      </section>
+
       <section className="pillarMethod">
         <p className="sectionIndex">RESPONSABILITÉ ÉDITORIALE</p>
         <div>
