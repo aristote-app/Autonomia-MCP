@@ -61,6 +61,7 @@ export default function SiteFooter() {
           <Link href="/observatoire-ia">Observatoire</Link>
           <Link href="/a-propos">À propos</Link>
           <Link href="/contact">Contact</Link>
+          <a href="https://calendly.com/deborah-build-autonomia/30min" target="_blank" rel="noreferrer">Prendre RDV</a>
           <Link href="/methodologie/politique-editoriale">Politique éditoriale</Link>
         </nav>
       </div>

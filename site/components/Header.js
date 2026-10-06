@@ -27,6 +27,15 @@ export default function Header() {
         </nav>
 
         <div className="headerActions">
+          <a
+            className="headerMeetingLink"
+            href="https://calendly.com/deborah-build-autonomia/30min"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Prendre RDV
+          </a>
+
           <Link className="headerCta" href="/start">
             <span>Commencer</span>
             <b aria-hidden="true">↗</b>
@@ -41,6 +50,15 @@ export default function Header() {
               {NAV_ITEMS.map(([label, href]) => (
                 <Link href={href} key={href} onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>{label}<span aria-hidden="true">↗</span></Link>
               ))}
+              <a
+                className="mobileMenuMeeting"
+                href="https://calendly.com/deborah-build-autonomia/30min"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}
+              >
+                Prendre RDV <span aria-hidden="true">↗</span>
+              </a>
               <Link className="mobileMenuPrimary" href="/start" onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
                 Commencer <span aria-hidden="true">→</span>
               </Link>
