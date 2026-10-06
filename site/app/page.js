@@ -142,11 +142,18 @@ export default function Home() {
           <div className="referenceGridGroup">
             <small>COLLECTIVITÉS & INSTITUTIONS</small>
             <div className="referenceGrid referenceGridPublic">
-              <span className="referencePremiumWord">CNFPT</span>
-              <span className="referencePremiumWord">VILLE DE BOBIGNY</span>
-              <span className="referencePremiumWord">VILLE DE CLICHY</span>
-              <span className="referencePremiumWord">ROUMOISEINE</span>
-              <span className="referencePremiumWord">GRAND DOLE</span>
+              {[
+                { name:"CNFPT", src:"https://www.cnfpt.fr/assets/images/logo.svg" },
+                { name:"Ville de Bobigny", src:"https://www.bobigny.fr/fileadmin/Minisites/principal/logo-blu.png" },
+                { name:"Ville de Clichy", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Clichy-la-Garenne.svg" },
+                { name:"Roumois Seine", src:"https://www.roumoiseine.fr/wp-content/themes/roumois-seine/assets/images/logo-site.png" },
+                { name:"Grand Dole", src:"https://www.grand-dole.fr/fileadmin/template/granddole/img/logo-grand-dole.png" },
+                { name:"CCI Essonne", src:"https://www.essonne.cci.fr/themes/custom/cspw_theme/medias/Logo_CCI_Essonne.svg" }
+              ].map((item) => (
+                <span className="referencePremiumLogo referencePremiumLogoPublic" key={item.name} title={item.name}>
+                  <img src={item.src} alt={item.name} loading="lazy" />
+                </span>
+              ))}
             </div>
           </div>
 
