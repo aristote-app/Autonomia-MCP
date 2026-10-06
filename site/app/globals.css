@@ -1,13 +1,13 @@
 :root {
-  --ink: #172033;
-  --ink-2: #22304a;
-  --paper: #f7f5f0;
-  --paper-2: #eeebe4;
+  --ink: #07111f;
+  --ink-2: #0e1d2f;
+  --paper: #ffffff;
+  --paper-2: #f3f7fa;
   --line: rgba(23, 32, 51, 0.14);
   --line-dark: rgba(247, 245, 240, 0.18);
-  --muted: #687081;
-  --signal: #FFC857;
-  --signal-ink: #171717;
+  --muted: #66717d;
+  --signal: #3de2d0;
+  --signal-ink: #07111f;
   --academy: #18756d;
   --academy-ink: #ffffff;
   --territory: #a66a3f;
@@ -9608,7 +9608,7 @@ body:has(.territoryCampaignPage) .desktopNav {
   border: 0;
   border-radius: 8px;
   background: #ffd16a;
-  color: #172033;
+  color: #07111f;
   font-weight: 900;
   cursor: pointer;
 }
@@ -20836,3 +20836,47 @@ body {
     padding-bottom: 54px;
   }
 }
+
+
+/* AUTONOMIA PDF BRAND — production system */
+:root{
+  --brand-navy:#07111f;
+  --brand-navy-2:#0e1d2f;
+  --brand-cyan:#3de2d0;
+  --brand-white:#ffffff;
+  --brand-mist:#f3f7fa;
+  --brand-line:#dce5eb;
+  --brand-muted:#66717d;
+  --radius:14px;
+}
+body{background:#fff;color:#18212b;}
+.siteHeader{
+  background:rgba(7,17,31,.97)!important;
+  color:#fff!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:0 8px 28px rgba(7,17,31,.14)!important;
+}
+.siteHeader::before{display:none!important;}
+.siteHeader::after{background:var(--brand-cyan)!important;height:2px!important;width:72px!important;}
+.brandMark{display:none!important;}
+.brand{gap:0!important;}
+.brandLockup{gap:3px!important;}
+.brandLockup strong{font-size:18px!important;letter-spacing:-.025em!important;font-weight:850!important;color:#fff!important;}
+.brandLockup strong::after{content:"▲";display:inline-block;margin-left:2px;color:var(--brand-cyan);font-size:8px;transform:translateY(-1px);}
+.brandLockup small{font-size:8px!important;letter-spacing:.035em!important;color:#93a1b1!important;font-weight:500!important;}
+.desktopNav a{color:rgba(255,255,255,.78)!important;}
+.desktopNav a:hover{color:#fff!important;}
+.headerCta,.mobileMenuPrimary{background:var(--brand-cyan)!important;border-color:var(--brand-cyan)!important;color:var(--brand-navy)!important;}
+:is(.card,.panel,.leadCard,.expertCard,.formationCard,.useCaseCard,.resultCard,.profileCard,.solutionCard,.academyCard){
+  border-color:var(--brand-line)!important;
+  border-radius:14px!important;
+  box-shadow:0 10px 30px rgba(7,17,31,.045);
+}
+input,textarea,select{border-color:var(--brand-line)!important;border-radius:10px!important;}
+button,.button,.btn,.cta{border-radius:10px;}
+:is(.chip,.pill,.tag,.badge){border-radius:999px;}
+:is(.eyebrow,.kicker,.sectionEyebrow,.microLabel,.signalLabel){color:#159f94!important;}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:3px solid rgba(61,226,208,.34);outline-offset:2px;
+}
+::selection{background:var(--brand-cyan);color:var(--brand-navy);}
