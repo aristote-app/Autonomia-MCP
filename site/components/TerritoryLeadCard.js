@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 function attribution() {
   if (typeof window === "undefined") return {};
@@ -87,6 +88,7 @@ export default function TerritoryLeadCard({ variant = "general", title = "Réser
       <label><span>Collectivité *</span><input value={data.collectivity} onChange={(e) => set("collectivity", e.target.value)} placeholder="Nom de la collectivité" /></label>
       <label><span>E-mail professionnel *</span><input type="email" value={data.email} onChange={(e) => set("email", e.target.value)} /></label>
       <label><span>Votre irritant principal</span><textarea rows="3" value={data.need} onChange={(e) => set("need", e.target.value)} placeholder="Ex. nos inscriptions au conservatoire prennent deux semaines…" /></label>
+      <PrivacyNotice actionLabel="Réserver mon diagnostic offert" context="ma demande de diagnostic" />
       {error && <p className="formError">{error}</p>}
       <button type="submit" disabled={status === "sending"}>{status === "sending" ? "Envoi…" : "Réserver mon diagnostic offert"}</button>
       <small>Formulaire court. Pas de cahier des charges nécessaire.</small>

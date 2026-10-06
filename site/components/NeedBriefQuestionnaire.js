@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 const AREAS = [
   "Direction / stratégie",
@@ -488,6 +489,8 @@ export default function NeedBriefQuestionnaire({ initialEmail = "" }) {
               <input type="checkbox" checked={data.marketingConsent} onChange={(e) => set("marketingConsent", e.target.checked)} />
               <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
             </label>
+
+            <PrivacyNotice />
 
             {error && <p className="formError" role="alert">{error}</p>}
 

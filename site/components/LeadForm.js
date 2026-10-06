@@ -17,6 +17,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
 import { useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 const OPTIONS = {
   experts: ["GenAI / LLM", "RAG", "Agents IA", "AI Project Manager", "Data / ML", "MLOps / LLMOps", "Automatisation", "Gouvernance / AI Act", "Je ne sais pas encore"],
@@ -282,9 +283,7 @@ export default function LeadForm({ mode = "experts", formId = "site-main", reque
             <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
           </label>
 
-          <p className="privacyNote">
-            Les informations envoyées sont utilisées pour répondre à votre demande. Le consentement marketing est facultatif.
-          </p>
+          <PrivacyNotice />
 
           {error && <p className="formError" role="alert">{error}</p>}
 

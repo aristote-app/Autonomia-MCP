@@ -22754,3 +22754,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     min-height:90px;
   }
 }
+/* Legal pages + RGPD notice */
+.legalPage{background:#f6f4ee;color:#171717;min-height:100vh;padding:112px 24px 96px}
+.legalHero,.legalContent{max-width:980px;margin:0 auto}
+.legalHero{padding:44px 0 34px;border-bottom:1px solid rgba(23,23,23,.18)}
+.legalHero h1{font-size:clamp(2.6rem,6vw,5.4rem);line-height:.98;letter-spacing:-.055em;margin:10px 0 18px}
+.legalHero>p:last-child{color:#67645d}
+.legalContent{padding-top:42px}
+.legalContent h2{font-size:1.45rem;margin:38px 0 12px;letter-spacing:-.02em}
+.legalContent h3{font-size:1.05rem;margin:24px 0 8px}
+.legalContent p{max-width:860px;line-height:1.72;color:#3f3d38}
+.legalContent a,.legalPrivacyNotice a{text-decoration:underline;text-underline-offset:3px}
+.legalPrivacyNotice{font-size:.78rem!important;line-height:1.45!important;opacity:.82;margin:12px 0!important}
+@media(max-width:720px){.legalPage{padding:88px 18px 64px}.legalHero{padding-top:24px}}

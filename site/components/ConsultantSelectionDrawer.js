@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 const STORAGE_KEY = "autonomia_consultant_selection_v1";
 
@@ -297,6 +298,8 @@ export default function ConsultantSelectionDrawer() {
             />
             <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
           </label>
+
+          <PrivacyNotice actionLabel="Envoyer ma demande de rencontre" context="ma demande de mise en relation" />
 
           {error && <p className="formError" role="alert">{error}</p>}
 

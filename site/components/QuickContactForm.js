@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   const controller = new AbortController();
@@ -173,9 +174,7 @@ export default function QuickContactForm({
         <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
       </label>
 
-      <p className="quickContactPrivacy">
-        Les informations envoyées servent à répondre à votre demande. Le consentement marketing reste facultatif.
-      </p>
+      <PrivacyNotice />
 
       {error && <p className="quickContactError" role="alert">{error}</p>}
 

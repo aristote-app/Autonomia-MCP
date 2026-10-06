@@ -18,6 +18,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 const EXAMPLES = [
   {
@@ -430,6 +431,8 @@ export default function SolutionFinder() {
                   />
                   <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
                 </label>
+
+                <PrivacyNotice />
 
                 {leadError && <p className="solutionFinderError" role="alert">{leadError}</p>}
 

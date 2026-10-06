@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
 import { getClientAttribution } from "@/lib/clientAttribution";
+import PrivacyNotice from "@/components/PrivacyNotice";
 
 export default function ObservatoryLeadForm({ topic, compact = false }) {
   const [data, setData] = useState({ name: "", company: "", email: "", need: "", marketingConsent: false });
@@ -136,7 +137,7 @@ export default function ObservatoryLeadForm({ topic, compact = false }) {
         <input type="checkbox" checked={data.marketingConsent} onChange={(e) => set("marketingConsent", e.target.checked)} />
         <span>J’accepte de recevoir des informations commerciales d’Autonomia. Facultatif.</span>
       </label>
-      <p className="privacyNote">Les informations envoyées sont utilisées pour répondre à votre demande. Le consentement marketing est facultatif.</p>
+      <PrivacyNotice actionLabel="Recevoir un diagnostic" />
 
       {error && <p className="formError">{error}</p>}
 
