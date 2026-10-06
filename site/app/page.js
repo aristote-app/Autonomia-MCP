@@ -150,7 +150,7 @@ export default function Home() {
                 { name:"Grand Dole", src:"https://www.grand-dole.fr/fileadmin/template/granddole/img/logo-grand-dole.png" },
                 { name:"CCI Essonne", src:"https://www.essonne.cci.fr/themes/custom/cspw_theme/medias/Logo_CCI_Essonne.svg" }
               ].map((item) => (
-                <span className="referencePremiumLogo referencePremiumLogoPublic" key={item.name} title={item.name}>
+                <span className={"referencePremiumLogo referencePremiumLogoPublic " + (item.name === "Roumois Seine" ? "referencePremiumLogoRoumois" : "")} key={item.name} title={item.name}>
                   <img src={item.src} alt={item.name} loading="lazy" />
                 </span>
               ))}
@@ -160,11 +160,17 @@ export default function Home() {
           <div className="referenceGridGroup referenceGridSchools">
             <small>ÉCOLES & UNIVERSITÉS</small>
             <div className="referenceGrid referenceGridEducation">
-              <span className="referencePremiumWord education">UPEC</span>
-              <span className="referencePremiumWord education">EDC PARIS</span>
-              <span className="referencePremiumWord education">ESCG</span>
-              <span className="referencePremiumWord education">PIGIER</span>
-              <span className="referencePremiumWord education">EFREI</span>
+              {[
+                { name:"UPEC", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/UPEC-logo.svg" },
+                { name:"EDC Paris Business School", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/EDC%20Paris%20Business%20School%20logo.svg" },
+                { name:"Pigier", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Pigier%20Wiki.jpg" },
+                { name:"Efrei", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Efrei%20Logo%202026.svg" }
+              ].map((item) => (
+                <span className="referencePremiumLogo referencePremiumLogoSchool" key={item.name} title={item.name}>
+                  <img src={item.src} alt={item.name} loading="lazy" />
+                </span>
+              ))}
+              <span className="referencePremiumWord education escgFallback" title="ESCG Paris">ESCG</span>
             </div>
           </div>
         </div>
