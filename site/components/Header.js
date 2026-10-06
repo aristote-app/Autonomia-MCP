@@ -33,7 +33,9 @@ export default function Header() {
             target="_blank"
             rel="noreferrer"
           >
-            Prendre RDV
+            <span className="headerMeetingIcon" aria-hidden="true">▦</span>
+            <span>Prendre RDV</span>
+            <b aria-hidden="true">↗</b>
           </a>
 
           <Link className="headerCta" href="/start">

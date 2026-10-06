@@ -22354,3 +22354,74 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     display:inline-flex;
   }
 }
+
+/* HEADER RDV V2 — explicit secondary button */
+.headerMeetingLink {
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:46px;
+  padding:0 16px 0 10px;
+  border:1px solid rgba(255,255,255,.92);
+  border-radius:999px;
+  background:#fff;
+  color:var(--brand-navy);
+  box-shadow:0 8px 24px rgba(0,0,0,.14);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.01em;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.headerMeetingIcon {
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  border-radius:50%;
+  background:var(--brand-cyan);
+  color:var(--brand-navy);
+  font-size:15px;
+  font-weight:950;
+  line-height:1;
+}
+
+.headerMeetingLink b {
+  color:var(--brand-navy);
+  font-size:14px;
+  line-height:1;
+}
+
+.headerMeetingLink:hover {
+  transform:translateY(-2px);
+  border-color:var(--brand-cyan);
+  background:#f8fffe;
+  box-shadow:0 12px 30px rgba(0,0,0,.20);
+}
+
+.headerMeetingLink:focus-visible {
+  outline:3px solid rgba(61,226,208,.45);
+  outline-offset:3px;
+}
+
+.mobileMenuPanel > .mobileMenuMeeting {
+  background:#fff;
+  color:var(--brand-navy);
+  font-weight:900;
+}
+
+.mobileMenuPanel > .mobileMenuMeeting span {
+  color:var(--brand-navy);
+}
+
+@media (min-width:980px) {
+  .headerMeetingLink {
+    display:inline-flex;
+  }
+}
