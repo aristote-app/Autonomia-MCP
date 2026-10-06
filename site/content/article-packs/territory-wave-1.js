@@ -3,16 +3,18 @@ export const territoryArticlesWave1 = [
     type: "territory",
     slug: "comment-construire-feuille-route-ia-communaute-de-communes",
     cluster: "Stratégie IA territoriale",
-    title: "Comment construire une feuille de route IA pour une communauté de communes : méthode, cas d’usage et gouvernance",
-    dek: "Une feuille de route IA intercommunale utile ne commence ni par l’achat d’un outil ni par une liste de promesses. Elle part des missions, des irritants des agents, des données réellement disponibles, des risques et des priorités du territoire.",
+    title: "Feuille de route IA pour une collectivité territoriale : méthode, cas d’usage et gouvernance",
+    dek: "Comment construire une feuille de route IA pour une collectivité, une communauté de communes ou une agglomération : missions, irritants des agents, données, risques, pilotes, gouvernance et montée en compétences.",
     summary: "Ce guide propose une méthode opérationnelle pour une communauté de communes ou d’agglomération : cadrer les objectifs, interroger les services, cartographier les tâches, sélectionner des cas d’usage, vérifier les données et les responsabilités, lancer quelques pilotes mesurables, former les agents et organiser le passage à l’échelle. L’IA reste un outil d’assistance : les décisions publiques, les validations sensibles et la responsabilité des agents ne sont pas déléguées au modèle.",
     readingTime: "22–26 min",
     publishedAt: "2026-09-23",
-    modifiedAt: "2026-09-23",
+    modifiedAt: "2026-10-06",
     jobSignalTags: ["public_sector_ai", "ai_governance", "process_automation", "change_management", "training", "data_governance"],
     search: {
-      primaryKeyword: "feuille de route IA communauté de communes",
+      primaryKeyword: "feuille de route IA collectivité territoriale",
       secondaryQueries: [
+        "feuille de route IA communauté de communes",
+        "stratégie IA collectivité",
         "intelligence artificielle communauté de communes",
         "IA intercommunalité",
         "stratégie IA collectivité territoriale",
@@ -20,7 +22,7 @@ export const territoryArticlesWave1 = [
         "plan IA agents territoriaux"
       ],
       demandEvidence: ["market_intelligence", "territory_signals", "public_sector_guidance"],
-      observedAt: "2026-09-23"
+      observedAt: "2026-10-06"
     },
     quickFacts: [
       ["PUBLIC", "Communautés de communes · communautés d’agglomération · EPCI"],
