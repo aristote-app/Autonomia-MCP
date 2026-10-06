@@ -58,6 +58,23 @@ const pages = {
         activation: "AI Project Manager"
       }
     ],
+    relatedLinks: [
+      {
+        href: "/metiers-ia/ai-product-manager",
+        kicker: "MÉTIER IA",
+        label: "AI Product Manager : missions et compétences"
+      },
+      {
+        href: "/metiers-ia/mlops-llmops-engineer",
+        kicker: "INDUSTRIALISATION",
+        label: "LLMOps / MLOps Engineer : quand mobiliser ce profil"
+      },
+      {
+        href: "/metiers-ia/rag-engineer",
+        kicker: "RAG",
+        label: "RAG Engineer : rôle, architecture et compétences"
+      }
+    ],
     faq: [
       ["Autonomia est-il une marketplace ?", "Non. Le positionnement repose sur la compréhension du besoin, la sélection et le staffing, pas sur l’accès à un catalogue de profils."],
       ["Quels types de missions ?", "Renfort d’équipe, expertise ciblée, pilotage de projet, conception ou déploiement de solutions IA selon le besoin exprimé."],
