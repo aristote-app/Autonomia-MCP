@@ -117,21 +117,21 @@ export default function AboutPage() {
 
         <div className="aboutMarketingPillars">
           <article>
-            <small>DDG GROUPE</small>
+            <div className="aboutEntityLogo aboutEntityLogoDdg"><img src="/brand/ddg-groupe.webp" alt="DDG GROUPE" /></div>
             <h3>Transformer & construire</h3>
             <p>
               Stratégie, IA, automatisation, SEO/GEO, digital, cadrage métier et pilotage de projets.
             </p>
           </article>
           <article>
-            <small>ODEXIS</small>
+            <div className="aboutEntityLogo aboutEntityLogoOdexis"><img src="/brand/odexis.webp" alt="ODEXIS" /></div>
             <h3>Comprendre le public & sécuriser</h3>
             <p>
               Commande publique, marchés publics, conseil, AMO et compréhension des environnements institutionnels.
             </p>
           </article>
           <article>
-            <small>MAJY ME</small>
+            <div className="aboutEntityLogo aboutEntityLogoMajy"><img src="/brand/majy-me.webp" alt="MAJY ME" /></div>
             <h3>Former & faire adopter</h3>
             <p>
               Formation professionnelle IA, montée en compétences et accompagnement à l’appropriation des nouveaux usages.
@@ -195,7 +195,7 @@ export default function AboutPage() {
           <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
               <div>
-                <small>DÉBORAH DIAN GOLDCHER</small>
+                <small className="aboutExpertName">DÉBORAH DIAN GOLDCHER</small>
                 <span>TRANSFORMATION · IA · DIGITAL · FORMATION</span>
               </div>
               <a
@@ -208,7 +208,7 @@ export default function AboutPage() {
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.93v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.54 9H7.1v11.45H3.54V9Z"/>
                 </svg>
-                <span>LinkedIn</span>
+                
               </a>
             </div>
 
@@ -244,7 +244,7 @@ export default function AboutPage() {
           <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
               <div>
-                <small>SYLVAIN LE TURCQ</small>
+                <small className="aboutExpertName">SYLVAIN LE TURCQ</small>
                 <span>COMMANDE PUBLIQUE · CONSEIL · AMO · FORMATION</span>
               </div>
               <a
@@ -257,7 +257,7 @@ export default function AboutPage() {
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.93v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.54 9H7.1v11.45H3.54V9Z"/>
                 </svg>
-                <span>LinkedIn</span>
+                
               </a>
             </div>
 
