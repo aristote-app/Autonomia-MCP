@@ -26,16 +26,16 @@ export default async function Image({ params }) {
           justifyContent: "space-between",
           padding: "64px",
           background: "#121313",
-          color: "#F3F1E9",
+          color: "#F3F7FA",
           fontFamily: "Arial, sans-serif"
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24 }}>
           <span>AUTONOMIA</span>
-          <span style={{ color: "#C9FF55" }}>AI EXECUTION PARTNER</span>
+          <span style={{ color: "#3DE2D0" }}>AI EXECUTION PARTNER</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ color: "#C9FF55", fontSize: 24, letterSpacing: 2 }}>{kicker}</div>
+          <div style={{ color: "#3DE2D0", fontSize: 24, letterSpacing: 2 }}>{kicker}</div>
           <div style={{ fontSize: 58, lineHeight: 1.02, letterSpacing: -2, maxWidth: 1040 }}>{title}</div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, opacity: .7 }}>
