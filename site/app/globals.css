@@ -22425,3 +22425,56 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     display:inline-flex;
   }
 }
+
+
+/* ABOUT EXPERT HEADER V8 — stack role under name */
+.aboutMarketingPersonTop{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 42px;
+  gap:14px;
+  align-items:start;
+}
+.aboutExpertIdentity{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:6px!important;
+  align-items:start!important;
+  min-width:0;
+}
+.aboutExpertName{
+  display:block;
+  white-space:normal!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+}
+.aboutExpertRole{
+  display:block;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+  letter-spacing:.085em!important;
+  text-align:left!important;
+  max-width:100%!important;
+}
+.aboutLinkedIn{
+  align-self:start;
+}
+.aboutExpertTimelineSylvain .aboutExpertNow{
+  background:rgba(13,102,194,.08);
+  border-color:rgba(13,102,194,.2)!important;
+}
+.aboutExpertTimelineSylvain .aboutExpertNow strong{
+  color:#0a66c2;
+}
+.aboutExpertTimelineSylvain .aboutExpertNow span{
+  color:#33414d;
+}
+@media(max-width:760px){
+  .aboutMarketingPersonTop{
+    grid-template-columns:minmax(0,1fr) 40px!important;
+  }
+  .aboutExpertName{font-size:15px!important}
+  .aboutExpertRole{font-size:11.5px!important}
+}
