@@ -20880,3 +20880,49 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   outline:3px solid rgba(61,226,208,.34);outline-offset:2px;
 }
 ::selection{background:var(--brand-cyan);color:var(--brand-navy);}
+
+
+/* CONTACT PAGE V2 — premium, single-conversion layout */
+.contactPageV2{background:#fff;color:#18212b;}
+.contactHeroV2{
+  max-width:1180px;margin:26px auto 0;padding:54px 56px 48px;border-radius:30px;
+  background:radial-gradient(circle at 82% 16%, rgba(61,226,208,.12), transparent 25%),linear-gradient(135deg,#07111f 0%,#10203a 100%);
+  color:#fff;
+}
+.contactHeroV2 .eyebrow{margin:0 0 16px;}
+.contactHeroV2 h1{max-width:880px;margin:0;font-size:clamp(52px,7vw,88px);line-height:.94;letter-spacing:-.055em;font-weight:650;}
+.contactHeroV2>p:not(.eyebrow){max-width:720px;margin:24px 0 0;color:rgba(255,255,255,.72);font-size:18px;line-height:1.55;}
+.contactMainV2{
+  max-width:1180px;margin:0 auto;padding:64px 0 84px;display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(440px,.8fr);gap:70px;align-items:start;
+}
+.contactInfoV2{padding-top:6px;}
+.contactPersonV2{
+  display:grid;grid-template-columns:78px 1fr;gap:22px;align-items:start;padding-bottom:30px;border-bottom:1px solid #dce5eb;
+}
+.contactPersonMonogramV2{
+  width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:#07111f;color:#3de2d0;font-weight:900;letter-spacing:-.03em;
+}
+.contactPersonV2 small{display:block;color:#159f94;font-size:11px;font-weight:900;letter-spacing:.14em;}
+.contactPersonV2 h2{margin:6px 0 12px;font-size:30px;line-height:1.05;letter-spacing:-.035em;}
+.contactPersonV2 a{display:block;width:max-content;max-width:100%;margin-top:6px;color:#18212b;font-size:16px;font-weight:750;}
+.contactReasonsV2{display:grid;gap:0;margin-top:16px;}
+.contactReasonsV2 article{display:grid;grid-template-columns:54px 1fr;gap:14px;padding:22px 0;border-bottom:1px solid #dce5eb;}
+.contactReasonsV2 article>span{color:#159f94;font-size:22px;line-height:1;font-weight:900;}
+.contactReasonsV2 strong{display:block;margin-bottom:7px;font-size:18px;}
+.contactReasonsV2 p{margin:0;color:#66717d;font-size:15px;line-height:1.55;}
+.contactPromiseV2{margin:24px 0 0;padding:18px 20px;border-radius:14px;background:#f3f7fa;color:#33404d;font-size:14px;line-height:1.55;}
+.contactFormV2{position:sticky;top:96px;}
+.contactFormV2 .quickContactForm{border-radius:22px;box-shadow:0 22px 70px rgba(7,17,31,.10);}
+.contactPageV2 + .globalSiteFooter .globalFooterBottom{padding-top:30px;}
+@media (max-width:900px){
+  .contactHeroV2{margin:16px;padding:40px 26px;border-radius:22px;}
+  .contactMainV2{grid-template-columns:1fr;gap:42px;padding:44px 18px 64px;}
+  .contactFormV2{position:static;}
+}
+@media (max-width:620px){
+  .contactHeroV2 h1{font-size:48px;}
+  .contactPersonV2{grid-template-columns:58px 1fr;gap:16px;}
+  .contactPersonMonogramV2{width:58px;height:58px;font-size:14px;}
+  .contactPersonV2 h2{font-size:25px;}
+}
