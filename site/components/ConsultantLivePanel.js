@@ -53,6 +53,15 @@ export default function ConsultantLivePanel({ roleSlug, roleTitle, fallbackHref 
 
   const updated = useMemo(() => relativeTime(state.generatedAt), [state.generatedAt]);
 
+  function cvHref(profile) {
+    const params = new URLSearchParams({
+      role: roleSlug,
+      id: String(profile.id),
+      roleTitle: roleTitle || "Consultant IA"
+    });
+    return "/api/public/consultants/cv?" + params.toString();
+  }
+
   function addConsultant(profile) {
     const detail = {
       id: profile.id,
@@ -148,10 +157,16 @@ export default function ConsultantLivePanel({ roleSlug, roleTitle, fallbackHref 
                   <strong>{money(profile.tjm, profile.currency)}</strong>
                 </div>
 
-                <button type="button" onClick={() => addConsultant(profile)}>
-                  Je veux rencontrer ce consultant
-                  <b aria-hidden="true">+</b>
-                </button>
+                <div className="consultantCardActions">
+                  <a className="consultantCvDownload" href={cvHref(profile)}>
+                    Télécharger le CV PDF
+                    <b aria-hidden="true">↓</b>
+                  </a>
+                  <button type="button" onClick={() => addConsultant(profile)}>
+                    Je veux rencontrer ce consultant
+                    <b aria-hidden="true">+</b>
+                  </button>
+                </div>
               </article>
             ))}
           </div>
