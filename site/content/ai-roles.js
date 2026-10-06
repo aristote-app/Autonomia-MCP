@@ -339,10 +339,10 @@ export const aiRoles = [
   },
   {
     slug: "mlops-llmops-engineer",
-    title: "MLOps / LLMOps Engineer",
-    frenchTitle: "Ingénieur MLOps / LLMOps",
-    dek: "Le profil qui rend le cycle de vie des modèles industrialisable : CI/CD, registry, déploiement, monitoring, dérive, observabilité, sécurité, coûts et résilience.",
-    angle: "Le MLOps / LLMOps Engineer construit les mécanismes qui permettent aux équipes de déployer, versionner, surveiller et faire évoluer des systèmes IA sans bricolage manuel. Les offres de septembre 2026 insistent sur Docker, Kubernetes, MLflow/Kubeflow, cloud, CI/CD, monitoring, drift et sécurité. Avec les LLM, le périmètre s’étend au versioning des prompts, modèles, bases vectorielles, jeux d’évaluation, coûts d’inférence et traces de conversations.",
+    title: "LLMOps / MLOps Engineer",
+    frenchTitle: "Ingénieur LLMOps / MLOps",
+    dek: "LLMOps et MLOps : le profil qui industrialise les applications IA et LLM en production — déploiement, versioning, évaluation, monitoring, observabilité, sécurité, coûts, CI/CD et résilience.",
+    angle: "Le LLMOps / MLOps Engineer construit les mécanismes qui permettent aux équipes de déployer, versionner, surveiller et faire évoluer des systèmes IA sans bricolage manuel. Les offres de septembre 2026 insistent sur Docker, Kubernetes, MLflow/Kubeflow, cloud, CI/CD, monitoring, drift et sécurité. Avec les LLM, le périmètre s’étend au versioning des prompts, modèles, bases vectorielles, jeux d’évaluation, coûts d’inférence et traces de conversations.",
     market: [
       "Des offres récentes décrivent explicitement l’industrialisation des modèles ML et GenAI, pipelines MLOps, CI/CD, supervision, versioning modèles/données et détection de dérive.",
       "Safran recrute un MLOps Engineer dans une IA Factory qui couvre autant le build et le run que les applications SaaS et Agents IA.",
