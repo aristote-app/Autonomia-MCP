@@ -23,6 +23,15 @@ function getStored() {
   }
 }
 
+function cvHref(item) {
+  const params = new URLSearchParams({
+    role: item.role_slug || "genai-engineer",
+    id: String(item.id),
+    roleTitle: item.role_title || "Consultant IA"
+  });
+  return "/api/public/consultants/cv?" + params.toString();
+}
+
 function attribution() {
   if (typeof window === "undefined") return {};
   const url = new URL(window.location.href);
@@ -252,6 +261,7 @@ export default function ConsultantSelectionDrawer() {
                 <strong>{item.title}</strong>
                 <span>{item.role_title}</span>
                 <small>{money(item.tjm, item.currency)}</small>
+                <a className="drawerCvDownload" href={cvHref(item)}>Télécharger le CV PDF ↓</a>
               </div>
               <button type="button" onClick={() => remove(item.id)} aria-label="Retirer ce consultant">×</button>
             </article>
