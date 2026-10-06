@@ -159,6 +159,24 @@ export default function IntentPage({ page }) {
 
       {isAcademy && <QualiopiProof compact />}
 
+      {page.relatedLinks?.length > 0 && (
+        <section className="intentContext">
+          <p className="sectionIndex">06 — APPROFONDIR</p>
+          <div>
+            <h2>Aller directement aux ressources utiles.</h2>
+            <div className="articleRelatedGrid">
+              {page.relatedLinks.map((item) => (
+                <Link key={item.href} href={item.href} className="articleRelatedCard">
+                  <small>{item.kicker}</small>
+                  <strong>{item.label}</strong>
+                  <span>Explorer →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="faqSection" id="faq">
         <p className="sectionIndex">06 — QUESTIONS</p>
         <div>
