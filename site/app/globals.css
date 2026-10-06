@@ -1,13 +1,13 @@
 :root {
-  --ink: #0a0b0b;
-  --ink-2: #121414;
-  --paper: #f3f1e9;
-  --paper-2: #e9e6dc;
+  --ink: #07111f;
+  --ink-2: #0e1d2f;
+  --paper: #ffffff;
+  --paper-2: #f3f7fa;
   --line: rgba(10, 11, 11, 0.14);
   --line-dark: rgba(243, 241, 233, 0.16);
-  --muted: #7a7e79;
-  --signal: #c9ff55;
-  --signal-ink: #11150a;
+  --muted: #66717d;
+  --signal: #3de2d0;
+  --signal-ink: #07111f;
   --white: #ffffff;
   --radius: 2px;
   --max: 1440px;
@@ -2573,7 +2573,7 @@ button {
   gap: 5px;
   padding: 14px;
   border-bottom: 1px solid var(--line);
-  background: #121414;
+  background: #0e1d2f;
   color: var(--paper);
 }
 
@@ -6983,3 +6983,50 @@ button {
   }
 }
 /* END Editorial Open Reading V2 */
+
+
+/* AUTONOMIA BRAND SYSTEM — aligned with consultant PDF identity */
+:root{
+  --brand-navy:#07111f;
+  --brand-navy-2:#0e1d2f;
+  --brand-cyan:#3de2d0;
+  --brand-white:#ffffff;
+  --brand-mist:#f3f7fa;
+  --brand-line:#dce5eb;
+  --brand-muted:#66717d;
+  --brand-radius:14px;
+}
+body{background:var(--brand-white);color:#18212b;}
+.siteHeader{
+  background:rgba(7,17,31,.97);
+  color:#fff;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  box-shadow:0 8px 28px rgba(7,17,31,.14);
+}
+.siteHeader::before{display:none;}
+.siteHeader::after{background:var(--brand-cyan);height:2px;width:72px;}
+.brandMark{display:none!important;}
+.brand{gap:0;}
+.brandLockup{gap:3px;}
+.brandLockup strong{font-size:18px;letter-spacing:-.025em;font-weight:850;color:#fff;}
+.brandLockup strong::after{content:"▲";display:inline-block;margin-left:2px;color:var(--brand-cyan);font-size:8px;transform:translateY(-1px);}
+.brandLockup small{font-size:8px;letter-spacing:.035em;color:#93a1b1;font-weight:500;}
+.desktopNav a{color:rgba(255,255,255,.78);}
+.desktopNav a:hover{color:#fff;}
+.headerPulse{background:var(--brand-cyan);}
+.headerCta{background:var(--brand-cyan);border-color:var(--brand-cyan);color:var(--brand-navy);}
+.headerScanLink{color:#aeb9c6;}
+button,input,textarea,select,.card,.panel,.leadCard,.expertCard,.formationCard,.useCaseCard{
+  border-radius:var(--brand-radius);
+}
+input,textarea,select{border-color:var(--brand-line)!important;}
+:is(.card,.panel,.leadCard,.expertCard,.formationCard,.useCaseCard,.resultCard,.profileCard){
+  border-color:var(--brand-line)!important;
+  box-shadow:0 10px 30px rgba(7,17,31,.045);
+}
+:is(.eyebrow,.kicker,.sectionEyebrow,.microLabel,.signalLabel){color:#159f94!important;}
+:is(.chip,.pill,.tag,.badge){border-radius:999px;}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:3px solid rgba(61,226,208,.34);outline-offset:2px;
+}
+::selection{background:var(--brand-cyan);color:var(--brand-navy);}
