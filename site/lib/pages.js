@@ -455,32 +455,45 @@ const pages = {
   "formation-ai-act": {
     ...academyDefaults,
     slug: "formation-ai-act",
-    title: "AI Act : donnez aux équipes les bons réflexes avant que les usages se multiplient.",
+    title: "Formation gouvernance IA & AI Act : rendez les règles actionnables pour vos équipes.",
     subtitle:
-      "Sensibilisation, rôles, risques et responsabilités : construisez une culture de conformité adaptée aux usages IA de l’entreprise.",
-    contextTitle: "La conformité IA n’est pas uniquement un sujet juridique.",
+      "AI literacy, usages, risques, responsabilités et supervision : construisez une formation Gouvernance IA / AI Act directement reliée aux situations de travail de votre organisation.",
+    contextTitle: "Une formation gouvernance IA doit partir des usages réels, pas d’un cours réglementaire abstrait.",
     contextText:
-      "Les collaborateurs qui choisissent, configurent ou utilisent des systèmes IA doivent comprendre les règles internes, les niveaux de risque et les bons circuits de validation.",
-    outcomes: ["Populations à sensibiliser", "Risques mieux compris", "Règles rendues actionnables"],
-    capabilities: ["AI literacy", "Risk", "Governance", "Usage policy", "Human oversight", "Traceability"],
-    translationTitle: "L’AI Act devient opérationnel quand chaque population comprend son rôle.",
+      "Les collaborateurs qui choisissent, configurent ou utilisent des systèmes IA doivent comprendre les règles internes, les niveaux de risque, les responsabilités, les limites d’usage et les bons circuits de validation. Le parcours est construit par population et par cas d’usage.",
+    outcomes: ["Usages IA cartographiés", "Populations à former", "Règles rendues actionnables"],
+    capabilities: ["Gouvernance IA", "AI Act", "AI literacy", "Risk", "Usage policy", "Human oversight", "Traceability"],
+    translationTitle: "La gouvernance IA devient opérationnelle quand chaque population sait quoi faire, vérifier et escalader.",
     translations: [
-      { need: "Nos équipes utilisent des systèmes IA sans cadre commun.", skills: "AI literacy · règles d’usage · responsabilités", activation: "Sensibilisation AI Act / gouvernance par population" },
-      { need: "Produit, achats et IT doivent partager les mêmes réflexes.", skills: "Risk · documentation · human oversight · traceability", activation: "Parcours transverse autour des cas réels" },
-      { need: "Les managers doivent savoir quand escalader une situation.", skills: "Décision · supervision · circuits de validation", activation: "Formation opérationnelle gouvernance IA" }
+      { need: "Nos équipes utilisent ChatGPT, Copilot ou d’autres IA sans cadre commun.", skills: "AI literacy · règles d’usage · responsabilités · données", activation: "Formation gouvernance IA / AI Act par population" },
+      { need: "Produit, achats, RH, métiers et IT doivent partager les mêmes réflexes.", skills: "Risques · documentation · human oversight · traçabilité", activation: "Parcours transverse construit autour des cas d’usage réels" },
+      { need: "Les managers doivent savoir quand valider, documenter ou escalader une situation.", skills: "Décision · supervision · circuits de validation", activation: "Atelier opérationnel de gouvernance IA" }
+    ],
+    relatedLinks: [
+      {
+        href: "/formation-ia/cas-usage/gouvernance-ai-act",
+        kicker: "10 SCÉNARIOS PRATIQUES",
+        label: "Voir les cas d’usage de formation Gouvernance IA & AI Act"
+      },
+      {
+        href: "/glossaire-ia#ai-literacy",
+        kicker: "DÉFINITION",
+        label: "Comprendre l’AI literacy et les notions de gouvernance IA"
+      }
     ],
     ads: {
-      intent: "Formation / sensibilisation AI Act entreprise",
-      keywordGroups: ["formation ai act entreprise", "formation règlement ia", "sensibilisation ai act"],
+      intent: "Formation gouvernance IA / sensibilisation AI Act en entreprise",
+      keywordGroups: ["formation gouvernance ia", "formation ai act entreprise", "formation règlement ia", "sensibilisation ai act", "ai literacy entreprise"],
       negativeKeywords: ["texte complet", "pdf gratuit", "emploi", "actualité uniquement"],
       primaryConversion: "lead_training",
       secondaryConversion: "form_start",
-      headlineVariants: ["Sensibilisez vos équipes à l’AI Act", "AI Act : transformez les obligations en réflexes opérationnels"]
+      headlineVariants: ["Formation Gouvernance IA & AI Act pour vos équipes", "AI Act : transformez les règles en réflexes opérationnels"]
     },
     faq: [
-      ["Est-ce un conseil juridique ?", "La formation vise la compréhension opérationnelle et la sensibilisation. Les besoins de conseil juridique doivent être distingués et traités par les professionnels compétents."],
-      ["Qui former ?", "Cela dépend des usages : direction, équipes produit, métiers, RH, achats, IT, sécurité ou fonctions de contrôle peuvent être concernés."],
-      ["Peut-on partir de nos cas d’usage ?", "Oui, c’est la meilleure façon de relier les concepts de risque aux situations réellement rencontrées."]
+      ["Quelle différence entre une formation gouvernance IA et une sensibilisation AI Act ?", "La sensibilisation donne les repères essentiels. Une formation gouvernance IA va plus loin : elle relie les règles aux usages, aux responsabilités, aux données, aux validations humaines et aux circuits d’escalade de l’organisation."],
+      ["Est-ce un conseil juridique ?", "La formation vise la compréhension opérationnelle et la sensibilisation. Les besoins de conseil juridique sont traités séparément par les professionnels compétents."],
+      ["Qui former ?", "Le périmètre dépend des usages : direction, managers, produit, métiers, RH, achats, IT, sécurité ou fonctions de contrôle peuvent être concernés."],
+      ["Peut-on partir de nos cas d’usage ?", "Oui. C’est l’approche privilégiée : partir des outils et situations réellement rencontrés pour définir les bons réflexes et le niveau de maîtrise attendu."]
     ]
   },
 
