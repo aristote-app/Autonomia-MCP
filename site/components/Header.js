@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import AutonomiaMark from "@/components/AutonomiaMark";
+import AutonomiaLogo from "@/components/AutonomiaLogo";
 
 const NAV_ITEMS = [
   ["Experts", "/experts"],
@@ -17,13 +17,7 @@ export default function Header() {
     <>
       <header className="siteHeader">
         <Link className="brand" href="/" aria-label="Autonomia, accueil">
-          <span className="brandMark" aria-hidden="true">
-            <AutonomiaMark size={38} inverse />
-          </span>
-          <span className="brandLockup">
-            <strong>AUTONOMIA</strong>
-            <small>AI EXECUTION PARTNER</small>
-          </span>
+          <AutonomiaLogo width={190} inverse />
         </Link>
 
         <nav className="desktopNav" aria-label="Navigation principale">
