@@ -182,6 +182,7 @@ function deriveStrengths(profile, roleTitle) {
   return s.slice(0,4);
 }
 
+
 function buildPdf(profile, roleTitle) {
   const p1 = streamBuilder();
   const p2 = streamBuilder();
@@ -200,216 +201,261 @@ function buildPdf(profile, roleTitle) {
   const useCases = deriveUseCases(profile, roleTitle);
   const strengths = deriveStrengths(profile, roleTitle);
 
-  // ---------------- PAGE 1 — MASTER TEMPLATE ----------------
-  p1.rect(0, 0, W, 130, C.navy);
-  drawLogo(p1, 24, 18, .58);
-
-  // subtle wave motif, like approved master
-  [0, 6, 12, 18].forEach((o, i) =>
-    p1.curve(360, 126 - o, 430, 104 - o, 510, 110 + o, 595, 91 + o, i % 2 ? C.cyan2 : C.cyan, .35)
-  );
-
-  p1.circle(529, 42, 27, C.navy2, C.cyan, 1.7);
-  p1.text(511, 31, initials, 15.5, true, C.white);
-
-  // exact title rhythm: two lines max, second accented cyan
-  const shortTitle = title.length > 64 ? title.slice(0, 64).trim() : title;
-  const titleLines = wrap(shortTitle, 34).slice(0, 2);
-  if (titleLines.length === 1) {
-    p1.text(24, 73, titleLines[0], 24, true, C.white);
-  } else {
-    p1.text(24, 66, titleLines[0], 22, true, C.white);
-    p1.text(24, 92, titleLines[1], 22, true, C.cyan);
+  function iconCircle(p, x, top, fill=[.89,.95,1]) {
+    p.circle(x, top, 17, fill);
   }
-  p1.text(24, 113, location + "  •  " + modality, 10, false, [.88,.91,.94]);
+  function iconPerson(p, x, top) {
+    iconCircle(p, x, top);
+    p.circle(x, top-5, 4.2, C.blue);
+    p.roundedRect(x-7.5, top+2, 15, 8, 4, C.blue);
+  }
+  function iconCoins(p, x, top) {
+    iconCircle(p, x, top);
+    [0,1,2].forEach(i => {
+      p.roundedRect(x-8+i*5, top-2-i*2, 6, 10, 2, C.blue);
+      p.line(x-8+i*5, top+1-i*2, x-2+i*5, top+1-i*2, C.white, .5);
+    });
+  }
+  function iconGear(p, x, top) {
+    iconCircle(p, x, top, [.87,.97,.94]);
+    p.circle(x, top, 7, C.blue);
+    p.circle(x, top, 3, [.87,.97,.94]);
+    for (let i=0;i<8;i++) {
+      const a=i*Math.PI/4, x1=x+Math.cos(a)*8, y1=top+Math.sin(a)*8;
+      const x2=x+Math.cos(a)*11, y2=top+Math.sin(a)*11;
+      p.line(x1,y1,x2,y2,C.blue,2);
+    }
+  }
+  function iconBulb(p, x, top) {
+    iconCircle(p, x, top, [.86,.97,.94]);
+    p.circle(x, top-3, 7, null, C.green, 1.5);
+    p.line(x-4, top+4, x-2, top+9, C.green, 1.4);
+    p.line(x+4, top+4, x+2, top+9, C.green, 1.4);
+    p.line(x-3, top+10, x+3, top+10, C.green, 1.4);
+  }
+  function iconTarget(p, x, top) {
+    iconCircle(p, x, top);
+    p.circle(x, top, 9, null, C.blue, 1.2);
+    p.circle(x, top, 5, null, C.blue, 1.2);
+    p.circle(x, top, 2, C.blue);
+  }
+  function iconStar(p, x, top) {
+    iconCircle(p, x, top, [.87,.97,.94]);
+    const pts=[];
+    for(let i=0;i<10;i++) {
+      const a=-Math.PI/2+i*Math.PI/5;
+      const r=i%2===0?9:4;
+      pts.push([x+Math.cos(a)*r, top+Math.sin(a)*r]);
+    }
+    p.polygon(pts,C.blue);
+  }
+  function iconBriefcase(p, x, top) {
+    iconCircle(p, x, top);
+    p.roundedRect(x-9, top-5, 18, 12, 2, C.blue);
+    p.roundedRect(x-4, top-9, 8, 4, 2, null, C.blue, 1.2);
+    p.line(x-9, top, x+9, top, C.white, .5);
+  }
+  function iconRocket(p, x, top) {
+    iconCircle(p, x, top);
+    p.polygon([[x-3,top+7],[x+4,top-7],[x+8,top-10],[x+5,top-3]],C.blue);
+    p.circle(x+3, top-4, 1.6, C.white);
+    p.polygon([[x-4,top+4],[x-9,top+7],[x-5,top+9]],C.green);
+  }
+  function iconGlobe(p, x, top) {
+    iconCircle(p, x, top);
+    p.circle(x, top, 9, null, C.blue, 1.2);
+    p.line(x-9, top, x+9, top, C.blue, 1);
+    p.line(x, top-9, x, top+9, C.blue, 1);
+  }
+  function iconBars(p, x, top) {
+    iconCircle(p, x, top);
+    p.roundedRect(x-8, top+1, 4, 8, 1, C.blue);
+    p.roundedRect(x-2, top-5, 4, 14, 1, C.blue);
+    p.roundedRect(x+4, top-9, 4, 18, 1, C.blue);
+  }
+  function iconMail(p, x, top) {
+    p.roundedRect(x-8, top-6, 16, 12, 2, C.blue);
+    p.line(x-8, top-5, x, top+1, C.white, .8);
+    p.line(x+8, top-5, x, top+1, C.white, .8);
+  }
+  function iconPhone(p, x, top) {
+    p.circle(x-4, top-5, 3, C.blue);
+    p.circle(x+4, top+5, 3, C.blue);
+    p.line(x-3, top-3, x+3, top+3, C.blue, 3);
+  }
+  function iconExternal(p, x, top) {
+    p.roundedRect(x-8, top-6, 12, 12, 1, null, C.blue, 1.3);
+    p.line(x, top-7, x+8, top-7, C.blue, 1.3);
+    p.line(x+8, top-7, x+8, top+1, C.blue, 1.3);
+    p.line(x, top+1, x+8, top-7, C.blue, 1.3);
+  }
+  function drawSkillPill(p, x, top, label, width) {
+    p.roundedRect(x, top, width, 27, 13, [.96,.98,.995], C.line, .35);
+    p.text(x+10, top+8, label, 8.2, true, C.text);
+  }
+
+  // PAGE 1 — exact visual structure from validated master
+  p1.rect(0, 0, W, 182, C.navy);
+  drawLogo(p1, 24, 22, .72);
+  [0,7,14,21].forEach((o,i)=>p1.curve(385,178-o,455,148-o,510,145+o,595,126+o,i%2?C.cyan2:C.cyan,.35));
+
+  p1.circle(524, 52, 30, C.navy2, C.cyan, 1.8);
+  p1.text(504, 40, initials, 17, true, C.white);
+
+  const headline = roleTitle || title;
+  const titleLines = wrap(headline, 28).slice(0, 2);
+  p1.text(26, 80, titleLines[0] || headline, 30, true, C.white);
+  if (titleLines[1]) p1.text(26, 116, titleLines[1], 30, true, C.cyan);
+  else if (title.toLowerCase().includes("automation") || title.toLowerCase().includes("automatisation")) {
+    p1.text(26, 116, title, 22, true, C.cyan);
+  }
+  p1.text(28, 157, location + "  •  " + modality, 10.5, false, C.white);
 
   // Why relevant
-  p1.roundedRect(18, 142, 559, 105, 10, [.95,.99,.98], C.line, .4);
-  p1.circle(49, 174, 17, [.86,.97,.94]);
-  p1.text(42, 162, "✓", 20, true, C.green);
-  p1.text(80, 157, "Pourquoi ce profil peut être pertinent", 15.5, true, C.text);
+  p1.roundedRect(18, 195, 559, 115, 10, [.95,.99,.98], C.line, .4);
+  iconBulb(p1, 49, 225);
+  p1.line(82, 206, 82, 296, C.line, .7);
+  p1.text(96, 207, "Pourquoi ce profil peut être pertinent", 16.5, true, C.text);
 
   const reasons = [
-    "Profil proposé pour : " + (roleTitle || "expertise IA") + ".",
-    skills.length
-      ? "Compétences déclarées : " + skills.slice(0, 5).join(" · ") + "."
-      : "Compétences détaillées à confirmer lors du cadrage.",
-    profile.remote
-      ? "Intervention remote / hybride indiquée dans le profil."
-      : "Modalités d’intervention à cadrer selon la mission."
+    bullets[0] || "Capacité à transformer un besoin métier en solution IA concrète.",
+    skills.length ? "Maîtrise déclarée : " + skills.slice(0, 5).join(" · ") + "." : "Compétences à confirmer lors du cadrage.",
+    profile.remote ? "Approche opérationnelle compatible avec une intervention remote / hybride." : "Approche opérationnelle à cadrer selon le contexte de mission."
   ];
-  reasons.forEach((r, i) => {
-    p1.circle(88, 190 + i * 18, 4.8, C.green);
-    p1.text(85.5, 185.8 + i * 18, "✓", 7, true, C.white);
-    p1.paragraph(101, 183 + i * 18, r, 452, 9, 11, false, C.text, 2);
+  reasons.forEach((r,i)=>{
+    p1.circle(104, 242+i*22, 6, C.green);
+    p1.text(101.5, 236.7+i*22, "✓", 8, true, C.white);
+    p1.paragraph(120, 234+i*22, r, 430, 9.7, 12, false, C.text, 2);
   });
 
-  // Positioning and TJM two-column block
-  p1.roundedRect(18, 257, 324, 126, 10, C.pale, C.line, .4);
-  p1.circle(50, 286, 16, [.89,.95,1]);
-  p1.text(45, 276, "●", 13, true, C.blue);
-  p1.text(80, 272, "Positionnement", 15, true, C.text);
-  const summary = bullets[0] || title;
-  p1.paragraph(80, 305, summary, 236, 9.8, 13, false, C.muted, 5);
+  // Positioning / TJM
+  p1.roundedRect(18, 324, 322, 132, 10, C.pale, C.line, .4);
+  iconPerson(p1, 49, 355);
+  p1.text(80, 341, "Positionnement", 16, true, C.text);
+  p1.paragraph(80, 377, bullets[0] || title, 235, 10.3, 14, false, C.muted, 5);
 
-  p1.roundedRect(351, 257, 226, 126, 10, C.pale, C.line, .4);
-  p1.text(374, 277, "TJM AUTONOMIA", 8.2, true, C.muted);
-  p1.paragraph(374, 300, rate, 176, 16.5, 18, true, C.text, 2);
-  p1.line(374, 342, 552, 342, C.line, .5);
-  p1.text(374, 353, availability, 8.5, true, C.green);
-  p1.text(374, 369, "Modalités : " + modality, 8.2, true, C.text);
+  p1.roundedRect(350, 324, 227, 132, 10, C.pale, C.line, .4);
+  iconCoins(p1, 382, 355);
+  p1.text(414, 341, "TJM AUTONOMIA", 9, true, C.text);
+  p1.paragraph(414, 365, rate, 145, 18, 20, true, C.text, 2);
+  p1.line(370, 404, 558, 404, C.line, .55);
+  p1.text(414, 414, "Disponibilité : " + availability, 8.7, true, C.text);
+  p1.line(370, 433, 558, 433, C.line, .55);
+  p1.text(414, 440, "Modalités : " + modality, 8.7, true, C.text);
 
-  // Expertise row
-  p1.roundedRect(18, 395, 559, 82, 10, [.974,.986,.995], C.line, .4);
-  p1.circle(49, 425, 16, [.87,.97,.94]);
-  p1.text(43, 414, "+", 17, true, C.blue);
-  p1.text(80, 410, "Expertises clés", 15, true, C.text);
-  let cx = 34, cy = 441;
-  (skills.length ? skills : ["IA", "Automatisation", "Transformation"]).slice(0, 8).forEach(skill => {
-    const w = Math.min(92, Math.max(46, 14 + skill.length * 4.8));
-    if (cx + w > 561) { cx = 34; cy += 24; }
-    p1.roundedRect(cx, cy, w, 20, 10, C.pale2, C.line, .3);
-    p1.text(cx + 7, cy + 5, skill, 7.4, true, C.text);
-    cx += w + 6;
+  // Expertise
+  p1.roundedRect(18, 470, 559, 95, 10, [.975,.985,.995], C.line, .4);
+  iconGear(p1, 49, 500);
+  p1.text(82, 486, "Expertises clés", 16, true, C.text);
+  let sx = 30;
+  const displaySkills = skills.length ? skills : ["IA générative","Automatisation","Prompt engineering"];
+  displaySkills.slice(0,8).forEach(skill=>{
+    const w=Math.min(92,Math.max(52,16+skill.length*5.2));
+    drawSkillPill(p1,sx,520,skill,w);
+    sx += w+6;
   });
 
   // Use cases
-  p1.roundedRect(18, 490, 559, 148, 10, [.982,.989,.996], C.line, .4);
-  p1.circle(49, 520, 16, [.89,.95,1]);
-  p1.text(43, 510, "◎", 14, true, C.blue);
-  p1.text(80, 505, "Cas d’usage maîtrisés", 15, true, C.text);
-
-  useCases.forEach((u, i) => {
-    const x = 32 + i * 138;
-    if (i > 0) p1.line(x - 9, 540, x - 9, 620, C.line, .45);
-    p1.circle(x + 13, 551, 13, i % 2 ? C.green : C.blue);
-    p1.text(x + 8, 543, String(i + 1).padStart(2, "0"), 7, true, C.white);
-    p1.paragraph(x, 572, u[0], 122, 9.2, 11, true, C.text, 2);
-    p1.paragraph(x, 600, u[1], 122, 7.4, 9, false, C.muted, 3);
+  p1.roundedRect(18, 579, 559, 154, 10, [.982,.989,.996], C.line, .4);
+  iconTarget(p1, 49, 608);
+  p1.text(82, 594, "Cas d’usage maîtrisés", 16, true, C.text);
+  useCases.slice(0,4).forEach((u,i)=>{
+    const x=30+i*139;
+    if(i>0) p1.line(x-8, 628, x-8, 714, C.line, .5);
+    p1.circle(x+14, 643, 13, i%2 ? C.green : C.blue);
+    p1.text(x+8, 635, String(i+1).padStart(2,"0"), 7.2, true, C.white);
+    p1.paragraph(x, 665, u[0], 122, 9.6, 11.5, true, C.text, 2);
+    p1.paragraph(x, 691, u[1], 122, 7.6, 9.6, false, C.muted, 3);
   });
 
   // Strengths
-  p1.roundedRect(18, 651, 559, 100, 10, [.965,.99,.98], C.line, .4);
-  p1.circle(49, 680, 16, [.87,.97,.94]);
-  p1.text(43, 670, "★", 13, true, C.blue);
-  p1.text(80, 665, "Points forts marquants", 15, true, C.text);
-
-  strengths.forEach((s, i) => {
-    const x = 34 + i * 133;
-    p1.roundedRect(x, 704, 120, 26, 12, [.91,.98,.96], C.line, .25);
-    p1.text(x + 9, 712, s, 7.5, true, C.text);
+  p1.roundedRect(18, 746, 559, 70, 10, [.965,.99,.98], C.line, .4);
+  iconStar(p1, 49, 773);
+  p1.text(82, 759, "Points forts marquants", 15.5, true, C.text);
+  strengths.slice(0,4).forEach((label,i)=>{
+    const x=30+i*139;
+    p1.roundedRect(x, 789, 128, 22, 11, [.91,.98,.96], C.line, .3);
+    p1.text(x+10, 795, label, 7.7, true, C.text);
   });
 
-  p1.line(18, 790, 577, 790, C.line, .5);
-  p1.text(20, 799, "Profil consultant — document commercial AUTONOMIA", 7, false, C.muted);
-  p1.text(552, 799, "1/2", 7, true, C.text);
+  p1.line(18, 826, 577, 826, C.line, .55);
+  p1.text(20, 832, "Profil consultant — document commercial AUTONOMIA", 6.5, false, C.muted);
+  p1.text(552, 832, "1/2", 6.5, true, C.text);
 
-  // ---------------- PAGE 2 — MASTER TEMPLATE ----------------
-  p2.rect(0, 0, W, 74, C.navy);
-  drawLogo(p2, 24, 14, .50);
-  p2.text(421, 22, initials + " — Consultant IA", 10, true, C.white);
-  [0, 5, 10].forEach((o, i) =>
-    p2.curve(365, 72 - o, 440, 49 - o, 510, 52 + o, 595, 32 + o, i % 2 ? C.cyan2 : C.cyan, .3)
-  );
+  // PAGE 2
+  p2.rect(0, 0, W, 92, C.navy);
+  drawLogo(p2, 24, 18, .62);
+  p2.text(424, 27, initials + " — Consultant IA", 10.5, true, C.white);
+  [0,6,12].forEach((o,i)=>p2.curve(360,88-o,445,56-o,520,58+o,595,39+o,i%2?C.cyan2:C.cyan,.33));
 
-  // 01 Experience
-  p2.text(18, 87, "01", 39, true, C.cyan);
-  p2.text(86, 103, "Expérience sélectionnée", 18.5, true, C.text);
+  p2.text(18, 104, "01", 40, true, C.cyan);
+  p2.text(92, 120, "Expérience sélectionnée", 18.5, true, C.text);
 
-  const exp1Title = title;
-  p2.roundedRect(18, 132, 559, 120, 10, C.pale, C.line, .4);
-  p2.circle(51, 164, 16, [.89,.95,1]);
-  p2.text(45, 153, "1", 9, true, C.blue);
-  p2.paragraph(85, 145, exp1Title, 460, 11.5, 14, true, C.text, 2);
-  p2.text(85, 176, "Freelance / Indépendant  •  " + location, 8.7, false, C.text);
-  p2.paragraph(
-    85, 197,
-    bullets[0] || "Intervention sur des besoins opérationnels IA et automatisation selon les informations disponibles dans le profil.",
-    452, 8.6, 11.5, false, C.muted, 3
-  );
-  p2.roundedRect(30, 225, 534, 22, 9, [.92,.97,.98], null);
-  p2.text(40, 231, "STACK :", 7.7, true, C.green);
-  p2.text(83, 231, (skills.length ? skills.slice(0,7).join("  •  ") : "Compétences à confirmer"), 7.5, true, C.text);
+  // Experience 1
+  p2.roundedRect(18, 152, 559, 160, 10, C.pale, C.line, .4);
+  iconBriefcase(p2, 50, 186);
+  p2.paragraph(88, 166, title, 460, 12.2, 14.5, true, C.text, 2);
+  p2.text(88, 203, "Freelance / Indépendant  •  " + location, 9.5, false, C.text);
+  p2.paragraph(88, 231, bullets[0] || "Intervention sur des sujets IA, automatisation et intégration d’outils selon les informations disponibles.", 455, 9.1, 12, false, C.muted, 4);
+  p2.roundedRect(30, 278, 533, 22, 10, [.92,.97,.98], null);
+  p2.text(40, 284, "STACK :", 7.8, true, C.green);
+  p2.text(82, 284, displaySkills.slice(0,7).join("   •   "), 7.6, true, C.text);
 
-  // optional second experience-like block from second bullet
-  p2.roundedRect(18, 266, 559, 86, 10, C.pale, C.line, .4);
-  p2.circle(51, 298, 16, [.89,.95,1]);
-  p2.text(45, 287, "2", 9, true, C.blue);
-  p2.text(85, 280, "Repères complémentaires", 11.5, true, C.text);
-  p2.paragraph(
-    85, 305,
-    bullets[1] || ("Modalités : " + modality + ". Disponibilité : " + availability + "."),
-    452, 8.6, 11.5, false, C.muted, 3
-  );
+  // Experience 2
+  p2.roundedRect(18, 328, 559, 105, 10, C.pale, C.line, .4);
+  iconRocket(p2, 50, 360);
+  p2.text(88, 343, "Repères complémentaires", 12.2, true, C.text);
+  p2.paragraph(88, 376, bullets[1] || "Périmètre complémentaire à préciser : contexte métier, niveau d’autonomie, livrables et environnement technique.", 455, 9.1, 12, false, C.muted, 4);
 
-  // 02 Formation & languages / profile details
-  p2.text(18, 373, "02", 39, true, C.cyan);
-  p2.text(86, 389, "Formation & langues", 18.5, true, C.text);
+  // 02
+  p2.text(18, 456, "02", 40, true, C.cyan);
+  p2.text(98, 472, "Formation & langues", 18.5, true, C.text);
 
-  p2.roundedRect(18, 419, 559, 84, 10, C.pale, C.line, .4);
-  p2.circle(51, 452, 16, [.89,.95,1]);
-  p2.text(45, 441, "•", 14, true, C.blue);
-  p2.text(85, 436, "Informations disponibles dans le profil", 11.5, true, C.text);
-  p2.text(85, 461, "Formation / langues : à confirmer si absentes du profil source", 8.5, true, C.text);
-  p2.text(85, 480, "Compétences : " + (skills.length ? skills.slice(0,6).join(" · ") : "à confirmer"), 8, false, C.muted);
+  p2.roundedRect(18, 505, 559, 103, 10, C.pale, C.line, .4);
+  iconGlobe(p2, 50, 538);
+  p2.text(88, 520, "Formation & langues — informations disponibles", 12, true, C.text);
+  p2.paragraph(88, 548, "Les informations de formation, certification et langues sont affichées lorsqu’elles figurent dans le profil source vérifié.", 455, 8.8, 11.5, false, C.muted, 3);
+  p2.text(88, 588, "Compétences : " + displaySkills.slice(0,5).join(" · "), 8.6, false, C.text);
 
-  p2.roundedRect(18, 516, 559, 78, 10, C.pale, C.line, .4);
-  p2.circle(51, 548, 16, [.89,.95,1]);
-  p2.text(44, 538, "||", 10, true, C.blue);
-  p2.text(85, 532, "Secteurs & modalités d’intervention", 12, true, C.text);
-
-  const chips = [
-    location,
-    strengths[0] || "Expertise IA",
-    strengths[1] || "Automatisation",
-    modality
-  ];
-  let chipX = 85;
-  chips.forEach((chip, i) => {
-    const w = Math.min(120, Math.max(72, 18 + chip.length * 4.3));
-    p2.roundedRect(chipX, 560, w, 23, 11, [.91,.98,.96], C.line, .25);
-    p2.text(chipX + 8, 567, chip, 7.4, true, C.text);
-    chipX += w + 7;
+  p2.roundedRect(18, 620, 559, 88, 10, C.pale, C.line, .4);
+  iconBars(p2, 50, 652);
+  p2.text(88, 634, "Secteurs & modalités d’intervention", 12.2, true, C.text);
+  const sectorChips = [location, strengths[0] || "PME / TPE", strengths[1] || "IA générative", modality];
+  let cx2=88;
+  sectorChips.forEach(label=>{
+    const w=Math.min(120,Math.max(76,18+label.length*4.8));
+    p2.roundedRect(cx2, 667, w, 25, 12, [.91,.98,.96], C.line, .3);
+    p2.text(cx2+10, 674, label, 7.7, true, C.text);
+    cx2 += w+7;
   });
 
-  // 03 contact
-  p2.text(18, 615, "03", 39, true, C.cyan);
-  p2.text(86, 631, "Rencontrer ce consultant", 18.5, true, C.text);
+  // 03
+  p2.text(18, 728, "03", 40, true, C.cyan);
+  p2.text(98, 744, "Rencontrer ce consultant", 18.5, true, C.text);
 
-  p2.roundedRect(18, 663, 559, 105, 10, C.pale, C.line, .4);
-  p2.circle(51, 704, 16, [.89,.95,1]);
-  p2.text(43, 694, "DDG", 8, true, C.blue);
+  p2.roundedRect(18, 777, 559, 50, 10, C.pale, C.line, .4);
+  iconPerson(p2, 50, 802);
+  p2.text(88, 786, "Déborah Dian Goldcher", 11, true, C.text);
+  iconMail(p2, 92, 809);
+  p2.text(108, 803, "deborah@build-autonomia.com", 8.5, false, C.text);
+  iconPhone(p2, 92, 824);
+  p2.text(108, 818, "06 09 74 62 40", 8.5, false, C.text);
 
-  p2.text(85, 681, "Déborah Dian Goldcher", 11.5, true, C.text);
-  p2.text(85, 706, "deborah@build-autonomia.com", 8.5, false, C.text);
-  p2.text(85, 726, "06 09 74 62 40", 8.5, false, C.text);
-
-  p2.line(315, 680, 315, 750, C.line, .45);
-  p2.text(338, 681, "Échanger sur ce profil", 10.5, true, C.text);
-  p2.paragraph(338, 701, "Présentez votre projet et vérifiez avec Autonomia l’adéquation de ce consultant à votre besoin.", 212, 7.8, 9.5, false, C.muted, 3);
-  p2.roundedRect(338, 730, 205, 24, 12, C.navy, null);
-  p2.text(351, 736, "Ouvrir la page contact", 8.5, true, C.white);
-  p2.text(525, 736, "↗", 10, true, C.cyan);
-  p2.text(338, 758, "build-autonomia.com/contact", 7.2, true, C.blue);
-
-  p2.line(18, 790, 577, 790, C.line, .5);
-  p2.text(20, 799, "Profil consultant — document commercial AUTONOMIA", 7, false, C.muted);
-  p2.text(552, 799, "2/2", 7, true, C.text);
+  p2.line(316, 785, 316, 823, C.line, .45);
+  iconExternal(p2, 339, 798);
+  p2.text(355, 786, "Échanger sur ce profil", 10.2, true, C.text);
+  p2.roundedRect(339, 807, 210, 18, 9, C.navy, null);
+  p2.text(350, 812, "Ouvrir la page contact", 7.8, true, C.white);
 
   // PDF assembly
   const objects = [];
   const add = body => { objects.push(body); return objects.length; };
   const f1 = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
   const f2 = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
-  const s1 = p1.out.join("\n");
-  const s2 = p2.out.join("\n");
+  const s1 = p1.out.join("\n"), s2 = p2.out.join("\n");
   const c1 = add("<< /Length " + Buffer.byteLength(s1, "binary") + " >>\nstream\n" + s1 + "\nendstream");
   const c2 = add("<< /Length " + Buffer.byteLength(s2, "binary") + " >>\nstream\n" + s2 + "\nendstream");
-
-  const linkY1 = H - 768;
-  const linkY2 = H - 663;
-  const annot = add("<< /Type /Annot /Subtype /Link /Rect [315 " + linkY1 + " 577 " + linkY2 + "] /Border [0 0 0] /A << /S /URI /URI (https://build-autonomia.com/contact) >> >>");
-
+  const annot = add("<< /Type /Annot /Subtype /Link /Rect [339 " + (H-827) + " 559 " + (H-777) + "] /Border [0 0 0] /A << /S /URI /URI (https://build-autonomia.com/contact) >> >>");
   const pagesFuture = objects.length + 3;
   const pg1 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c1 + " 0 R >>");
   const pg2 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c2 + " 0 R /Annots [" + annot + " 0 R] >>");
@@ -417,24 +463,17 @@ function buildPdf(profile, roleTitle) {
   const catalog = add("<< /Type /Catalog /Pages " + pages + " 0 R >>");
 
   const chunks = [Buffer.from("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n", "binary")];
-  const offsets = [0];
-  let offset = chunks[0].length;
-
-  objects.forEach((body, i) => {
-    offsets[i + 1] = offset;
-    const b = Buffer.from((i + 1) + " 0 obj\n" + body + "\nendobj\n", "binary");
-    chunks.push(b);
-    offset += b.length;
+  const offsets = [0]; let offset = chunks[0].length;
+  objects.forEach((body,i)=>{
+    offsets[i+1]=offset;
+    const b=Buffer.from((i+1)+" 0 obj\n"+body+"\nendobj\n","binary");
+    chunks.push(b); offset+=b.length;
   });
-
-  const xrefOffset = offset;
-  let xref = "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f \n";
-  for (let i = 1; i <= objects.length; i++) {
-    xref += String(offsets[i]).padStart(10, "0") + " 00000 n \n";
-  }
-  xref += "trailer\n<< /Size " + (objects.length + 1) + " /Root " + catalog + " 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF";
-  chunks.push(Buffer.from(xref, "ascii"));
-
+  const xrefOffset=offset;
+  let xref="xref\n0 "+(objects.length+1)+"\n0000000000 65535 f \n";
+  for(let i=1;i<=objects.length;i++) xref+=String(offsets[i]).padStart(10,"0")+" 00000 n \n";
+  xref+="trailer\n<< /Size "+(objects.length+1)+" /Root "+catalog+" 0 R >>\nstartxref\n"+xrefOffset+"\n%%EOF";
+  chunks.push(Buffer.from(xref,"ascii"));
   return Buffer.concat(chunks);
 }
 
