@@ -278,10 +278,16 @@ export async function GET(request) {
   }
 
   try {
-    const feedUrl = new URL("/api/public/consultants", url.origin);
+    const feedBase =
+      process.env.AUTONOMIA_CONSULTANTS_URL ||
+      "https://cockpit.build-autonomia.com/api/public/consultants";
+    const feedUrl = new URL(feedBase);
     feedUrl.searchParams.set("role", role);
     feedUrl.searchParams.set("limit", "12");
-    const response = await fetch(feedUrl, { cache: "no-store" });
+    const response = await fetch(feedUrl, {
+      cache: "no-store",
+      headers: { accept: "application/json" }
+    });
     const payload = await response.json();
     const profile = Array.isArray(payload?.profiles)
       ? payload.profiles.find((item) => String(item.id) === id)
@@ -303,6 +309,7 @@ export async function GET(request) {
       }
     });
   } catch (error) {
+    console.error("consultant_cv_generation_failed", error);
     return Response.json(
       { ok: false, error: "cv_generation_failed" },
       { status: 500, headers: { "cache-control": "no-store" } }
