@@ -23,6 +23,12 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
   const training = family === "training";
   const territory = family === "territory";
   const insight = getPillarInsight(family, pillar.cluster);
+  const trainingLanding = training && pillar.cluster === "Gouvernance & AI Act"
+    ? {
+        href: "/formation-ai-act",
+        label: "Voir la formation Gouvernance IA & AI Act"
+      }
+    : null;
   const publishedBySlug = new Map(publishedArticles.map((article) => [article.slug, article]));
   const basePath = training ? "/formation-ia/cas-usage" : territory ? "/territoires/guides" : "/cas-usage-ia";
   const publishedCount = pillar.topics.filter((topic) => publishedBySlug.has(topic.slug)).length;
@@ -122,6 +128,11 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
             <Link className="primaryButton" href={training ? "/formation-ia-entreprise" : territory ? "/territoires" : "/expert-ia"}>
               {training ? "Construire le parcours" : territory ? "Cadrer le programme territorial" : "Cadrer le besoin"}
             </Link>
+            {trainingLanding && (
+              <Link className="secondaryButton" href={trainingLanding.href}>
+                {trainingLanding.label}
+              </Link>
+            )}
             <Link className="secondaryButton" href={training ? "/methodologie/learning-transfer" : territory ? "/territoires" : "/methodologie/execution-matrix"}>
               Voir la matrice Autonomia
             </Link>
