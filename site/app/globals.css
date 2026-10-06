@@ -22556,3 +22556,201 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     font-size:20px;
   }
 }
+
+/* AI MATCH V24 — compact idea launcher */
+
+/* Global AI Match footprint: much tighter, still readable. */
+.homeV10 .homeSolutionMatch {
+  grid-template-columns:minmax(260px,.58fr) minmax(0,1.42fr);
+  gap:22px;
+  padding:34px 0 42px;
+}
+
+.homeV10 .homeSolutionMatchIntro {
+  padding:8px 0 0;
+}
+
+.homeV10 .homeSolutionMatchIntro h2 {
+  max-width:520px;
+  margin:0 0 12px;
+  font-size:clamp(32px,3.3vw,48px);
+  line-height:.98;
+}
+
+.homeV10 .homeSolutionMatchIntro p:last-child {
+  max-width:500px;
+  margin:0;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinder {
+  border-radius:22px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderTopline {
+  min-height:34px;
+  padding:8px 12px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderForm {
+  grid-template-columns:minmax(0,1fr) 180px;
+  gap:8px 10px;
+  padding:12px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderForm label {
+  font-size:clamp(20px,1.8vw,27px);
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderForm textarea {
+  min-height:86px;
+  max-height:110px;
+  padding:11px 12px;
+  font-size:12px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 {
+  gap:6px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 small {
+  font-size:7px;
+}
+
+.homeV10 .homeSolutionMatch .solutionFinderSubmitV19 button {
+  min-height:48px;
+  padding:0 12px;
+  font-size:11px;
+}
+
+/* Explicit but compact "ideas" launcher. */
+.solutionExamplesWrapV19 {
+  padding:0 12px 12px;
+}
+
+.solutionExamplesHeadV19 {
+  align-items:center;
+  padding:10px 0 8px;
+}
+
+.solutionExamplesHeadV19 > div {
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:5px 8px;
+}
+
+.solutionExamplesHeadV19 small {
+  font-size:8px;
+}
+
+.solutionExamplesHeadV19 strong {
+  font-size:12px;
+  font-weight:750;
+}
+
+.solutionExamplesHeadV19 > span {
+  padding:4px 7px;
+  border:1px solid rgba(61,226,208,.24);
+  border-radius:999px;
+  color:#8fece2;
+  font-size:7px;
+  letter-spacing:.08em;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  padding:0;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button {
+  grid-template-rows:auto auto 1fr auto;
+  min-height:104px;
+  padding:11px 12px;
+  border-radius:13px;
+}
+
+.solutionExampleMetaV19 {
+  min-height:20px;
+}
+
+.solutionExampleMetaV19 small {
+  font-size:7px;
+}
+
+.solutionExampleMetaV19 b {
+  width:21px;
+  height:21px;
+  font-size:9px;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button > strong {
+  margin-top:4px;
+  font-size:13px;
+  line-height:1.08;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button > p {
+  display:-webkit-box;
+  overflow:hidden;
+  margin:4px 0 7px;
+  color:#aebbd5;
+  font-size:9px;
+  line-height:1.3;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+
+.solutionExampleActionV19 {
+  font-size:8px;
+}
+
+.homeV10 .homeSolutionMatch .solutionExamplesV19 button:hover {
+  transform:translateY(-2px);
+}
+
+/* Tablet: keep ideas compact in 2 columns. */
+@media (max-width:1100px) {
+  .homeV10 .homeSolutionMatch {
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  .homeV10 .homeSolutionMatchIntro h2,
+  .homeV10 .homeSolutionMatchIntro p:last-child {
+    max-width:780px;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamplesV19 {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (max-width:759px) {
+  .homeV10 .homeSolutionMatch {
+    padding:28px 0 34px;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionFinderForm {
+    grid-template-columns:1fr;
+  }
+
+  .solutionExamplesHeadV19 {
+    display:grid;
+    gap:5px;
+  }
+
+  .solutionExamplesHeadV19 > div {
+    display:grid;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamplesV19 {
+    grid-template-columns:1fr;
+  }
+
+  .homeV10 .homeSolutionMatch .solutionExamplesV19 button {
+    min-height:90px;
+  }
+}

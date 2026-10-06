@@ -275,9 +275,9 @@ export default function SolutionFinder() {
           <div className="solutionExamplesHeadV19">
             <div>
               <small>BESOIN D’INSPIRATION ?</small>
-              <strong>Cliquez sur un exemple pour préremplir votre demande.</strong>
+              <strong>Choisissez une idée : elle préremplit votre demande.</strong>
             </div>
-            <span>4 idées pour démarrer</span>
+            <span>4 IDÉES CLIQUABLES</span>
           </div>
 
           <div className="solutionExamples solutionExamplesV19">
