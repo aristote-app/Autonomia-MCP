@@ -41,10 +41,17 @@ export async function generateMetadata({ params }) {
   const pillar = getExecutionPillar(slug);
   if (!pillar) return {};
 
-  const description = `10 scénarios concrets pour ${pillar.title.toLowerCase()} : workflows, contrôles humains, données, outils et compétences à mobiliser.`;
+  const pillarSeo = {
+    "support-client": {
+      title: "Automatiser le support client avec l’IA : tri, réponses, knowledge base et escalade",
+      description: "10 cas concrets pour automatiser le support client avec l’IA : qualification des tickets, brouillons de réponse, base de connaissances, détection d’insatisfaction et escalade humaine."
+    }
+  }[slug];
+
+  const description = pillarSeo?.description || `10 scénarios concrets pour ${pillar.title.toLowerCase()} : workflows, contrôles humains, données, outils et compétences à mobiliser.`;
 
   return {
-    title: pillar.title,
+    title: pillarSeo?.title || pillar.title,
     description,
     alternates: { canonical: `/cas-usage-ia/${slug}` },
     openGraph: {
