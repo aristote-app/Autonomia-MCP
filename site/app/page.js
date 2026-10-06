@@ -101,52 +101,66 @@ export default function Home() {
       </section>
 
       <section className="referenceSection referenceSectionHome" aria-label="Références des équipes Autonomia">
-        <div className="referenceIntro">
+        <div className="referenceIntro referenceIntroCompact">
           <p className="sectionIndex">NOS RÉFÉRENCES</p>
           <div>
             <h2>L’expérience derrière AUTONOMIA.</h2>
             <p>
-              Les dirigeants et structures qui portent AUTONOMIA ont accompagné, formé ou réalisé
-              des missions auprès de grands groupes, entreprises technologiques et acteurs publics.
+              Entreprises, acteurs publics, écoles et universités : les dirigeants et structures qui portent
+              AUTONOMIA ont construit leur expérience au contact d’organisations très différentes.
             </p>
           </div>
         </div>
 
-        <div className="referenceFamily">
-          <small>ENTREPRISES & MARQUES</small>
-          <div className="referenceMarquee" aria-label="Références entreprises et marques">
-            <div className="referenceTrack">
+        <div className="referenceLogoWall">
+          <div className="referenceWallRow">
+            <small>ENTREPRISES & MARQUES</small>
+            <div className="referenceWallLogos">
               {[
                 { name: "Air France Industries", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Air%20France%20Logo.svg" },
-                { name: "BNP Paribas Personal Finance", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNP%20Paribas%20logo.svg" },
+                { name: "BNP Paribas", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNP%20Paribas%20logo.svg", color: true },
                 { name: "Symrise", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Symrise%20wordmark%20logo.svg" },
-                { name: "KRYS Group", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20KRYS%20GROUP.png" },
                 { name: "WESCO", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Wesco%20International%20logo.svg" },
-                { name: "Westcon Group", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/WESTCON%20GROUP%20LOGO.png" },
-                { name: "ATLAND", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/LOGO%20ATLAND.jpg" },
-                { name: "OZITEM", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20groupe%20ozitem.png" },
+                { name: "Westcon", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/WESTCON%20GROUP%20LOGO.png" },
                 { name: "Mercure", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mercure%20Hotels%20Logo%20neu.svg" },
                 { name: "Novotel", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Novotel%20logo%20%282016%29.svg" },
                 { name: "Franprix", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Franprix%20-%202015.svg" }
-              ].map((item, index) => (
-                <span className="referenceLogoItem" key={`company-${item.name}-${index}`}>
+              ].map((item) => (
+                <span className={"referenceWallLogo" + (item.color ? " keepColor" : "")} key={item.name} title={item.name}>
                   <img src={item.src} alt={item.name} loading="lazy" />
                 </span>
               ))}
             </div>
           </div>
-        </div>
 
-        <div className="referenceFamily referenceFamilyPublic">
-          <small>COLLECTIVITÉS & INSTITUTIONS</small>
-          <div className="referenceMarquee referenceMarqueePublic" aria-label="Références collectivités et institutions">
-            <div className="referenceTrack referenceTrackPublic">
+          <div className="referenceWallRow">
+            <small>COLLECTIVITÉS & INSTITUTIONS</small>
+            <div className="referenceWallLogos referenceWallPublic">
               {[
-                { name: "CNFPT", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo-CNFPT-2024-RVB.png" },
-                { name: "Ville de Bobigny", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20bobigny.png" },
+                { name: "CNFPT", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo-CNFPT-2024-RVB.png", color: true },
                 { name: "Ville de Clichy", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Clichy-la-Garenne.svg" }
-              ].map((item, index) => (
-                <span className="referenceLogoItem referenceLogoInstitution" key={`public-${item.name}-${index}`}>
+              ].map((item) => (
+                <span className={"referenceWallLogo public" + (item.color ? " keepColor" : "")} key={item.name} title={item.name}>
+                  <img src={item.src} alt={item.name} loading="lazy" />
+                </span>
+              ))}
+              <span className="referenceWordmark" aria-label="Ville de Bobigny">BOBIGNY</span>
+              <span className="referenceWordmark" aria-label="Roumoiseine">ROUMOISEINE</span>
+              <span className="referenceWordmark" aria-label="Grand Dole">GRAND DOLE</span>
+            </div>
+          </div>
+
+          <div className="referenceWallRow referenceWallSchools">
+            <small>ÉCOLES & UNIVERSITÉS</small>
+            <div className="referenceWallLogos">
+              {[
+                { name: "UPEC", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/UPEC-logo.svg", color: true },
+                { name: "EDC Paris Business School", src: "https://upload.wikimedia.org/wikipedia/commons/9/90/EDC_PARIS_BUSINESS_SCHOOL_LOGO_MONOCHROME_BLEU_-_CARRE.png", color: true },
+                { name: "Pigier", src: "https://diy7ta1tt6jst.cloudfront.net/prod/okulus/eff0d465-4808-40dd-be3c-c9e9fee9a6b5", color: true },
+                { name: "Efrei", src: "https://armandhurault.github.io/leavengo/images/img/efrei.png", color: true },
+                { name: "ESCG Paris", src: "https://pbs.twimg.com/profile_images/459272996616548352/QAi2haWo_400x400.jpeg", color: true }
+              ].map((item) => (
+                <span className="referenceWallLogo school keepColor" key={item.name} title={item.name}>
                   <img src={item.src} alt={item.name} loading="lazy" />
                 </span>
               ))}
@@ -154,8 +168,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="referenceActions">
-          <Link className="secondaryButton" href="/a-propos">Voir l’expérience du collectif →</Link>
+        <div className="referenceActions referenceActionsCompact">
+          <Link className="secondaryButton" href="/a-propos">Découvrir l’expérience du collectif →</Link>
         </div>
       </section>
 
