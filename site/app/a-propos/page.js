@@ -1,14 +1,62 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "À propos d’Autonomia",
-  description: "Autonomia est un AI Execution Partner qui relie besoins métier, expertise externe, montée en compétences et exécution IA.",
+  title: "À propos — L’expérience derrière Autonomia",
+  description:
+    "Découvrez l’expérience, les expertises et les références des équipes qui portent Autonomia : IA, transformation, digital, formation professionnelle et marchés publics.",
   alternates: { canonical: "/a-propos" }
 };
 
+const referenceGroups = [
+  {
+    label: "ENTREPRISES & MARQUES",
+    items: [
+      "Air France Industries",
+      "BNP Paribas Personal Finance",
+      "Symrise",
+      "KRYS",
+      "Wesco",
+      "Westcon",
+      "ATLAND",
+      "OZITEM",
+      "Mercure",
+      "Novotel",
+      "Franprix",
+      "TILLI"
+    ]
+  },
+  {
+    label: "TECH & SERVICES",
+    items: [
+      "OROLIA",
+      "Spectracom",
+      "Garantme",
+      "Equinoxe IT",
+      "Fuzzy Logic Robotics",
+      "Active International",
+      "Potel & Chabot",
+      "Cinéville"
+    ]
+  },
+  {
+    label: "COLLECTIVITÉS & INSTITUTIONS",
+    items: [
+      "CNFPT",
+      "Ville de Bobigny",
+      "Ville de Clichy",
+      "Roumois Seine",
+      "Grand Dole",
+      "CCI Essonne"
+    ]
+  },
+  {
+    label: "ÉCOLES & UNIVERSITÉS",
+    items: ["UPEC", "EDC Paris", "ESCG", "Pigier", "Efrei"]
+  }
+];
+
 export default function AboutPage() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr";
-  const url = `${base}/a-propos`;
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com";
 
   const schema = {
     "@context": "https://schema.org",
@@ -17,86 +65,286 @@ export default function AboutPage() {
     name: "Autonomia",
     url: base,
     description:
-      "AI Execution Partner : expertise IA externe, formation IA en entreprise, diagnostic d’exécution et contenus pratiques autour du déploiement de l’IA."
+      "AI Execution Partner réunissant des expertises en intelligence artificielle, transformation, formation professionnelle et marchés publics."
   };
 
   return (
-    <main className="methodologyPage">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+    <main className="aboutPremium">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
 
-      <section className="contentHubHero">
-        <p className="eyebrow">AUTONOMIA / À PROPOS</p>
-        <h1>La force d’exécution IA.</h1>
-        <p>
-          Autonomia aide les entreprises à transformer un besoin IA en capacité d’exécution :
-          compétences externes lorsqu’il faut construire ou accélérer, montée en compétences
-          lorsqu’il faut rendre l’organisation autonome.
-        </p>
+      <section className="aboutHeroPremium">
+        <div className="aboutHeroEyebrow">
+          <span>AUTONOMIA</span>
+          <span>AI EXECUTION PARTNER</span>
+        </div>
+
+        <div className="aboutHeroGrid">
+          <div>
+            <h1>
+              L’IA avec
+              <span> l’expérience du terrain.</span>
+            </h1>
+          </div>
+
+          <div className="aboutHeroSide">
+            <p>
+              AUTONOMIA réunit des parcours construits dans le digital, la transformation,
+              la formation professionnelle, les marchés publics et l’accompagnement des organisations.
+            </p>
+            <p>
+              Cette expérience sert une ambition simple : transformer l’intelligence artificielle
+              en solutions réellement utilisables, déployables et adoptées par les équipes.
+            </p>
+            <div className="aboutHeroActions">
+              <Link className="primaryButton" href="/contact">Parler de votre projet IA</Link>
+              <Link className="secondaryButton" href="/solutions-ia">Voir ce que nous construisons</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="aboutHeroProof">
+          <article><strong>18+</strong><span>années d’expertise marchés publics via ODEXIS</span></article>
+          <article><strong>20</strong><span>ans environ de parcours digital, transformation et formation</span></article>
+          <article><strong>3</strong><span>structures réunies sous une même marque opérationnelle</span></article>
+          <article><strong>1</strong><span>point d’entrée pour trouver, construire et former</span></article>
+        </div>
       </section>
 
-      <section className="contentHubIntro">
-        <p className="sectionIndex">POSITIONNEMENT</p>
-        <div>
-          <h2>Ni marketplace de CV, ni catalogue de formations.</h2>
+      <section className="aboutWhy">
+        <p className="sectionIndex">POURQUOI AUTONOMIA</p>
+        <div className="aboutWhyLead">
+          <h2>Une solution IA sérieuse commence bien avant le choix d’un outil.</h2>
           <p>
-            Le point de départ est le travail à accomplir : résultat attendu, processus, données,
-            contraintes, niveau d’autonomie, risques et compétences nécessaires. L’objectif est
-            ensuite de déterminer s’il faut mobiliser un expert, former une équipe, combiner les deux
-            ou commencer par clarifier le besoin.
+            Nous partons du métier, du processus, des responsabilités et du résultat attendu.
+            Puis nous déterminons ce qui mérite d’être automatisé, assisté, sécurisé, confié à un agent
+            ou simplement mieux outillé.
           </p>
         </div>
+
+        <div className="aboutWhyGrid">
+          <article>
+            <span>01</span>
+            <h3>Comprendre le travail réel</h3>
+            <p>
+              Les irritants, les étapes manuelles, les dépendances, les données disponibles,
+              les validations humaines et les contraintes opérationnelles.
+            </p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Construire ce qui sera utilisé</h3>
+            <p>
+              Agents IA, automatisations, assistants, RAG, mini-apps et workflows conçus autour
+              des usages quotidiens plutôt qu’autour d’une démonstration technologique.
+            </p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Déployer avec méthode</h3>
+            <p>
+              Gouvernance, droits d’accès, contrôle humain, documentation, conduite du changement
+              et articulation avec les outils déjà présents dans l’organisation.
+            </p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Rendre les équipes autonomes</h3>
+            <p>
+              La formation intervient au bon moment : pour comprendre, prendre en main, faire évoluer
+              et sécuriser les nouveaux usages.
+            </p>
+          </article>
+        </div>
       </section>
 
-      <section className="collectiveSection">
-        <div className="sectionHeading">
+      <section className="aboutBridge">
+        <div className="aboutBridgeCopy">
+          <p className="sectionIndex">NOTRE DIFFÉRENCE</p>
+          <h2>Notre expérience permet de relier l’IA à la réalité de l’organisation.</h2>
+        </div>
+
+        <div className="aboutBridgeFlow">
+          <div><small>01</small><strong>Besoin métier</strong><span>Ce qui bloque, coûte du temps ou limite la qualité.</span></div>
+          <b>→</b>
+          <div><small>02</small><strong>Architecture de solution</strong><span>Processus, données, outils, IA, contrôles.</span></div>
+          <b>→</b>
+          <div><small>03</small><strong>Exécution</strong><span>Expert, build, automatisation ou intégration.</span></div>
+          <b>→</b>
+          <div><small>04</small><strong>Adoption</strong><span>Formation, transfert, documentation et autonomie.</span></div>
+        </div>
+      </section>
+
+      <section className="aboutCollectivePremium">
+        <div className="aboutSectionIntro">
           <p className="sectionIndex">LE COLLECTIF</p>
-          <div><h2>Trois structures. Une même capacité d’exécution.</h2><p>AUTONOMIA est une marque commune qui réunit des expertises complémentaires en intelligence artificielle, transformation, marchés publics et formation professionnelle.</p></div>
-        </div>
-        <div className="collectiveGrid">
-          <article><span>01</span><h3>DDG GROUPE</h3><p>IA, transformation, conseil, pilotage de projets et développement des offres AUTONOMIA.</p></article>
-          <article><span>02</span><h3>ODEXIS</h3><p>Marchés publics, secteur public, conseil, formation et assistance à maîtrise d’ouvrage depuis 2008.</p></article>
-          <article><span>03</span><h3>MAJY ME</h3><p>Formation professionnelle, IA et développement des compétences, avec certification Qualiopi.</p></article>
-        </div>
-      </section>
-
-      <section className="foundersSection">
-        <div className="sectionHeading">
-          <p className="sectionIndex">EXPÉRIENCE</p>
-          <div><h2>Des parcours construits avant AUTONOMIA.</h2><p>La marque est récente. Les compétences, les références et l’expérience réunies derrière elle ont été construites au fil de missions, d’entreprises, de collectivités et d’établissements d’enseignement supérieur.</p></div>
-        </div>
-        <div className="founderGrid">
-          <article><small>DÉBORAH DIAN GOLDCHER</small><h3>Transformation · IA · Digital · Formation</h3><p>Près de 20 ans de parcours professionnel entre acquisition digitale, SEO/SEA, transformation, entrepreneuriat et formation. Interventions auprès d’entreprises, collectivités, écoles de commerce et universités.</p></article>
-          <article><small>SYLVAIN LE TURCQ</small><h3>Commande publique · Marchés publics · AMO</h3><p>Fondateur d’ODEXIS, structure créée en 2008 et spécialisée dans l’accompagnement, le conseil et la formation autour des marchés publics et de la commande publique.</p></article>
-        </div>
-      </section>
-
-      <section className="aboutReferences">
-        <div className="sectionHeading">
-          <p className="sectionIndex">RÉFÉRENCES</p>
-          <div><h2>Des expériences auprès d’organisations de premier plan.</h2><p>Ces références ont été acquises par les dirigeants et les structures qui portent aujourd’hui AUTONOMIA. Elles sont rattachées à leur contexte contractuel d’origine.</p></div>
-        </div>
-        <div className="referenceFamilies">
-          <article><small>GRANDS GROUPES & MARQUES</small><p>Air France Industries · BNP Paribas Personal Finance · Symrise · KRYS · Wesco · Westcon · Mercure · Novotel · Franprix</p></article>
-          <article><small>TECH & SERVICES</small><p>OROLIA · Spectracom · OZITEM · Garantme · Equinoxe IT · Fuzzy Logic Robotics · TILLI · Active International</p></article>
-          <article><small>SECTEUR PUBLIC</small><p>Ville de Bobigny · Ville de Clichy · Roumoiseine · CNFPT</p></article>
-          <article><small>ENSEIGNEMENT SUPÉRIEUR</small><p>Université Paris-Est Créteil · EDC Paris · ESCG · Pigier · EfreiTech</p></article>
-        </div>
-      </section>
-
-      <section className="pillarMethod">
-        <p className="sectionIndex">RESPONSABILITÉ ÉDITORIALE</p>
-        <div>
-          <h2>Les contenus sont publiés sous la responsabilité d’Autonomia.</h2>
-          <ol>
-            <li><span>01</span><div><strong>Sources</strong><p>Les guides publiés comportent des sources vérifiables lorsque des capacités, outils ou pratiques externes sont décrits.</p></div></li>
-            <li><span>02</span><div><strong>Distinction faits / scénarios</strong><p>Les scénarios Autonomia sont explicitement présentés comme des architectures ou méthodes proposées, pas comme des cas clients inventés.</p></div></li>
-            <li><span>03</span><div><strong>Contrôle humain</strong><p>Les pages traitant d’automatisation ou d’agents précisent les validations, limites et exceptions lorsque cela est pertinent.</p></div></li>
-            <li><span>04</span><div><strong>Mise à jour</strong><p>Les pages publiées portent une date de publication et une date de modification pour rendre la fraîcheur éditoriale visible.</p></div></li>
-          </ol>
-          <div className="closingActions">
-            <Link className="primaryButton" href="/methodologie/politique-editoriale">Lire la politique éditoriale</Link>
-            <Link className="secondaryButton" href="/methodologie/execution-matrix">Voir la méthode d’exécution</Link>
+          <div>
+            <h2>Trois structures. Des expertises complémentaires. Une même exigence.</h2>
+            <p>
+              AUTONOMIA fonctionne comme une marque commune et un point d’entrée unique.
+              Chaque mission s’appuie sur la structure et les compétences les plus adaptées au besoin.
+            </p>
           </div>
+        </div>
+
+        <div className="aboutEntityGrid">
+          <article>
+            <div className="aboutEntityTop"><span>01</span><small>TRANSFORMATION & IA</small></div>
+            <h3>DDG GROUPE</h3>
+            <p>
+              Pilotage, transformation, acquisition digitale, SEO/GEO, IA, automatisation,
+              structuration d’offres et conduite de projets.
+            </p>
+            <ul>
+              <li>Compréhension des enjeux business et métiers</li>
+              <li>Cadrage des cas d’usage IA</li>
+              <li>Pilotage de solutions et de partenaires</li>
+              <li>Adoption et transformation des usages</li>
+            </ul>
+          </article>
+
+          <article>
+            <div className="aboutEntityTop"><span>02</span><small>SECTEUR PUBLIC & COMMANDE PUBLIQUE</small></div>
+            <h3>ODEXIS</h3>
+            <p>
+              Conseil, accompagnement et formation en marchés publics depuis 2008,
+              avec une connaissance concrète des contraintes des acteurs publics et des entreprises.
+            </p>
+            <ul>
+              <li>Marchés publics et appels d’offres</li>
+              <li>Assistance et conseil</li>
+              <li>Formation et transmission</li>
+              <li>Compréhension des environnements publics</li>
+            </ul>
+          </article>
+
+          <article>
+            <div className="aboutEntityTop"><span>03</span><small>FORMATION & COMPÉTENCES</small></div>
+            <h3>MAJY ME</h3>
+            <p>
+              Formation professionnelle et montée en compétences autour de l’IA,
+              avec certification Qualiopi et accompagnement des dispositifs de financement lorsque les critères sont réunis.
+            </p>
+            <ul>
+              <li>Formations IA orientées usages</li>
+              <li>Parcours intra-entreprise</li>
+              <li>Accompagnement à l’adoption</li>
+              <li>Montée en compétences des équipes</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="aboutFoundersPremium">
+        <div className="aboutSectionIntro">
+          <p className="sectionIndex">LES PARCOURS</p>
+          <div>
+            <h2>Une marque récente portée par des expériences déjà établies.</h2>
+            <p>
+              AUTONOMIA concentre des compétences construites sur des années de missions,
+              de direction, de conseil, de formation et d’enseignement.
+            </p>
+          </div>
+        </div>
+
+        <div className="aboutFounderCards">
+          <article>
+            <div className="aboutFounderHead">
+              <small>DÉBORAH DIAN GOLDCHER</small>
+              <span>TRANSFORMATION · IA · DIGITAL · FORMATION</span>
+            </div>
+            <h3>Relier technologie, usages et performance.</h3>
+            <p>
+              Un parcours d’environ vingt ans entre acquisition digitale, SEO/SEA, pilotage,
+              entrepreneuriat et formation professionnelle. Cette double culture business et transmission
+              permet d’aborder l’IA par ce qu’elle change concrètement dans le travail.
+            </p>
+            <div className="aboutFounderTags">
+              <span>IA & automatisation</span><span>SEO / GEO</span><span>Transformation</span>
+              <span>Formation</span><span>Acquisition</span><span>Pilotage</span>
+            </div>
+            <div className="aboutFounderFoot">
+              Interventions et expériences auprès de grands comptes, collectivités,
+              écoles de commerce et universités.
+            </div>
+          </article>
+
+          <article>
+            <div className="aboutFounderHead">
+              <small>SYLVAIN LE TURCQ</small>
+              <span>MARCHÉS PUBLICS · AMO · FORMATION</span>
+            </div>
+            <h3>Comprendre les organisations publiques et leurs contraintes.</h3>
+            <p>
+              Fondateur d’ODEXIS, Sylvain accompagne depuis 2008 les entreprises et acteurs publics
+              sur la commande publique, le conseil et la formation. Cette expertise apporte à AUTONOMIA
+              une lecture particulièrement utile des projets IA destinés aux collectivités et organismes publics.
+            </p>
+            <div className="aboutFounderTags">
+              <span>Commande publique</span><span>Appels d’offres</span><span>AMO</span>
+              <span>Conseil</span><span>Formation</span><span>Secteur public</span>
+            </div>
+            <div className="aboutFounderFoot">
+              Intervenant identifié notamment par la CCI Essonne comme consultant expert/formateur en marchés publics.
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="aboutReferencesPremium">
+        <div className="aboutSectionIntro">
+          <p className="sectionIndex">RÉFÉRENCES</p>
+          <div>
+            <h2>Des expériences acquises auprès d’organisations très différentes.</h2>
+            <p>
+              Les références ci-dessous ont été acquises par les dirigeants et structures qui portent aujourd’hui AUTONOMIA,
+              dans leur contexte contractuel d’origine.
+            </p>
+          </div>
+        </div>
+
+        <div className="aboutReferenceMatrix">
+          {referenceGroups.map((group) => (
+            <article key={group.label}>
+              <small>{group.label}</small>
+              <div>
+                {group.items.map((item) => <span key={item}>{item}</span>)}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="aboutSerious">
+        <div className="aboutSeriousCopy">
+          <p className="sectionIndex">EXIGENCE</p>
+          <h2>La crédibilité d’un projet IA se joue dans l’exécution.</h2>
+          <p>
+            Nous privilégions les solutions explicables, documentées, testables et reliées à une responsabilité humaine claire.
+            L’objectif est de construire des usages qui puissent être repris, contrôlés et améliorés dans le temps.
+          </p>
+        </div>
+
+        <div className="aboutSeriousList">
+          <div><span>01</span><strong>Pas de démonstration déconnectée du métier.</strong></div>
+          <div><span>02</span><strong>Un périmètre, des responsabilités et des critères de réussite explicites.</strong></div>
+          <div><span>03</span><strong>Des contrôles humains aux endroits où ils apportent de la valeur.</strong></div>
+          <div><span>04</span><strong>Une documentation qui permet de maintenir et transmettre la solution.</strong></div>
+          <div><span>05</span><strong>Une formation reliée aux usages réellement déployés.</strong></div>
+        </div>
+      </section>
+
+      <section className="aboutFinalCta">
+        <div>
+          <p className="sectionIndex">TRAVAILLER AVEC AUTONOMIA</p>
+          <h2>Vous avez un problème métier. Nous construisons le chemin vers la bonne solution IA.</h2>
+        </div>
+        <div className="aboutFinalActions">
+          <Link className="primaryButton" href="/contact">Nous parler de votre besoin</Link>
+          <Link className="secondaryButton" href="/experts">Trouver un expert IA</Link>
+          <Link className="secondaryButton" href="/academy">Former vos équipes</Link>
         </div>
       </section>
     </main>
