@@ -5,9 +5,6 @@ export default function Header() {
     <>
       <header className="siteHeader">
         <Link className="brand" href="/" aria-label="Autonomia, accueil">
-          <span className="brandMark" aria-hidden="true">
-            <span>A</span>
-          </span>
           <span className="brandLockup">
             <strong>AUTONOMIA</strong>
             <small>AI EXECUTION PARTNER</small>
