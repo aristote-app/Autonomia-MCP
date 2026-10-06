@@ -29,15 +29,6 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <section className="contactHeroV2">
-        <p className="eyebrow">AUTONOMIA / CONTACT</p>
-        <h1>Parlons de votre projet IA.</h1>
-        <p>
-          Un besoin d’expert, une solution à construire ou des équipes à former ?
-          Décrivez le sujet en quelques lignes. Nous vous recontactons pour cadrer la suite.
-        </p>
-      </section>
-
       <section className="contactMainV2">
         <div className="contactInfoV2">
           <div className="contactPersonV2">
