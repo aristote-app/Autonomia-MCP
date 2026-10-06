@@ -22767,3 +22767,72 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .legalContent a,.legalPrivacyNotice a{text-decoration:underline;text-underline-offset:3px}
 .legalPrivacyNotice{font-size:.78rem!important;line-height:1.45!important;opacity:.82;margin:12px 0!important}
 @media(max-width:720px){.legalPage{padding:88px 18px 64px}.legalHero{padding-top:24px}}
+
+/* HOME PILLARS V25 — richer tag clouds */
+.homeV10 .executionStickerCloudRichV25 {
+  min-height:190px;
+  margin-top:20px;
+}
+
+.homeV10 .executionStickerCloudRichV25 span {
+  min-height:30px;
+  padding:0 10px;
+  border-radius:12px;
+  font-size:9px;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
+}
+
+.homeV10 .executionStickerCloudRichV25 span:nth-child(1){left:0;top:4px;rotate:-5deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(2){left:34%;top:0;rotate:4deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(3){right:0;top:18px;rotate:6deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(4){left:7%;top:52px;rotate:3deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(5){left:46%;top:48px;rotate:-6deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(6){right:3%;top:64px;rotate:4deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(7){left:0;top:98px;rotate:-3deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(8){left:31%;top:103px;rotate:5deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(9){right:0;top:112px;rotate:-4deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(10){left:10%;top:145px;rotate:4deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(11){left:49%;top:151px;rotate:-5deg}
+.homeV10 .executionStickerCloudRichV25 span:nth-child(12){right:1%;top:153px;rotate:3deg}
+
+.homeV10 .executionStickerCloudRichV25 span:nth-child(3n){
+  transform:scale(.92);
+  opacity:.92;
+}
+
+.homeV10 .executionStickerCloudRichV25 span:nth-child(4n+2){
+  min-height:34px;
+  padding-inline:12px;
+  font-size:10px;
+}
+
+.homeV10 .executionPillarV12.experts .executionStickerCloudRichV25 span:nth-child(2n){
+  background:#f7f8fb;
+}
+
+.homeV10 .executionPillarV12.build .executionStickerCloudRichV25 span:nth-child(3n+1){
+  background:#fff;
+  color:#0b1530;
+}
+
+.homeV10 .executionPillarV12.build .executionStickerCloudRichV25 span:nth-child(3n+2){
+  background:#0b1530;
+  color:#fff;
+}
+
+.homeV10 .executionPillarV12.academy .executionStickerCloudRichV25 span:nth-child(3n+1){
+  background:#e8fffb;
+}
+
+.homeV10 .executionPillarV12.academy .executionStickerCloudRichV25 span:nth-child(3n+2){
+  background:#fff;
+}
+
+@media (max-width:1180px){
+  .homeV10 .executionStickerCloudRichV25{min-height:175px}
+}
+
+@media (max-width:759px){
+  .homeV10 .executionStickerCloudRichV25{min-height:210px}
+  .homeV10 .executionStickerCloudRichV25 span{font-size:8px;min-height:28px}
+}

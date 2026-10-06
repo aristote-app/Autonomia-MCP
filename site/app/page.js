@@ -53,8 +53,8 @@ export default function Home() {
             </div>
             <h3>Les bonnes compétences IA, au bon moment, pour le bon besoin.</h3>
             <p>Nous trouvons et mobilisons les profils capables de cadrer, construire, intégrer et piloter vos projets IA.</p>
-            <div className="executionStickerCloudV12" aria-hidden="true">
-              <span>AI Engineers</span><span>Data Scientists</span><span>RAG</span><span>Agents IA</span><span>AI Product</span><span>GEO / AEO</span>
+            <div className="executionStickerCloudV12 executionStickerCloudRichV25" aria-hidden="true">
+              <span>AI Engineers</span><span>Data Scientists</span><span>Automation Experts</span><span>AI Project Managers</span><span>RAG</span><span>Agents IA</span><span>AI Product</span><span>GEO / AEO</span><span>MLOps / LLMOps</span><span>Data Engineers</span><span>AI Governance</span>
             </div>
             <Link href="/experts" className="executionPillarCtaV12">Trouver un expert IA →</Link>
           </article>
@@ -71,8 +71,8 @@ export default function Home() {
             <div className="executionBuildFlowV12" aria-hidden="true">
               <span>Problème</span><i>→</i><span>Workflow</span><i>→</i><span>IA</span><i>→</i><span>Usage</span>
             </div>
-            <div className="executionStickerCloudV12">
-              <span>Agents IA</span><span>RAG</span><span>Automatisation</span><span>Reporting</span><span>Mini-apps</span><span>Outils internes</span>
+            <div className="executionStickerCloudV12 executionStickerCloudRichV25">
+              <span>Agents IA</span><span>RAG</span><span>Automatisation</span><span>Workflows</span><span>Assistants métier</span><span>Reporting</span><span>Traitement e-mails</span><span>Qualification leads</span><span>Documents</span><span>Mini-apps</span><span>Outils internes</span><span>Intégrations</span>
             </div>
             <div className="executionBuildLinksV12">
               <Link href="/solutions-ia" className="executionPillarCtaV12">Construire une solution IA →</Link>
@@ -90,8 +90,8 @@ export default function Home() {
             </div>
             <h3>Former les équipes pour que l’IA devienne réellement utilisable au quotidien.</h3>
             <p>Des parcours reliés aux métiers, aux outils, aux agents IA, aux automatisations et aux workflows réels de l’organisation.</p>
-            <div className="executionStickerCloudV12" aria-hidden="true">
-              <span>Cas d’usage métier</span><span>Agents IA</span><span>Automatisation</span><span>Adoption</span><span>Intra</span><span>Inter</span>
+            <div className="executionStickerCloudV12 executionStickerCloudRichV25" aria-hidden="true">
+              <span>Cas d’usage métier</span><span>ChatGPT & Copilot</span><span>Agents IA</span><span>Automatisation</span><span>Prompting</span><span>Managers</span><span>AI Act</span><span>Adoption</span><span>Ateliers métier</span><span>Intra</span><span>Inter</span>
             </div>
             <Link href="/academy" className="executionPillarCtaV12">Voir les Formations IA →</Link>
           </article>
