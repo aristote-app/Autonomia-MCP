@@ -194,9 +194,9 @@ export default function AboutPage() {
         <div className="aboutMarketingPeopleGrid aboutMarketingPeopleGridExpert">
           <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
-              <div>
+              <div className="aboutExpertIdentity">
                 <small className="aboutExpertName">DÉBORAH DIAN GOLDCHER</small>
-                <span>DIGITAL · MARKETING · TRANSFORMATION · IA · FORMATION</span>
+                <span className="aboutExpertRole">DIGITAL · MARKETING · TRANSFORMATION · IA · FORMATION</span>
               </div>
               <a
                 className="aboutLinkedIn"
@@ -246,9 +246,9 @@ export default function AboutPage() {
 
           <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
-              <div>
+              <div className="aboutExpertIdentity">
                 <small className="aboutExpertName">SYLVAIN LE TURCQ</small>
-                <span>COMMANDE PUBLIQUE · CONSEIL · AMO · FORMATION</span>
+                <span className="aboutExpertRole">COMMANDE PUBLIQUE · ADMINISTRATIONS · COLLECTIVITÉS · AMO · FORMATION</span>
               </div>
               <a
                 className="aboutLinkedIn"
@@ -264,31 +264,36 @@ export default function AboutPage() {
               </a>
             </div>
 
-            <h3>Faire avancer des projets dans des environnements publics exigeants.</h3>
+            <h3>Une expertise construite au cœur des administrations et des collectivités.</h3>
             <p className="aboutExpertIntro">
-              Plus de 20 ans d’expérience professionnelle, dont près de deux décennies consacrées aux marchés publics.
-              Fondateur d’ODEXIS, Sylvain accompagne entreprises et acteurs publics en conseil, formation et assistance,
-              avec une maîtrise approfondie des procédures et des attentes des acheteurs.
+              Plus de 20 ans d’expérience professionnelle, avec une spécialisation forte en commande publique,
+              marchés publics et fonctionnement des administrations. Son passage au Conseil général des Hauts-de-Seine,
+              puis la création d’ODEXIS, lui donnent une double lecture particulièrement utile : comprendre de l’intérieur
+              les contraintes des acheteurs publics et accompagner les entreprises qui souhaitent travailler avec eux.
             </p>
 
             <div className="aboutExpertSplit">
               <div>
                 <small>EXPERTISES</small>
                 <ul>
+                  <li><strong>Collectivités territoriales</strong><span>Compréhension des organisations publiques, de leurs circuits de décision, contraintes opérationnelles et logiques d’achat.</span></li>
                   <li><strong>Commande publique</strong><span>Lecture des consultations, compréhension des procédures, stratégie de réponse et sécurisation.</span></li>
                   <li><strong>Marchés publics</strong><span>Accompagnement des entreprises, groupements, réponses aux appels d’offres et développement sur le secteur public.</span></li>
-                  <li><strong>AMO & conseil</strong><span>Analyse des besoins, cadrage, méthode, assistance et accompagnement des organisations.</span></li>
-                  <li><strong>Formation</strong><span>Transmission des pratiques de la commande publique à des entreprises et acteurs institutionnels.</span></li>
-                  <li><strong>Culture acheteur</strong><span>Compréhension des critères, des usages de la commande publique et de la logique de valeur attendue.</span></li>
+                  <li><strong>AMO & conseil</strong><span>Analyse des besoins, cadrage, méthode, assistance et accompagnement des administrations et organisations.</span></li>
+                  <li><strong>Formation</strong><span>Transmission des pratiques de la commande publique à des entreprises, collectivités et acteurs institutionnels.</span></li>
                 </ul>
               </div>
 
-              <div className="aboutExpertMarkers">
-                <small>REPÈRES DE PARCOURS</small>
-                <p><strong>ODEXIS</strong> fondée en 2008, spécialisée en Conseil, Formation et AMO marchés publics.</p>
-                <p><strong>Université Paris X Nanterre</strong> : mémoire consacré à la notion d’offre économiquement la plus avantageuse dans les marchés publics.</p>
-                <p><strong>Interventions</strong> auprès d’acteurs comme la CCI Essonne, le CNFPT et des réseaux d’entreprises.</p>
-                <p><strong>Double lecture</strong> : besoins des entreprises et exigences des acheteurs publics.</p>
+              <div className="aboutExpertMarkers aboutExpertTimeline aboutExpertTimelineSylvain">
+                <small>ADMINISTRATIONS & COLLECTIVITÉS</small>
+                <p className="aboutExpertNow aboutExpertPublicNow">
+                  <strong>Aujourd’hui · Référent collectivités territoriales</strong>
+                  <span>Expertise dédiée aux collectivités, administrations et acteurs publics pour cadrer, sécuriser et faire avancer leurs projets.</span>
+                </p>
+                <p><strong>ODEXIS · depuis 2008</strong><span>Conseil, formation et AMO en marchés publics auprès d’entreprises et d’acteurs publics.</span></p>
+                <p><strong>Conseil général des Hauts-de-Seine</strong><span>Expérience au sein d’une administration départementale : compréhension concrète des circuits, contraintes et attentes du secteur public.</span></p>
+                <p><strong>CCI Essonne · CNFPT · réseaux d’entreprises</strong><span>Interventions et formations autour de la commande publique et des marchés publics.</span></p>
+                <p><strong>Université Paris X Nanterre</strong><span>Mémoire consacré à la notion d’offre économiquement la plus avantageuse dans les marchés publics.</span></p>
               </div>
             </div>
           </article>
