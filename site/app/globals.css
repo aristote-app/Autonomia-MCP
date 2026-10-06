@@ -21020,3 +21020,56 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .referenceLogoInstitution{width:176px;min-width:176px}
   .referenceLogoInstitution img{max-width:126px;max-height:34px}
 }
+
+
+/* REFERENCE LOGOS — clean, unique, no grey cards */
+.referenceSectionHome .referenceMarquee{
+  overflow:visible;
+  padding:8px 0 2px;
+  mask-image:none;
+}
+.referenceSectionHome .referenceTrack,
+.referenceSectionHome .referenceTrackPublic{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px 34px;
+  width:auto;
+  animation:none;
+  align-items:center;
+}
+.referenceSectionHome .referenceLogoItem,
+.referenceSectionHome .referenceLogoInstitution{
+  width:auto;
+  min-width:0;
+  height:58px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.referenceSectionHome .referenceLogoItem img{
+  max-width:150px;
+  max-height:34px;
+  opacity:.9;
+  filter:grayscale(1) brightness(0) invert(1);
+}
+.referenceSectionHome .referenceLogoInstitution img{
+  max-width:165px;
+  max-height:38px;
+}
+.referenceSectionHome .referenceLogoItem:hover img{
+  opacity:1;
+  transform:translateY(-1px);
+}
+@media(max-width:820px){
+  .referenceSectionHome .referenceTrack,
+  .referenceSectionHome .referenceTrackPublic{
+    gap:18px 24px;
+  }
+  .referenceSectionHome .referenceLogoItem,
+  .referenceSectionHome .referenceLogoInstitution{
+    height:48px;
+  }
+  .referenceSectionHome .referenceLogoItem img{max-width:120px;max-height:28px}
+  .referenceSectionHome .referenceLogoInstitution img{max-width:135px;max-height:32px}
+}
