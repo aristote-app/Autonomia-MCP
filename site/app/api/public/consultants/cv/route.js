@@ -279,9 +279,17 @@ function buildPdf(profile, roleTitle) {
     p.line(x+8, top-5, x, top+1, C.white, .8);
   }
   function iconPhone(p, x, top) {
-    p.circle(x-4, top-5, 3, C.blue);
-    p.circle(x+4, top+5, 3, C.blue);
-    p.line(x-3, top-3, x+3, top+3, C.blue, 3);
+    // cleaner handset icon
+    p.curve(x-7, top-7, x-9, top-2, x-2, top+7, x+5, top+9, C.blue, 2.6);
+    p.roundedRect(x-9, top-9, 5, 8, 2, C.blue);
+    p.roundedRect(x+4, top+5, 5, 8, 2, C.blue);
+  }
+  function iconAutonomiaMark(p, x, top) {
+    // Autonomia favicon / mark only
+    p.circle(x, top, 18, [.94,.98,.99]);
+    p.polygon([[x-10,top+10],[x-2,top-8],[x+2,top-2],[x-5,top+10]], C.cyan2);
+    p.polygon([[x,top-11],[x+12,top+10],[x+5,top+10],[x-4,top-3]], C.cyan);
+    p.polygon([[x-3,top+2],[x+2,top-3],[x+10,top+10],[x+3,top+10]], C.cyan);
   }
   function iconExternal(p, x, top) {
     p.roundedRect(x-8, top-6, 12, 12, 1, null, C.blue, 1.3);
@@ -434,7 +442,7 @@ function buildPdf(profile, roleTitle) {
   p2.text(98, 744, "Rencontrer ce consultant", 18.5, true, C.text);
 
   p2.roundedRect(18, 777, 559, 50, 10, C.pale, C.line, .4);
-  iconPerson(p2, 50, 802);
+  iconAutonomiaMark(p2, 50, 802);
   p2.text(88, 786, "Déborah Dian Goldcher", 11, true, C.text);
   iconMail(p2, 92, 809);
   p2.text(108, 803, "deborah@build-autonomia.com", 8.5, false, C.text);
@@ -445,7 +453,7 @@ function buildPdf(profile, roleTitle) {
   iconExternal(p2, 339, 798);
   p2.text(355, 786, "Échanger sur ce profil", 10.2, true, C.text);
   p2.roundedRect(339, 807, 210, 18, 9, C.navy, null);
-  p2.text(350, 812, "Ouvrir la page contact", 7.8, true, C.white);
+  p2.text(350, 812, "Prendre RDV", 7.8, true, C.white);
 
   // PDF assembly
   const objects = [];
@@ -455,7 +463,7 @@ function buildPdf(profile, roleTitle) {
   const s1 = p1.out.join("\n"), s2 = p2.out.join("\n");
   const c1 = add("<< /Length " + Buffer.byteLength(s1, "binary") + " >>\nstream\n" + s1 + "\nendstream");
   const c2 = add("<< /Length " + Buffer.byteLength(s2, "binary") + " >>\nstream\n" + s2 + "\nendstream");
-  const annot = add("<< /Type /Annot /Subtype /Link /Rect [339 " + (H-827) + " 559 " + (H-777) + "] /Border [0 0 0] /A << /S /URI /URI (https://build-autonomia.com/contact) >> >>");
+  const annot = add("<< /Type /Annot /Subtype /Link /Rect [339 " + (H-827) + " 559 " + (H-777) + "] /Border [0 0 0] /A << /S /URI /URI (https://calendly.com/deborah-build-autonomia/30min) >> >>");
   const pagesFuture = objects.length + 3;
   const pg1 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c1 + " 0 R >>");
   const pg2 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c2 + " 0 R /Annots [" + annot + " 0 R] >>");
