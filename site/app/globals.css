@@ -21073,3 +21073,54 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .referenceSectionHome .referenceLogoItem img{max-width:120px;max-height:28px}
   .referenceSectionHome .referenceLogoInstitution img{max-width:135px;max-height:32px}
 }
+
+
+/* Consultant CV downloads */
+.consultantCardActions {
+  display: grid;
+  gap: 8px;
+}
+
+.consultantCvDownload,
+.consultantCardActions > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 50px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.consultantCvDownload {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+
+.consultantCvDownload:hover {
+  border-color: var(--ink);
+  background: var(--paper);
+}
+
+.consultantCardActions > button {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+
+.consultantCardActions > button:hover {
+  background: var(--signal);
+  border-color: #28bfae;
+  color: var(--signal-ink);
+}
+
+.consultantCvDownload b,
+.consultantCardActions > button b {
+  font-size: 20px;
+  line-height: 1;
+}
