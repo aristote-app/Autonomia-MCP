@@ -1,3 +1,4 @@
+import AutonomiaLogo from "@/components/AutonomiaLogo";
 import Link from "next/link";
 
 export default function Header() {
@@ -5,10 +6,7 @@ export default function Header() {
     <>
       <header className="siteHeader">
         <Link className="brand" href="/" aria-label="Autonomia, accueil">
-          <span className="brandLockup">
-            <strong>AUTONOMIA</strong>
-            <small>AI EXECUTION PARTNER</small>
-          </span>
+          <AutonomiaLogo width={190} inverse />
         </Link>
 
         <nav className="desktopNav" aria-label="Navigation principale">
