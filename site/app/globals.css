@@ -22239,3 +22239,32 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     white-space:normal;
   }
 }
+
+
+/* ABOUT DEBORAH TIMELINE V6 — digital to AI progression */
+.aboutExpertTimeline p{
+  display:grid;
+  gap:5px;
+}
+.aboutExpertTimeline p strong{
+  font-size:13px;
+  line-height:1.35;
+}
+.aboutExpertTimeline p span{
+  color:#65727f;
+  font-size:12.5px;
+  line-height:1.5;
+}
+.aboutExpertTimeline .aboutExpertNow{
+  margin-top:4px!important;
+  padding:14px!important;
+  border:1px solid rgba(21,159,148,.22)!important;
+  border-radius:12px;
+  background:rgba(61,226,208,.10);
+}
+.aboutExpertTimeline .aboutExpertNow strong{
+  color:#0f8f86;
+}
+.aboutExpertTimeline .aboutExpertNow span{
+  color:#33414d;
+}
