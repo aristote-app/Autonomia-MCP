@@ -4027,7 +4027,7 @@ button {
 }
 .territoryBuyerGrid span { color:var(--muted); font-size:9px; }
 .territoryBuyerGrid strong { margin-top:auto; font-size:16px; line-height:1.2; }
-.territoryLeadSection { background:#f7f6f1; }
+.territoryLeadSection { background:#f3f7fa; }
 .territoryLeadIntro { display:grid; gap:18px; margin-bottom:10px; }
 
 .territoryHomePromo {
