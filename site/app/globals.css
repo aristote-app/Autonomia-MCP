@@ -7030,3 +7030,27 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   outline:3px solid rgba(61,226,208,.34);outline-offset:2px;
 }
 ::selection{background:var(--brand-cyan);color:var(--brand-navy);}
+
+
+/* AUTONOMIA — references & collective */
+.referenceSection,.collectiveSection,.foundersSection,.aboutReferences{padding:92px clamp(24px,5vw,80px);border-top:1px solid rgba(255,255,255,.08)}
+.referenceIntro,.collectiveSection .sectionHeading,.foundersSection .sectionHeading,.aboutReferences .sectionHeading{display:grid;grid-template-columns:minmax(140px,.38fr) minmax(0,1.62fr);gap:clamp(24px,4vw,72px);align-items:start;margin-bottom:42px}
+.referenceIntro h2,.collectiveSection h2,.foundersSection h2,.aboutReferences h2{margin:0 0 14px;font-size:clamp(2.2rem,4vw,4.5rem);line-height:.98;letter-spacing:-.045em}
+.referenceIntro p,.collectiveSection .sectionHeading p,.foundersSection .sectionHeading p,.aboutReferences .sectionHeading p{max-width:900px}
+.referenceMarquee{overflow:hidden;padding:18px 0;mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
+.referenceTrack{display:flex;gap:14px;width:max-content;animation:autonomiaReferenceRail 42s linear infinite}
+.referenceMarquee:hover .referenceTrack{animation-play-state:paused}
+.referenceLogo{display:inline-flex;align-items:center;min-height:68px;padding:0 28px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.035);font-size:.82rem;font-weight:800;letter-spacing:.08em;white-space:nowrap;text-transform:uppercase}
+.referenceActions{display:flex;justify-content:flex-end;margin-top:28px}
+.collectiveGrid,.founderGrid,.referenceFamilies{display:grid;gap:16px}
+.collectiveGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.collectiveGrid article,.founderGrid article,.referenceFamilies article{padding:28px;border:1px solid rgba(255,255,255,.1);border-radius:24px;background:rgba(255,255,255,.03)}
+.collectiveGrid article span{display:inline-flex;margin-bottom:34px;font-size:.72rem;font-weight:800;opacity:.58}
+.collectiveGrid h3,.founderGrid h3{margin:0 0 12px;font-size:clamp(1.45rem,2vw,2.2rem);letter-spacing:-.035em}
+.founderGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.founderGrid small,.referenceFamilies small{display:block;margin-bottom:14px;font-size:.72rem;font-weight:800;letter-spacing:.08em}
+.referenceFamilies{grid-template-columns:repeat(2,minmax(0,1fr))}
+.referenceFamilies p{margin:0;line-height:1.7}
+@keyframes autonomiaReferenceRail{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:820px){.referenceSection,.collectiveSection,.foundersSection,.aboutReferences{padding:64px 20px}.referenceIntro,.collectiveSection .sectionHeading,.foundersSection .sectionHeading,.aboutReferences .sectionHeading{grid-template-columns:1fr;gap:14px}.collectiveGrid,.founderGrid,.referenceFamilies{grid-template-columns:1fr}.referenceLogo{min-height:58px;padding:0 22px;font-size:.72rem}.referenceActions{justify-content:flex-start}}
+@media(prefers-reduced-motion:reduce){.referenceTrack{animation:none;flex-wrap:wrap;width:auto}}
