@@ -181,84 +181,114 @@ export default function AboutPage() {
 
       <section className="aboutMarketingPeople">
         <div className="aboutMarketingHeading">
-          <p className="sectionIndex">20+ ANS D’EXPÉRIENCE CHACUN</p>
+          <p className="sectionIndex">LES EXPERTISES DIRIGEANTES</p>
           <div>
-            <h2>Deux parcours complémentaires derrière le groupement.</h2>
+            <h2>Deux experts. Plus de 20 ans d’expérience chacun. Des compétences qui se complètent.</h2>
             <p>
-              L’un apporte une culture transformation, business, digital et formation.
-              L’autre une expertise profonde de la commande publique, du conseil et de l’accompagnement des organisations.
+              AUTONOMIA associe une expertise forte de la transformation digitale, du marketing, de l’IA et de la formation
+              à une expertise reconnue de la commande publique, du conseil et de l’accompagnement des organisations.
             </p>
           </div>
         </div>
 
-        <div className="aboutMarketingPeopleGrid">
-          <article>
+        <div className="aboutMarketingPeopleGrid aboutMarketingPeopleGridExpert">
+          <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
-              <small>DÉBORAH DIAN GOLDCHER</small>
-              <span>TRANSFORMATION · IA · DIGITAL · FORMATION</span>
+              <div>
+                <small>DÉBORAH DIAN GOLDCHER</small>
+                <span>TRANSFORMATION · IA · DIGITAL · FORMATION</span>
+              </div>
+              <a
+                className="aboutLinkedIn"
+                href="https://fr.linkedin.com/in/deborahdiangoldcher"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Voir le profil LinkedIn de Déborah Dian Goldcher"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.93v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.54 9H7.1v11.45H3.54V9Z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
             </div>
-            <h3>Transformer les usages en performance.</h3>
-            <p>
-              Plus de 20 ans d’expérience entre acquisition digitale, SEO/SEA, pilotage,
-              entrepreneuriat, formation professionnelle et transformation des organisations.
-              Une approche orientée business : partir du besoin, construire le bon dispositif et mesurer l’utilité réelle.
+
+            <h3>Transformer une stratégie en usages qui performent.</h3>
+            <p className="aboutExpertIntro">
+              Plus de 20 ans d’expérience en acquisition digitale, SEO/SEA, webmarketing, pilotage,
+              entrepreneuriat et formation professionnelle. Son parcours combine vision business,
+              compréhension des usages et capacité à structurer des dispositifs opérationnels.
             </p>
-            <div className="aboutMarketingTags">
-              <span>IA & automatisation</span>
-              <span>SEO / GEO</span>
-              <span>Transformation</span>
-              <span>Formation</span>
-              <span>Pilotage</span>
+
+            <div className="aboutExpertSplit">
+              <div>
+                <small>EXPERTISES</small>
+                <ul>
+                  <li><strong>IA & automatisation</strong><span>Cadrage de cas d’usage, agents, automatisations, adoption et transformation des processus.</span></li>
+                  <li><strong>Transformation digitale</strong><span>Diagnostic des usages, structuration de projets et accompagnement du changement.</span></li>
+                  <li><strong>SEO / SEA / acquisition</strong><span>Stratégie d’acquisition, audit SEO, contenu, Google Ads, analytics et pilotage des KPI.</span></li>
+                  <li><strong>Formation & transmission</strong><span>Conception et déploiement de formations digitales, bureautiques et IA en entreprise et dans l’enseignement supérieur.</span></li>
+                  <li><strong>Pilotage business</strong><span>Direction de structures, conception d’offres, développement et gestion de partenaires.</span></li>
+                </ul>
+              </div>
+
+              <div className="aboutExpertMarkers">
+                <small>REPÈRES DE PARCOURS</small>
+                <p><strong>6 ans</strong> Responsable Acquisition chez ADL Performance.</p>
+                <p><strong>4 ans</strong> chez Effinity / Effiliation en SEA et acquisition B2B.</p>
+                <p><strong>Depuis 2017</strong> direction d’organismes de formation et conseil digital.</p>
+                <p><strong>Enseignement</strong> UPEC, ESCG, EDC Paris, Pigier, EfreiTech.</p>
+              </div>
             </div>
           </article>
 
-          <article>
+          <article className="aboutExpertCard">
             <div className="aboutMarketingPersonTop">
-              <small>SYLVAIN LE TURCQ</small>
-              <span>MARCHÉS PUBLICS · CONSEIL · AMO · FORMATION</span>
+              <div>
+                <small>SYLVAIN LE TURCQ</small>
+                <span>COMMANDE PUBLIQUE · CONSEIL · AMO · FORMATION</span>
+              </div>
+              <a
+                className="aboutLinkedIn"
+                href="https://fr.linkedin.com/in/sylvain-le-turcq-424700b1"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Voir le profil LinkedIn de Sylvain Le Turcq"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.14 1.44-2.14 2.93v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.54 9H7.1v11.45H3.54V9Z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
             </div>
-            <h3>Faire avancer les projets dans des environnements exigeants.</h3>
-            <p>
-              Plus de 20 ans d’expérience dans l’accompagnement des entreprises et acteurs publics,
-              les marchés publics, le conseil et la formation. Une expertise particulièrement forte pour les projets
-              IA destinés aux collectivités, organismes publics et entreprises qui travaillent avec eux.
+
+            <h3>Faire avancer des projets dans des environnements publics exigeants.</h3>
+            <p className="aboutExpertIntro">
+              Plus de 20 ans d’expérience professionnelle, dont près de deux décennies consacrées aux marchés publics.
+              Fondateur d’ODEXIS, Sylvain accompagne entreprises et acteurs publics en conseil, formation et assistance,
+              avec une maîtrise approfondie des procédures et des attentes des acheteurs.
             </p>
-            <div className="aboutMarketingTags">
-              <span>Commande publique</span>
-              <span>Appels d’offres</span>
-              <span>AMO</span>
-              <span>Conseil</span>
-              <span>Secteur public</span>
+
+            <div className="aboutExpertSplit">
+              <div>
+                <small>EXPERTISES</small>
+                <ul>
+                  <li><strong>Commande publique</strong><span>Lecture des consultations, compréhension des procédures, stratégie de réponse et sécurisation.</span></li>
+                  <li><strong>Marchés publics</strong><span>Accompagnement des entreprises, groupements, réponses aux appels d’offres et développement sur le secteur public.</span></li>
+                  <li><strong>AMO & conseil</strong><span>Analyse des besoins, cadrage, méthode, assistance et accompagnement des organisations.</span></li>
+                  <li><strong>Formation</strong><span>Transmission des pratiques de la commande publique à des entreprises et acteurs institutionnels.</span></li>
+                  <li><strong>Culture acheteur</strong><span>Compréhension des critères, des usages de la commande publique et de la logique de valeur attendue.</span></li>
+                </ul>
+              </div>
+
+              <div className="aboutExpertMarkers">
+                <small>REPÈRES DE PARCOURS</small>
+                <p><strong>ODEXIS</strong> fondée en 2008, spécialisée en Conseil, Formation et AMO marchés publics.</p>
+                <p><strong>Université Paris X Nanterre</strong> : mémoire consacré à la notion d’offre économiquement la plus avantageuse dans les marchés publics.</p>
+                <p><strong>Interventions</strong> auprès d’acteurs comme la CCI Essonne, le CNFPT et des réseaux d’entreprises.</p>
+                <p><strong>Double lecture</strong> : besoins des entreprises et exigences des acheteurs publics.</p>
+              </div>
             </div>
           </article>
-        </div>
-      </section>
-
-      <section className="aboutMarketingReferences">
-        <div className="aboutMarketingReferencesHead">
-          <div>
-            <p className="sectionIndex">RÉFÉRENCES</p>
-            <h2>Une expérience construite auprès d’organisations de premier plan.</h2>
-          </div>
-          <p>
-            Ces références ont été acquises par les dirigeants et les structures qui portent aujourd’hui AUTONOMIA,
-            dans leur contexte contractuel d’origine.
-          </p>
-        </div>
-
-        <div className="aboutMarketingReferenceRows">
-          <div>
-            <small>ENTREPRISES & MARQUES</small>
-            <p>{refs.entreprises.join(" · ")}</p>
-          </div>
-          <div>
-            <small>COLLECTIVITÉS & INSTITUTIONS</small>
-            <p>{refs.public.join(" · ")}</p>
-          </div>
-          <div>
-            <small>ÉCOLES & UNIVERSITÉS</small>
-            <p>{refs.education.join(" · ")}</p>
-          </div>
         </div>
       </section>
 
