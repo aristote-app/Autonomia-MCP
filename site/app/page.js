@@ -111,13 +111,49 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="referenceMarquee" aria-label="Références principales">
-          <div className="referenceTrack">
-            {["AIR FRANCE INDUSTRIES","BNP PARIBAS PERSONAL FINANCE","SYMRISE","KRYS","OROLIA","WESCO","SPECTRACOM","WESTCON","ATLAND","GARANTME","OZITEM","POTEL & CHABOT","MERCURE","NOVOTEL","TILLI","FRANPRIX","VILLE DE BOBIGNY","VILLE DE CLICHY","ROUMOISEINE","CNFPT","AIR FRANCE INDUSTRIES","BNP PARIBAS PERSONAL FINANCE","SYMRISE","KRYS","OROLIA","WESCO","SPECTRACOM","WESTCON","ATLAND","GARANTME","OZITEM","POTEL & CHABOT","MERCURE","NOVOTEL","TILLI","FRANPRIX","VILLE DE BOBIGNY","VILLE DE CLICHY","ROUMOISEINE","CNFPT"].map((name,index)=>(
-              <span className="referenceLogo" key={`${name}-${index}`}>{name}</span>
-            ))}
+
+        <div className="referenceFamily">
+          <small>ENTREPRISES & MARQUES</small>
+          <div className="referenceMarquee" aria-label="Références entreprises et marques">
+            <div className="referenceTrack">
+              {[
+                { name: "Air France Industries", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Air%20France%20Logo.svg" },
+                { name: "BNP Paribas Personal Finance", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNP%20Paribas%20logo.svg" },
+                { name: "Symrise", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Symrise%20wordmark%20logo.svg" },
+                { name: "KRYS Group", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20KRYS%20GROUP.png" },
+                { name: "WESCO", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Wesco%20International%20logo.svg" },
+                { name: "Westcon Group", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/WESTCON%20GROUP%20LOGO.png" },
+                { name: "ATLAND", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/LOGO%20ATLAND.jpg" },
+                { name: "OZITEM", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20groupe%20ozitem.png" },
+                { name: "Mercure", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mercure%20Hotels%20Logo%20neu.svg" },
+                { name: "Novotel", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Novotel%20logo%20%282016%29.svg" },
+                { name: "Franprix", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Franprix%20-%202015.svg" }
+              ].flatMap((item) => [item, item]).map((item, index) => (
+                <span className="referenceLogoItem" key={`company-${item.name}-${index}`}>
+                  <img src={item.src} alt={item.name} loading="lazy" />
+                </span>
+              ))}
+            </div>
           </div>
         </div>
+
+        <div className="referenceFamily referenceFamilyPublic">
+          <small>COLLECTIVITÉS & INSTITUTIONS</small>
+          <div className="referenceMarquee referenceMarqueePublic" aria-label="Références collectivités et institutions">
+            <div className="referenceTrack referenceTrackPublic">
+              {[
+                { name: "CNFPT", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo-CNFPT-2024-RVB.png" },
+                { name: "Ville de Bobigny", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20bobigny.png" },
+                { name: "Ville de Clichy", src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Clichy-la-Garenne.svg" }
+              ].flatMap((item) => [item, item, item, item]).map((item, index) => (
+                <span className="referenceLogoItem referenceLogoInstitution" key={`public-${item.name}-${index}`}>
+                  <img src={item.src} alt={item.name} loading="lazy" />
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="referenceActions">
           <Link className="secondaryButton" href="/a-propos">Voir l’expérience du collectif →</Link>
         </div>
