@@ -22268,3 +22268,51 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .aboutExpertTimeline .aboutExpertNow span{
   color:#33414d;
 }
+
+
+/* ABOUT EXPERT HEADER V7 — no overlap */
+.aboutMarketingPersonTop{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 42px;
+  gap:14px;
+  align-items:center;
+}
+.aboutMarketingPersonTop>div{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:14px;
+  align-items:center;
+  min-width:0;
+}
+.aboutExpertName{
+  min-width:0;
+  white-space:nowrap;
+}
+.aboutMarketingPersonTop>div>span{
+  min-width:0;
+  max-width:none;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:left;
+  font-size:10.5px;
+  letter-spacing:.075em;
+}
+.aboutLinkedIn{
+  width:42px;
+  min-width:42px;
+  height:42px;
+  min-height:42px;
+  justify-self:end;
+}
+@media(max-width:1200px){
+  .aboutMarketingPersonTop>div{
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .aboutMarketingPersonTop>div>span{
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+  }
+}
