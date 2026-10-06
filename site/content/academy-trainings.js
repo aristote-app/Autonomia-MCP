@@ -3,7 +3,7 @@ export const academyTrainings = [
     "slug": "ia-generative-entreprise",
     "title": "Formation IA générative en entreprise",
     "homeTitle": "Formation IA générative en entreprise",
-    "subtitle": "Comprendre, utiliser et encadrer les IA génératives pour gagner en productivité sans perdre la maîtrise de la qualité, des données et des décisions.",
+    "subtitle": "Formation professionnelle à l’IA générative pour salariés, managers et fonctions support : ChatGPT, Claude, Gemini, Copilot, cas d’usage métier, prompting, vérification, données et règles d’usage.",
     "standardDays": 2,
     "introDays": 1,
     "expertDays": 3,
