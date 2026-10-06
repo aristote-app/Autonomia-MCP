@@ -235,11 +235,11 @@ export default function AboutPage() {
 
               <div className="aboutExpertMarkers aboutExpertTimeline">
                 <small>DU DIGITAL À L’IA</small>
-                <p><strong>2006–2011 · Effiliation / Effinity</strong><span>Search, acquisition B2B, stratégies webmarketing multicanal et premiers projets d’outils digitaux.</span></p>
-                <p><strong>2011–2016 · ADLPartner</strong><span>Responsable Acquisition : SEO, Google Ads, analytics, UX, refonte d’outils et coordination avec la DSI.</span></p>
-                <p><strong>2016–2018 · Enseignement</strong><span>SEO/SEM, webmarketing et e-commerce à l’UPEC, EDC, EfreiTech, Pigier et ESCG.</span></p>
-                <p><strong>2018–2026 · Direction & formation</strong><span>Direction d’organismes de formation, ingénierie pédagogique, recrutement, staffing, qualité et pilotage opérationnel.</span></p>
                 <p className="aboutExpertNow"><strong>Aujourd’hui · Transformation IA</strong><span>Mettre cette culture digitale, métier et pédagogique au service de l’adoption de l’IA dans les organisations.</span></p>
+                <p><strong>2018–2026 · Direction & formation</strong><span>Direction d’organismes de formation, ingénierie pédagogique, recrutement, staffing, qualité et pilotage opérationnel.</span></p>
+                <p><strong>2016–2018 · Enseignement</strong><span>SEO/SEM, webmarketing et e-commerce à l’UPEC, EDC, EfreiTech, Pigier et ESCG.</span></p>
+                <p><strong>2011–2016 · ADLPartner</strong><span>Responsable Acquisition : SEO, Google Ads, analytics, UX, refonte d’outils et coordination avec la DSI.</span></p>
+                <p><strong>2006–2011 · Effiliation / Effinity</strong><span>Search, acquisition B2B, stratégies webmarketing multicanal et premiers projets d’outils digitaux.</span></p>
               </div>
             </div>
           </article>
