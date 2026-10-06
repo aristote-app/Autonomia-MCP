@@ -183,192 +183,258 @@ function deriveStrengths(profile, roleTitle) {
 }
 
 function buildPdf(profile, roleTitle) {
-  const p1=streamBuilder(), p2=streamBuilder();
-  const rawInitials=String(profile.initials||"IA").replace(/\./g,"").slice(0,3).toUpperCase();
-  const initials=rawInitials.split("").join(".")+".";
-  const title=String(profile.title||roleTitle||"Consultant IA").trim();
-  const skills=unique(profile.skills||[]).slice(0,10);
-  const bullets=unique(profile.cv_bullets||[]).slice(0,6);
-  const location=profile.location||"France";
-  const modality=profile.remote?"Remote / Hybride":"Modalités à confirmer";
-  const availability=profile.availability?.label||"Disponibilité à confirmer";
-  const rate=profile.tjm==null?"TJM à confirmer":new Intl.NumberFormat("fr-FR",{maximumFractionDigits:0}).format(Number(profile.tjm))+" € HT / jour";
-  const useCases=deriveUseCases(profile,roleTitle);
-  const strengths=deriveStrengths(profile,roleTitle);
+  const p1 = streamBuilder();
+  const p2 = streamBuilder();
 
-  // PAGE 1 — approved Autonomia visual language
-  p1.rect(0,0,W,184,C.navy);
-  drawLogo(p1,28,25,.72);
-  p1.circle(523,54,31,C.navy2,C.cyan,1.8);
-  p1.text(503,42,initials,17,true,C.white);
+  const rawInitials = String(profile.initials || "IA").replace(/\./g, "").slice(0, 3).toUpperCase();
+  const initials = rawInitials.split("").join(".") + ".";
+  const title = String(profile.title || roleTitle || "Consultant IA").trim();
+  const skills = unique(profile.skills || []).slice(0, 10);
+  const bullets = unique(profile.cv_bullets || []).slice(0, 6);
+  const location = profile.location || "France";
+  const modality = profile.remote ? "Remote / Hybride" : "Modalités à confirmer";
+  const availability = profile.availability?.label || "Disponibilité à confirmer";
+  const rate = profile.tjm == null
+    ? "TJM à confirmer"
+    : new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(Number(profile.tjm)) + " € HT / jour";
+  const useCases = deriveUseCases(profile, roleTitle);
+  const strengths = deriveStrengths(profile, roleTitle);
 
-  const titleSize=title.length>68?18:title.length>48?20:24;
-  const titleLines=wrap(title,titleSize<=18?46:38).slice(0,3);
-  titleLines.forEach((ln,i)=>p1.text(28,94+i*(titleSize+5),ln,titleSize,true,i===titleLines.length-1&&titleLines.length>1?C.cyan:C.white));
-  const locTop=96+titleLines.length*(titleSize+5)+3;
-  p1.text(30,locTop,location+"  •  "+modality,10,false,[.85,.89,.93]);
+  // ---------------- PAGE 1 — MASTER TEMPLATE ----------------
+  p1.rect(0, 0, W, 130, C.navy);
+  drawLogo(p1, 24, 18, .58);
 
-  // decorative waves
-  [0,7,14,21].forEach((o,i)=>p1.curve(385,178-o,455,148-o,500,145+o,595,126+o,i%2?C.cyan2:C.cyan,.35));
+  // subtle wave motif, like approved master
+  [0, 6, 12, 18].forEach((o, i) =>
+    p1.curve(360, 126 - o, 430, 104 - o, 510, 110 + o, 595, 91 + o, i % 2 ? C.cyan2 : C.cyan, .35)
+  );
 
-  p1.roundedRect(20,198,555,112,12,[.95,.99,.98],C.line,.5);
-  p1.circle(50,226,17,[.86,.97,.94]);
-  p1.text(44,215,"✓",18,true,C.green);
-  p1.text(78,212,"Pourquoi ce profil peut être pertinent",15,true,C.text);
-  const reasons=[
-    "Profil proposé pour : "+(roleTitle||"expertise IA")+".",
-    skills.length?"Compétences déclarées : "+skills.slice(0,5).join(" · ")+".":"Compétences détaillées à confirmer lors du cadrage.",
-    profile.remote?"Intervention remote / hybride indiquée dans le profil.":"Modalités d’intervention à cadrer selon la mission."
+  p1.circle(529, 42, 27, C.navy2, C.cyan, 1.7);
+  p1.text(511, 31, initials, 15.5, true, C.white);
+
+  // exact title rhythm: two lines max, second accented cyan
+  const shortTitle = title.length > 64 ? title.slice(0, 64).trim() : title;
+  const titleLines = wrap(shortTitle, 34).slice(0, 2);
+  if (titleLines.length === 1) {
+    p1.text(24, 73, titleLines[0], 24, true, C.white);
+  } else {
+    p1.text(24, 66, titleLines[0], 22, true, C.white);
+    p1.text(24, 92, titleLines[1], 22, true, C.cyan);
+  }
+  p1.text(24, 113, location + "  •  " + modality, 10, false, [.88,.91,.94]);
+
+  // Why relevant
+  p1.roundedRect(18, 142, 559, 105, 10, [.95,.99,.98], C.line, .4);
+  p1.circle(49, 174, 17, [.86,.97,.94]);
+  p1.text(42, 162, "✓", 20, true, C.green);
+  p1.text(80, 157, "Pourquoi ce profil peut être pertinent", 15.5, true, C.text);
+
+  const reasons = [
+    "Profil proposé pour : " + (roleTitle || "expertise IA") + ".",
+    skills.length
+      ? "Compétences déclarées : " + skills.slice(0, 5).join(" · ") + "."
+      : "Compétences détaillées à confirmer lors du cadrage.",
+    profile.remote
+      ? "Intervention remote / hybride indiquée dans le profil."
+      : "Modalités d’intervention à cadrer selon la mission."
   ];
-  reasons.forEach((r,i)=>{
-    p1.circle(83,247+i*18,5,C.green);
-    p1.text(80.5,242.5+i*18,"✓",7.5,true,C.white);
-    p1.paragraph(96,241+i*18,r,455,9.2,11,false,C.text,2);
+  reasons.forEach((r, i) => {
+    p1.circle(88, 190 + i * 18, 4.8, C.green);
+    p1.text(85.5, 185.8 + i * 18, "✓", 7, true, C.white);
+    p1.paragraph(101, 183 + i * 18, r, 452, 9, 11, false, C.text, 2);
   });
 
-  p1.roundedRect(20,326,322,126,12,C.pale,C.line,.5);
-  p1.circle(52,356,17,[.89,.95,1]);
-  p1.text(46,347,"•",18,true,C.blue);
-  p1.text(80,342,"Positionnement",15,true,C.text);
-  const summary=bullets[0]||title;
-  p1.paragraph(80,374,summary,240,10,14,false,C.muted,5);
+  // Positioning and TJM two-column block
+  p1.roundedRect(18, 257, 324, 126, 10, C.pale, C.line, .4);
+  p1.circle(50, 286, 16, [.89,.95,1]);
+  p1.text(45, 276, "●", 13, true, C.blue);
+  p1.text(80, 272, "Positionnement", 15, true, C.text);
+  const summary = bullets[0] || title;
+  p1.paragraph(80, 305, summary, 236, 9.8, 13, false, C.muted, 5);
 
-  p1.roundedRect(351,326,224,126,12,C.pale,C.line,.5);
-  p1.text(373,345,"TJM AUTONOMIA",8.5,true,C.muted);
-  p1.paragraph(373,366,rate,180,17,19,true,C.text,2);
-  p1.line(373,410,553,410,C.line,.6);
-  p1.text(373,421,availability,8.5,true,C.green);
+  p1.roundedRect(351, 257, 226, 126, 10, C.pale, C.line, .4);
+  p1.text(374, 277, "TJM AUTONOMIA", 8.2, true, C.muted);
+  p1.paragraph(374, 300, rate, 176, 16.5, 18, true, C.text, 2);
+  p1.line(374, 342, 552, 342, C.line, .5);
+  p1.text(374, 353, availability, 8.5, true, C.green);
+  p1.text(374, 369, "Modalités : " + modality, 8.2, true, C.text);
 
-  p1.roundedRect(20,468,555,84,12,[.975,.985,.995],C.line,.5);
-  p1.circle(52,498,17,[.87,.97,.94]);
-  p1.text(45,489,"+",18,true,C.blue);
-  p1.text(80,484,"Expertises clés",15,true,C.text);
-  let cx=80, cy=514;
-  (skills.length?skills:["IA","Automatisation","Transformation"]).slice(0,8).forEach(skill=>{
-    const w=Math.min(104,Math.max(48,14+skill.length*5.2));
-    if(cx+w>556){cx=80;cy+=25}
-    p1.roundedRect(cx,cy,w,20,10,C.pale2,C.line,.4);
-    p1.text(cx+8,cy+5,skill,7.8,true,C.text);
-    cx+=w+6;
+  // Expertise row
+  p1.roundedRect(18, 395, 559, 82, 10, [.974,.986,.995], C.line, .4);
+  p1.circle(49, 425, 16, [.87,.97,.94]);
+  p1.text(43, 414, "+", 17, true, C.blue);
+  p1.text(80, 410, "Expertises clés", 15, true, C.text);
+  let cx = 34, cy = 441;
+  (skills.length ? skills : ["IA", "Automatisation", "Transformation"]).slice(0, 8).forEach(skill => {
+    const w = Math.min(92, Math.max(46, 14 + skill.length * 4.8));
+    if (cx + w > 561) { cx = 34; cy += 24; }
+    p1.roundedRect(cx, cy, w, 20, 10, C.pale2, C.line, .3);
+    p1.text(cx + 7, cy + 5, skill, 7.4, true, C.text);
+    cx += w + 6;
   });
 
-  p1.roundedRect(20,568,555,126,12,[.982,.988,.995],C.line,.5);
-  p1.text(36,585,"Cas d’usage / champs d’intervention",15,true,C.text);
-  const colW=128;
-  useCases.forEach((u,i)=>{
-    const x=34+i*136;
-    if(i>0)p1.line(x-8,614,x-8,678,C.line,.5);
-    p1.circle(x+13,625,13,i%2?C.green:C.blue);
-    p1.text(x+8,617,String(i+1).padStart(2,"0"),7.5,true,C.white);
-    p1.paragraph(x,646,u[0],colW-4,9.5,11,true,C.text,2);
-    p1.paragraph(x,668,u[1],colW-4,7.6,9,false,C.muted,3);
+  // Use cases
+  p1.roundedRect(18, 490, 559, 148, 10, [.982,.989,.996], C.line, .4);
+  p1.circle(49, 520, 16, [.89,.95,1]);
+  p1.text(43, 510, "◎", 14, true, C.blue);
+  p1.text(80, 505, "Cas d’usage maîtrisés", 15, true, C.text);
+
+  useCases.forEach((u, i) => {
+    const x = 32 + i * 138;
+    if (i > 0) p1.line(x - 9, 540, x - 9, 620, C.line, .45);
+    p1.circle(x + 13, 551, 13, i % 2 ? C.green : C.blue);
+    p1.text(x + 8, 543, String(i + 1).padStart(2, "0"), 7, true, C.white);
+    p1.paragraph(x, 572, u[0], 122, 9.2, 11, true, C.text, 2);
+    p1.paragraph(x, 600, u[1], 122, 7.4, 9, false, C.muted, 3);
   });
 
-  p1.roundedRect(20,710,555,76,12,[.965,.99,.98],C.line,.5);
-  p1.text(36,726,"Points forts marquants",14,true,C.text);
-  strengths.forEach((s,i)=>{
-    const x=36+i*132;
-    p1.roundedRect(x,752,120,23,11,[.91,.98,.96],C.line,.35);
-    p1.text(x+9,758,s,7.7,true,C.text);
+  // Strengths
+  p1.roundedRect(18, 651, 559, 100, 10, [.965,.99,.98], C.line, .4);
+  p1.circle(49, 680, 16, [.87,.97,.94]);
+  p1.text(43, 670, "★", 13, true, C.blue);
+  p1.text(80, 665, "Points forts marquants", 15, true, C.text);
+
+  strengths.forEach((s, i) => {
+    const x = 34 + i * 133;
+    p1.roundedRect(x, 704, 120, 26, 12, [.91,.98,.96], C.line, .25);
+    p1.text(x + 9, 712, s, 7.5, true, C.text);
   });
 
-  p1.line(20,804,575,804,C.line,.6);
-  p1.text(22,812,"Profil consultant — document commercial AUTONOMIA",7,false,C.muted);
-  p1.text(552,812,"1/2",7,true,C.text);
+  p1.line(18, 790, 577, 790, C.line, .5);
+  p1.text(20, 799, "Profil consultant — document commercial AUTONOMIA", 7, false, C.muted);
+  p1.text(552, 799, "1/2", 7, true, C.text);
 
-  // PAGE 2
-  p2.rect(0,0,W,88,C.navy);
-  drawLogo(p2,25,20,.55);
-  p2.text(425,27,initials+" — Consultant IA",10,true,C.white);
-  [0,6,12].forEach((o,i)=>p2.curve(380,86-o,455,60-o,520,58+o,595,40+o,i%2?C.cyan2:C.cyan,.35));
+  // ---------------- PAGE 2 — MASTER TEMPLATE ----------------
+  p2.rect(0, 0, W, 74, C.navy);
+  drawLogo(p2, 24, 14, .50);
+  p2.text(421, 22, initials + " — Consultant IA", 10, true, C.white);
+  [0, 5, 10].forEach((o, i) =>
+    p2.curve(365, 72 - o, 440, 49 - o, 510, 52 + o, 595, 32 + o, i % 2 ? C.cyan2 : C.cyan, .3)
+  );
 
-  p2.text(24,112,"01",34,true,C.cyan);
-  p2.text(88,122,"Expérience & repères du profil",18,true,C.text);
+  // 01 Experience
+  p2.text(18, 87, "01", 39, true, C.cyan);
+  p2.text(86, 103, "Expérience sélectionnée", 18.5, true, C.text);
 
-  const expItems=bullets.length?bullets:[
-    title,
-    skills.length?"Compétences clés : "+skills.slice(0,6).join(" · "):"Compétences à confirmer",
+  const exp1Title = title;
+  p2.roundedRect(18, 132, 559, 120, 10, C.pale, C.line, .4);
+  p2.circle(51, 164, 16, [.89,.95,1]);
+  p2.text(45, 153, "1", 9, true, C.blue);
+  p2.paragraph(85, 145, exp1Title, 460, 11.5, 14, true, C.text, 2);
+  p2.text(85, 176, "Freelance / Indépendant  •  " + location, 8.7, false, C.text);
+  p2.paragraph(
+    85, 197,
+    bullets[0] || "Intervention sur des besoins opérationnels IA et automatisation selon les informations disponibles dans le profil.",
+    452, 8.6, 11.5, false, C.muted, 3
+  );
+  p2.roundedRect(30, 225, 534, 22, 9, [.92,.97,.98], null);
+  p2.text(40, 231, "STACK :", 7.7, true, C.green);
+  p2.text(83, 231, (skills.length ? skills.slice(0,7).join("  •  ") : "Compétences à confirmer"), 7.5, true, C.text);
+
+  // optional second experience-like block from second bullet
+  p2.roundedRect(18, 266, 559, 86, 10, C.pale, C.line, .4);
+  p2.circle(51, 298, 16, [.89,.95,1]);
+  p2.text(45, 287, "2", 9, true, C.blue);
+  p2.text(85, 280, "Repères complémentaires", 11.5, true, C.text);
+  p2.paragraph(
+    85, 305,
+    bullets[1] || ("Modalités : " + modality + ". Disponibilité : " + availability + "."),
+    452, 8.6, 11.5, false, C.muted, 3
+  );
+
+  // 02 Formation & languages / profile details
+  p2.text(18, 373, "02", 39, true, C.cyan);
+  p2.text(86, 389, "Formation & langues", 18.5, true, C.text);
+
+  p2.roundedRect(18, 419, 559, 84, 10, C.pale, C.line, .4);
+  p2.circle(51, 452, 16, [.89,.95,1]);
+  p2.text(45, 441, "•", 14, true, C.blue);
+  p2.text(85, 436, "Informations disponibles dans le profil", 11.5, true, C.text);
+  p2.text(85, 461, "Formation / langues : à confirmer si absentes du profil source", 8.5, true, C.text);
+  p2.text(85, 480, "Compétences : " + (skills.length ? skills.slice(0,6).join(" · ") : "à confirmer"), 8, false, C.muted);
+
+  p2.roundedRect(18, 516, 559, 78, 10, C.pale, C.line, .4);
+  p2.circle(51, 548, 16, [.89,.95,1]);
+  p2.text(44, 538, "||", 10, true, C.blue);
+  p2.text(85, 532, "Secteurs & modalités d’intervention", 12, true, C.text);
+
+  const chips = [
+    location,
+    strengths[0] || "Expertise IA",
+    strengths[1] || "Automatisation",
     modality
   ];
-  let etop=158;
-  expItems.slice(0,3).forEach((b,i)=>{
-    const h=i===0?82:68;
-    p2.roundedRect(24,etop,547,h,10,C.pale,C.line,.45);
-    p2.circle(55,etop+28,17,[.89,.95,1]);
-    p2.text(49,etop+18,String(i+1).padStart(2,"0"),8,true,C.blue);
-    p2.paragraph(84,etop+15,i===0?title:b,460,i===0?11:9.3,i===0?14:12,i===0,C.text,i===0?3:4);
-    if(i===0){
-      p2.text(84,etop+58,location+"  •  "+modality,8.5,false,C.muted);
-    }
-    etop+=h+12;
+  let chipX = 85;
+  chips.forEach((chip, i) => {
+    const w = Math.min(120, Math.max(72, 18 + chip.length * 4.3));
+    p2.roundedRect(chipX, 560, w, 23, 11, [.91,.98,.96], C.line, .25);
+    p2.text(chipX + 8, 567, chip, 7.4, true, C.text);
+    chipX += w + 7;
   });
 
-  const section2Top=Math.max(430,etop+2);
-  p2.text(24,section2Top,"02",34,true,C.cyan);
-  p2.text(88,section2Top+10,"Compétences & modalités",18,true,C.text);
+  // 03 contact
+  p2.text(18, 615, "03", 39, true, C.cyan);
+  p2.text(86, 631, "Rencontrer ce consultant", 18.5, true, C.text);
 
-  p2.roundedRect(24,section2Top+52,547,116,10,C.pale,C.line,.45);
-  let sx=40, sy=section2Top+69;
-  (skills.length?skills:["IA","Automatisation","Transformation"]).slice(0,8).forEach(skill=>{
-    const w=Math.min(105,Math.max(50,14+skill.length*5.2));
-    if(sx+w>554){sx=40;sy+=27}
-    p2.roundedRect(sx,sy,w,21,10,[.93,.98,.97],C.line,.35);
-    p2.text(sx+8,sy+5,skill,7.8,true,C.text);
-    sx+=w+7;
-  });
-  p2.text(40,section2Top+127,"LOCALISATION",7,true,C.muted);
-  p2.text(125,section2Top+127,location,8.5,true,C.text);
-  p2.text(288,section2Top+127,"MODALITÉS",7,true,C.muted);
-  p2.text(365,section2Top+127,modality,8.5,true,C.text);
-  p2.text(40,section2Top+148,"DISPONIBILITÉ",7,true,C.muted);
-  p2.text(125,section2Top+148,availability,8.5,true,C.text);
+  p2.roundedRect(18, 663, 559, 105, 10, C.pale, C.line, .4);
+  p2.circle(51, 704, 16, [.89,.95,1]);
+  p2.text(43, 694, "DDG", 8, true, C.blue);
 
-  const contactTop=Math.max(684,section2Top+190);
-  p2.text(24,contactTop,"03",34,true,C.cyan);
-  p2.text(88,contactTop+10,"Rencontrer ce consultant",18,true,C.text);
-  p2.roundedRect(24,contactTop+50,547,88,10,C.pale,C.line,.45);
-  p2.circle(55,contactTop+88,17,[.89,.95,1]);
-  p2.text(47,contactTop+77,"DDG",8,true,C.blue);
-  p2.text(84,contactTop+66,"Déborah Dian Goldcher",11,true,C.text);
-  p2.text(84,contactTop+87,"deborah@build-autonomia.com",8.5,false,C.text);
-  p2.text(84,contactTop+105,"06 09 74 62 40",8.5,false,C.text);
-  p2.line(320,contactTop+66,320,contactTop+122,C.line,.5);
-  p2.text(342,contactTop+66,"Échanger sur ce profil",10,true,C.text);
-  p2.text(342,contactTop+89,"build-autonomia.com/contact",8.5,true,C.blue);
-  p2.text(342,contactTop+107,"Présentez votre projet et votre besoin.",7.8,false,C.muted);
+  p2.text(85, 681, "Déborah Dian Goldcher", 11.5, true, C.text);
+  p2.text(85, 706, "deborah@build-autonomia.com", 8.5, false, C.text);
+  p2.text(85, 726, "06 09 74 62 40", 8.5, false, C.text);
 
-  p2.line(20,818,575,818,C.line,.6);
-  p2.text(22,825,"Profil consultant — document commercial AUTONOMIA",7,false,C.muted);
-  p2.text(552,825,"2/2",7,true,C.text);
+  p2.line(315, 680, 315, 750, C.line, .45);
+  p2.text(338, 681, "Échanger sur ce profil", 10.5, true, C.text);
+  p2.paragraph(338, 701, "Présentez votre projet et vérifiez avec Autonomia l’adéquation de ce consultant à votre besoin.", 212, 7.8, 9.5, false, C.muted, 3);
+  p2.roundedRect(338, 730, 205, 24, 12, C.navy, null);
+  p2.text(351, 736, "Ouvrir la page contact", 8.5, true, C.white);
+  p2.text(525, 736, "↗", 10, true, C.cyan);
+  p2.text(338, 758, "build-autonomia.com/contact", 7.2, true, C.blue);
+
+  p2.line(18, 790, 577, 790, C.line, .5);
+  p2.text(20, 799, "Profil consultant — document commercial AUTONOMIA", 7, false, C.muted);
+  p2.text(552, 799, "2/2", 7, true, C.text);
 
   // PDF assembly
-  const objects=[];
-  const add=body=>{objects.push(body);return objects.length};
-  const f1=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
-  const f2=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
-  const s1=p1.out.join("\n"), s2=p2.out.join("\n");
-  const c1=add("<< /Length "+Buffer.byteLength(s1,"binary")+" >>\nstream\n"+s1+"\nendstream");
-  const c2=add("<< /Length "+Buffer.byteLength(s2,"binary")+" >>\nstream\n"+s2+"\nendstream");
-  const linkY1=H-(contactTop+138), linkY2=H-(contactTop+50);
-  const annot=add("<< /Type /Annot /Subtype /Link /Rect [320 "+linkY1+" 571 "+linkY2+"] /Border [0 0 0] /A << /S /URI /URI (https://build-autonomia.com/contact) >> >>");
-  const pagesFuture=objects.length+3;
-  const pg1=add("<< /Type /Page /Parent "+pagesFuture+" 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /Font << /F1 "+f1+" 0 R /F2 "+f2+" 0 R >> >> /Contents "+c1+" 0 R >>");
-  const pg2=add("<< /Type /Page /Parent "+pagesFuture+" 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /Font << /F1 "+f1+" 0 R /F2 "+f2+" 0 R >> >> /Contents "+c2+" 0 R /Annots ["+annot+" 0 R] >>");
-  const pages=add("<< /Type /Pages /Kids ["+pg1+" 0 R "+pg2+" 0 R] /Count 2 >>");
-  const catalog=add("<< /Type /Catalog /Pages "+pages+" 0 R >>");
+  const objects = [];
+  const add = body => { objects.push(body); return objects.length; };
+  const f1 = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  const f2 = add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  const s1 = p1.out.join("\n");
+  const s2 = p2.out.join("\n");
+  const c1 = add("<< /Length " + Buffer.byteLength(s1, "binary") + " >>\nstream\n" + s1 + "\nendstream");
+  const c2 = add("<< /Length " + Buffer.byteLength(s2, "binary") + " >>\nstream\n" + s2 + "\nendstream");
 
-  const chunks=[Buffer.from("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n","binary")];
-  const offsets=[0]; let offset=chunks[0].length;
-  objects.forEach((body,i)=>{
-    offsets[i+1]=offset;
-    const b=Buffer.from((i+1)+" 0 obj\n"+body+"\nendobj\n","binary");
-    chunks.push(b); offset+=b.length;
+  const linkY1 = H - 768;
+  const linkY2 = H - 663;
+  const annot = add("<< /Type /Annot /Subtype /Link /Rect [315 " + linkY1 + " 577 " + linkY2 + "] /Border [0 0 0] /A << /S /URI /URI (https://build-autonomia.com/contact) >> >>");
+
+  const pagesFuture = objects.length + 3;
+  const pg1 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c1 + " 0 R >>");
+  const pg2 = add("<< /Type /Page /Parent " + pagesFuture + " 0 R /MediaBox [0 0 " + W + " " + H + "] /Resources << /Font << /F1 " + f1 + " 0 R /F2 " + f2 + " 0 R >> >> /Contents " + c2 + " 0 R /Annots [" + annot + " 0 R] >>");
+  const pages = add("<< /Type /Pages /Kids [" + pg1 + " 0 R " + pg2 + " 0 R] /Count 2 >>");
+  const catalog = add("<< /Type /Catalog /Pages " + pages + " 0 R >>");
+
+  const chunks = [Buffer.from("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n", "binary")];
+  const offsets = [0];
+  let offset = chunks[0].length;
+
+  objects.forEach((body, i) => {
+    offsets[i + 1] = offset;
+    const b = Buffer.from((i + 1) + " 0 obj\n" + body + "\nendobj\n", "binary");
+    chunks.push(b);
+    offset += b.length;
   });
-  const xrefOffset=offset;
-  let xref="xref\n0 "+(objects.length+1)+"\n0000000000 65535 f \n";
-  for(let i=1;i<=objects.length;i++) xref+=String(offsets[i]).padStart(10,"0")+" 00000 n \n";
-  xref+="trailer\n<< /Size "+(objects.length+1)+" /Root "+catalog+" 0 R >>\nstartxref\n"+xrefOffset+"\n%%EOF";
-  chunks.push(Buffer.from(xref,"ascii"));
+
+  const xrefOffset = offset;
+  let xref = "xref\n0 " + (objects.length + 1) + "\n0000000000 65535 f \n";
+  for (let i = 1; i <= objects.length; i++) {
+    xref += String(offsets[i]).padStart(10, "0") + " 00000 n \n";
+  }
+  xref += "trailer\n<< /Size " + (objects.length + 1) + " /Root " + catalog + " 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF";
+  chunks.push(Buffer.from(xref, "ascii"));
+
   return Buffer.concat(chunks);
 }
 
