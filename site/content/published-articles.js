@@ -356,7 +356,58 @@ function uniqueArticlesBySlug(items) {
   return [...bySlug.values()];
 }
 
-export const publishedExecutionArticles = uniqueArticlesBySlug([
+const executionSeoOverrides = {
+  "extraire-automatiquement-les-donnees-cles-des-factures-recues-par-e-mail": {
+    title: "Extraction de factures par IA : automatiser les données clés reçues par e-mail",
+    dek: "Comment extraire automatiquement fournisseur, date, montant, référence et champs utiles d’une facture reçue par e-mail, puis les envoyer vers un workflow de contrôle avec validation humaine.",
+    search: {
+      primaryKeyword: "extraction de factures par IA",
+      secondaryQueries: [
+        "extraire données facture IA",
+        "automatiser extraction facture",
+        "lecture automatique facture IA",
+        "workflow validation factures",
+        "automatiser factures reçues par email"
+      ],
+      demandEvidence: ["gsc_observed"],
+      observedAt: "2026-10-06"
+    }
+  },
+  "transformer-une-reunion-en-compte-rendu-et-plan-d-action-automatiquement": {
+    title: "Automatiser un compte rendu de réunion avec l’IA : décisions, actions et suivi",
+    dek: "Transformer notes ou transcription en compte rendu structuré, décisions, responsables et actions à suivre, avec validation humaine avant tout engagement ou attribution sensible.",
+    search: {
+      primaryKeyword: "automatiser compte rendu réunion IA",
+      secondaryQueries: [
+        "compte rendu réunion automatique IA",
+        "IA prise de notes réunion",
+        "transformer réunion en plan d'action",
+        "automatiser décisions réunion",
+        "résumé réunion IA"
+      ],
+      demandEvidence: ["gsc_observed"],
+      observedAt: "2026-10-06"
+    }
+  }
+};
+
+function applyExecutionSeoOverrides(items) {
+  return items.map((article) => {
+    const override = executionSeoOverrides[article.slug];
+    if (!override) return article;
+    return {
+      ...article,
+      ...override,
+      modifiedAt: "2026-10-06",
+      search: {
+        ...(article.search || {}),
+        ...(override.search || {})
+      }
+    };
+  });
+}
+
+export const publishedExecutionArticles = applyExecutionSeoOverrides(uniqueArticlesBySlug([
   ...baseExecutionArticles,
   ...marketDemandExecutionArticles,
   ...marketDemandExecutionArticlesWave2,
@@ -389,7 +440,7 @@ export const publishedExecutionArticles = uniqueArticlesBySlug([
   ...marketDemandExecutionArticlesWave29,
   ...marketDemandExecutionArticlesWave30,
   ...marketDemandExecutionArticlesWave31
-]);
+]));
 
 export const publishedTrainingArticles = uniqueArticlesBySlug([
   ...baseTrainingArticles,
