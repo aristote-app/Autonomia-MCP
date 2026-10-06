@@ -22187,3 +22187,55 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .aboutEntityLogo img{max-height:58px;max-width:170px}
   .aboutExpertName{font-size:14px!important}
 }
+
+
+/* ABOUT EXPERT HEADER V5 — single-line identity row */
+.aboutMarketingPersonTop{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:center;
+}
+.aboutMarketingPersonTop>div{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  min-width:0;
+  flex-wrap:nowrap;
+}
+.aboutExpertName{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.aboutMarketingPersonTop>div>span{
+  max-width:none;
+  text-align:left;
+  white-space:nowrap;
+}
+.aboutLinkedIn{
+  flex:0 0 auto;
+}
+@media(max-width:1050px){
+  .aboutMarketingPersonTop>div{
+    flex-wrap:wrap;
+    gap:8px 14px;
+  }
+  .aboutMarketingPersonTop>div>span{
+    white-space:normal;
+  }
+}
+@media(max-width:760px){
+  .aboutMarketingPersonTop{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start;
+  }
+  .aboutMarketingPersonTop>div{
+    display:grid;
+    gap:6px;
+  }
+  .aboutExpertName,
+  .aboutMarketingPersonTop>div>span{
+    white-space:normal;
+  }
+}
