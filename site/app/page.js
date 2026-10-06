@@ -100,7 +100,28 @@ export default function Home() {
 
       </section>
 
-
+      <section className="referenceSection referenceSectionHome" aria-label="Références des équipes Autonomia">
+        <div className="referenceIntro">
+          <p className="sectionIndex">NOS RÉFÉRENCES</p>
+          <div>
+            <h2>L’expérience derrière AUTONOMIA.</h2>
+            <p>
+              Les dirigeants et structures qui portent AUTONOMIA ont accompagné, formé ou réalisé
+              des missions auprès de grands groupes, entreprises technologiques et acteurs publics.
+            </p>
+          </div>
+        </div>
+        <div className="referenceMarquee" aria-label="Références principales">
+          <div className="referenceTrack">
+            {["AIR FRANCE INDUSTRIES","BNP PARIBAS PERSONAL FINANCE","SYMRISE","KRYS","OROLIA","WESCO","SPECTRACOM","WESTCON","ATLAND","GARANTME","OZITEM","POTEL & CHABOT","MERCURE","NOVOTEL","TILLI","FRANPRIX","VILLE DE BOBIGNY","VILLE DE CLICHY","ROUMOISEINE","CNFPT","AIR FRANCE INDUSTRIES","BNP PARIBAS PERSONAL FINANCE","SYMRISE","KRYS","OROLIA","WESCO","SPECTRACOM","WESTCON","ATLAND","GARANTME","OZITEM","POTEL & CHABOT","MERCURE","NOVOTEL","TILLI","FRANPRIX","VILLE DE BOBIGNY","VILLE DE CLICHY","ROUMOISEINE","CNFPT"].map((name,index)=>(
+              <span className="referenceLogo" key={`${name}-${index}`}>{name}</span>
+            ))}
+          </div>
+        </div>
+        <div className="referenceActions">
+          <Link className="secondaryButton" href="/a-propos">Voir l’expérience du collectif →</Link>
+        </div>
+      </section>
 
       <section className="homeSolutionMatch" id="solution-finder">
         <div className="homeSolutionMatchIntro">
