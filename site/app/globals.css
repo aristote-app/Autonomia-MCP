@@ -22078,3 +22078,112 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .aboutExpertSplit li span,
   .aboutExpertMarkers p{font-size:13px!important}
 }
+
+
+/* ABOUT TYPOGRAPHY + ENTITY LOGOS V4 */
+.aboutMarketing .sectionIndex,
+.aboutMarketing .eyebrow{
+  font-size:14px;
+  line-height:1.3;
+  letter-spacing:.11em;
+}
+.aboutMarketingTopline{
+  font-size:12px;
+}
+.aboutMarketingPillars article{
+  min-height:260px;
+}
+.aboutEntityLogo{
+  height:74px;
+  display:flex;
+  align-items:center;
+  margin-bottom:24px;
+}
+.aboutEntityLogo img{
+  display:block;
+  max-height:68px;
+  max-width:190px;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+}
+.aboutEntityLogoDdg img{max-height:72px}
+.aboutEntityLogoOdexis img{max-height:66px}
+.aboutEntityLogoMajy img{max-height:62px;max-width:210px}
+.aboutMarketingPillars h3{
+  margin-top:0;
+  font-size:29px;
+}
+.aboutMarketingPillars p{
+  font-size:16px;
+  line-height:1.6;
+}
+.aboutMarketingValueCopy .sectionIndex,
+.aboutMarketingHeading .sectionIndex,
+.aboutMarketingPeople .sectionIndex{
+  font-size:14px;
+}
+.aboutMarketingValueGrid article>span{
+  font-size:13px;
+}
+.aboutMarketingValueGrid small{
+  font-size:13px;
+  letter-spacing:.10em;
+}
+.aboutMarketingValueGrid h3{
+  font-size:30px;
+}
+.aboutMarketingValueGrid p{
+  font-size:15px;
+  line-height:1.6;
+}
+.aboutExpertName{
+  font-size:15px!important;
+  line-height:1.25!important;
+  letter-spacing:.08em!important;
+  color:#111827;
+}
+.aboutMarketingPersonTop span{
+  font-size:12px;
+  line-height:1.45;
+}
+.aboutLinkedIn{
+  width:42px;
+  min-width:42px;
+  height:42px;
+  min-height:42px;
+  padding:0;
+  justify-content:center;
+  border-radius:10px;
+}
+.aboutLinkedIn svg{
+  width:20px;
+  height:20px;
+}
+.aboutExpertIntro{
+  font-size:16px!important;
+}
+.aboutExpertSplit>div>small,
+.aboutExpertMarkers>small{
+  font-size:12px;
+}
+.aboutExpertSplit li strong,
+.aboutExpertSplit li span,
+.aboutExpertMarkers p{
+  font-size:14px!important;
+}
+.aboutMarketingClosing .sectionIndex{
+  font-size:14px;
+}
+@media(max-width:760px){
+  .aboutMarketing .sectionIndex,
+  .aboutMarketing .eyebrow,
+  .aboutMarketingValueCopy .sectionIndex,
+  .aboutMarketingHeading .sectionIndex,
+  .aboutMarketingPeople .sectionIndex{
+    font-size:12px;
+  }
+  .aboutEntityLogo{height:64px}
+  .aboutEntityLogo img{max-height:58px;max-width:170px}
+  .aboutExpertName{font-size:14px!important}
+}
