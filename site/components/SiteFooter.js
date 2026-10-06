@@ -11,7 +11,7 @@ function normalizedPhone(value = "") {
 
 export default function SiteFooter() {
   const pathname = usePathname();
-  const hideContactBlock = pathname === "/contact";
+  const hideContactBlock = pathname?.startsWith("/contact");
   const phone = (process.env.NEXT_PUBLIC_CONTACT_PHONE || "").trim();
   const email = (process.env.NEXT_PUBLIC_CONTACT_EMAIL || "").trim();
 
