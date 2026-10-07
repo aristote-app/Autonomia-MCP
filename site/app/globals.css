@@ -22963,3 +22963,53 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     grid-template-columns:repeat(2,minmax(120px,1fr));
   }
 }
+
+/* REFERENCES PUBLIC V26 — expanded collectivités logos */
+
+.homeV10 .referenceGridPublic {
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
+}
+
+.homeV10 .referencePremiumLogoPublic {
+  min-height:84px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+}
+
+.homeV10 .referencePremiumLogoPublic img {
+  width:100%;
+  height:54px;
+  object-fit:contain;
+  object-position:center;
+  filter:none;
+}
+
+.homeV10 .referencePremiumLogoRoumois img {
+  height:58px;
+}
+
+@media (max-width:1180px) {
+  .homeV10 .referenceGridPublic {
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+@media (max-width:759px) {
+  .homeV10 .referenceGridPublic {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .homeV10 .referencePremiumLogoPublic {
+    min-height:72px;
+    padding:10px;
+  }
+
+  .homeV10 .referencePremiumLogoPublic img {
+    height:46px;
+  }
+}
