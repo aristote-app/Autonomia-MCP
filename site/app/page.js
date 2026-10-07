@@ -144,6 +144,14 @@ export default function Home() {
             <div className="referenceGrid referenceGridPublic">
               {[
                 { name:"CNFPT", src:"https://www.cnfpt.fr/assets/images/logo.svg" },
+                { name:"Région Auvergne-Rhône-Alpes", src:"https://www.auvergnerhonealpes.fr/themes/custom/aura_region_theme/logo.svg" },
+                { name:"Département des Hauts-de-Seine", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Hauts-de-Seine%20%2892%29.svg" },
+                { name:"Département de la Seine-Saint-Denis", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo_Seine_Saint_Denis.svg" },
+                { name:"Département de l’Essonne", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20d%C3%A9partement%20Essonne%20version%20fond%20bleu%20horizontale%20%28LogoCD%202022%20horizontal%20bleu%20TA%29.png" },
+                { name:"Département du Rhône", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20D%C3%A9partement%20Rh%C3%B4ne.svg" },
+                { name:"Département de la Haute-Savoie", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Haute%20Savoie%202015.svg" },
+                { name:"Ville de Lyon", src:"https://www.polville.lyon.fr/file/188" },
+                { name:"Ville de Versailles", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Ville%20Versailles%20-%202012.svg" },
                 { name:"Ville de Bobigny", src:"https://www.bobigny.fr/fileadmin/Minisites/principal/logo-blu.png" },
                 { name:"Ville de Clichy", src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Clichy-la-Garenne.svg" },
                 { name:"Roumois Seine", src:"https://www.roumoiseine.fr/wp-content/themes/roumois-seine/assets/images/logo-site.png" },
