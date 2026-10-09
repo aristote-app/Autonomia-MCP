@@ -221,6 +221,8 @@ function buildKit(config) {
     JSON.stringify({
       protocol: "AUTONOMIA_INSTALLER_V1",
       machine_id: MACHINE_ID,
+      machine_name: MACHINE_NAME,
+      machine_slug: MACHINE_SLUG,
       mail_provider: config.mailProvider,
       mail_access: config.mailAccess,
       business_tool: config.commerce,
@@ -431,6 +433,8 @@ export default function MachineBuilder() {
           email,
           first_name: firstName.trim() || null,
           machine_id: MACHINE_ID,
+          machine_name: MACHINE_NAME,
+          machine_slug: MACHINE_SLUG,
           kit_markdown: kit
         })
       });
