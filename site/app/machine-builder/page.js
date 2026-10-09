@@ -61,20 +61,23 @@ export default function MachineBuilderHubPage() {
       </section>
 
       <section className={styles.newsletter}>
-        <div>
+        <div className={styles.newsletterCopy}>
           <span>AUTONOMIA — L’IA, CONCRÈTEMENT.</span>
           <h2>Une nouvelle machine, un nouveau cas d’usage concret.</h2>
           <p>
-            Suivez les prochaines publications sur LinkedIn. Dès que la newsletter AUTONOMIA sera
-            ouverte, ce lien pointera directement vers l’abonnement.
+            Suivez les prochaines machines, prompts, kits et cas d’usage concrets publiés par AUTONOMIA sur LinkedIn.
           </p>
         </div>
         <a
+          className={styles.linkedinButton}
           href={process.env.NEXT_PUBLIC_LINKEDIN_NEWSLETTER_URL || "https://www.linkedin.com/in/deborahdiangoldcher/"}
           target="_blank"
           rel="noreferrer"
+          aria-label="Suivre AUTONOMIA sur LinkedIn"
         >
-          Suivre les prochaines machines sur LinkedIn ↗
+          <span className={styles.linkedinBadge} aria-hidden="true">in</span>
+          <span className={styles.linkedinButtonText}>Suivre sur LinkedIn</span>
+          <span className={styles.linkedinArrow} aria-hidden="true">↗</span>
         </a>
       </section>
     </main>
