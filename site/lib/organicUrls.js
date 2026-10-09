@@ -39,6 +39,7 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/territoires/conservatoire`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-28" },
     { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-23" },
+    { url: `${base}/machine-builder`, kind: "machine-builder", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-10-09" },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
   ];
 
