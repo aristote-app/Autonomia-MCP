@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./MachineBuilderHub.module.css";
+import { MACHINE_BUILDERS, machineBuilderHref } from "@/lib/machineBuilders";
 
 export const metadata = {
   title: "AUTONOMIA Machine Builder — Des machines IA concrètes à construire",
@@ -8,40 +9,6 @@ export const metadata = {
   alternates: { canonical: "/machine-builder" }
 };
 
-const MACHINES = [
-  {
-    id: "01",
-    title: "Automatiser le SAV e-commerce avec l’IA",
-    description: "E-mail entrant → compréhension → commande → brouillon → validation → suivi.",
-    href: "/machine-builder/automatiser-sav-ecommerce",
-    status: "available",
-    meta: "Gmail / Outlook · Shopify / WooCommerce / PrestaShop"
-  },
-  {
-    id: "02",
-    title: "Réunion → compte rendu → plan d’action",
-    description: "Transformer une réunion en décisions, tâches, responsables et suivi.",
-    status: "coming"
-  },
-  {
-    id: "03",
-    title: "Boîte mail → détection des prospects",
-    description: "Repérer les opportunités commerciales dans les e-mails entrants et les qualifier.",
-    status: "coming"
-  },
-  {
-    id: "04",
-    title: "Documents → analyse de contrats",
-    description: "Extraire les clauses, risques, différences et points à valider.",
-    status: "coming"
-  },
-  {
-    id: "05",
-    title: "Drive → assistant documentaire",
-    description: "Interroger ses documents avec des réponses sourcées et contrôlées.",
-    status: "coming"
-  }
-];
 
 export default function MachineBuilderHubPage() {
   return (
@@ -67,9 +34,9 @@ export default function MachineBuilderHubPage() {
         </div>
 
         <div className={styles.grid}>
-          {MACHINES.map((machine) =>
+          {MACHINE_BUILDERS.map((machine) =>
             machine.status === "available" ? (
-              <Link className={styles.cardActive} href={machine.href} key={machine.id}>
+              <Link className={styles.cardActive} href={machineBuilderHref(machine)} key={machine.id}>
                 <div className={styles.cardTop}>
                   <b>#{machine.id}</b>
                   <span>Disponible</span>
