@@ -121,6 +121,22 @@ function sendWithLocalMta(message) {
   });
 }
 
+async function sendWithRetry(message, attempts = 2) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      await sendWithRetry(message);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    }
+  }
+  throw lastError || new Error("email_delivery_failed");
+}
+
 export async function POST(request) {
   let input;
 
