@@ -65,7 +65,7 @@ export default function MachineBuilderHubPage() {
           <span>AUTONOMIA — L’IA, CONCRÈTEMENT.</span>
           <h2>Une nouvelle machine, un nouveau cas d’usage concret.</h2>
           <p>
-            Suivez les prochaines machines, prompts, kits et cas d’usage concrets publiés par AUTONOMIA sur LinkedIn.
+            Recevez nos prochaines publications concrètes sur LinkedIn : cas d’usage, machines prêtes à déployer, prompts et kits actionnables.
           </p>
         </div>
         <a
@@ -75,7 +75,14 @@ export default function MachineBuilderHubPage() {
           rel="noreferrer"
           aria-label="Suivre AUTONOMIA sur LinkedIn"
         >
-          <span className={styles.linkedinBadge} aria-hidden="true">in</span>
+          <span className={styles.linkedinBadge} aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <rect width="24" height="24" rx="4" fill="#0A66C2" />
+              <circle cx="6.45" cy="7.1" r="1.55" fill="#ffffff" />
+              <rect x="5.1" y="9.35" width="2.7" height="8.55" rx=".35" fill="#ffffff" />
+              <path d="M9.55 9.35h2.58v1.17h.04c.36-.68 1.24-1.4 2.55-1.4 2.73 0 3.23 1.8 3.23 4.13v4.65h-2.69v-4.12c0-.98-.02-2.25-1.37-2.25-1.38 0-1.59 1.08-1.59 2.18v4.19H9.6V9.35h-.05Z" fill="#ffffff" />
+            </svg>
+          </span>
           <span className={styles.linkedinButtonText}>Suivre sur LinkedIn</span>
           <span className={styles.linkedinArrow} aria-hidden="true">↗</span>
         </a>
