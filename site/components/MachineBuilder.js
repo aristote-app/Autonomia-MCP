@@ -139,19 +139,17 @@ function buildPrompt(config) {
     "ARCHITECTURE CIBLE",
     architecture(config),
     "",
-    "TA MISSION",
-    "1. Vérifie d'abord les accès et prérequis. Pose uniquement les questions indispensables.",
-    "2. Donne-moi une étape à la fois et attends ma validation avant de poursuivre.",
-    "3. Génère le code COMPLET correspondant à mon environnement avec les API officielles actuelles.",
-    "4. Dis-moi exactement où créer chaque fichier, variable ou secret.",
-    "5. Les clés API, mots de passe et tokens restent dans des variables d'environnement ou un gestionnaire de secrets.",
-    "6. Commence en lecture seule sur un dossier / label de test.",
-    "7. Les réponses sont d'abord créées en brouillon. Aucun envoi automatique avant validation explicite.",
-    "8. Ajoute les logs, la gestion des erreurs, les doublons et les cas où une information manque.",
-    "9. Donne-moi un test concret à exécuter à la fin de chaque étape.",
-    "10. Quand le flux fonctionne, propose une checklist de passage en production.",
+    "MODE INSTALLATEUR",
+    "Je veux être accompagné jusqu’à ce que cette machine fonctionne réellement dans mon environnement.",
+    "Procède par phases, une seule action à la fois. Pour chaque action : explique, donne le chemin exact / code complet, donne le test, indique le résultat attendu, puis attends mon OK.",
+    "Si je rencontre une erreur, reste sur cette étape jusqu’à résolution. Demande-moi la capture ou l’erreur exacte si nécessaire.",
+    "Ne suppose aucun accès, token ou permission. Aide-moi à obtenir proprement chaque prérequis manquant.",
+    "Utilise les API officielles actuelles correspondant à mes outils.",
+    "Commence en lecture seule sur un périmètre TEST et crée uniquement des brouillons.",
+    "Ajoute logs, gestion des erreurs, anti-doublons, règles déterministes et validations humaines.",
+    "À la fin, réalise un test de bout en bout, un tableau PASS / FAIL et une checklist GO LIVE.",
     "",
-    "Commence par l'étape 1 : vérification des accès et prérequis."
+    "Si ce prompt est utilisé seul, commence par la PHASE 1. Si le fichier AUTONOMIA complet a été uploadé, attends que j’écrive START."
   ].join("\n");
 }
 
@@ -163,14 +161,54 @@ function buildKit(config) {
     "# AUTONOMIA — KIT MACHINE IA",
     "Machine #01 · E-mails / SAV / demandes entrantes",
     "",
-    "## 0. Comment utiliser ce kit",
-    "Ce kit est une feuille de route opérationnelle à utiliser avec Claude ou ChatGPT.",
-    "1. Ouvrez ce fichier .md dans votre navigateur, un éditeur de texte, Claude ou ChatGPT.",
-    "2. Lisez d’abord les sections Configuration, Architecture et Règles de validation humaine.",
-    "3. Copiez la section « Prompt à copier dans Claude ou ChatGPT » dans une nouvelle conversation.",
-    "4. L’IA vous accompagne ensuite étape par étape : accès, code complet, emplacement des fichiers, tests et passage en production.",
-    "5. Commencez toujours sur un dossier / label TEST et avec des brouillons. Activez les actions réelles seulement après validation.",
-    "6. Le script fourni est un point de départ adapté à votre messagerie : l’IA doit le compléter avec vos accès et les API officielles de vos outils.",
+    "## 0. DÉMARRAGE — le plus simple",
+    "Vous pouvez utiliser ce kit sans être développeur.",
+    "1. Ouvrez Claude ou ChatGPT.",
+    "2. Uploadez CE FICHIER COMPLET dans la conversation.",
+    "3. Écrivez simplement : START",
+    "4. L’IA doit ensuite vous prendre par la main, une seule étape à la fois, jusqu’au test final.",
+    "5. À chaque étape, répondez OK si tout fonctionne. Si quelque chose bloque, envoyez la capture d’écran ou copiez l’erreur exacte.",
+    "",
+    "IMPORTANT : pendant la construction, utilisez un dossier / label TEST et créez uniquement des brouillons. Les actions réelles seront activées seulement après validation.",
+    "",
+    "## 0B. INSTRUCTIONS POUR CLAUDE / CHATGPT — MODE INSTALLATEUR",
+    "Si vous êtes l’assistant IA qui lit ce fichier, considérez toute la configuration ci-dessous comme le cahier des charges de l’utilisateur.",
+    "Votre objectif est de l’accompagner jusqu’à ce que la machine fonctionne réellement dans SON environnement.",
+    "",
+    "RÈGLES DE CONDUITE :",
+    "- Commencez uniquement lorsque l’utilisateur écrit START.",
+    "- Travaillez par phases et ne donnez qu’UNE action concrète à la fois.",
+    "- Avant chaque action, dites en une phrase ce que nous allons faire et pourquoi.",
+    "- Donnez les chemins de menus exacts, les commandes exactes et le code complet quand du code est nécessaire.",
+    "- Après chaque action, donnez UN test précis et indiquez le résultat attendu.",
+    "- Terminez chaque étape par : « Répondez OK si vous obtenez ce résultat, sinon envoyez-moi la capture ou l’erreur exacte. »",
+    "- Ne passez jamais à l’étape suivante avant validation de l’utilisateur.",
+    "- Si une erreur survient, restez sur l’étape en cours : diagnostiquez, proposez un correctif, refaites le test.",
+    "- N’inventez jamais une clé API, un identifiant, un token, une URL privée ou une permission.",
+    "- Les secrets restent dans des variables d’environnement ou un gestionnaire de secrets, jamais dans le code partagé.",
+    "- Utilisez les API officielles actuelles de Gmail / Google Workspace, Microsoft Graph, Shopify, WooCommerce, PrestaShop, CRM et fournisseur IA selon la configuration.",
+    "- Si un accès manque, expliquez exactement où l’obtenir et ce qu’il autorise avant de continuer.",
+    "- Pendant les tests : lecture seule quand possible, brouillons uniquement, aucune suppression, aucun remboursement, aucun envoi réel automatique.",
+    "- Respectez les règles de validation humaine indiquées dans ce kit.",
+    "",
+    "PHASES À SUIVRE :",
+    "PHASE 1 — Vérifier les accès et prérequis.",
+    "PHASE 2 — Créer l’environnement de test et 5 à 10 cas représentatifs.",
+    "PHASE 3 — Connecter la messagerie en lecture sur le périmètre TEST.",
+    "PHASE 4 — Transformer un message en données structurées et vérifier le JSON.",
+    "PHASE 5 — Connecter l’outil métier / e-commerce et récupérer les données utiles.",
+    "PHASE 6 — Connecter Claude / ChatGPT via l’API adaptée et appliquer les règles métier.",
+    "PHASE 7 — Créer un brouillon de réponse, sans envoi automatique.",
+    "PHASE 8 — Ajouter CRM / journalisation, doublons, erreurs et reprise.",
+    "PHASE 9 — Tester tous les cas limites du kit.",
+    "PHASE 10 — Faire une revue sécurité / données / permissions et préparer le passage en production.",
+    "",
+    "À LA FIN :",
+    "- exécutez un test de bout en bout ;",
+    "- affichez un tableau PASS / FAIL pour chaque étape ;",
+    "- listez ce qui reste manuel ;",
+    "- donnez la checklist GO LIVE ;",
+    "- demandez explicitement l’accord de l’utilisateur avant toute activation d’action réelle.",
     "",
     "## 1. Votre configuration",
     "- Messagerie : " + label("mailProvider", config.mailProvider),
@@ -503,7 +541,7 @@ export default function MachineBuilder() {
             <div>
               <span>02 — KIT DÉBLOQUÉ</span>
               <h2>Votre machine est cadrée.</h2>
-              <p>Gardez le fichier comme feuille de route, puis copiez le prompt dans Claude ou ChatGPT pour construire la machine étape par étape.</p>
+              <p>Le plus simple : uploadez directement le fichier complet dans Claude ou ChatGPT et écrivez <b>START</b>. L’IA doit ensuite vous guider une étape à la fois jusqu’au test final.</p>
               {emailDelivery === "sending" && <p className={styles.deliveryNote}>Envoi du kit par e-mail en cours…</p>}
               {emailDelivery === "sent" && <p className={styles.deliverySuccess}>✓ Le kit a aussi été envoyé à {email}.</p>}
               {emailDelivery === "failed" && <p className={styles.deliveryWarning}>Le téléchargement reste disponible ici. L’envoi par e-mail a rencontré un problème.</p>}
@@ -511,7 +549,7 @@ export default function MachineBuilder() {
             <div className={styles.resultActions}>
               <button type="button" onClick={downloadKit}>Télécharger le kit .md ↓</button>
               <button type="button" className={styles.secondary} onClick={copyPrompt}>
-                {copied ? "Prompt copié ✓" : "Copier le prompt Claude / ChatGPT"}
+                {copied ? "Prompt copié ✓" : "Ou copier uniquement le prompt"}
               </button>
             </div>
           </div>
