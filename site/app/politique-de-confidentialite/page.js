@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
       <section className="legalHero">
         <p className="eyebrow">DONNÉES PERSONNELLES</p>
         <h1>Politique de confidentialité</h1>
-        <p>Dernière mise à jour : 6 octobre 2026</p>
+        <p>Dernière mise à jour : 9 octobre 2026</p>
       </section>
 
       <section className="legalContent">
@@ -17,10 +17,10 @@ export default function PrivacyPolicyPage() {
         <p>Le site AUTONOMIA est exploité dans le cadre d’un groupement opérationnel réunissant DDG GROUPE, ODEXIS et MAJY ME. L’entité responsable du traitement est déterminée selon le service concerné et l’entité qui traite effectivement votre demande. Un point de contact unique est mis à disposition : <a href="mailto:deborah@build-autonomia.com">deborah@build-autonomia.com</a>.</p>
 
         <h2>2. Données collectées</h2>
-        <p>Selon le formulaire utilisé, nous pouvons collecter vos nom, prénom, fonction, entreprise ou organisation, adresse e-mail professionnelle, numéro de téléphone, besoin exprimé, informations liées à votre projet, choix de formation, sélection de consultants ainsi que les informations techniques et d’attribution nécessaires au suivi de la demande.</p>
+        <p>Selon le formulaire utilisé, nous pouvons collecter vos nom, prénom, fonction, entreprise ou organisation, adresse e-mail professionnelle, numéro de téléphone, besoin exprimé, informations liées à votre projet, choix de formation, sélection de consultants ainsi que les informations techniques et d’attribution nécessaires au suivi de la demande. Lorsque vous utilisez AUTONOMIA Machine Builder, nous collectons également les réponses de configuration utiles à la génération du kit : messagerie, outils métier, CRM, IA choisie, niveau d’accès déclaré, volume, actions souhaitées et règles de validation humaine.</p>
 
         <h2>3. Finalités</h2>
-        <p>Ces données sont utilisées pour répondre à votre demande, vous recontacter, préparer une proposition commerciale, un devis, une convention ou une mise en relation, assurer le suivi de la relation commerciale et, lorsque vous y consentez séparément, vous adresser des informations commerciales.</p>
+        <p>Ces données sont utilisées pour répondre à votre demande, générer et débloquer les ressources ou kits demandés, vous recontacter au sujet de la configuration ou du projet concerné, préparer une proposition commerciale, un devis, une convention ou une mise en relation et assurer le suivi de la relation professionnelle. Lorsque vous y consentez séparément, elles peuvent aussi être utilisées pour vous adresser la newsletter « AUTONOMIA — L’IA, concrètement. » ainsi que des conseils, ressources et informations commerciales.</p>
 
         <h2>4. Bases juridiques</h2>
         <p>Le traitement d’une demande de contact, de devis, de formation, de prestation ou de mise en relation repose sur les mesures précontractuelles prises à votre demande et, selon le cas, sur l’intérêt légitime à assurer le suivi de la relation professionnelle. Les communications commerciales qui nécessitent un consentement reposent sur votre consentement.</p>
