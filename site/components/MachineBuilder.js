@@ -163,6 +163,15 @@ function buildKit(config) {
     "# AUTONOMIA — KIT MACHINE IA",
     "Machine #01 · E-mails / SAV / demandes entrantes",
     "",
+    "## 0. Comment utiliser ce kit",
+    "Ce kit est une feuille de route opérationnelle à utiliser avec Claude ou ChatGPT.",
+    "1. Ouvrez ce fichier .md dans votre navigateur, un éditeur de texte, Claude ou ChatGPT.",
+    "2. Lisez d’abord les sections Configuration, Architecture et Règles de validation humaine.",
+    "3. Copiez la section « Prompt à copier dans Claude ou ChatGPT » dans une nouvelle conversation.",
+    "4. L’IA vous accompagne ensuite étape par étape : accès, code complet, emplacement des fichiers, tests et passage en production.",
+    "5. Commencez toujours sur un dossier / label TEST et avec des brouillons. Activez les actions réelles seulement après validation.",
+    "6. Le script fourni est un point de départ adapté à votre messagerie : l’IA doit le compléter avec vos accès et les API officielles de vos outils.",
+    "",
     "## 1. Votre configuration",
     "- Messagerie : " + label("mailProvider", config.mailProvider),
     "- Type d'accès : " + label("mailAccess", config.mailAccess),
@@ -260,6 +269,7 @@ export default function MachineBuilder() {
   const [error, setError] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [emailDelivery, setEmailDelivery] = useState("idle");
 
   const kit = useMemo(() => buildKit(config), [config]);
   const prompt = useMemo(() => buildPrompt(config), [config]);
@@ -318,16 +328,33 @@ export default function MachineBuilder() {
       setUnlocked(true);
       setGateOpen(false);
       setStatus("sent");
+      setEmailDelivery("sending");
+
+      const emailResponse = await fetch("/api/machine-kit", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email,
+          first_name: firstName.trim() || null,
+          machine_id: "email-sav-01",
+          kit_markdown: kit
+        })
+      });
+
+      setEmailDelivery(emailResponse.ok ? "sent" : "failed");
+
       trackLeadConversion({ form_id: "machine-builder-kit-gate", mode: "machine-builder", requested_service: "machine-builder" });
       trackEvent("machine_kit_unlocked", {
         machine_id: "email-sav-01",
         mail_provider: config.mailProvider,
         commerce: config.commerce,
         crm: config.crm,
-        ai: config.ai
+        ai: config.ai,
+        email_delivery: emailResponse.ok ? "sent" : "failed"
       });
     } catch {
       setStatus("error");
+      setEmailDelivery("failed");
       setError("Le kit n’a pas pu être débloqué. Merci de réessayer.");
     }
   }
@@ -477,6 +504,9 @@ export default function MachineBuilder() {
               <span>02 — KIT DÉBLOQUÉ</span>
               <h2>Votre machine est cadrée.</h2>
               <p>Gardez le fichier comme feuille de route, puis copiez le prompt dans Claude ou ChatGPT pour construire la machine étape par étape.</p>
+              {emailDelivery === "sending" && <p className={styles.deliveryNote}>Envoi du kit par e-mail en cours…</p>}
+              {emailDelivery === "sent" && <p className={styles.deliverySuccess}>✓ Le kit a aussi été envoyé à {email}.</p>}
+              {emailDelivery === "failed" && <p className={styles.deliveryWarning}>Le téléchargement reste disponible ici. L’envoi par e-mail a rencontré un problème.</p>}
             </div>
             <div className={styles.resultActions}>
               <button type="button" onClick={downloadKit}>Télécharger le kit .md ↓</button>
