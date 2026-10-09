@@ -210,6 +210,21 @@ function buildKit(config) {
     "- donnez la checklist GO LIVE ;",
     "- demandez explicitement l’accord de l’utilisateur avant toute activation d’action réelle.",
     "",
+    "## 0C. MANIFESTE MACHINE — à lire en priorité par l’IA",
+    JSON.stringify({
+      protocol: "AUTONOMIA_INSTALLER_V1",
+      machine_id: "email-sav-01",
+      mail_provider: config.mailProvider,
+      mail_access: config.mailAccess,
+      business_tool: config.commerce,
+      crm: config.crm,
+      ai: config.ai,
+      ai_api_access: config.apiAccess,
+      volume: config.volume,
+      actions: config.actions,
+      human_review_rules: config.humanRules
+    }, null, 2),
+    "",
     "## 1. Votre configuration",
     "- Messagerie : " + label("mailProvider", config.mailProvider),
     "- Type d'accès : " + label("mailAccess", config.mailAccess),
@@ -397,6 +412,29 @@ export default function MachineBuilder() {
     }
   }
 
+  async function sendKitEmail() {
+    setEmailDelivery("sending");
+    try {
+      const response = await fetch("/api/machine-kit", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email,
+          first_name: firstName.trim() || null,
+          machine_id: "email-sav-01",
+          kit_markdown: kit
+        })
+      });
+      setEmailDelivery(response.ok ? "sent" : "failed");
+      trackEvent("machine_kit_email_retry", {
+        machine_id: "email-sav-01",
+        result: response.ok ? "sent" : "failed"
+      });
+    } catch {
+      setEmailDelivery("failed");
+    }
+  }
+
   function downloadKit() {
     const blob = new Blob([kit], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -544,7 +582,12 @@ export default function MachineBuilder() {
               <p>Le plus simple : uploadez directement le fichier complet dans Claude ou ChatGPT et écrivez <b>START</b>. L’IA doit ensuite vous guider une étape à la fois jusqu’au test final.</p>
               {emailDelivery === "sending" && <p className={styles.deliveryNote}>Envoi du kit par e-mail en cours…</p>}
               {emailDelivery === "sent" && <p className={styles.deliverySuccess}>✓ Le kit a aussi été envoyé à {email}.</p>}
-              {emailDelivery === "failed" && <p className={styles.deliveryWarning}>Le téléchargement reste disponible ici. L’envoi par e-mail a rencontré un problème.</p>}
+              {emailDelivery === "failed" && (
+                <div className={styles.deliveryWarning}>
+                  <span>Le téléchargement reste disponible ici. L’envoi par e-mail a rencontré un problème.</span>
+                  <button type="button" onClick={sendKitEmail}>Réessayer l’envoi</button>
+                </div>
+              )}
             </div>
             <div className={styles.resultActions}>
               <button type="button" onClick={downloadKit}>Télécharger le kit .md ↓</button>
