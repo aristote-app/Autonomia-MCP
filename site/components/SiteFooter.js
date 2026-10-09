@@ -65,6 +65,7 @@ export default function SiteFooter() {
           <a href="https://calendly.com/deborah-build-autonomia/30min" target="_blank" rel="noreferrer">Prendre RDV</a>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/politique-de-confidentialite">Politique de confidentialité</Link>
+          <button type="button" className="footerCookiePreferences" onClick={() => window.dispatchEvent(new Event("autonomia:cookie-preferences"))}>Gérer les cookies</button>
           <Link href="/conditions-generales-de-vente">Conditions générales de vente</Link>
           <Link href="/methodologie/politique-editoriale">Politique éditoriale</Link>
         </nav>
