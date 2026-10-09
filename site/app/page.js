@@ -20,6 +20,27 @@ const expertRoles = [
 export default function Home() {
   return (
     <main className="homeV10">
+      <style>{`/* Compact newsletter invitation at the top of the home. */
+.homeNewsletterStrip { display:flex; align-items:center; justify-content:space-between; gap:20px; width:calc(100% - 48px); max-width:1320px; margin:18px auto 0; padding:14px 20px; border:1px solid #cfe2f4; border-left:4px solid #0969c5; border-radius:14px; background:#f3f8ff; color:#0b1930; }
+.homeNewsletterStripText { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px; }
+.homeNewsletterStripText strong { font-size:15px; line-height:1.5; }
+.homeNewsletterStripText > span { font-size:13px; line-height:1.5; color:#52647b; }
+.homeNewsletterStrip > a { display:inline-flex; align-items:center; justify-content:center; gap:9px; flex-shrink:0; padding:10px 14px; border-radius:9px; background:#0969c5; color:#fff; font-size:13px; font-weight:700; text-decoration:none; }
+.homeNewsletterStrip > a:hover { background:#07559f; }
+.homeNewsletterStrip > a:focus-visible { outline:3px solid #0a69c5; outline-offset:4px; }
+.homeNewsletterLinkedIn { font-family:Arial,sans-serif; font-weight:800; font-size:17px; }
+@media (max-width:700px) { .homeNewsletterStrip { width:calc(100% - 28px); margin-top:12px; padding:12px 14px; gap:12px; flex-direction:column; align-items:flex-start; } .homeNewsletterStripText { display:block; } .homeNewsletterStripText > span { display:block; margin-top:3px; } .homeNewsletterStrip > a { padding:9px 12px; } }
+`}</style>
+      <aside className="homeNewsletterStrip" aria-label="Newsletter AUTONOMIA — Les Machines IA">
+        <div className="homeNewsletterStripText">
+          <strong>Actualités IA &amp; kits machines à installer</strong>
+          <span>Chaque semaine, une machine concrète et son Kit IA prêt à l’emploi.</span>
+        </div>
+        <a href="https://www.linkedin.com/newsletters/7514281561907953664/" target="_blank" rel="noopener noreferrer">
+          <span className="homeNewsletterLinkedIn" aria-hidden="true">in</span>
+          Suivre la newsletter <span aria-hidden="true">↗</span>
+        </a>
+      </aside>
       <section className="homeHeroV10 homeHeroMinimalV13" id="top">
         <div className="homeHeroMinimalInnerV13">
           <p className="eyebrow">PARTENAIRE OPÉRATIONNEL DE L’ADOPTION IA</p>
