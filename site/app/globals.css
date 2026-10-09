@@ -23067,3 +23067,84 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .homeAcademyBookingCta .primaryButton { width: 100%; }
 }
 
+/* Home final conversion area — restrained, premium and responsive */
+.homeV10 .homeFinalStart {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, .85fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 76px);
+  padding: clamp(38px, 5vw, 76px);
+  margin-top: 20px;
+  background: #101e3d;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 28px 28px 0 0;
+}
+.homeV10 .homeFinalStart .eyebrow {
+  color: #64dfd1;
+  font-size: 12px;
+  letter-spacing: .13em;
+  margin-bottom: 18px;
+}
+.homeV10 .homeFinalStart h2 {
+  max-width: 720px;
+  margin: 0;
+  font-size: clamp(34px, 4vw, 62px);
+  line-height: 1.06;
+  letter-spacing: -.045em;
+  color: #fff;
+}
+.homeV10 .homeFinalStart h2 span { color: #57dfd2; }
+.homeV10 .homeFinalStartLead {
+  max-width: 530px;
+  margin: 18px 0 0;
+  color: #b8c7da;
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 1.6;
+}
+.homeV10 .homeFinalStart .homeStartEmail.compact {
+  width: 100%;
+  max-width: 560px;
+  justify-self: end;
+  padding: 22px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 20px;
+}
+.homeV10 .homeFinalStart .homeStartEmail.compact .homeStartEmailFields {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  min-width: 0;
+  gap: 12px;
+}
+.homeV10 .homeFinalStart .homeStartEmail input {
+  min-height: 58px;
+  border: 1px solid #e3eaf0;
+  border-radius: 11px;
+  background: #fff;
+}
+.homeV10 .homeFinalStart .homeStartEmail button {
+  min-height: 54px;
+  border-radius: 11px;
+  background: #57dfd2;
+  border-color: #57dfd2;
+  color: #09172f;
+  font-size: 15px;
+}
+.homeV10 .homeFinalStart .homeStartEmail button:hover { background: #7ceee3; }
+@media (max-width: 900px) {
+  .homeV10 .homeFinalStart {
+    grid-template-columns: minmax(0,1fr);
+    padding: 34px 28px 38px;
+    gap: 28px;
+  }
+  .homeV10 .homeFinalStart .homeStartEmail.compact {
+    justify-self: stretch;
+    max-width: none;
+  }
+}
+@media (max-width: 600px) {
+  .homeV10 .homeFinalStart { padding: 32px 20px; border-radius: 20px 20px 0 0; }
+  .homeV10 .homeFinalStart .homeStartEmail.compact { padding: 14px; }
+}
+

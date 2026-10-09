@@ -269,8 +269,9 @@ export default function Home() {
 
       <section className="homeFinalStart">
         <div>
-          <p className="eyebrow">PRÊT À PARTIR D’UN VRAI PROBLÈME ?</p>
-          <h2>Un e-mail. Puis on structure le reste.</h2>
+          <p className="eyebrow">UN PROJET IA EN TÊTE ?</p>
+          <h2>Passons de l’idée <span>à l’action.</span></h2>
+          <p className="homeFinalStartLead">Expliquez-nous votre besoin. Nous vous aiderons à identifier la bonne expertise, la bonne solution ou la bonne formation.</p>
         </div>
         <HomeStartEmail origin="home_bottom" compact />
       </section>
