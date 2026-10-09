@@ -250,3 +250,15 @@
   .modal{padding:22px 18px}
   .modal h2{font-size:32px}
 }
+
+.deliveryNote,.deliverySuccess,.deliveryWarning{
+  margin-top:8px!important;
+  padding:9px 11px;
+  border-radius:9px;
+  font-size:11px!important;
+  line-height:1.35!important;
+  font-weight:800;
+}
+.deliveryNote{background:#eef3f6;color:#4f5d6f!important}
+.deliverySuccess{background:#e8fffb;color:#08796f!important}
+.deliveryWarning{background:#fff4dc;color:#785300!important}
