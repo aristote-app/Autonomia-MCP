@@ -55,6 +55,7 @@ export default function SiteFooter() {
         <nav aria-label="Liens de pied de page">
           <Link href="/experts">Experts</Link>
           <Link href="/solutions-ia">Build</Link>
+          <Link href="/machine-builder">Machines</Link>
           <Link href="/academy">Academy</Link>
           <Link href="/territoires">Territoires</Link>
           <Link href="/cas-usage-ia">Cas d’usage</Link>
