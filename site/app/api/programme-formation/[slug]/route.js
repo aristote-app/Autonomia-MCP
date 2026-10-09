@@ -58,7 +58,7 @@ function text(lines, {
   size = 11,
   leading = 15,
   bold = false,
-  color = "0.09 0.12 0.19"
+  color = "0.03 0.07 0.12"
 } = {}) {
   const font = bold ? "/F2" : "/F1";
   const out = ["BT", color + " rg", font + " " + size + " Tf", "1 0 0 1 " + x + " " + y + " Tm"];
@@ -71,20 +71,25 @@ function text(lines, {
 }
 
 function logo(x = 42, y = 790) {
-  const s = 11, g = 4;
-  const pts = [
-    [0,0],[s+g,0],
-    [0,-s-g],[s+g,-s-g],[2*(s+g),-s-g],
-    [0,-2*(s+g)],[s+g,-2*(s+g)],[2*(s+g),-2*(s+g)]
-  ];
+  // Official AUTONOMIA mark from the CV and site header: three interlocking
+  // turquoise facets of a stylised A, placed LEFT of the wordmark.
+  // PDF path geometry uses a bottom-left origin (unlike the website SVG).
+  const k = 0.48;
+  const py = (v) => y + (86 - v) * k;
+  const px = (v) => x + v * k;
+  const facet = (points, color) => [
+    color + " rg",
+    px(points[0][0]) + " " + py(points[0][1]) + " m",
+    ...points.slice(1).map(([a, b]) => px(a) + " " + py(b) + " l"),
+    "h f"
+  ].join("\n");
   return [
-    "0.05 0.05 0.05 rg",
-    ...pts.map(([dx,dy]) => (x+dx) + " " + (y+dy) + " " + s + " " + s + " re f"),
-    "1 0.78 0.34 rg",
-    (x+2*(s+g)+3) + " " + (y+11) + " " + s + " " + s + " re f"
+    facet([[10,86],[50,18],[62,37],[34,86]], "0.20 0.73 1"),
+    facet([[55,10],[104,86],[80,86],[43,30]], "0.33 0.91 0.94"),
+    facet([[47,58],[63,36],[96,86],[72,86]], "0.20 0.88 0.76"),
+    facet([[50,86],[61,68],[73,86]], "0.03 0.07 0.12")
   ].join("\n");
 }
-
 function makePdf(pages) {
   const objects = [];
   const add = (body) => {
@@ -151,20 +156,20 @@ function makePdf(pages) {
 function coverPage(training) {
   const duration = training.standardDays + " jours - " + (training.standardDays * 7) + " heures";
   return [
-    "0.09 0.12 0.19 rg 0 0 595 842 re f",
+    "0.03 0.07 0.12 rg 0 0 595 842 re f",
     logo(42, 793),
     text(["AUTONOMIA"], { x:105, y:797, size:16, bold:true, color:"1 1 1" }),
-    text(["ACADEMY"], { x:105, y:777, size:9, bold:true, color:"1 0.78 0.34" }),
-    text(["PROGRAMME DE FORMATION"], { x:42, y:690, size:10, bold:true, color:"1 0.78 0.34" }),
+    text(["AI EXECUTION PARTNER  |  ACADEMY"], { x:105, y:777, size:9, bold:true, color:"0.20 0.88 0.76" }),
+    text(["PROGRAMME DE FORMATION"], { x:42, y:690, size:10, bold:true, color:"0.20 0.88 0.76" }),
     text(wrap(training.title, 34), { x:42, y:646, size:29, leading:33, bold:true, color:"1 1 1" }),
     text(wrap(training.subtitle, 74), { x:42, y:525, size:13, leading:19, color:"0.86 0.88 0.92" }),
-    "0.13 0.17 0.26 rg 42 304 511 128 re f",
-    text(["FORMAT RECOMMANDE"], { x:60, y:402, size:9, bold:true, color:"1 0.78 0.34" }),
+    "0.07 0.14 0.23 rg 42 304 511 128 re f",
+    text(["FORMAT RECOMMANDE"], { x:60, y:402, size:9, bold:true, color:"0.20 0.88 0.76" }),
     text([duration], { x:60, y:374, size:20, bold:true, color:"1 1 1" }),
     text(["Presentiel ou distanciel - Intra ou inter-entreprises"], { x:60, y:348, size:10, color:"0.86 0.88 0.92" }),
     text(["Intra : 1 800 EUR HT / jour / groupe"], { x:60, y:326, size:10, bold:true, color:"1 1 1" }),
     text(["Inter : 990 EUR HT / jour / participant"], { x:300, y:326, size:9, color:"0.86 0.88 0.92" }),
-    text(["Initiation " + training.introDays + " j  |  Operationnel " + training.standardDays + " j  |  Expert " + training.expertDays + " j"], { x:42, y:242, size:11, bold:true, color:"1 0.78 0.34" }),
+    text(["Initiation " + training.introDays + " j  |  Operationnel " + training.standardDays + " j  |  Expert " + training.expertDays + " j"], { x:42, y:242, size:11, bold:true, color:"0.20 0.88 0.76" }),
     text(["build-autonomia.com"], { x:42, y:48, size:9, color:"0.65 0.68 0.74" })
   ].join("\n");
 }
@@ -172,22 +177,23 @@ function coverPage(training) {
 function essentialsPage(training) {
   let y = 775;
   const c = [
-    "0.97 0.96 0.94 rg 0 0 595 842 re f",
-    text(["AUTONOMIA ACADEMY  |  PROGRAMME"], { x:42, y:806, size:9, bold:true, color:"0.09 0.12 0.19" }),
-    text(["01 - L'ESSENTIEL"], { x:42, y, size:10, bold:true, color:"0.10 0.46 0.43" })
+    "0.96 0.98 0.99 rg 0 0 595 842 re f",
+    logo(42, 781),
+    text(["AUTONOMIA ACADEMY  |  PROGRAMME"], { x:105, y:806, size:9, bold:true, color:"0.03 0.07 0.12" }),
+    text(["01 - L'ESSENTIEL"], { x:42, y, size:10, bold:true, color:"0.06 0.54 0.62" })
   ];
   y -= 34;
   c.push(text(wrap("Public, prerequis et objectifs pedagogiques", 46), { x:42, y, size:24, leading:28, bold:true }));
   y -= 84;
-  c.push(text(["PUBLIC VISE"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(["PUBLIC VISE"], { x:42, y, size:9, bold:true, color:"0.06 0.54 0.62" }));
   y -= 20;
   training.audience.forEach((item) => { c.push(text(wrap("- " + item, 58), { x:42, y, size:10, leading:14 })); y -= 32; });
   y -= 8;
-  c.push(text(["PREREQUIS"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(["PREREQUIS"], { x:42, y, size:9, bold:true, color:"0.06 0.54 0.62" }));
   y -= 20;
   training.prerequisites.forEach((item) => { c.push(text(wrap("- " + item, 58), { x:42, y, size:10, leading:14 })); y -= 32; });
   y -= 6;
-  c.push(text(["OBJECTIFS PEDAGOGIQUES"], { x:42, y, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(["OBJECTIFS PEDAGOGIQUES"], { x:42, y, size:9, bold:true, color:"0.06 0.54 0.62" }));
   y -= 20;
   training.goals.slice(0, 6).forEach((item) => { c.push(text(wrap("- " + item, 82), { x:42, y, size:10, leading:14 })); y -= 32; });
   c.push(text(["build-autonomia.com"], { x:42, y:30, size:8, color:"0.40 0.43 0.48" }));
@@ -198,22 +204,23 @@ function dayPage(training, day, index) {
   let y = 775;
   const c = [
     "1 1 1 rg 0 0 595 842 re f",
-    text(["AUTONOMIA ACADEMY  |  " + training.title], { x:42, y:806, size:8, bold:true, color:"0.09 0.12 0.19" }),
-    text([String(index + 2).padStart(2, "0") + " - PROGRAMME DETAILLE"], { x:42, y, size:10, bold:true, color:"0.10 0.46 0.43" })
+    logo(42, 781),
+    text(["AUTONOMIA ACADEMY  |  " + training.title], { x:105, y:806, size:8, bold:true, color:"0.03 0.07 0.12" }),
+    text([String(index + 2).padStart(2, "0") + " - PROGRAMME DETAILLE"], { x:42, y, size:10, bold:true, color:"0.06 0.54 0.62" })
   ];
   y -= 34;
   c.push(text(wrap(day.title, 48), { x:42, y, size:23, leading:27, bold:true }));
   y -= 88;
   day.modules.forEach((item) => {
-    c.push("1 0.78 0.34 rg 42 " + (y + 4) + " 6 6 re f");
+    c.push("0.20 0.88 0.76 rg 42 " + (y + 4) + " 6 6 re f");
     c.push(text(wrap(item, 72), { x:58, y, size:11, leading:15 }));
     y -= Math.max(34, wrap(item, 72).length * 15 + 14);
   });
   y -= 10;
-  c.push("0.95 0.94 0.91 rg 42 " + (y - 128) + " 511 128 re f");
-  c.push(text(["ATELIER"], { x:60, y: y - 25, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push("0.91 0.97 0.98 rg 42 " + (y - 128) + " 511 128 re f");
+  c.push(text(["ATELIER"], { x:60, y: y - 25, size:9, bold:true, color:"0.06 0.54 0.62" }));
   c.push(text(wrap(day.workshop, 70), { x:60, y: y - 46, size:10, leading:14 }));
-  c.push(text(["LIVRABLE"], { x:60, y: y - 84, size:9, bold:true, color:"0.10 0.46 0.43" }));
+  c.push(text(["LIVRABLE"], { x:60, y: y - 84, size:9, bold:true, color:"0.06 0.54 0.62" }));
   c.push(text(wrap(day.deliverable, 70), { x:60, y: y - 105, size:10, leading:14 }));
   c.push(text(["build-autonomia.com"], { x:42, y:30, size:8, color:"0.40 0.43 0.48" }));
   return c.join("\n");
@@ -223,22 +230,23 @@ function finalPage(training) {
   const intra = trainingPrice(training.standardDays, "intra");
   const inter = trainingPrice(training.standardDays, "inter");
   return [
-    "0.97 0.96 0.94 rg 0 0 595 842 re f",
-    text(["AUTONOMIA ACADEMY  |  MODALITES & TARIFS"], { x:42, y:806, size:9, bold:true }),
-    text(["MODALITES PEDAGOGIQUES"], { x:42, y:760, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    "0.96 0.98 0.99 rg 0 0 595 842 re f",
+    logo(42, 781),
+    text(["AUTONOMIA ACADEMY  |  MODALITES & TARIFS"], { x:105, y:806, size:9, bold:true }),
+    text(["MODALITES PEDAGOGIQUES"], { x:42, y:760, size:10, bold:true, color:"0.06 0.54 0.62" }),
     text(wrap("Apports courts, demonstrations, exercices progressifs, ateliers fil rouge et production de livrables reutilisables. En intra, les cas peuvent etre adaptes aux outils et processus de l'entreprise.", 82), { x:42, y:735, size:11, leading:16 }),
-    text(["EVALUATION"], { x:42, y:650, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    text(["EVALUATION"], { x:42, y:650, size:10, bold:true, color:"0.06 0.54 0.62" }),
     text(wrap("Positionnement initial, exercices d'application, observation des productions et evaluation finale des acquis. Une attestation de fin de formation peut etre remise.", 82), { x:42, y:625, size:11, leading:16 }),
-    "0.09 0.12 0.19 rg 42 324 511 210 re f",
-    text(["TARIFS"], { x:60, y:505, size:10, bold:true, color:"1 0.78 0.34" }),
+    "0.03 0.07 0.12 rg 42 324 511 210 re f",
+    text(["TARIFS"], { x:60, y:505, size:10, bold:true, color:"0.20 0.88 0.76" }),
     text(["INTRA-ENTREPRISE"], { x:60, y:468, size:9, bold:true, color:"0.86 0.88 0.92" }),
     text(["1 800 EUR HT / jour / groupe"], { x:60, y:440, size:18, bold:true, color:"1 1 1" }),
     text(["INTER-ENTREPRISES"], { x:60, y:395, size:9, bold:true, color:"0.86 0.88 0.92" }),
     text(["990 EUR HT / jour / participant"], { x:60, y:367, size:18, bold:true, color:"1 1 1" }),
     text(["Parcours recommande : " + training.standardDays + " jours - Intra " + intra + " EUR HT / groupe - Inter " + inter + " EUR HT / participant"], { x:60, y:340, size:9, color:"0.86 0.88 0.92" }),
-    text(["FINANCEMENT OPCO"], { x:42, y:270, size:10, bold:true, color:"0.10 0.46 0.43" }),
+    text(["FINANCEMENT OPCO"], { x:42, y:270, size:10, bold:true, color:"0.06 0.54 0.62" }),
     text(wrap("Une demande de prise en charge OPCO peut etre etudiee et peut aller jusqu'a 100 % selon votre branche, les budgets disponibles, les criteres d'eligibilite et l'accord prealable du financeur. Aucune prise en charge n'est garantie avant accord ecrit.", 84), { x:42, y:244, size:10, leading:15 }),
-    text(["AUTONOMIA ACADEMY - build-autonomia.com"], { x:42, y:45, size:10, bold:true, color:"0.09 0.12 0.19" })
+    text(["AUTONOMIA ACADEMY - build-autonomia.com"], { x:42, y:45, size:10, bold:true, color:"0.03 0.07 0.12" })
   ].join("\n");
 }
 
