@@ -42,7 +42,7 @@ function chunkBase64(value) {
   return value.replace(/(.{76})/g, "$1\r\n");
 }
 
-function buildText({ hello, machineName, machineUrl }) {
+function buildText({ hello, machineName, linkedinUrl }) {
   return [
     hello,
     "",
@@ -59,10 +59,10 @@ function buildText({ hello, machineName, machineUrl }) {
     "",
     "Le kit contient votre architecture, vos choix d’outils, vos règles de validation humaine, un script de départ, les tests à effectuer et le mode installateur.",
     "",
-    "Reprendre la machine : " + machineUrl,
-    "",
     "Vous préférez qu’AUTONOMIA la construise avec vous ?",
     "https://calendly.com/deborah-build-autonomia/30min",
+    "",
+    "Suivre les prochaines machines sur LinkedIn : " + linkedinUrl,
     "",
     "Déborah Dian Goldcher",
     "AUTONOMIA — TROUVER · CONSTRUIRE · FORMER",
@@ -70,10 +70,9 @@ function buildText({ hello, machineName, machineUrl }) {
   ].join("\r\n");
 }
 
-function buildHtml({ hello, machineName, machineUrl, linkedinUrl }) {
+function buildHtml({ hello, machineName, linkedinUrl }) {
   const safeHello = escapeHtml(hello);
   const safeMachineName = escapeHtml(machineName);
-  const safeMachineUrl = escapeHtml(machineUrl);
   const safeLinkedinUrl = escapeHtml(linkedinUrl);
 
   return `<!doctype html>
@@ -124,14 +123,11 @@ function buildHtml({ hello, machineName, machineUrl, linkedinUrl }) {
 
             <tr>
               <td style="padding:10px 30px 24px;">
-                <p style="margin:0 0 16px;font-size:13px;line-height:1.55;color:#657283;">
+                <p style="margin:0;font-size:13px;line-height:1.55;color:#657283;">
                   Le kit contient votre architecture, vos règles métier, les validations humaines,
                   le script de départ, les tests et un mode installateur prévu pour rester sur une étape
                   tant qu’elle n’est pas validée.
                 </p>
-                <a href="${safeMachineUrl}" style="display:inline-block;background:#3de2d0;color:#07111f;text-decoration:none;font-size:13px;font-weight:800;padding:13px 18px;border-radius:9px;">
-                  Reprendre ma machine →
-                </a>
               </td>
             </tr>
 
@@ -145,8 +141,9 @@ function buildHtml({ hello, machineName, machineUrl, linkedinUrl }) {
                   Parler de cette machine →
                 </a>
                 <span style="display:inline-block;width:8px;"></span>
-                <a href="${safeLinkedinUrl}" style="display:inline-block;color:#ffffff;text-decoration:underline;font-size:12px;font-weight:700;padding:11px 0;">
-                  Suivre les prochaines machines sur LinkedIn
+                <a href="${safeLinkedinUrl}" style="display:inline-block;background:#0A66C2;color:#ffffff;text-decoration:none;font-size:12px;font-weight:800;padding:8px 14px 8px 9px;border-radius:8px;vertical-align:middle;">
+                  <span style="display:inline-block;width:24px;height:24px;line-height:24px;margin-right:8px;border-radius:5px;background:#ffffff;color:#0A66C2;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:900;vertical-align:middle;">in</span>
+                  <span style="vertical-align:middle;">Suivre les prochaines machines sur LinkedIn</span>
                 </a>
               </td>
             </tr>
@@ -177,13 +174,12 @@ function buildMessage({ email, first_name, machine_id, machine_name, machine_slu
   const hello = name ? "Bonjour " + name + "," : "Bonjour,";
   const messageId = "<autonomia-kit-" + Date.now() + "-" + Math.random().toString(36).slice(2) + "@build-autonomia.com>";
   const dateHeader = new Date().toUTCString();
-  const machineUrl = "https://build-autonomia.com/machine-builder/" + slug;
   const linkedinUrl =
     process.env.NEXT_PUBLIC_LINKEDIN_NEWSLETTER_URL ||
     "https://www.linkedin.com/in/deborahdiangoldcher/";
 
-  const text = buildText({ hello, machineName, machineUrl });
-  const html = buildHtml({ hello, machineName, machineUrl, linkedinUrl });
+  const text = buildText({ hello, machineName, linkedinUrl });
+  const html = buildHtml({ hello, machineName, linkedinUrl });
   const attachment = chunkBase64(Buffer.from(kit_markdown, "utf8").toString("base64"));
 
   return [
