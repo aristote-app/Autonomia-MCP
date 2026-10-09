@@ -23148,3 +23148,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .homeV10 .homeFinalStart .homeStartEmail.compact { padding: 14px; }
 }
 
+/* Separate homepage closing CTA from the global footer */
+.homeV10 .homeFinalStart {
+  margin-bottom: 32px;
+  border-radius: 28px;
+}
+.homeV10 + .globalSiteFooter {
+  margin-top: 0;
+  border-top: 1px solid var(--line-dark);
+}
+@media (max-width: 600px) {
+  .homeV10 .homeFinalStart {
+    margin-bottom: 24px;
+    border-radius: 20px;
+  }
+}
+
