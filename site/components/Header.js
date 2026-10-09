@@ -6,6 +6,7 @@ import AutonomiaLogo from "@/components/AutonomiaLogo";
 const NAV_ITEMS = [
   ["Experts", "/experts"],
   ["Build", "/solutions-ia"],
+  ["Machines", "/machine-builder"],
   ["Academy", "/academy"],
   ["Territoires", "/territoires"],
   ["Cas d’usage", "/cas-usage-ia"],
