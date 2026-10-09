@@ -254,19 +254,6 @@ export default function Home() {
         </Link>
       </section>
 
-      <section className="territoryHomePromo homeTerritoryCompact homeTerritoryV10">
-        <div>
-          <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
-          <h2>Experts, Build et Formations IA adaptés aux collectivités et aux entreprises du territoire.</h2>
-          <Link className="secondaryButton" href="/territoires">Découvrir Autonomia Territoires</Link>
-        </div>
-        <div className="territoryHomeTracks">
-          <span><b>01</b>Agents</span>
-          <span><b>02</b>Processus internes</span>
-          <span><b>03</b>TPE / PME locales</span>
-        </div>
-      </section>
-
       <section className="homeFinalStart">
         <div>
           <p className="eyebrow">UN PROJET IA EN TÊTE ?</p>
