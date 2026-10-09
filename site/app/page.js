@@ -246,6 +246,14 @@ export default function Home() {
 
 
 
+      <section className="homeAcademyBookingCta" aria-label="Prendre rendez-vous pour un projet de formation">
+        <p className="eyebrow">BESOIN D’UN PARCOURS SPÉCIFIQUE ?</p>
+        <h2>Partons de vos équipes, de leurs usages et de leur niveau.</h2>
+        <Link className="primaryButton" href="https://calendly.com/deborah-build-autonomia/30min" target="_blank" rel="noopener noreferrer">
+          Prendre RDV pour parler de vos projets de formation
+        </Link>
+      </section>
+
       <section className="territoryHomePromo homeTerritoryCompact homeTerritoryV10">
         <div>
           <span className="territoryHomeKicker">COMMUNAUTÉS DE COMMUNES · AGGLOMÉRATIONS</span>
