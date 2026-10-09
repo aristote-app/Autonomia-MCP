@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "./MachineBuilder.module.css";
 import { getClientAttribution } from "@/lib/clientAttribution";
 import { trackEvent, trackLeadConversion } from "@/lib/clientTracking";
+import { MACHINE_BUILDERS, getMachineBuilder, machineBuilderHref } from "@/lib/machineBuilders";
 
 const LABELS = {
   mailProvider: { gmail: "Gmail / Google Workspace", outlook: "Outlook / Microsoft 365", other: "Autre messagerie" },
@@ -33,9 +34,10 @@ const HUMAN_RULES = [
   ["always_send", "Toute réponse avant envoi"]
 ];
 
-const MACHINE_ID = "sav-ecommerce-01";
-const MACHINE_NAME = "Automatiser le SAV e-commerce";
 const MACHINE_SLUG = "automatiser-sav-ecommerce";
+const CURRENT_MACHINE = getMachineBuilder(MACHINE_SLUG);
+const MACHINE_ID = "sav-ecommerce-01";
+const MACHINE_NAME = CURRENT_MACHINE?.title || "Automatiser le SAV e-commerce avec l’IA";
 const LINKEDIN_FOLLOW_URL =
   process.env.NEXT_PUBLIC_LINKEDIN_NEWSLETTER_URL ||
   "https://www.linkedin.com/in/deborahdiangoldcher/";
@@ -645,10 +647,19 @@ export default function MachineBuilder() {
           </a>
         </div>
         <div>
-          <article className={styles.comingMachine}><div><b>#02</b><em>À venir</em></div><strong>Réunion → compte rendu → plan d’action</strong></article>
-          <article className={styles.comingMachine}><div><b>#03</b><em>À venir</em></div><strong>Boîte mail → détection des prospects</strong></article>
-          <article className={styles.comingMachine}><div><b>#04</b><em>À venir</em></div><strong>Documents → analyse de contrats</strong></article>
-          <article className={styles.comingMachine}><div><b>#05</b><em>À venir</em></div><strong>Drive → assistant documentaire</strong></article>
+          {MACHINE_BUILDERS.filter((machine) => machine.slug !== MACHINE_SLUG).map((machine) =>
+            machine.status === "available" ? (
+              <Link className={styles.availableMachine} href={machineBuilderHref(machine)} key={machine.id}>
+                <div><b>#{machine.id}</b><em>Disponible</em></div>
+                <strong>{machine.shortTitle || machine.title}</strong>
+              </Link>
+            ) : (
+              <article className={styles.comingMachine} key={machine.id} aria-disabled="true">
+                <div><b>#{machine.id}</b><em>À venir</em></div>
+                <strong>{machine.shortTitle || machine.title}</strong>
+              </article>
+            )
+          )}
         </div>
         <p className={styles.newsletterHint}>
           Dès que la newsletter <b>AUTONOMIA — L’IA, concrètement.</b> est ouverte, ce bouton pointera directement vers l’abonnement.
