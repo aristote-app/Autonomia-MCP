@@ -21,8 +21,8 @@ export default function Home() {
   return (
     <main className="homeV10">
       <style>{`
-.homeHeroNewsletterRow { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; margin:28px 14px 20px; align-items:stretch; }
-.homeV10 .homeHeroNewsletterRow .homeHeroMinimalV13 { width:100%; max-width:none; margin:0; min-height:0; }
+.homeHeroNewsletterRow { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; width:min(calc(100% - 28px),var(--max)); max-width:100%; margin:28px auto 20px; align-items:stretch; }
+.homeV10 .homeHeroNewsletterRow .homeHeroMinimalV13 { width:100%; max-width:100%; min-width:0; margin:0; min-height:0; }
 .homeV10 .homeHeroNewsletterRow .homeHeroMinimalInnerV13 { padding:42px 40px 34px; }
 .homeV10 .homeHeroNewsletterRow h1 { font-size:clamp(42px,4.4vw,72px); line-height:1.06; }
 .homeV10 .homeHeroNewsletterRow h1 .homeHeroPrimaryLineV15 { white-space:normal; }
@@ -37,7 +37,10 @@ export default function Home() {
 .homeNewsletterStrip > a:hover { background:#07559f; }
 .homeNewsletterStrip > a:focus-visible { outline:3px solid #0a69c5; outline-offset:4px; }
 .homeNewsletterLinkedIn { font-family:Arial,sans-serif; font-weight:800; font-size:19px; }
-@media (max-width:900px) { .homeHeroNewsletterRow { grid-template-columns:1fr; margin-top:20px; gap:16px; } .homeV10 .homeHeroNewsletterRow .homeHeroMinimalInnerV13 { padding:30px 24px; } .homeV10 .homeHeroNewsletterRow h1 { font-size:clamp(38px,7vw,60px); } .homeNewsletterStrip { padding:22px 24px; gap:18px; } .homeNewsletterStripText { gap:10px; } .homeNewsletterStripText strong { font-size:23px; } .homeNewsletterStrip > a { align-self:flex-start; padding:12px 18px; } }
+.homeHeroNewsletterRow > * { min-width:0; box-sizing:border-box; }
+.homeHeroNewsletterRow input { min-width:0; max-width:100%; }
+@media (max-width:759px) { .homeHeroNewsletterRow { width:calc(100% - 16px); } }
+@media (max-width:900px) { .homeHeroNewsletterRow { grid-template-columns:minmax(0,1fr); margin-top:20px; gap:16px; } .homeV10 .homeHeroNewsletterRow .homeHeroMinimalInnerV13 { padding:30px 24px; } .homeV10 .homeHeroNewsletterRow h1 { font-size:clamp(38px,7vw,60px); } .homeNewsletterStrip { padding:22px 24px; gap:18px; } .homeNewsletterStripText { gap:10px; } .homeNewsletterStripText strong { font-size:23px; } .homeNewsletterStrip > a { align-self:flex-start; padding:12px 18px; } }
 `}</style>
       <div className="homeHeroNewsletterRow">
       <section className="homeHeroV10 homeHeroMinimalV13" id="top">
