@@ -7696,6 +7696,22 @@ button {
 .academyFinalCta {
   background: var(--academy);
   color: #fff;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: 32px;
+}
+.academyFinalCta > div { width: 100%; min-width: 0; }
+.academyFinalCta h2 { max-width: none; overflow-wrap: normal; }
+.academyFinalCta > .primaryButton {
+  grid-column: 1;
+  justify-self: start;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+@media (min-width: 760px) {
+  .pillarFinalCta.academyFinalCta { grid-template-columns: minmax(0, 1fr); }
+  .pillarFinalCta.academyFinalCta > .primaryButton { grid-column: 1; }
 }
 .academyFinalCta .eyebrow { color: #3de2d0; }
 .academyFinalCta > div > p:not(.eyebrow) { color: rgba(255,255,255,.72); }

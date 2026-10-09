@@ -133,7 +133,7 @@ export default function AcademyPage() {
           <p className="eyebrow">BESOIN D’UN PARCOURS SPÉCIFIQUE ?</p>
           <h2>Partons de vos équipes, de leurs usages et de leur niveau.</h2>
         </div>
-        <Link className="primaryButton" href="/#diagnostic-ia">Construire mon besoin formation</Link>
+        <Link className="primaryButton" href="https://calendly.com/deborah-build-autonomia/30min" target="_blank" rel="noopener noreferrer">Prendre RDV pour parler de vos projets de formation</Link>
       </section>
     </main>
   );
