@@ -25,25 +25,24 @@ function buildMessage({ email, first_name, machine_id, kit_markdown }) {
   const filename = "AUTONOMIA-kit-machine-IA-email.md";
   const subject = "Votre kit AUTONOMIA — Machine IA";
   const hello = name ? "Bonjour " + name + "," : "Bonjour,";
+  const messageId = "<autonomia-kit-" + Date.now() + "-" + Math.random().toString(36).slice(2) + "@build-autonomia.com>";
+  const dateHeader = new Date().toUTCString();
 
   const text = [
     hello,
     "",
     "Votre kit AUTONOMIA est prêt.",
     "",
-    "Vous trouverez en pièce jointe :",
-    "- votre architecture personnalisée ;",
-    "- le plan de mise en place ;",
-    "- le script de départ ;",
-    "- le prompt à copier dans Claude ou ChatGPT ;",
-    "- les tests et garde-fous avant passage en production.",
+    "Vous trouverez en pièce jointe votre configuration complète : architecture, plan de mise en place, script de départ, tests et garde-fous.",
     "",
-    "Mode d’emploi rapide :",
+    "Le mode le plus simple :",
     "1. Téléchargez la pièce jointe .md.",
-    "2. Ouvrez-la dans votre navigateur, un éditeur de texte ou directement dans Claude / ChatGPT.",
-    "3. Copiez la section « Prompt à copier dans Claude ou ChatGPT ».",
-    "4. Collez-la dans une nouvelle conversation avec votre IA.",
-    "5. Suivez les étapes une par une, en commençant sur un dossier ou label de test.",
+    "2. Ouvrez Claude ou ChatGPT.",
+    "3. Uploadez directement le fichier complet dans la conversation.",
+    "4. Écrivez simplement : START",
+    "5. L’IA vous guide ensuite une étape à la fois jusqu’au test final.",
+    "",
+    "Si une étape bloque, envoyez à l’IA la capture d’écran ou l’erreur exacte. Le kit contient un mode installateur prévu pour rester sur l’étape jusqu’à résolution.",
     "",
     "Machine : " + machine_id,
     "",
@@ -60,6 +59,10 @@ function buildMessage({ email, first_name, machine_id, kit_markdown }) {
     "To: " + recipient,
     "Reply-To: deborah@build-autonomia.com",
     "Subject: " + encodeHeader(subject),
+    "Date: " + dateHeader,
+    "Message-ID: " + messageId,
+    "Auto-Submitted: auto-generated",
+    "X-Auto-Response-Suppress: All",
     "MIME-Version: 1.0",
     "Content-Type: multipart/mixed; boundary=\"" + boundary + "\"",
     "X-AUTONOMIA-Machine: " + safeHeader(machine_id),
@@ -86,7 +89,7 @@ function sendWithLocalMta(message) {
   const sendmailPath = process.env.AUTONOMIA_SENDMAIL_PATH || "/usr/sbin/sendmail";
 
   return new Promise((resolve, reject) => {
-    const child = spawn(sendmailPath, ["-t", "-i"], {
+    const child = spawn(sendmailPath, ["-t", "-i", "-f", "deborah@build-autonomia.com"], {
       stdio: ["pipe", "ignore", "pipe"]
     });
 
