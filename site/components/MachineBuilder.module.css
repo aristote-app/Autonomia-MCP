@@ -262,3 +262,24 @@
 .deliveryNote{background:#eef3f6;color:#4f5d6f!important}
 .deliverySuccess{background:#e8fffb;color:#08796f!important}
 .deliveryWarning{background:#fff4dc;color:#785300!important}
+
+.deliveryWarning{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.deliveryWarning button{
+  flex:0 0 auto;
+  min-height:32px;
+  padding:0 10px;
+  border:1px solid rgba(120,83,0,.24);
+  border-radius:8px;
+  background:#fff;
+  color:#785300;
+  font-size:10px;
+  font-weight:900;
+}
+@media(max-width:700px){
+  .deliveryWarning{align-items:flex-start;flex-direction:column}
+}
