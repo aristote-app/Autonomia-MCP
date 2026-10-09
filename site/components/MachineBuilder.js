@@ -34,6 +34,21 @@ const HUMAN_RULES = [
   ["always_send", "Toute réponse avant envoi"]
 ];
 
+const BUILDER_STEPS = [
+  { pole: "environment", key: "mailProvider", number: "01", title: "Votre boîte mail", values: ["gmail", "outlook", "other"] },
+  { pole: "environment", key: "mailAccess", number: "02", title: "Quel niveau d’accès avez-vous ?", values: ["standard", "shared", "admin", "unknown"] },
+  { pole: "environment", key: "commerce", number: "03", title: "Où sont les commandes / données métier ?", values: ["shopify", "woocommerce", "prestashop", "none", "other"] },
+  { pole: "environment", key: "crm", number: "04", title: "Où suivez-vous le client ?", values: ["odoo", "hubspot", "salesforce", "sheets", "none", "other"] },
+  { pole: "environment", key: "ai", number: "05", title: "Avec quelle IA voulez-vous travailler ?", values: ["chatgpt", "claude", "auto"] },
+  { pole: "environment", key: "apiAccess", number: "06", title: "Avez-vous déjà un accès API IA ?", values: ["yes", "no", "unknown"] },
+  { pole: "environment", key: "volume", number: "07", title: "Quel volume traitez-vous ?", values: ["low", "medium", "high"] },
+  { pole: "behavior", key: "actions", number: "08", title: "Que doit faire la machine ?" },
+  { pole: "behavior", key: "humanRules", number: "09", title: "Quand voulez-vous garder un humain dans la boucle ?" }
+];
+
+const ENVIRONMENT_STEPS = 7;
+const TOTAL_STEPS = BUILDER_STEPS.length;
+
 const MACHINE_SLUG = "automatiser-sav-ecommerce";
 const CURRENT_MACHINE = getMachineBuilder(MACHINE_SLUG);
 const MACHINE_ID = "sav-ecommerce-01";
@@ -47,14 +62,20 @@ function toggle(list, value) {
 }
 
 function label(group, value) {
+  if (!value) return "À définir";
   return LABELS[group]?.[value] || value;
 }
 
 function architecture(config) {
-  const steps = [label("mailProvider", config.mailProvider), "lecture du message", "extraction structurée"];
-  if (config.commerce !== "none") steps.push(label("commerce", config.commerce));
-  steps.push(label("ai", config.ai), "règles métier", "brouillon / décision", "validation humaine");
-  if (config.crm !== "none") steps.push(label("crm", config.crm));
+  const steps = [
+    config.mailProvider ? label("mailProvider", config.mailProvider) : "Messagerie",
+    "lecture du message",
+    "extraction structurée"
+  ];
+  if (config.commerce && config.commerce !== "none") steps.push(label("commerce", config.commerce));
+  if (config.ai) steps.push(label("ai", config.ai));
+  steps.push("règles métier", "brouillon / décision", "validation humaine");
+  if (config.crm && config.crm !== "none") steps.push(label("crm", config.crm));
   steps.push("journal de suivi");
   return steps.join(" → ");
 }
@@ -313,17 +334,19 @@ function buildKit(config) {
 
 export default function MachineBuilder() {
   const [config, setConfig] = useState({
-    mailProvider: "gmail",
-    mailAccess: "standard",
-    commerce: "shopify",
-    crm: "odoo",
-    ai: "chatgpt",
-    apiAccess: "unknown",
-    volume: "medium",
+    mailProvider: null,
+    mailAccess: null,
+    commerce: null,
+    crm: null,
+    ai: null,
+    apiAccess: null,
+    volume: null,
     actions: [],
     humanRules: []
   });
 
+  const [currentStep, setCurrentStep] = useState(0);
+  const [humanRulesConfirmed, setHumanRulesConfirmed] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -340,6 +363,40 @@ export default function MachineBuilder() {
 
   function choose(key, value) {
     setConfig((current) => ({ ...current, [key]: value }));
+  }
+
+  const currentStepDef = BUILDER_STEPS[currentStep];
+  const currentPole = currentStepDef.pole;
+  const currentPoleStep = currentPole === "environment" ? currentStep + 1 : currentStep - ENVIRONMENT_STEPS + 1;
+  const currentPoleTotal = currentPole === "environment" ? ENVIRONMENT_STEPS : TOTAL_STEPS - ENVIRONMENT_STEPS;
+  const stepsAfterThis = TOTAL_STEPS - currentStep - 1;
+  const environmentComplete = BUILDER_STEPS.slice(0, ENVIRONMENT_STEPS).every((step) => Boolean(config[step.key]));
+  const actionsComplete = config.actions.length > 0;
+  const allStepsComplete = environmentComplete && actionsComplete && humanRulesConfirmed;
+
+  function currentStepIsComplete() {
+    if (currentStep < ENVIRONMENT_STEPS) return Boolean(config[currentStepDef.key]);
+    if (currentStepDef.key === "actions") return config.actions.length > 0;
+    return humanRulesConfirmed;
+  }
+
+  function goNext() {
+    if (!currentStepIsComplete()) return;
+    setCurrentStep((step) => Math.min(step + 1, TOTAL_STEPS - 1));
+  }
+
+  function goBack() {
+    setCurrentStep((step) => Math.max(step - 1, 0));
+  }
+
+  function toggleHumanRule(id) {
+    setHumanRulesConfirmed(true);
+    setConfig((current) => ({ ...current, humanRules: toggle(current.humanRules, id) }));
+  }
+
+  function confirmNoHumanRule() {
+    setHumanRulesConfirmed(true);
+    setConfig((current) => ({ ...current, humanRules: [] }));
   }
 
   async function unlockKit(event) {
@@ -518,61 +575,142 @@ export default function MachineBuilder() {
           <p>Le kit se construit à partir de vos réponses. Vous pourrez ensuite le télécharger et le donner tel quel à Claude ou ChatGPT.</p>
         </div>
 
-        <div className={styles.questionGrid}>
-          <article className={styles.card}>
-            <span>01</span><h3>Votre boîte mail</h3>
-            <OptionRow group="mailProvider" values={["gmail", "outlook", "other"]} />
-          </article>
-          <article className={styles.card}>
-            <span>02</span><h3>Quel niveau d’accès avez-vous ?</h3>
-            <OptionRow group="mailAccess" values={["standard", "shared", "admin", "unknown"]} />
-          </article>
-          <article className={styles.card}>
-            <span>03</span><h3>Où sont les commandes / données métier ?</h3>
-            <OptionRow group="commerce" values={["shopify", "woocommerce", "prestashop", "none", "other"]} />
-          </article>
-          <article className={styles.card}>
-            <span>04</span><h3>Où suivez-vous le client ?</h3>
-            <OptionRow group="crm" values={["odoo", "hubspot", "salesforce", "sheets", "none", "other"]} />
-          </article>
-          <article className={styles.card}>
-            <span>05</span><h3>Avec quelle IA voulez-vous travailler ?</h3>
-            <OptionRow group="ai" values={["chatgpt", "claude", "auto"]} />
-          </article>
-          <article className={styles.card}>
-            <span>06</span><h3>Avez-vous déjà un accès API IA ?</h3>
-            <OptionRow group="apiAccess" values={["yes", "no", "unknown"]} />
-          </article>
-          <article className={styles.card}>
-            <span>07</span><h3>Quel volume traitez-vous ?</h3>
-            <OptionRow group="volume" values={["low", "medium", "high"]} />
-          </article>
+        <div className={styles.guidedBuilder} data-pole={currentPole}>
+          <div className={styles.poleRail}>
+            <div className={currentPole === "environment" ? styles.poleActive : environmentComplete ? styles.poleDone : styles.pole}>
+              <div className={styles.poleIndex}>{environmentComplete ? "✓" : "1"}</div>
+              <div>
+                <small>PÔLE 1</small>
+                <strong>Vos outils & votre environnement</strong>
+                <span>Messagerie, accès, outils métier, CRM, IA et volume.</span>
+              </div>
+            </div>
+            <div className={currentPole === "behavior" ? styles.poleActiveDark : styles.pole}>
+              <div className={styles.poleIndex}>2</div>
+              <div>
+                <small>PÔLE 2</small>
+                <strong>Le comportement de la machine</strong>
+                <span>Ce qu’elle fait et quand l’humain reprend la main.</span>
+              </div>
+            </div>
+          </div>
 
-          <article className={styles.cardWide}>
-            <span>08</span><h3>Que doit faire la machine ?</h3>
-            <p className={styles.selectionHelp}>Sélectionnez uniquement les actions que vous souhaitez automatiser. Aucune option n’est présélectionnée.</p>
-            <div className={styles.checkGrid}>
-              {ACTIONS.map(([id, text]) => (
-                <label key={id} className={config.actions.includes(id) ? styles.checkActive : styles.check}>
-                  <input type="checkbox" checked={config.actions.includes(id)} onChange={() => setConfig((current) => ({ ...current, actions: toggle(current.actions, id) }))} />
-                  <b>{text}</b>
-                </label>
-              ))}
+          <div className={styles.progressPanel}>
+            <div className={styles.progressMeta}>
+              <span>{currentPole === "environment" ? "PÔLE 1 — ENVIRONNEMENT" : "PÔLE 2 — COMPORTEMENT"}</span>
+              <b>Étape {currentStep + 1} / {TOTAL_STEPS}</b>
+              <em>{stepsAfterThis === 0 ? "Dernière étape" : stepsAfterThis === 1 ? "1 étape après celle-ci" : `${stepsAfterThis} étapes après celle-ci`}</em>
+            </div>
+            <div className={styles.progressTrack} aria-hidden="true">
+              <span style={{ width: `${((currentStep + 1) / TOTAL_STEPS) * 100}%` }} />
+            </div>
+            <div className={styles.poleProgress}>
+              <span>Étape {currentPoleStep} sur {currentPoleTotal} dans ce pôle</span>
+            </div>
+          </div>
+
+          <article className={styles.stepCard}>
+            <div className={styles.stepHeading}>
+              <span>{currentStepDef.number}</span>
+              <div>
+                <small>{currentPole === "environment" ? "Votre environnement" : "Comportement de la machine"}</small>
+                <h3>{currentStepDef.title}</h3>
+              </div>
+            </div>
+
+            {currentStep < ENVIRONMENT_STEPS && (
+              <OptionRow group={currentStepDef.key} values={currentStepDef.values} />
+            )}
+
+            {currentStepDef.key === "actions" && (
+              <>
+                <p className={styles.selectionHelp}>
+                  Sélectionnez uniquement les actions que vous souhaitez réellement confier à la machine.
+                </p>
+                <div className={styles.checkGrid}>
+                  {ACTIONS.map(([id, text]) => (
+                    <label key={id} className={config.actions.includes(id) ? styles.checkActive : styles.check}>
+                      <input
+                        type="checkbox"
+                        checked={config.actions.includes(id)}
+                        onChange={() => setConfig((current) => ({ ...current, actions: toggle(current.actions, id) }))}
+                      />
+                      <b>{text}</b>
+                    </label>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {currentStepDef.key === "humanRules" && (
+              <>
+                <p className={styles.selectionHelp}>
+                  Choisissez les situations qui doivent rester sous contrôle humain. Pendant les tests, les actions sensibles restent protégées dans tous les cas.
+                </p>
+                <div className={styles.checkGrid}>
+                  {HUMAN_RULES.map(([id, text]) => (
+                    <label key={id} className={config.humanRules.includes(id) ? styles.checkActive : styles.check}>
+                      <input
+                        type="checkbox"
+                        checked={config.humanRules.includes(id)}
+                        onChange={() => toggleHumanRule(id)}
+                      />
+                      <b>{text}</b>
+                    </label>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className={config.humanRules.length === 0 && humanRulesConfirmed ? styles.noneRuleActive : styles.noneRule}
+                  onClick={confirmNoHumanRule}
+                >
+                  Aucune règle supplémentaire pour l’instant
+                </button>
+              </>
+            )}
+
+            <div className={styles.stepFooter}>
+              <button type="button" className={styles.backButton} onClick={goBack} disabled={currentStep === 0}>
+                ← Retour
+              </button>
+
+              <div className={styles.stepFooterRight}>
+                {!currentStepIsComplete() && (
+                  <span className={styles.stepHint}>
+                    {currentStepDef.key === "actions"
+                      ? "Choisissez au moins une action"
+                      : currentStepDef.key === "humanRules"
+                        ? "Choisissez une règle ou confirmez qu’il n’y en a aucune"
+                        : "Choisissez une réponse pour continuer"}
+                  </span>
+                )}
+
+                {currentStep < TOTAL_STEPS - 1 ? (
+                  <button type="button" className={styles.nextButton} onClick={goNext} disabled={!currentStepIsComplete()}>
+                    Continuer →
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className={styles.nextButton}
+                    disabled={!allStepsComplete}
+                    onClick={() => {
+                      setGateOpen(true);
+                      setError("");
+                      trackEvent("machine_kit_gate_open", { machine_id: MACHINE_ID });
+                    }}
+                  >
+                    Générer mon kit personnalisé →
+                  </button>
+                )}
+              </div>
             </div>
           </article>
 
-          <article className={styles.cardWide}>
-            <span>09</span><h3>Quand voulez-vous garder un humain dans la boucle ?</h3>
-            <p className={styles.selectionHelp}>Choisissez vos règles métier. Pendant la phase de test, le kit garde de toute façon les actions sensibles sous validation humaine.</p>
-            <div className={styles.checkGrid}>
-              {HUMAN_RULES.map(([id, text]) => (
-                <label key={id} className={config.humanRules.includes(id) ? styles.checkActive : styles.check}>
-                  <input type="checkbox" checked={config.humanRules.includes(id)} onChange={() => setConfig((current) => ({ ...current, humanRules: toggle(current.humanRules, id) }))} />
-                  <b>{text}</b>
-                </label>
-              ))}
-            </div>
-          </article>
+          <div className={styles.configRecap}>
+            <span>VOTRE MACHINE SE CONSTRUIT</span>
+            <p>{architecture(config)}</p>
+          </div>
         </div>
 
         <div className={styles.preview}>
@@ -582,14 +720,14 @@ export default function MachineBuilder() {
           </div>
           <button
             type="button"
-            disabled={!config.actions.length}
+            disabled={!allStepsComplete}
             onClick={() => {
               setGateOpen(true);
               setError("");
               trackEvent("machine_kit_gate_open", { machine_id: MACHINE_ID });
             }}
           >
-            {config.actions.length ? "Générer mon kit personnalisé →" : "Choisissez au moins une action"}
+            {allStepsComplete ? "Générer mon kit personnalisé →" : "Terminez les 2 pôles pour générer le kit"}
           </button>
         </div>
       </section>
