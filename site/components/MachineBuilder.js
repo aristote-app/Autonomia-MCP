@@ -33,6 +33,13 @@ const HUMAN_RULES = [
   ["always_send", "Toute réponse avant envoi"]
 ];
 
+const MACHINE_ID = "sav-ecommerce-01";
+const MACHINE_NAME = "Automatiser le SAV e-commerce";
+const MACHINE_SLUG = "automatiser-sav-ecommerce";
+const LINKEDIN_FOLLOW_URL =
+  process.env.NEXT_PUBLIC_LINKEDIN_NEWSLETTER_URL ||
+  "https://www.linkedin.com/in/deborahdiangoldcher/";
+
 function toggle(list, value) {
   return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 }
@@ -159,7 +166,7 @@ function buildKit(config) {
 
   return [
     "# AUTONOMIA — KIT MACHINE IA",
-    "Machine #01 · E-mails / SAV / demandes entrantes",
+    "Machine #01 · " + MACHINE_NAME,
     "",
     "## 0. DÉMARRAGE — le plus simple",
     "Vous pouvez utiliser ce kit sans être développeur.",
@@ -213,7 +220,7 @@ function buildKit(config) {
     "## 0C. MANIFESTE MACHINE — à lire en priorité par l’IA",
     JSON.stringify({
       protocol: "AUTONOMIA_INSTALLER_V1",
-      machine_id: "email-sav-01",
+      machine_id: MACHINE_ID,
       mail_provider: config.mailProvider,
       mail_access: config.mailAccess,
       business_tool: config.commerce,
@@ -309,8 +316,8 @@ export default function MachineBuilder() {
     ai: "chatgpt",
     apiAccess: "unknown",
     volume: "medium",
-    actions: ["classify", "order", "status", "draft", "crm"],
-    humanRules: ["refund", "missing", "angry", "always_send"]
+    actions: [],
+    humanRules: []
   });
 
   const [gateOpen, setGateOpen] = useState(false);
@@ -355,19 +362,19 @@ export default function MachineBuilder() {
       phone: null,
       company_name: domain,
       requested_service: "machine-builder",
-      message: "Kit Machine #01 · " + architecture(config),
+      message: "Kit Machine #01 · " + MACHINE_NAME + " · " + architecture(config),
       desired_timeline: null,
       company_size: null,
       ...getClientAttribution(),
       form_id: "machine-builder-kit-gate",
-      landing_page_topic: "AUTONOMIA Machine Builder — Machine #01 e-mails",
+      landing_page_topic: "AUTONOMIA Machine Builder — " + MACHINE_NAME,
       marketing_consent: Boolean(newsletterConsent),
       consent_timestamp: now,
       privacy_notice_version: "2026-10-09-machine-v1",
       consent_source: "machine-builder-kit-gate",
       project_contact_consent: true,
       newsletter_optin: Boolean(newsletterConsent),
-      machine_context: { machine_id: "email-sav-01", ...config, architecture: architecture(config) }
+      machine_context: { machine_id: MACHINE_ID, machine_name: MACHINE_NAME, machine_slug: MACHINE_SLUG, ...config, architecture: architecture(config) }
     };
 
     try {
@@ -389,7 +396,9 @@ export default function MachineBuilder() {
         body: JSON.stringify({
           email,
           first_name: firstName.trim() || null,
-          machine_id: "email-sav-01",
+          machine_id: MACHINE_ID,
+          machine_name: MACHINE_NAME,
+          machine_slug: MACHINE_SLUG,
           kit_markdown: kit
         })
       });
@@ -398,7 +407,7 @@ export default function MachineBuilder() {
 
       trackLeadConversion({ form_id: "machine-builder-kit-gate", mode: "machine-builder", requested_service: "machine-builder" });
       trackEvent("machine_kit_unlocked", {
-        machine_id: "email-sav-01",
+        machine_id: MACHINE_ID,
         mail_provider: config.mailProvider,
         commerce: config.commerce,
         crm: config.crm,
@@ -421,13 +430,13 @@ export default function MachineBuilder() {
         body: JSON.stringify({
           email,
           first_name: firstName.trim() || null,
-          machine_id: "email-sav-01",
+          machine_id: MACHINE_ID,
           kit_markdown: kit
         })
       });
       setEmailDelivery(response.ok ? "sent" : "failed");
       trackEvent("machine_kit_email_retry", {
-        machine_id: "email-sav-01",
+        machine_id: MACHINE_ID,
         result: response.ok ? "sent" : "failed"
       });
     } catch {
@@ -440,19 +449,19 @@ export default function MachineBuilder() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "AUTONOMIA-kit-machine-IA-email.md";
+    anchor.download = "AUTONOMIA-kit-machine-IA-sav-ecommerce.md";
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
-    trackEvent("machine_kit_download", { machine_id: "email-sav-01" });
+    trackEvent("machine_kit_download", { machine_id: MACHINE_ID });
   }
 
   async function copyPrompt() {
     await navigator.clipboard.writeText(prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
-    trackEvent("machine_prompt_copy", { machine_id: "email-sav-01", ai: config.ai });
+    trackEvent("machine_prompt_copy", { machine_id: MACHINE_ID, ai: config.ai });
   }
 
   const OptionRow = ({ group, values }) => (
@@ -475,10 +484,10 @@ export default function MachineBuilder() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>AUTONOMIA MACHINE BUILDER · #01</p>
-          <h1>Construisez votre machine IA à partir de votre environnement réel.</h1>
+          <h1>Automatisez votre SAV e-commerce avec l’IA, de l’e-mail au brouillon de réponse.</h1>
           <p className={styles.lead}>
-            Répondez à quelques questions. AUTONOMIA génère votre architecture, votre plan de mise en place,
-            un script de départ et le brief exact à donner à Claude ou ChatGPT.
+            Configurez votre messagerie, votre outil e-commerce et vos règles de validation.
+            AUTONOMIA génère ensuite le kit à uploader dans Claude ou ChatGPT pour construire la machine étape par étape.
           </p>
           <div className={styles.promise}>
             <span>15 min pour cadrer</span>
@@ -535,6 +544,7 @@ export default function MachineBuilder() {
 
           <article className={styles.cardWide}>
             <span>08</span><h3>Que doit faire la machine ?</h3>
+            <p className={styles.selectionHelp}>Sélectionnez uniquement les actions que vous souhaitez automatiser. Aucune option n’est présélectionnée.</p>
             <div className={styles.checkGrid}>
               {ACTIONS.map(([id, text]) => (
                 <label key={id} className={config.actions.includes(id) ? styles.checkActive : styles.check}>
@@ -547,6 +557,7 @@ export default function MachineBuilder() {
 
           <article className={styles.cardWide}>
             <span>09</span><h3>Quand voulez-vous garder un humain dans la boucle ?</h3>
+            <p className={styles.selectionHelp}>Choisissez vos règles métier. Pendant la phase de test, le kit garde de toute façon les actions sensibles sous validation humaine.</p>
             <div className={styles.checkGrid}>
               {HUMAN_RULES.map(([id, text]) => (
                 <label key={id} className={config.humanRules.includes(id) ? styles.checkActive : styles.check}>
@@ -563,12 +574,16 @@ export default function MachineBuilder() {
             <span>VOTRE ARCHITECTURE</span>
             <p>{architecture(config)}</p>
           </div>
-          <button type="button" onClick={() => {
-            setGateOpen(true);
-            setError("");
-            trackEvent("machine_kit_gate_open", { machine_id: "email-sav-01" });
-          }}>
-            Générer mon kit personnalisé →
+          <button
+            type="button"
+            disabled={!config.actions.length}
+            onClick={() => {
+              setGateOpen(true);
+              setError("");
+              trackEvent("machine_kit_gate_open", { machine_id: MACHINE_ID });
+            }}
+          >
+            {config.actions.length ? "Générer mon kit personnalisé →" : "Choisissez au moins une action"}
           </button>
         </div>
       </section>
@@ -616,13 +631,24 @@ export default function MachineBuilder() {
       )}
 
       <section className={styles.nextMachines}>
-        <span>PROCHAINES MACHINES</span>
-        <div>
-          <article><b>#02</b><strong>Réunion → compte rendu → plan d’action</strong></article>
-          <article><b>#03</b><strong>Boîte mail → détection des prospects</strong></article>
-          <article><b>#04</b><strong>Documents → analyse de contrats</strong></article>
-          <article><b>#05</b><strong>Drive → assistant documentaire</strong></article>
+        <div className={styles.nextMachinesHead}>
+          <div>
+            <span>PROCHAINES MACHINES</span>
+            <h2>Elles arrivent au fur et à mesure.</h2>
+          </div>
+          <a href={LINKEDIN_FOLLOW_URL} target="_blank" rel="noreferrer">
+            Suivre les prochaines machines sur LinkedIn ↗
+          </a>
         </div>
+        <div>
+          <article className={styles.comingMachine}><div><b>#02</b><em>À venir</em></div><strong>Réunion → compte rendu → plan d’action</strong></article>
+          <article className={styles.comingMachine}><div><b>#03</b><em>À venir</em></div><strong>Boîte mail → détection des prospects</strong></article>
+          <article className={styles.comingMachine}><div><b>#04</b><em>À venir</em></div><strong>Documents → analyse de contrats</strong></article>
+          <article className={styles.comingMachine}><div><b>#05</b><em>À venir</em></div><strong>Drive → assistant documentaire</strong></article>
+        </div>
+        <p className={styles.newsletterHint}>
+          Dès que la newsletter <b>AUTONOMIA — L’IA, concrètement.</b> est ouverte, ce bouton pointera directement vers l’abonnement.
+        </p>
       </section>
 
       {gateOpen && (
