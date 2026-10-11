@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { getReviewedDecisionMaker } from "../lib/intelligence/reviewedDecisionMakers.js";
+import { getReviewedDecisionMaker, getReviewedOpportunityDecisionMaker } from "../lib/intelligence/reviewedDecisionMakers.js";
 import { decisionCompanyKey, getSnapshotCandidate } from "../lib/intelligence/decisionMakerSnapshot.js";
 
 const now = Date.parse("2026-10-11");
@@ -29,3 +29,9 @@ assert.equal(getSnapshotCandidate(snapshot, "Societe A", { now: now + 15 * 86400
 snapshot.accounts[key].candidates[0].linkedin_url = "https://evil.example/in/test-person";
 assert.equal(getSnapshotCandidate(snapshot, "Societe A", { now }), null);
 console.log("Decision-maker matching, contact status, freshness and URL checks passed.");
+
+assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now }).name, "Gérard Réus");
+assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "autre-annonce", { now }), null);
+assert.equal(getReviewedOpportunityDecisionMaker("Autre entreprise", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now }), null);
+assert.equal(getReviewedOpportunityDecisionMaker("Entreprise non identifiée", "ab6f8fa9-3c1f-4099-8183-71627a7b8a21", { now }).name, "Jamal Mazaz");
+assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now: now + 31 * 86400000 }), null);

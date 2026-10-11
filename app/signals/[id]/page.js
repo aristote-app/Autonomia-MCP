@@ -122,7 +122,7 @@ export default async function SignalPage({ params }) {
         </div>
       </header>
 
-      <DecisionMaker company={signal.company_name} />
+      <DecisionMaker company={signal.company_name} opportunityId={id} />
 
       <section className="detailGrid">
         <article className="detailPanel">

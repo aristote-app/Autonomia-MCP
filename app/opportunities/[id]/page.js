@@ -52,7 +52,7 @@ export default async function OpportunityPage({ params }) {
         </div>
       </header>
 
-      <DecisionMaker company={organization} />
+      <DecisionMaker company={organization} opportunityId={id} />
 
       <section className="detailGrid">
         <article className="detailPanel">

@@ -622,7 +622,7 @@ export default async function Home({ searchParams }) {
                     )}
                   </div>
 
-                  <DecisionMaker company={item.company_name} />
+                  <DecisionMaker company={item.company_name} opportunityId={item.entity_id} />
 
                   <div className="nextAction">
                     <span>PROCHAINE ACTION</span>
