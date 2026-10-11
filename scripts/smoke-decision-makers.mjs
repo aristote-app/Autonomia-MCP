@@ -9,6 +9,15 @@ assert.match(getReviewedDecisionMaker("G2F CONSEIL", { now }).status, /Interméd
 assert.equal(getReviewedDecisionMaker("Autre Laboratoire L&M", { now }), null);
 assert.equal(getReviewedDecisionMaker("PerformAcademy", { now: now + 31 * 86400000 }), null);
 
+for (const company of ["GROUPE SKILLSET", "Copylot Group", "BEFORMA", "ECORIS", "ELVATUS", "AGENCE FRANCAISE D'INFORMATIQUE", "WOOSPEAK", "SPL GAAM HDF", "Akanea", "Ville de Lyon", "ADALIA CONSULTING", "AXSENS"]) {
+  const contact = getReviewedDecisionMaker(company, { now });
+  assert.ok(contact, `Missing reviewed contact for ${company}`);
+  assert.match(contact.linkedin, /^https:\/\/[a-z]{2,3}\.linkedin\.com\/in\//);
+  assert.equal(getReviewedDecisionMaker(`Autre ${company}`, { now }), null);
+}
+assert.match(getReviewedDecisionMaker("Akanea", { now }).status, /RH/);
+assert.match(getReviewedDecisionMaker("SPL GAAM HDF", { now }).status, /marché/);
+
 const key = decisionCompanyKey("Société A");
 const snapshot = { version: 1, accounts: { [key]: {
   checkedAt: "2026-10-11",
