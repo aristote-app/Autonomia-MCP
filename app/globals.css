@@ -1800,3 +1800,12 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .queueFilters a.active strong { color:var(--brand-cyan); }
 .revenueActionPriority { color:#fff; border-radius:10px; }
 .revenueActionOpen a { border-radius:8px; }
+
+.decisionContact { margin: 18px 0; padding: 18px; border: 1px solid #3de2d044; border-radius: 14px; background: #3de2d008; display: grid; gap: 8px; overflow-wrap: anywhere; }
+.decisionContactLabel { color: #65758a; font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.decisionContact > strong { color: #07111f; font-size: 18px; }
+.decisionContact p { margin: 0; line-height: 1.5; }
+.decisionContactStatus { color: #215c56; font-size: 13px; font-weight: 700; }
+.decisionContactReason, .decisionContact small { color: #65758a; font-size: 12px; }
+.decisionContactLinks { display: flex; flex-wrap: wrap; gap: 12px; }
+.decisionContactLinks a { color: #155a51; font-size: 13px; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }

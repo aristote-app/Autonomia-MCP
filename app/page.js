@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DecisionMaker from "../lib/ui/DecisionMaker.js";
 import { SOURCES, SOURCE_GROUPS } from "../lib/sources.js";
 import { hasAutonomiaDatabase } from "../lib/db/supabase.js";
 import {
@@ -620,6 +621,8 @@ export default async function Home({ searchParams }) {
                       <span>{formatMoney(item.budget_max || item.budget_min)}</span>
                     )}
                   </div>
+
+                  <DecisionMaker company={item.company_name} />
 
                   <div className="nextAction">
                     <span>PROCHAINE ACTION</span>

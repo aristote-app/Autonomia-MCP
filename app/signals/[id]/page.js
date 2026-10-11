@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DecisionMaker from "../../../lib/ui/DecisionMaker.js";
 import { notFound } from "next/navigation";
 import { getJobSignalDetail } from "../../../lib/db/jobSignals.js";
 import { listConsultantsWithSkills } from "../../../lib/db/consultants.js";
@@ -120,6 +121,8 @@ export default async function SignalPage({ params }) {
           <p className="lede">{signal.company_name || "Entreprise à identifier"}</p>
         </div>
       </header>
+
+      <DecisionMaker company={signal.company_name} />
 
       <section className="detailGrid">
         <article className="detailPanel">

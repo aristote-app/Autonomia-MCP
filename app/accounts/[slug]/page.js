@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DecisionMaker from "../../../lib/ui/DecisionMaker.js";
 import { notFound } from "next/navigation";
 import { loadAccountBySlug } from "../../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../../lib/db/supabase.js";
@@ -661,7 +662,8 @@ export default async function AccountDetailPage({ params, searchParams }) {
       <section className="accountDetailGrid">
         <div className="detailPanel">
           <p className="eyebrow">DECISION MAKER ENGINE</p>
-          <h2>Qui chercher ?</h2>
+          <h2>Qui approcher ?</h2>
+          <DecisionMaker company={account.name} />
           <div className="decisionRoleList">
             {account.decision_roles.map((role, index) => (
               <article key={role.label}>
@@ -688,7 +690,7 @@ export default async function AccountDetailPage({ params, searchParams }) {
                 Recherche décideurs prête · activation après sécurisation du cockpit
               </span>
             )}
-            <span>Recherche publique à la demande · pas de boucle automatique</span>
+            <span>Recherche complémentaire à la demande · profils potentiels à vérifier</span>
           </div>
 
           <div id="decision-makers" className="decisionCandidates">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DecisionMaker from "../../../lib/ui/DecisionMaker.js";
 import { notFound } from "next/navigation";
 import { getOpportunityDetail } from "../../../lib/db/opportunitySources.js";
 
@@ -50,6 +51,8 @@ export default async function OpportunityPage({ params }) {
           <span>FIT / 100</span>
         </div>
       </header>
+
+      <DecisionMaker company={organization} />
 
       <section className="detailGrid">
         <article className="detailPanel">

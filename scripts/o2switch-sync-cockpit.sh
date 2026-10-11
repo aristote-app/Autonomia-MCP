@@ -198,10 +198,12 @@ TALENT_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/a
 SEO_GEO_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-seo-geo.mjs >> /home/dide4169/autonomia-cockpit-app/seo-geo-refresh.log 2>&1'
 INBOUND_DRAIN_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-drain-inbound.mjs >> /home/dide4169/autonomia-cockpit-app/inbound-drain.log 2>&1'
 JOBS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-jobs.mjs >> /home/dide4169/autonomia-cockpit-app/job-refresh.log 2>&1'
+DECISION_MAKERS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-decision-makers.mjs >> /home/dide4169/autonomia-cockpit-app/decision-makers-refresh.log 2>&1'
 if command -v crontab >/dev/null 2>&1; then
   TMP_CRON="$(mktemp)"
   {
-    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' | grep -v 'o2switch-drain-inbound.mjs' || true
+    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' | grep -v 'o2switch-drain-inbound.mjs' | grep -v 'o2switch-refresh-decision-makers.mjs' || true
+    echo "37 5 * * * $DECISION_MAKERS_CMD"
     echo "17 4 * * * $TALENT_CMD"
     echo "23 */6 * * * $SEO_GEO_CMD"
     echo "*/5 * * * * $INBOUND_DRAIN_CMD"
@@ -216,6 +218,9 @@ if command -v crontab >/dev/null 2>&1; then
 else
   echo "crontab unavailable; Talent and SEO/GEO refreshes remain manually executable."
 fi
+
+echo "Priming decision-maker research (daily quota enforced)..."
+/home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-decision-makers.mjs >> decision-makers-refresh.log 2>&1 || echo "Decision-maker refresh deferred to daily cron."
 
 CURRENT_STEP="passenger-restart"
 touch tmp/restart.txt
