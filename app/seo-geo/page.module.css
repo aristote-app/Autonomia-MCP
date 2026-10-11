@@ -1,8 +1,8 @@
 .page {
   min-height: 100vh;
   padding: 32px;
-  background: #f5f7fb;
-  color: #14213d;
+  background: var(--brand-mist);
+  color: var(--brand-navy);
 }
 
 .header {
@@ -18,7 +18,7 @@
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .14em;
-  color: #5b6b8c;
+  color: #0b766d;
 }
 
 .header h1 {
@@ -30,17 +30,17 @@
 .lede {
   max-width: 760px;
   margin: 14px 0 0;
-  color: #52617d;
+  color: var(--brand-muted);
   font-size: 18px;
   line-height: 1.6;
 }
 
 .back {
   text-decoration: none;
-  color: #14213d;
+  color: var(--brand-navy);
   font-weight: 800;
   background: white;
-  border: 1px solid #dce3ef;
+  border: 1px solid var(--brand-line);
   padding: 10px 14px;
   border-radius: 999px;
 }
@@ -54,7 +54,7 @@
 
 .card, .panel {
   background: white;
-  border: 1px solid #dfe5ef;
+  border: 1px solid var(--brand-line);
   border-radius: 18px;
   box-shadow: 0 8px 30px rgba(23, 37, 61, .05);
 }
@@ -123,7 +123,7 @@
 
 .button {
   border: 0;
-  background: #172554;
+  background: var(--brand-navy);
   color: white;
 }
 
@@ -133,9 +133,9 @@
 }
 
 .secondaryButton {
-  border: 1px solid #d8dfeb;
+  border: 1px solid var(--brand-line);
   background: white;
-  color: #172554;
+  color: var(--brand-navy);
   text-decoration: none;
 }
 
@@ -148,7 +148,7 @@
 .statusItem {
   padding: 14px;
   border-radius: 14px;
-  background: #f7f9fc;
+  background: var(--brand-mist);
   border: 1px solid #e8edf5;
 }
 
@@ -198,8 +198,8 @@
   align-items: center;
   border-radius: 999px;
   padding: 5px 9px;
-  background: #eef2ff;
-  color: #3730a3;
+  background: #e5f9f5;
+  color: #0b665e;
   font-size: 12px;
   font-weight: 800;
 }

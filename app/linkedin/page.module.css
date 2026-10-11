@@ -1,8 +1,8 @@
 .page {
   min-height: 100vh;
   padding: 32px;
-  background: #f5f7fb;
-  color: #14213d;
+  background: var(--brand-mist);
+  color: var(--brand-navy);
 }
 
 .header {
@@ -21,8 +21,8 @@
   text-transform: uppercase;
 }
 
-.eyebrow { color: #5b6b8c; }
-.newsletterEyebrow { color: #0a66c2; }
+.eyebrow { color: #0b766d; }
+.newsletterEyebrow { color: #0b766d; }
 
 .header h1 {
   margin: 0;
@@ -34,7 +34,7 @@
 .lede {
   max-width: 780px;
   margin: 14px 0 0;
-  color: #52617d;
+  color: var(--brand-muted);
   font-size: 18px;
   line-height: 1.55;
 }
@@ -42,10 +42,10 @@
 .back {
   flex: 0 0 auto;
   text-decoration: none;
-  color: #14213d;
+  color: var(--brand-navy);
   font-weight: 800;
   background: white;
-  border: 1px solid #dce3ef;
+  border: 1px solid var(--brand-line);
   padding: 10px 14px;
   border-radius: 999px;
 }
@@ -58,7 +58,7 @@
   margin-bottom: 18px;
   padding: 13px 16px;
   background: #fff;
-  border: 1px solid #dfe5ef;
+  border: 1px solid var(--brand-line);
   border-radius: 14px;
 }
 
@@ -71,13 +71,13 @@
 
 .sourceBar strong { font-size: 12px; }
 .sourceBar span { color: #778399; font-size: 12px; }
-.sourceBar a { color: #0a66c2; font-size: 12px; font-weight: 900; text-decoration: none; white-space: nowrap; }
+.sourceBar a { color: #0b766d; font-size: 12px; font-weight: 900; text-decoration: none; white-space: nowrap; }
 
 .liveDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #0a66c2;
+  background: #0b766d;
 }
 
 .grid {
@@ -89,7 +89,7 @@
 
 .card, .panel, .newsletterPanel {
   background: white;
-  border: 1px solid #dfe5ef;
+  border: 1px solid var(--brand-line);
   border-radius: 18px;
   box-shadow: 0 8px 30px rgba(23, 37, 61, .05);
 }
@@ -155,7 +155,7 @@
 
 .topPost > span {
   max-width: 105px;
-  color: #0a66c2;
+  color: #0b766d;
   font-size: 9px;
   font-weight: 900;
   line-height: 1.4;
@@ -165,7 +165,7 @@
 .topPost strong { display: block; font-size: 15px; }
 .topPost p { margin: 5px 0 0; color: #657283; font-size: 12px; }
 .topPost a, .issueHeader a, .tableLink {
-  color: #0a66c2;
+  color: #0b766d;
   text-decoration: none;
   font-size: 11px;
   font-weight: 900;
@@ -211,7 +211,7 @@
   margin: -22px -22px 22px;
   padding: 28px 28px 24px;
   background: #f3f8ff;
-  border-left: 6px solid #0a66c2;
+  border-left: 6px solid #0b766d;
 }
 
 .newsletterHero h2 {
@@ -232,7 +232,7 @@
 .subscriberCard {
   padding: 17px;
   border-radius: 14px;
-  background: #0a66c2;
+  background: #0b766d;
   color: #fff;
 }
 
@@ -254,7 +254,7 @@
 }
 
 .issueHeader span {
-  color: #0a66c2;
+  color: #0b766d;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: .1em;
@@ -293,7 +293,7 @@
 .manualForm {
   margin-top: 16px;
   padding: 18px;
-  border: 1px solid #dce3ef;
+  border: 1px solid var(--brand-line);
   border-radius: 14px;
   background: #fbfcfe;
 }
@@ -307,7 +307,7 @@
 }
 .formHead span {
   display: block;
-  color: #0a66c2;
+  color: #0b766d;
   font-size: 9px;
   font-weight: 900;
   letter-spacing: .1em;
@@ -325,7 +325,7 @@
 .formGrid input {
   width: 100%;
   min-height: 42px;
-  border: 1px solid #d8dfeb;
+  border: 1px solid var(--brand-line);
   border-radius: 9px;
   padding: 8px 10px;
   background: #fff;
@@ -338,7 +338,7 @@
   padding: 0 15px;
   border: 0;
   border-radius: 9px;
-  background: #0a66c2;
+  background: #0b766d;
   color: #fff;
   font-weight: 900;
   cursor: pointer;
