@@ -5,6 +5,7 @@ import AutonomiaScan from "@/components/AutonomiaScan";
 import ConsultantLivePanel from "@/components/ConsultantLivePanel";
 
 const EXPERT_PAGE_ROLE = {
+  "orchestrateur-ia": { role: "orchestrateur-ia", label: "Orchestrateur IA" },
   "consultant-ia": { role: "ai-project-manager", label: "Consultant IA / AI Project Manager" },
   "freelance-ia": { role: "genai-engineer", label: "Freelance IA / GenAI Engineer" },
   "expert-ia": { role: "genai-engineer", label: "Expert IA / GenAI Engineer" },
