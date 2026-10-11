@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 const PAGE_TO_ROLE = {
-  "orchestrateur-ia": { role: "automation-engineer", label: "Orchestrateur IA" },
+  "orchestrateur-ia": { role: "orchestrateur-ia", label: "Orchestrateur IA" },
   "ai-project-manager": { role: "ai-project-manager", label: "AI Project Manager" },
   "consultant-genai": { role: "genai-engineer", label: "GenAI Engineer" },
   "consultant-rag": { role: "rag-engineer", label: "RAG Engineer" },
