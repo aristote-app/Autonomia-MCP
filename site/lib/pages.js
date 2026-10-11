@@ -58,6 +58,7 @@ const pages = {
         activation: "AI Project Manager"
       }
     ],
+    relatedLinks: [{ kicker: "MÉTIER EXPERT", label: "Orchestrateur IA", href: "/orchestrateur-ia" }],
     faq: [
       ["Autonomia est-il une marketplace ?", "Non. Le positionnement repose sur la compréhension du besoin, la sélection et le staffing, pas sur l’accès à un catalogue de profils."],
       ["Quels types de missions ?", "Renfort d’équipe, expertise ciblée, pilotage de projet, conception ou déploiement de solutions IA selon le besoin exprimé."],
@@ -257,6 +258,48 @@ const pages = {
       ["Pouvez-vous intervenir sur un RAG existant ?", "Le besoin peut concerner une construction, une revue d’architecture ou l’amélioration d’un système dont la qualité n’est pas satisfaisante."],
       ["Quels sujets faut-il évaluer ?", "La récupération, la pertinence du contexte, la fidélité des réponses, les citations et le comportement sur les cas sans réponse."],
       ["Le profil doit-il être uniquement LLM ?", "Pas forcément : selon l’architecture, des compétences search, data engineering, backend ou MLOps peuvent être déterminantes."]
+    ]
+  },
+
+  "orchestrateur-ia": {
+    ...expertDefaults,
+    slug: "orchestrateur-ia",
+    title: "Orchestrateur IA : coordonnez agents, outils et workflows métier.",
+    subtitle:
+      "Trouvez un expert capable de relier vos agents IA, vos API et vos applications métier dans un processus fiable, supervisé et réellement utilisable.",
+    contextTitle: "Une chaîne d'agents IA doit rester pilotable de bout en bout.",
+    contextText:
+      "L'orchestrateur IA conçoit les enchaînements entre modèles, agents, règles métier, outils et validations humaines. Il structure les droits d'accès, les reprises sur erreur, la traçabilité, les coûts et les tests avant la mise en production.",
+    outcomes: ["Processus cartographié", "Architecture d'orchestration définie", "Expert ciblé"],
+    capabilities: ["n8n", "Make", "LangGraph", "CrewAI", "Python", "API & webhooks", "MCP", "RAG", "Human-in-the-loop", "Observabilité", "Gestion des erreurs", "Sécurité & permissions"],
+    translationTitle: "Du processus manuel à une orchestration IA contrôlable.",
+    translations: [
+      { need: "Nos outils CRM, messagerie et ERP ne communiquent pas assez.", skills: "Connecteurs API · webhooks · n8n / Make · qualité des données", activation: "Orchestrateur IA orienté automatisation métier" },
+      { need: "Plusieurs agents doivent se répartir les tâches, avec validation humaine.", skills: "LangGraph / CrewAI · états · routage · permissions · human-in-the-loop", activation: "AI Agent Engineer spécialisé en orchestration multi-agents" },
+      { need: "Notre automatisation fonctionne en démo mais échoue en production.", skills: "Gestion des erreurs · files d'attente · monitoring · tests · sécurité", activation: "Expert orchestration et industrialisation IA" },
+      { need: "Nous souhaitons automatiser la qualification de prospects B2B.", skills: "CRM · enrichissement autorisé · scoring · déduplication · supervision", activation: "Orchestrateur IA pour processus commerciaux" }
+    ],
+    proofTitle: "L'automatisation doit rester compréhensible, mesurable et supervisable.",
+    proofText: "Nous distinguons les étapes déterministes des décisions confiées à l'IA, explicitons les validations humaines nécessaires et sélectionnons les compétences selon les outils réellement utilisés.",
+    relatedLinks: [
+      { kicker: "MÉTIER COMPLÉMENTAIRE", label: "Expert agents IA", href: "/consultant-agent-ia" },
+      { kicker: "MÉTIER COMPLÉMENTAIRE", label: "Consultant GenAI", href: "/consultant-genai" },
+      { kicker: "TROUVER", label: "Tous les experts IA", href: "/experts" }
+    ],
+    ads: {
+      intent: "Entreprise recherchant un orchestrateur IA ou expert en automatisation agentique",
+      keywordGroups: ["orchestrateur ia", "expert orchestration ia", "consultant langgraph freelance", "expert n8n ia", "ai orchestration engineer"],
+      negativeKeywords: ["emploi", "salaire", "stage", "formation gratuite", "tutoriel", "définition"],
+      primaryConversion: "lead_expert",
+      secondaryConversion: "form_start",
+      headlineVariants: ["Un orchestrateur IA pour vos processus métier", "Coordonnez vos agents IA et vos applications"]
+    },
+    faq: [
+      ["Quelle différence entre orchestrateur IA et expert automatisation ?", "L'orchestrateur conçoit la coordination d'étapes, d'agents, de données et de contrôles. Selon le besoin, un spécialiste des automatisations classiques peut suffire."],
+      ["Quels outils maîtrise un orchestrateur IA ?", "Les outils recherchés peuvent inclure n8n, Make, LangGraph, CrewAI, Python, API et MCP. Le choix dépend du système existant."],
+      ["Peut-on conserver une validation humaine ?", "Oui. Les autorisations, points de contrôle et traitements des exceptions sont définis selon les risques du processus."],
+      ["Comment les consultants sont-ils sélectionnés ?", "Le besoin est traduit en compétences et recherché dans le vivier Autonomia. Les profils affichés proviennent du flux de consultants publiables ; leurs disponibilités sont confirmées uniquement lorsqu'elles sont renseignées."],
+      ["Les profils proviennent-ils de Malt ?", "Malt peut être une source de recherche parmi d'autres, sous réserve des accès autorisés. Un profil n'est affiché que lorsqu'il est vérifié et publiable dans le vivier Autonomia."]
     ]
   },
 
