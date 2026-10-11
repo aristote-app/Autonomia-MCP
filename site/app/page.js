@@ -20,29 +20,6 @@ const expertRoles = [
 export default function Home() {
   return (
     <main className="homeV10">
-      <style>{`
-.homeHeroNewsletterRow { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; width:min(calc(100% - 28px),var(--max)); max-width:100%; margin:28px auto 20px; align-items:stretch; }
-.homeV10 .homeHeroNewsletterRow .homeHeroMinimalV13 { width:100%; max-width:100%; min-width:0; margin:0; min-height:0; }
-.homeV10 .homeHeroNewsletterRow .homeHeroMinimalInnerV13 { padding:42px 40px 34px; }
-.homeV10 .homeHeroNewsletterRow h1 { font-size:clamp(42px,4.4vw,72px); line-height:1.06; }
-.homeV10 .homeHeroNewsletterRow h1 .homeHeroPrimaryLineV15 { white-space:normal; }
-.homeV10 .homeHeroNewsletterRow .homeHeroMinimalBottomV14 { grid-template-columns:1fr; gap:20px; margin-top:22px; padding-top:20px; }
-.homeV10 .homeHeroNewsletterRow .homeHeroMinimalLeadV13 { max-width:720px; font-size:17px; }
-.homeNewsletterStrip { display:flex; flex-direction:column; justify-content:center; gap:26px; min-width:0; padding:28px; border:1px solid #cfe2f4; border-top:4px solid #0969c5; border-radius:28px; background:linear-gradient(150deg,#f3f8ff,#e8f3ff); color:#0b1930; }
-.homeNewsletterStripText { display:flex; flex-direction:column; gap:18px; }
-.homeNewsletterStripText::before { content:'AUTONOMIA — LES MACHINES IA'; font-size:10px; font-weight:800; letter-spacing:.12em; color:#0969c5; line-height:1.6; }
-.homeNewsletterStripText strong { font-size:28px; line-height:1.15; letter-spacing:-.035em; }
-.homeNewsletterStripText > span { font-size:15px; line-height:1.6; color:#52647b; }
-.homeNewsletterStrip > a { display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:13px 12px; border-radius:11px; background:#0969c5; color:#fff; font-size:13px; font-weight:700; text-decoration:none; }
-.homeNewsletterStrip > a:hover { background:#07559f; }
-.homeNewsletterStrip > a:focus-visible { outline:3px solid #0a69c5; outline-offset:4px; }
-.homeNewsletterLinkedIn { font-family:Arial,sans-serif; font-weight:800; font-size:19px; }
-.homeHeroNewsletterRow > * { min-width:0; box-sizing:border-box; }
-.homeHeroNewsletterRow input { min-width:0; max-width:100%; }
-@media (max-width:759px) { .homeHeroNewsletterRow { width:calc(100% - 16px); } }
-@media (max-width:900px) { .homeHeroNewsletterRow { grid-template-columns:minmax(0,1fr); margin-top:20px; gap:16px; } .homeV10 .homeHeroNewsletterRow .homeHeroMinimalInnerV13 { padding:30px 24px; } .homeV10 .homeHeroNewsletterRow h1 { font-size:clamp(38px,7vw,60px); } .homeNewsletterStrip { padding:22px 24px; gap:18px; } .homeNewsletterStripText { gap:10px; } .homeNewsletterStripText strong { font-size:23px; } .homeNewsletterStrip > a { align-self:flex-start; padding:12px 18px; } }
-`}</style>
-      <div className="homeHeroNewsletterRow">
       <section className="homeHeroV10 homeHeroMinimalV13" id="top">
         <div className="homeHeroMinimalInnerV13">
           <p className="eyebrow">PARTENAIRE OPÉRATIONNEL DE L’ADOPTION IA</p>
@@ -66,17 +43,6 @@ export default function Home() {
 
         </div>
       </section>
-      <aside className="homeNewsletterStrip" aria-label="Newsletter AUTONOMIA — Les Machines IA">
-        <div className="homeNewsletterStripText">
-          <strong>Actualités IA &amp; kits machines à installer</strong>
-          <span>Chaque semaine, une machine concrète et son Kit IA prêt à l’emploi.</span>
-        </div>
-        <a href="https://www.linkedin.com/newsletters/7514281561907953664/" target="_blank" rel="noopener noreferrer">
-          <span className="homeNewsletterLinkedIn" aria-hidden="true">in</span>
-          Suivre la newsletter <span aria-hidden="true">↗</span>
-        </a>
-      </aside>
-      </div>
 
       <section className="homeExecutionChainV12" id="experts-academy">
         <div className="homeExecutionRailV12">
