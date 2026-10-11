@@ -127,6 +127,7 @@ export const roleEnhancements = {
       ["Traçabilité", "Logs et traces permettant de comprendre pourquoi une action a été exécutée."]
     ],
     neighbors: [
+      ["orchestrateur-ia", "Coordonne les agents, workflows et intégrations métier dans un processus complet."],
       ["genai-engineer", "Construit l’application IA autour de l’agent et ses interfaces."],
       ["llm-engineer", "Évalue et fiabilise les décisions prises par le modèle."],
       ["automation-engineer", "Détermine ce qui doit rester déterministe plutôt qu’agentique."],
@@ -269,6 +270,66 @@ export const roleEnhancements = {
       ["mlops-llmops-engineer", "Fournit traçabilité, monitoring et contrôles techniques nécessaires."],
       ["genai-engineer", "Implémente garde-fous, permissions et mécanismes de supervision."],
       ["ai-agent-engineer", "Traite les risques spécifiques liés à l’autonomie et aux actions."]
+    ]
+  },
+  "orchestrateur-ia": {
+    "questions": [
+      "Quel processus métier doit être orchestré, avec quel résultat et quel volume ?",
+      "Quelles applications ou données sont accessibles par APIs autorisées ?",
+      "Quelles étapes doivent suivre des règles fixes, et lesquelles justifient un modèle IA ?",
+      "Quels agents ou outils doivent coopérer, et quels rôles distincts leur donner ?",
+      "Quelles actions ont besoin d’une confirmation humaine explicite ?",
+      "Quels droits et secrets chaque agent ou connecteur peut-il utiliser ?",
+      "Que se passe-t-il en cas de timeout, erreur, doublon ou réponse incohérente ?",
+      "Comment mesurer fiabilité, latence, coût des appels et temps humain réellement économisé ?"
+    ],
+    "deliverables": [
+      [
+        "Architecture d’orchestration",
+        "Diagramme des étapes, agents, outils, déclencheurs, états et validations nécessaires."
+      ],
+      [
+        "Workflows opérationnels",
+        "Flux n8n, Make, LangGraph ou composants codés avec versions et configuration documentées."
+      ],
+      [
+        "Catalogue des intégrations",
+        "APIs, webhooks, formats d’échange, permissions, secrets et contrats de données."
+      ],
+      [
+        "Gestion des exceptions",
+        "Règles de reprise, idempotence, retries, limites, confirmations et escalades humaines."
+      ],
+      [
+        "Jeux de tests",
+        "Parcours normaux, scénarios d’échec, actions interdites, données partielles et contrôle de non-régression."
+      ],
+      [
+        "Tableau de supervision",
+        "État des exécutions, taux d’échec, coûts, délais, alertes et procédure d’exploitation."
+      ]
+    ],
+    "neighbors": [
+      [
+        "automation-engineer",
+        "Conçoit les étapes déterministes et les connecteurs entre logiciels."
+      ],
+      [
+        "ai-agent-engineer",
+        "Construit des agents capables de choisir ou utiliser plusieurs outils sous contrôle."
+      ],
+      [
+        "genai-engineer",
+        "Intègre modèles, RAG et services d’IA générative au système métier."
+      ],
+      [
+        "mlops-llmops-engineer",
+        "Organise l’observabilité, les déploiements et la fiabilité en production."
+      ],
+      [
+        "ai-project-manager",
+        "Coordonne la mission, ses responsabilités et ses critères de réussite."
+      ]
     ]
   },
   "automation-engineer": {
