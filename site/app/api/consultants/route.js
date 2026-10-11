@@ -11,6 +11,7 @@ const ALLOWED_ROLES = new Set([
   "mlops-llmops-engineer",
   "ai-product-manager",
   "ai-governance",
+  "orchestrateur-ia",
   "automation-engineer"
 ]);
 
