@@ -1,6 +1,6 @@
 import "./globals.css";
 import Link from "next/link";
-import AutonomiaLogo from "../site/components/AutonomiaLogo.js";
+import AutonomiaLogo from "../lib/ui/AutonomiaLogo.js";
 
 export const metadata = {
   title: { default: "AUTONOMIA · Cockpit", template: "%s · AUTONOMIA" },
