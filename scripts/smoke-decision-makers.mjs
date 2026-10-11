@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { getReviewedDecisionMaker, getReviewedOpportunityDecisionMaker } from "../lib/intelligence/reviewedDecisionMakers.js";
 import { decisionCompanyKey, getSnapshotCandidate } from "../lib/intelligence/decisionMakerSnapshot.js";
+import { reviewedResearchContacts } from "../lib/intelligence/reviewedOpportunityContacts.js";
 
 const now = Date.parse("2026-10-11");
 assert.equal(getReviewedDecisionMaker("SARL LABORATOIRE L & M", { now }).name, "Fabrice Leroy");
@@ -35,3 +36,26 @@ assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "autre-annonce"
 assert.equal(getReviewedOpportunityDecisionMaker("Autre entreprise", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now }), null);
 assert.equal(getReviewedOpportunityDecisionMaker("Entreprise non identifiée", "ab6f8fa9-3c1f-4099-8183-71627a7b8a21", { now }).name, "Jamal Mazaz");
 assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now: now + 31 * 86400000 }), null);
+
+for (const entry of reviewedResearchContacts) {
+  for (const id of entry.ids) {
+    const matched = getReviewedOpportunityDecisionMaker(entry.company, id, { now });
+    assert.equal(matched.resolvedCompany, entry.resolvedCompany);
+    assert.equal(matched.linkedin, entry.linkedin);
+    assert.equal(getReviewedOpportunityDecisionMaker("Autre entreprise", id, { now }), null);
+    assert.equal(getReviewedOpportunityDecisionMaker(entry.company, "autre-annonce", { now }), null);
+    assert.equal(getReviewedOpportunityDecisionMaker(entry.company, id, { now: now + 31 * 86400000 }), null);
+    if (entry.linkedin) {
+      const url = new URL(entry.linkedin);
+      assert.match(url.hostname, /(^|\.)linkedin\.com$/);
+      assert.ok(url.pathname.startsWith("/in/"));
+      assert.ok(entry.name && entry.role && entry.reason && entry.additionalSource);
+    } else assert.equal(entry.name, undefined);
+  }
+}
+assert.equal(getReviewedDecisionMaker("Organisation non identifiée", { now }), null);
+assert.equal(getReviewedDecisionMaker("EQUANS", { now }), null);
+assert.equal(getReviewedOpportunityDecisionMaker("EQUANS", "16470b9e-7068-46ef-9d8b-0bd33a3c01aa", { now }).linkedin, "https://fr.linkedin.com/in/%C3%A9ric-b-b4a496a2");
+assert.match(getReviewedOpportunityDecisionMaker("Collective.work", "bb479586-fb5c-41d6-b26f-196fb799b77c", { now }).status, /Intermédiaire/);
+assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "05fe21cd-e476-436d-bc44-6838b15d7931", { now }), null);
+console.log("Reviewed ad provenance, personal-profile coverage and scoped matching checks passed.");
