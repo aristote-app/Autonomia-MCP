@@ -57,5 +57,7 @@ assert.equal(getReviewedDecisionMaker("Organisation non identifiée", { now }), 
 assert.equal(getReviewedDecisionMaker("EQUANS", { now }), null);
 assert.equal(getReviewedOpportunityDecisionMaker("EQUANS", "16470b9e-7068-46ef-9d8b-0bd33a3c01aa", { now }).linkedin, "https://fr.linkedin.com/in/%C3%A9ric-b-b4a496a2");
 assert.match(getReviewedOpportunityDecisionMaker("Collective.work", "bb479586-fb5c-41d6-b26f-196fb799b77c", { now }).status, /Intermédiaire/);
-assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "05fe21cd-e476-436d-bc44-6838b15d7931", { now }), null);
+assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "05fe21cd-e476-436d-bc44-6838b15d7931", { now }).resolvedCompany, "Bloomays");
+assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "65f91f46-f171-44c6-a125-901225b23b94", { now }).name, "Alicia Pilon");
+assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "b694a967-c4ad-4fff-8e68-5ca36ef282ae", { now }).status, /pourvu/);
 console.log("Reviewed ad provenance, personal-profile coverage and scoped matching checks passed.");
