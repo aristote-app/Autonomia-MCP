@@ -485,6 +485,148 @@ export const aiRoles = [
     ]
   },
   {
+    "slug": "orchestrateur-ia",
+    "title": "Orchestrateur IA",
+    "frenchTitle": "Expert en orchestration d'agents et d'automatisations IA",
+    "dek": "Le spécialiste qui fait coopérer agents IA, APIs, logiciels métiers et workflows : routage des tâches, validations humaines, résilience et supervision de bout en bout.",
+    "angle": "L’Orchestrateur IA organise la circulation du travail entre plusieurs systèmes, et pas uniquement entre plusieurs modèles. Il cartographie les décisions, sélectionne les outils ou agents adaptés à chaque étape, définit les données échangées et choisit ce qui relève de règles déterministes ou de l’IA. Il prévoit les droits d’accès, les confirmations humaines, les reprises en cas d’échec, les coûts et les traces. Son objectif : rendre un processus automatisé compréhensible, testable et maintenable, même quand il combine CRM, ERP, messagerie, bases documentaires, n8n ou Make et des agents spécialisés.",
+    "market": [
+      "Le terme « orchestrateur IA » recouvre plusieurs spécialités : orchestration d’agents, automatisation de processus avec IA et intégration de services. Le niveau technique doit être précisé dans chaque mission.",
+      "Le recours à plusieurs agents n’est pas systématiquement nécessaire : un workflow déterministe avec une étape de classification ou d’extraction par LLM peut constituer une architecture plus simple.",
+      "Pour évaluer un profil, il faut examiner ses réalisations en production : gestion des permissions, erreurs, reprise, supervision, coût des appels et maintenabilité, au-delà de la seule maîtrise d’un outil."
+    ],
+    "responsibilities": [
+      "Cartographier les processus métier, les déclencheurs, les entrées et sorties, les acteurs, les systèmes et les exceptions.",
+      "Définir l’architecture d’orchestration : étapes, transitions, états, règles, files de traitement et limites d’autonomie des agents.",
+      "Connecter les applications métier, CRM, ERP, messageries, bases documentaires et APIs au moyen d’intégrations autorisées.",
+      "Choisir pour chaque étape entre automatisation classique, LLM, RAG, agent spécialisé et intervention humaine.",
+      "Définir les permissions de chaque outil, la gestion des secrets et les validations avant toute action sensible.",
+      "Implémenter timeouts, retries, idempotence, journalisation, files d’échec et procédures de reprise.",
+      "Mettre en place des tests de scénarios, des métriques de qualité, de latence, de coûts et des alertes exploitables.",
+      "Documenter les flux et organiser la transmission aux équipes chargées de l’exploitation."
+    ],
+    "deliverables": [
+      "cartographie métier et architecture d’orchestration",
+      "workflow n8n, Make, LangGraph ou code",
+      "connecteurs API et contrats de données",
+      "règles de permissions et validations humaines",
+      "scénarios de tests et gestion des exceptions",
+      "observabilité, alertes et suivi des coûts",
+      "documentation, runbook et plan de reprise"
+    ],
+    "stack": [
+      "n8n",
+      "Make",
+      "LangGraph",
+      "CrewAI",
+      "Python",
+      "TypeScript / Node.js",
+      "API REST & webhooks",
+      "MCP / tool calling",
+      "RAG",
+      "PostgreSQL",
+      "queues & retries",
+      "Langfuse / traces",
+      "authentification et secrets",
+      "Human-in-the-loop"
+    ],
+    "lifecycle": [
+      [
+        "Cadrer",
+        "Recenser les tâches, les acteurs, les applications, les données autorisées et les actions qui nécessitent une confirmation. Mesurer la fréquence des cas et leurs exceptions."
+      ],
+      [
+        "Choisir les composants",
+        "Séparer les règles déterministes des étapes nécessitant compréhension du langage ou décision contextualisée. Déterminer si un agent suffit, si plusieurs agents sont utiles ou si un workflow classique est préférable."
+      ],
+      [
+        "Orchestrer",
+        "Implémenter déclencheurs, transitions, routage, appels d’outils, contrats de données, validations et reprise sur erreurs dans le contexte informatique réel."
+      ],
+      [
+        "Tester",
+        "Simuler doublons, données manquantes, API indisponible, sorties incohérentes et actions non autorisées. Mesurer coût, latence, qualité et taux d’intervention humaine."
+      ],
+      [
+        "Exploiter",
+        "Mettre à disposition logs, alertes, procédures de reprise et tableaux de suivi. Versionner les flux et former les personnes chargées de les maintenir."
+      ]
+    ],
+    "cases": [
+      {
+        "title": "Demandes clients et SAV e-commerce",
+        "context": "Les demandes arrivent par e-mail ou formulaire, nécessitent une recherche de commande puis une réponse adaptée.",
+        "action": "L’orchestrateur relie la boîte de réception, les commandes et le transporteur. L’IA prépare une réponse à partir des informations autorisées, puis un humain valide les exceptions.",
+        "result": "Chaque demande suit un flux traçable ; les cas simples et les exceptions sont traités selon des règles explicites."
+      },
+      {
+        "title": "Qualification de prospects B2B",
+        "context": "Les contacts entrants doivent être dédoublonnés, enrichis à partir de sources autorisées, qualifiés et transmis au bon commercial.",
+        "action": "Il coordonne formulaires, CRM, règles de déduplication, scoring assisté par IA et notifications, avec des seuils d’intervention humaine.",
+        "result": "La qualification devient reproductible et les données transmises conservent leur provenance."
+      },
+      {
+        "title": "Instruction administrative de dossiers",
+        "context": "Les équipes reçoivent des pièces hétérogènes et doivent contrôler leur complétude avant étude.",
+        "action": "Il connecte dépôt documentaire, extraction structurée, référentiel métier, vérifications et tableau de traitement, avec validation humaine avant les décisions.",
+        "result": "L’instruction est organisée autour des contrôles et des pièces manquantes, sans déléguer les décisions sensibles au modèle."
+      }
+    ],
+    "boundaries": "L’Orchestrateur IA se distingue de l’Automation Engineer, davantage centré sur l’exécution de workflows souvent déterministes, et de l’AI Agent Engineer, centré sur les comportements autonomes, les outils et la prise de décision agentique. Il relie ces deux univers à l’écosystème métier complet. Un AI Project Manager peut piloter les acteurs sans concevoir l’orchestration technique ; un LLMOps Engineer peut en opérer l’infrastructure. Sur une petite mission, une même personne peut cumuler plusieurs de ces compétences.",
+    "questions": [
+      "Quel résultat concret doit produire ce processus et à quelle fréquence ?",
+      "Quels systèmes et APIs doivent être reliés ?",
+      "Quelles étapes peuvent rester entièrement déterministes ?",
+      "Un ou plusieurs agents IA sont-ils réellement nécessaires ?",
+      "Quelles données, permissions et secrets sont impliqués ?",
+      "Quelles actions doivent être validées par un humain ?",
+      "Que doit-il se passer lorsque l’API, le modèle ou une étape échoue ?",
+      "Comment détecter doublons, boucles, timeouts et pertes de données ?",
+      "Quels indicateurs de fiabilité, temps, coût et valeur suivra-t-on ?",
+      "Qui maintiendra les automatisations après la mission ?"
+    ],
+    "sources": [
+      [
+        "Indeed — recherche « orchestration IA »",
+        "https://fr.indeed.com/jobs?q=orchestration+IA"
+      ],
+      [
+        "Free-Work — missions IA générative",
+        "https://www.free-work.com/fr/tech-it/jobs/ia-generative"
+      ],
+      [
+        "Malt — recherche de consultants spécialisés",
+        "https://www.malt.fr/"
+      ]
+    ],
+    "faq": [
+      [
+        "À quoi sert un orchestrateur IA ?",
+        "Il conçoit et supervise la coordination entre outils, agents IA, règles métier et personnes, de l’entrée d’un processus jusqu’au résultat contrôlé."
+      ],
+      [
+        "Quelle différence entre orchestrateur IA et expert n8n ?",
+        "n8n est l’un des outils possibles. Le métier couvre aussi architecture, agents, APIs, permissions, qualité, gestion des erreurs et supervision, quelle que soit la technologie retenue."
+      ],
+      [
+        "Faut-il utiliser plusieurs agents IA ?",
+        "Non. Le bon choix peut être un workflow classique, un seul agent ou plusieurs agents spécialisés selon le besoin et le niveau d’autonomie utile."
+      ],
+      [
+        "Comment sont sélectionnés les consultants sur Malt ?",
+        "Autonomia utilise son vivier et des recherches ciblées dans les sources accessibles et autorisées, dont Malt lorsqu’il est disponible. Seuls des profils effectivement présents et publiables sont affichés."
+      ],
+      [
+        "Peut-on télécharger les CV et connaître les TJM ?",
+        "Les profils remontés du vivier disposent des mêmes fonctionnalités que les autres métiers : CV PDF anonymisé, disponibilité renseignée et TJM Autonomia lorsqu’un tarif source existe."
+      ],
+      [
+        "L’orchestrateur peut-il intégrer un CRM ou un ERP ?",
+        "Oui, si les connecteurs ou APIs autorisés sont disponibles. Le périmètre dépend des droits, des données et des contraintes de sécurité de l’organisation."
+      ]
+    ]
+  },
+  {
     slug: "automation-engineer",
     title: "Automation Engineer",
     frenchTitle: "Ingénieur automatisation IA",
