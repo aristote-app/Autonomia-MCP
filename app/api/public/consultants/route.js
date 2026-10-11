@@ -46,7 +46,7 @@ const ROLE_MAP = {
     keywords: ["governance", "gouvernance", "ai act", "responsible ai", "risk", "risque", "compliance", "conformite"]
   },
   "orchestrateur-ia": {
-    families: ["automation", "genai-engineer"],
+    families: ["orchestrateur-ia", "agentic", "automation", "genai-engineer"],
     keywords: ["orchestrateur ia", "orchestration", "orchestrator", "agentic", "multi-agent", "langgraph", "crewai", "n8n", "make", "mcp", "workflow", "api", "human-in-the-loop"]
   },
   "automation-engineer": {
