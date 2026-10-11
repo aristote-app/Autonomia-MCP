@@ -1,11 +1,4 @@
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
-import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
-import {
-  latestLinkedinNewsletterMetrics,
-  listLinkedinNewsletterMetrics,
-  saveLinkedinNewsletterMetrics
-} from "../../lib/db/linkedinAnalytics.js";
 import { LINKEDIN_SNAPSHOT } from "../../lib/linkedin/snapshot.js";
 import { loadMetricoolLinkedinAccount } from "../../lib/linkedin/metricool.js";
 import styles from "./page.module.css";
@@ -37,37 +30,6 @@ function formatDate(value, includeTime = false) {
   }).format(new Date(value));
 }
 
-function metric(value, fallback = null) {
-  return value == null ? fallback : value;
-}
-
-async function saveNewsletterMetricsAction(formData) {
-  "use server";
-
-  const context = await getCurrentWorkspaceMembership();
-  const workspaceId = context?.membership?.workspace_id;
-  const actorUserId = context?.claims?.sub || null;
-
-  if (!workspaceId || !actorUserId || context.membership.role === "viewer") {
-    throw new Error("Accès en écriture requis");
-  }
-
-  await saveLinkedinNewsletterMetrics({
-    workspaceId,
-    actorUserId,
-    subscribers: formData.get("subscribers"),
-    issueId: "issue-01",
-    issueTitle: "#01 — Construire une machine IA pour le SAV e-commerce",
-    impressions: formData.get("impressions"),
-    reactions: formData.get("reactions"),
-    comments: formData.get("comments"),
-    shares: formData.get("shares"),
-    clicks: formData.get("clicks")
-  });
-
-  revalidatePath("/linkedin");
-}
-
 export default async function LinkedinAnalyticsPage() {
   const snapshot = LINKEDIN_SNAPSHOT;
   const liveAccount = await loadMetricoolLinkedinAccount({
@@ -84,35 +46,10 @@ export default async function LinkedinAnalyticsPage() {
       : {})
   };
 
-  const context = await getCurrentWorkspaceMembership().catch(() => ({
-    configured: false,
-    claims: null,
-    membership: null
-  }));
-  const workspaceId = context?.membership?.workspace_id || null;
-  const canWrite = Boolean(
-    context?.claims?.sub &&
-    workspaceId &&
-    context.membership.role !== "viewer"
-  );
-
-  const savedRows = workspaceId
-    ? await listLinkedinNewsletterMetrics({ workspaceId }).catch(() => [])
-    : [];
-  const saved = latestLinkedinNewsletterMetrics(savedRows);
-
   const newsletter = snapshot.newsletter;
   const baseIssue = newsletter.issues[0];
-  const manualIssue = saved.issues?.[baseIssue.id] || null;
-  const subscribers = metric(saved.newsletter?.subscribers, newsletter.subscribers);
-  const issue = {
-    ...baseIssue,
-    impressions: metric(manualIssue?.impressions, baseIssue.impressions),
-    reactions: metric(manualIssue?.reactions, baseIssue.reactions),
-    comments: metric(manualIssue?.comments, baseIssue.comments),
-    shares: metric(manualIssue?.shares, baseIssue.shares),
-    clicks: metric(manualIssue?.clicks, baseIssue.clicks)
-  };
+  const subscribers = newsletter.subscribers;
+  const issue = baseIssue;
 
   const posts = [...snapshot.posts].sort(
     (a, b) => Number(b.impressions || 0) - Number(a.impressions || 0)
@@ -127,8 +64,7 @@ export default async function LinkedinAnalyticsPage() {
     : null;
 
   const sourceLabel = liveAccount ? "Metricool API · live" : "Metricool · dernier snapshot";
-  const newsletterUpdatedAt =
-    manualIssue?.updatedAt || saved.newsletter?.updatedAt || null;
+  const newsletterUpdatedAt = newsletter.sync?.lastCheckedAt || snapshot.generatedAt;
 
   return (
     <main className={styles.page}>
@@ -251,8 +187,8 @@ export default async function LinkedinAnalyticsPage() {
             <strong>{number(subscribers)}</strong>
             <small>
               {subscribers == null
-                ? "À renseigner depuis LinkedIn Analytics."
-                : `Dernière valeur enregistrée${saved.newsletter?.updatedAt ? " · " + formatDate(saved.newsletter.updatedAt, true) : ""}.`}
+                ? "Synchronisation automatique active · compteur exact non exposé par la source actuelle."
+                : `Synchronisé automatiquement · ${formatDate(newsletterUpdatedAt, true)}.`}
             </small>
           </div>
         </div>
@@ -267,64 +203,26 @@ export default async function LinkedinAnalyticsPage() {
         </div>
 
         <div className={styles.issueGrid}>
-          <article><span>Impressions / vues</span><strong>{number(issue.impressions)}</strong></article>
-          <article><span>Réactions</span><strong>{number(issue.reactions)}</strong></article>
-          <article><span>Commentaires</span><strong>{number(issue.comments)}</strong></article>
-          <article><span>Partages</span><strong>{number(issue.shares)}</strong></article>
-          <article><span>Clics</span><strong>{number(issue.clicks)}</strong></article>
+          <article><span>Vues article</span><strong>{number(issue.impressions)}</strong></article>
+          <article><span>Réactions article</span><strong>{number(issue.reactions)}</strong></article>
+          <article><span>Commentaires article</span><strong>{number(issue.comments)}</strong></article>
+          <article><span>Impressions diffusion</span><strong>{number(issue.distributionImpressions)}</strong></article>
+          <article><span>Portée diffusion</span><strong>{number(issue.distributionUniqueImpressions)}</strong></article>
         </div>
 
         <div className={styles.newsletterNotice}>
-          <strong>Pourquoi certains chiffres sont saisis ici ?</strong>
+          <strong>Synchronisation automatique activée</strong>
           <p>
-            La connexion Metricool actuelle suit automatiquement le profil personnel et les posts.
-            Les statistiques de newsletter détaillées ne sont exposées par Metricool que pour les pages entreprise.
-            Le cockpit conserve donc les chiffres de la newsletter que vous relevez dans LinkedIn, sans les mélanger aux données posts.
+            Le cockpit met à jour seul les performances de la diffusion via Metricool et recherche les
+            statistiques exactes de la newsletter dans les sources LinkedIn disponibles. Une valeur n’est
+            affichée comme « abonnés newsletter » ou « vues article » que lorsqu’elle est vérifiée : aucun
+            chiffre n’est déduit du nombre de followers du profil.
+          </p>
+          <p>
+            Dernière vérification : {formatDate(newsletterUpdatedAt, true)} · Sources suivies :
+            {" "}{(newsletter.sync?.sources || []).join(" · ") || "Metricool · LinkedIn"}.
           </p>
         </div>
-
-        {canWrite ? (
-          <form action={saveNewsletterMetricsAction} className={styles.manualForm}>
-            <div className={styles.formHead}>
-              <div>
-                <span>MISE À JOUR NEWSLETTER</span>
-                <strong>Reporter les chiffres affichés dans LinkedIn Analytics.</strong>
-              </div>
-              {newsletterUpdatedAt && <small>Dernière saisie · {formatDate(newsletterUpdatedAt, true)}</small>}
-            </div>
-            <div className={styles.formGrid}>
-              <label>
-                <span>Abonnés newsletter</span>
-                <input name="subscribers" type="number" min="0" defaultValue={subscribers ?? ""} />
-              </label>
-              <label>
-                <span>Vues / impressions #01</span>
-                <input name="impressions" type="number" min="0" defaultValue={issue.impressions ?? ""} />
-              </label>
-              <label>
-                <span>Réactions #01</span>
-                <input name="reactions" type="number" min="0" defaultValue={issue.reactions ?? ""} />
-              </label>
-              <label>
-                <span>Commentaires #01</span>
-                <input name="comments" type="number" min="0" defaultValue={issue.comments ?? ""} />
-              </label>
-              <label>
-                <span>Partages #01</span>
-                <input name="shares" type="number" min="0" defaultValue={issue.shares ?? ""} />
-              </label>
-              <label>
-                <span>Clics #01</span>
-                <input name="clicks" type="number" min="0" defaultValue={issue.clicks ?? ""} />
-              </label>
-            </div>
-            <button type="submit">Enregistrer les stats newsletter</button>
-          </form>
-        ) : (
-          <p className={styles.readOnly}>
-            Connectez-vous au cockpit avec un rôle contributeur ou supérieur pour enregistrer les statistiques Newsletter.
-          </p>
-        )}
       </section>
 
       <section className={styles.panel}>
