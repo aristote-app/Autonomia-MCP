@@ -14,8 +14,8 @@ const expertRoles = [
   { label: "MLOps / LLMOps", slug: "mlops-llmops-engineer" },
   { label: "AI Product Manager", slug: "ai-product-manager" },
   { label: "AI Governance", slug: "ai-governance" },
-  { label: "Orchestrateur IA", slug: "orchestrateur-ia" },
-  { label: "Automatisation IA", slug: "automation-engineer" }
+  { label: "Automatisation IA", slug: "automation-engineer" },
+  { label: "Orchestrateur IA", slug: "orchestrateur-ia" }
 ];
 
 export default function Home() {
