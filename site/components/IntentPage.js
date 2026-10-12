@@ -3,6 +3,7 @@ import LeadForm from "@/components/LeadForm";
 import QualiopiProof from "@/components/QualiopiProof";
 import AutonomiaScan from "@/components/AutonomiaScan";
 import ConsultantLivePanel from "@/components/ConsultantLivePanel";
+import OrchestrateurIAContent from "@/components/OrchestrateurIAContent";
 
 const EXPERT_PAGE_ROLE = {
   "orchestrateur-ia": { role: "orchestrateur-ia", label: "Orchestrateur IA" },
@@ -103,7 +104,9 @@ export default function IntentPage({ page }) {
         </div>
       </section>
 
-      {page.translations?.length > 0 && (
+      {page.slug === "orchestrateur-ia" && <OrchestrateurIAContent />}
+
+      {page.slug !== "orchestrateur-ia" && page.translations?.length > 0 && (
         <section className="translationSection">
           <p className="sectionIndex">03 — DU BESOIN À L’ACTIVATION</p>
           <div>
@@ -131,6 +134,7 @@ export default function IntentPage({ page }) {
         </section>
       )}
 
+      {page.slug !== "orchestrateur-ia" && (
       <section className="methodSplit">
         <div>
           <p className="sectionIndex">04 — NOTRE LOGIQUE</p>
@@ -161,6 +165,9 @@ export default function IntentPage({ page }) {
         </ol>
       </section>
 
+      )}
+
+      {page.slug !== "orchestrateur-ia" && (
       <section className="proofArchitecture">
         <p className="sectionIndex">05 — STANDARD</p>
         <div>
@@ -177,6 +184,8 @@ export default function IntentPage({ page }) {
           </div>
         </div>
       </section>
+
+      )}
 
       {isAcademy && <QualiopiProof compact />}
 
