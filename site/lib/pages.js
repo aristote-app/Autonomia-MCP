@@ -307,7 +307,12 @@ const pages = {
       "Trouvez un expert capable de relier vos agents IA, vos API et vos applications métier dans un processus fiable, supervisé et réellement utilisable.",
     contextTitle: "Une chaîne d'agents IA doit rester pilotable de bout en bout.",
     contextText:
-      "L'orchestrateur IA conçoit les enchaînements entre modèles, agents, règles métier, outils et validations humaines. Il structure les droits d'accès, les reprises sur erreur, la traçabilité, les coûts et les tests avant la mise en production.",
+      "Une entreprise peut avoir un excellent chatbot, un CRM complet et des automatisations efficaces sans que ces outils travaillent réellement ensemble. L'orchestrateur IA fait circuler le bon contexte entre les systèmes, attribue les tâches aux bons composants et prévoit les validations avant chaque action sensible. Il conçoit également le comportement en cas de données manquantes, d'API indisponible ou de résultat incertain. C'est la différence entre une démonstration qui fonctionne une fois et un processus dont on peut comprendre et vérifier chaque étape.",
+    contextPoints: [
+      { title: "Relier", text: "Applications métier, données, APIs, agents et événements dans un même parcours." },
+      { title: "Arbitrer", text: "Déterminer ce qu'une règle gère, ce que l'IA interprète et ce qu'un humain valide." },
+      { title: "Superviser", text: "Prévoir les erreurs, les droits, les reprises, les traces et la maintenance." }
+    ],
     outcomes: ["Processus cartographié", "Architecture d'orchestration définie", "Expert ciblé"],
     capabilities: ["n8n", "Make", "LangGraph", "CrewAI", "Python", "API & webhooks", "MCP", "RAG", "Human-in-the-loop", "Observabilité", "Gestion des erreurs", "Sécurité & permissions"],
     translationTitle: "Du processus manuel à une orchestration IA contrôlable.",
@@ -320,6 +325,7 @@ const pages = {
     proofTitle: "L'automatisation doit rester compréhensible, mesurable et supervisable.",
     proofText: "Nous distinguons les étapes déterministes des décisions confiées à l'IA, explicitons les validations humaines nécessaires et sélectionnons les compétences selon les outils réellement utilisés.",
     relatedLinks: [
+      { kicker: "DÉCOUVRIR LE MÉTIER", label: "Orchestrateur IA : missions, cas pratiques et compétences", href: "/metiers-ia/orchestrateur-ia" },
       { kicker: "MÉTIER COMPLÉMENTAIRE", label: "Expert agents IA", href: "/consultant-agent-ia" },
       { kicker: "MÉTIER COMPLÉMENTAIRE", label: "Consultant GenAI", href: "/consultant-genai" },
       { kicker: "TROUVER", label: "Tous les experts IA", href: "/experts" }
@@ -337,7 +343,11 @@ const pages = {
       ["Quels outils maîtrise un orchestrateur IA ?", "Les outils recherchés peuvent inclure n8n, Make, LangGraph, CrewAI, Python, API et MCP. Le choix dépend du système existant."],
       ["Peut-on conserver une validation humaine ?", "Oui. Les autorisations, points de contrôle et traitements des exceptions sont définis selon les risques du processus."],
       ["Comment les consultants sont-ils sélectionnés ?", "Le besoin est traduit en compétences et recherché dans le vivier Autonomia. Les profils affichés proviennent du flux de consultants publiables ; leurs disponibilités sont confirmées uniquement lorsqu'elles sont renseignées."],
-      ["Les profils proviennent-ils de Malt ?", "Malt peut être une source de recherche parmi d'autres, sous réserve des accès autorisés. Un profil n'est affiché que lorsqu'il est vérifié et publiable dans le vivier Autonomia."]
+      ["Les profils proviennent-ils de Malt ?", "Malt peut être une source de recherche parmi d'autres, sous réserve des accès autorisés. Un profil n'est affiché que lorsqu'il est vérifié et publiable dans le vivier Autonomia."],
+      ["Comment vérifier qu'un orchestrateur peut tenir une mission en production ?", "Demandez-lui de décrire un workflow déjà conçu : architecture, décisions IA, permissions, scénarios d'échec, traçabilité, alertes et procédure de reprise. La maîtrise déclarée d'un outil ne remplace pas ces éléments."],
+      ["Comment cadrer le budget d'une orchestration IA ?", "Le périmètre dépend du nombre de systèmes à connecter, de la qualité des données, des droits d'accès, des volumes, du niveau d'autonomie, des tests et du suivi attendu. Un cadrage du processus permet de chiffrer la conception puis l'exploitation."],
+      ["Faut-il absolument LangGraph, CrewAI ou n8n ?", "Non. Une automatisation classique, un workflow avec un seul modèle ou une orchestration agentique peuvent convenir. L'architecture doit être choisie en fonction des étapes et des risques."],
+      ["Que reçoit l'entreprise à la fin de la mission ?", "Selon le périmètre retenu : cartographie, configuration ou code, connecteurs, contrôles d'accès, tests, suivi d'exécution, documentation et procédure de maintenance."]
     ]
   },
 
