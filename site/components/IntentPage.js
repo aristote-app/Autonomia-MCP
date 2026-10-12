@@ -94,6 +94,17 @@ export default function IntentPage({ page }) {
         <div>
           <h2>{page.contextTitle}</h2>
           <p>{page.contextText}</p>
+          {page.contextPoints?.length > 0 && (
+            <div className="orchestratorContextPoints">
+              {page.contextPoints.map((item, index) => (
+                <div key={item.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
