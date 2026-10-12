@@ -23249,3 +23249,50 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   .consentBannerV2Actions .consentPrimaryV2 { grid-column: 1 / -1; }
   .consentBannerV2Preferences { justify-content: flex-start; }
 }
+
+
+/* Editorial highlights only on the Orchestrateur IA intent landing */
+.intentPage .orchestratorContextPoints {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid #d9e5eb;
+  border-radius: 10px;
+  background: #d9e5eb;
+}
+.intentPage .orchestratorContextPoints > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 24px;
+  background: #f3f9f8;
+}
+.intentPage .orchestratorContextPoints span {
+  margin-bottom: 16px;
+  color: #147c74;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+.intentPage .orchestratorContextPoints strong {
+  margin-bottom: 10px;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+.intentPage .orchestratorContextPoints p {
+  margin: 0;
+  color: #4b5d69;
+  font-size: 13px;
+  line-height: 1.65;
+}
+@media (max-width: 940px) {
+  .intentPage .orchestratorContextPoints {
+    grid-template-columns: 1fr;
+  }
+  .intentPage .orchestratorContextPoints > div {
+    padding: 20px;
+  }
+}
