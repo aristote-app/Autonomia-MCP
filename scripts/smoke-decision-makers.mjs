@@ -73,3 +73,16 @@ assert.equal(artTick.name, "Danielle Vantaggioli");
 assert.equal(artTick.linkedin, undefined);
 assert.equal(artTick.profilePending, true);
 console.log("Reviewed ad provenance, personal-profile coverage and scoped matching checks passed.");
+
+for (const id of ["0edd74dd-1fb3-4a54-aacc-570a21cdacfd", "4fd5366c-ed93-4910-b4c1-b745b7c5034c", "e050f8fd-da6b-43fa-869a-6f886889147c"]) {
+  const contact = getReviewedOpportunityDecisionMaker("Organisation non identifiée", id, { now });
+  assert.equal(contact.name, "Lola Bernadac");
+  assert.match(contact.reason, /CDI/);
+}
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "fd8fb071-9da6-4f6f-9e8f-66139281f7ca", { now }).name, "Cédric Routaboul");
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "b576ebe2-bfcd-405b-9e05-a85defc36fde", { now }).name, "Yankel Elgrably");
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "8a18f06d-dac5-47d8-92eb-9f83fc127459", { now }).name, "Maxime Bucaille");
+const alc = getReviewedOpportunityDecisionMaker("A L C CONSULTING", "cf0cc046-4652-4bfc-9308-ba5d236398b9", { now });
+assert.equal(alc.name, "Catherine Lasithio");
+assert.equal(alc.linkedin, undefined);
+assert.equal(alc.profilePending, true);
