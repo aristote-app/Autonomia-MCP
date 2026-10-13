@@ -83,7 +83,7 @@ assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée",
 assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "b576ebe2-bfcd-405b-9e05-a85defc36fde", { now }).name, "Yankel Elgrably");
 assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "8a18f06d-dac5-47d8-92eb-9f83fc127459", { now }).name, "Maxime Bucaille");
 const alc = getReviewedOpportunityDecisionMaker("A L C CONSULTING", "cf0cc046-4652-4bfc-9308-ba5d236398b9", { now });
-assert.equal(alc.name, "Catherine Lasithio");
+assert.equal(alc.name, "Catherine Lasithiotakis");
 assert.equal(alc.linkedin, undefined);
 assert.equal(alc.profilePending, true);
 
@@ -92,3 +92,8 @@ assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée",
 assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "d0470faf-e6cb-4403-a0e1-3bb2a8b930ff", { now }).name, "Thomas Adoue");
 assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "1761fd0f-ad78-40c7-914f-fa8e9c8ba248", { now }).name, "Mandy Godart");
 assert.match(getReviewedOpportunityDecisionMaker("MEDICAL LOCA SERVICES", "a9dd2fc6-f99f-466e-9eec-213469ea8774", { now }).status, /à confirmer/);
+
+assert.equal(artTick.email, "contact@arttick.fr");
+assert.equal(artTick.phone, "+33484253569");
+assert.equal(alc.phone, "+33660779433");
+assert.equal(alc.linkedin, undefined);
