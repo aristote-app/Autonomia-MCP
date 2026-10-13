@@ -86,3 +86,5 @@ const alc = getReviewedOpportunityDecisionMaker("A L C CONSULTING", "cf0cc046-46
 assert.equal(alc.name, "Catherine Lasithio");
 assert.equal(alc.linkedin, undefined);
 assert.equal(alc.profilePending, true);
+
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "dddc97b5-f5be-40ed-99ee-5a7227d0bca4", { now }).name, "Victoire Launeau");
