@@ -50,6 +50,9 @@ for (const entry of reviewedResearchContacts) {
       assert.match(url.hostname, /(^|\.)linkedin\.com$/);
       assert.ok(url.pathname.startsWith("/in/"));
       assert.ok(entry.name && entry.role && entry.reason && entry.additionalSource);
+    } else if (entry.name) {
+      assert.equal(entry.profilePending, true);
+      assert.ok(entry.role && entry.reason && entry.additionalSource);
     } else assert.equal(entry.name, undefined);
   }
 }
@@ -63,4 +66,10 @@ assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée",
 assert.equal(getReviewedOpportunityDecisionMaker("INDEED", "6e19f3cb-f3f7-4cd1-9de2-98e6af9b6d17", { now }).resolvedCompany, "ASCOR");
 assert.equal(getReviewedOpportunityDecisionMaker("Agence Nationale de la Recherche (ANR)", "52549486-7835-423e-b230-881f003ff76b", { now }).name, "Claire Giry");
 assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "656b42ee-32cb-4046-9dcf-9012aac01505", { now }).status, /expirée/);
+assert.equal(getReviewedOpportunityDecisionMaker("Randstad professional", "8ef75e6a-033a-443a-9f6c-1446f72fd945", { now }).name, "Alexandra Gonnaud");
+assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "8a89372a-2fe9-4b84-b5bd-ac8a5a9dab07", { now }).status, /orientation/);
+const artTick = getReviewedOpportunityDecisionMaker("ART TICK", "7ae45e1e-1412-45a7-9ca0-8b818efc886d", { now });
+assert.equal(artTick.name, "Danielle Vantaggioli");
+assert.equal(artTick.linkedin, undefined);
+assert.equal(artTick.profilePending, true);
 console.log("Reviewed ad provenance, personal-profile coverage and scoped matching checks passed.");
