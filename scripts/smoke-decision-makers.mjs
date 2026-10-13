@@ -3,7 +3,7 @@ import { getReviewedDecisionMaker, getReviewedOpportunityDecisionMaker } from ".
 import { decisionCompanyKey, getSnapshotCandidate } from "../lib/intelligence/decisionMakerSnapshot.js";
 import { reviewedResearchContacts } from "../lib/intelligence/reviewedOpportunityContacts.js";
 
-const now = Date.parse("2026-10-11");
+const now = Date.parse("2026-10-13");
 assert.equal(getReviewedDecisionMaker("SARL LABORATOIRE L & M", { now }).name, "Fabrice Leroy");
 assert.match(getReviewedDecisionMaker("Perform Academy", { now }).status, /opérationnel/);
 assert.match(getReviewedDecisionMaker("G2F CONSEIL", { now }).status, /Intermédiaire/);
@@ -60,4 +60,7 @@ assert.match(getReviewedOpportunityDecisionMaker("Collective.work", "bb479586-fb
 assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "05fe21cd-e476-436d-bc44-6838b15d7931", { now }).resolvedCompany, "Bloomays");
 assert.equal(getReviewedOpportunityDecisionMaker("Collective.work", "65f91f46-f171-44c6-a125-901225b23b94", { now }).name, "Alicia Pilon");
 assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "b694a967-c4ad-4fff-8e68-5ca36ef282ae", { now }).status, /pourvu/);
+assert.equal(getReviewedOpportunityDecisionMaker("INDEED", "6e19f3cb-f3f7-4cd1-9de2-98e6af9b6d17", { now }).resolvedCompany, "ASCOR");
+assert.equal(getReviewedOpportunityDecisionMaker("Agence Nationale de la Recherche (ANR)", "52549486-7835-423e-b230-881f003ff76b", { now }).name, "Claire Giry");
+assert.match(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "656b42ee-32cb-4046-9dcf-9012aac01505", { now }).status, /expirée/);
 console.log("Reviewed ad provenance, personal-profile coverage and scoped matching checks passed.");
