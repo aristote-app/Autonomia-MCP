@@ -88,3 +88,7 @@ assert.equal(alc.linkedin, undefined);
 assert.equal(alc.profilePending, true);
 
 assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "dddc97b5-f5be-40ed-99ee-5a7227d0bca4", { now }).name, "Victoire Launeau");
+
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "d0470faf-e6cb-4403-a0e1-3bb2a8b930ff", { now }).name, "Thomas Adoue");
+assert.equal(getReviewedOpportunityDecisionMaker("Organisation non identifiée", "1761fd0f-ad78-40c7-914f-fa8e9c8ba248", { now }).name, "Mandy Godart");
+assert.match(getReviewedOpportunityDecisionMaker("MEDICAL LOCA SERVICES", "a9dd2fc6-f99f-466e-9eec-213469ea8774", { now }).status, /à confirmer/);
