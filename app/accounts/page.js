@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AccountContacts from "../../lib/ui/AccountContacts.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 
@@ -114,6 +115,8 @@ export default async function AccountsPage() {
                     <strong>Dernier signal :</strong>{" "}
                     {account.timeline[0]?.title || "—"} · {formatDate(account.timeline[0]?.date)}
                   </p>
+
+                  <AccountContacts account={account} />
 
                   <div className="oppActions">
                     <Link href={`/accounts/${account.slug}`}>Ouvrir le compte 360° →</Link>
