@@ -32,8 +32,8 @@ export default function Home() {
 
           <div className="homeHeroMinimalBottomV14">
             <p className="homeHeroMinimalLeadV13">
-              Autonomia accompagne les organisations de bout en bout : trouver les bonnes compétences,
-              construire les solutions IA utiles et former les équipes pour les intégrer réellement dans leur travail.
+              Nous concevons des agents IA, automatisations et applications adaptés au travail réel.
+              Avec AUTONOMIA EXPERTS et ACADEMY, nous mobilisons les bonnes compétences et formons vos équipes pour les utiliser.
             </p>
 
             <div className="homeHeroMinimalStartV13">
@@ -78,7 +78,7 @@ export default function Home() {
             <div className="executionBuildLinksV12">
               <Link href="/solutions-ia" className="executionPillarCtaV12">Construire une solution IA →</Link>
               <Link href="/cas-usage-ia">Voir les cas d’usage</Link>
-              <Link href="/observatoire-ia">Voir les démonstrateurs</Link>
+              <Link href="/demonstrateurs-ia">Voir nos démonstrateurs métier</Link>
             </div>
           </article>
 
