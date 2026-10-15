@@ -38,7 +38,7 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/territoires/urbanisme`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/territoires/conservatoire`, kind: "territory-campaign", priority: 0.82, changeFrequency: "monthly", lastModified: "2026-09-23" },
     { url: `${base}/observatoire-ia`, kind: "ai-needs-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-09-28" },
-    { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-09-23" },
+    { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-10-15" },
     { url: `${base}/cout-agent-ia`, kind: "commercial-guide", priority: 0.87, changeFrequency: "monthly", lastModified: "2026-10-15" },
     { url: `${base}/demonstrateurs-ia`, kind: "demonstrations-hub", priority: 0.9, changeFrequency: "monthly", lastModified: "2026-10-15" },
     { url: `${base}/machine-builder`, kind: "machine-builder-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-10-09" },
