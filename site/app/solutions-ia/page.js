@@ -135,7 +135,7 @@ export default function SolutionsIaPage() {
             <span className={styles.sectionKicker}>EXEMPLES DE BESOINS MÉTIER</span>
             <h2 className={styles.sectionTitle}>Quel travail voulez-vous simplifier ?</h2>
           </div>
-          <Link href="/cas-usage-ia">Explorer tous les cas d'usage ↗</Link>
+          <div><Link href="/cout-agent-ia">Combien coûte un agent IA ? ↗</Link><span aria-hidden="true"> · </span><Link href="/cas-usage-ia">Explorer les cas d'usage ↗</Link></div>
         </div>
         <p className={styles.sectionIntro}>Retrouvez nos scénarios et mini-applications à tester. Ce sont des démonstrations de possibilités, pas des références de déploiement chez un client.</p>
       </section>
