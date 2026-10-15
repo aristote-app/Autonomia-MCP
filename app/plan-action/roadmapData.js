@@ -22,7 +22,8 @@ export const ROADMAP_PHASES = [
       {id:"o-03",title:"Définir les modalités de vente BUILD",detail:"Cadrage, réalisations sur mesure, maintenance, responsabilités et limites ; chiffrage proposé pour validation.",owner:"IA",priority:"P1",due:"2026-10-27"},
       {id:"o-04",title:"Valider la grille tarifaire et les conditions commerciales",detail:"Approuver les offres et tarifs avant publication de prix contractuels.",owner:"Direction",priority:"P0",due:"2026-10-30"},
       {id:"o-05",title:"Fiabiliser le parcours Calendly et les formulaires",detail:"Vérifier les CTA /start, Calendly, consentements et absence de friction sur téléphone.",owner:"IA",priority:"P0",due:"2026-10-25"},
-      {id:"o-06",title:"Contrôler les deux landing pages BUILD",detail:"Promesses commerciales, deux angles de conversion et mesures d'attribution.",owner:"IA",priority:"P1",due:"2026-10-29"}
+      {id:"o-06",title:"Contrôler les deux landing pages BUILD",detail:"Promesses commerciales, deux angles de conversion et mesures d'attribution.",owner:"IA",priority:"P1",due:"2026-10-29"},
+      {id:"o-07",title:"Finaliser notre positionnement Numérique360",detail:"Préparer le référencement sous Odexis, réunir deux références publiques vérifiables et présenter les trois outils pilotes comme des démonstrateurs.",owner:"Partagé",priority:"P0",due:"2026-10-30"}
     ]
   },
   {
