@@ -117,6 +117,7 @@ export default function SolutionsIaPage() {
           </div>
           <div className={styles.methodFooter}>
             <Link href="/start">Étudier mon projet →</Link>
+            <Link href="/demonstrateurs-ia">Explorer nos démonstrateurs métier ↗</Link>
             <span>Besoin d'une compétence spécifique ? <Link href="/experts">AUTONOMIA EXPERTS ↗</Link></span>
           </div>
         </div>
