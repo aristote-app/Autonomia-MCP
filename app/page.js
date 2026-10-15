@@ -357,6 +357,7 @@ export default async function Home({ searchParams }) {
               {countQueue(live.today, "public")} marchés ouverts · {countQueue(live.today, "freelance")} missions freelance
             </small>
           )}
+          <Link className="adminNav" href="/plan-action">✓ Plan d’action · 90 jours</Link>
           <Link className="adminNav" href="/accounts">Comptes 360°</Link>
           <Link className="adminNav" href="/inbound">Inbound</Link>
           <Link className="adminNav" href="/contacts">Contacts</Link>
