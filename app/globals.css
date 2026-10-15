@@ -1809,3 +1809,9 @@ button:disabled { cursor:not-allowed; opacity:.55; }
 .decisionContactReason, .decisionContact small { color: #65758a; font-size: 12px; }
 .decisionContactLinks { display: flex; flex-wrap: wrap; gap: 12px; }
 .decisionContactLinks a { color: #155a51; font-size: 13px; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Cockpit plan d'action — always visible in the shared header. */
+.cockpitPlanNav{color:#07111f;background:#3de2d0;display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:8px 14px;font-size:12px;font-weight:850;text-decoration:none;border-radius:9px;white-space:nowrap;box-shadow:0 3px 12px rgba(61,226,208,.1);}
+.cockpitPlanNav:hover{background:#69e9da;color:#07111f;}
+@media(max-width:700px){.cockpitBrandInner{flex-wrap:wrap}.cockpitBrandActions{gap:13px;flex-wrap:wrap;margin-left:auto}.cockpitPlanNav{font-size:11px;padding:8px 12px}.cockpitBrand{flex:1 1 205px;max-width:220px}}
+@media(max-width:390px){.cockpitBrandActions{flex:1 1 100%;justify-content:space-between;margin-left:0}}
