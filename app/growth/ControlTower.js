@@ -195,6 +195,12 @@ export default function ControlTower({ overview, plays, signalCount, sources, co
           ].map(c => <div className={styles.connectionRow} key={c.name}><div className={cls(styles.toolIcon, styles["tool_" + c.color])}>{c.initial}</div><div><strong>{c.name}</strong><span>{c.detail}</span></div><span className={cls(styles.connectionDot, c.status ? styles.dotOn : styles.dotOff)} title={c.status ? "Configuration présente, connexion non testée ici" : "Accès à connecter"}/></div>)}
           <Link className={styles.integrationsLink} href="/integrations">Voir le détail des connexions <span aria-hidden="true">↗</span></Link>
         </section>
+        <section className={styles.editorialPanel}>
+          <div className={styles.sideHeading}><span className={styles.miniIcon}>✎</span><div><p className={styles.eyebrow}>04 · VISIBILITÉ</p><h2>Posts & newsletter</h2></div></div>
+          <div className={styles.editorialRow}><div className={styles.editorialBullet}>in</div><div><strong>Publications LinkedIn</strong><span>Calendrier et statistiques dans l'espace dédié</span></div><Link href="/linkedin" aria-label="Ouvrir les publications LinkedIn">↗</Link></div>
+          <div className={styles.editorialRow}><div className={styles.editorialBullet}>✦</div><div><strong>Les Machines IA</strong><span>Préparer les kits et publier les éditions natives sur LinkedIn</span></div><a href="https://www.linkedin.com/newsletters/" target="_blank" rel="noopener noreferrer" aria-label="Accéder aux newsletters LinkedIn">↗</a></div>
+          <p className={styles.editorialFoot}>Les posts et les éditions ne sont pas marqués « publiés » sans vérification.</p>
+        </section>
       </aside>
     </section>
 
