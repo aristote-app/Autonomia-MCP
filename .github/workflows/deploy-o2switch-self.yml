@@ -195,6 +195,7 @@ jobs:
           exit 1
 
       - name: Verify action plan page and report production success
+        id: smoke_plan
         if: steps.verify.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -203,7 +204,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           PAGE="$(curl -fsSL --retry 3 --max-time 30 "https://cockpit.build-autonomia.com/plan-action")"
-          if ! printf '%s' "$PAGE" | grep -Fq "AVANCEMENT GLOBAL"; then
+          if [[ "$PAGE" != *"AVANCEMENT GLOBAL"* ]]; then
             echo "::error::Cockpit plan-action page is missing its expected progress dashboard."
             exit 1
           fi
@@ -476,7 +477,7 @@ jobs:
           fi
 
       - name: Report o2switch production verification failure
-        if: failure() && steps.target.outputs.should_deploy == 'true' && steps.verify.outcome != 'success'
+        if: failure() && steps.target.outputs.should_deploy == 'true' && steps.smoke_plan.outcome != 'success'
         env:
           GH_TOKEN: ${{ github.token }}
           TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
