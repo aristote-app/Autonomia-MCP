@@ -71,3 +71,8 @@
   .estimates div{padding:9px;}
   .estimates strong{font-size:22px;}
 }
+
+.messagePreview { border:1px solid #e4edf3; border-radius:9px; padding:12px; background:#fcfeff; }
+.messagePreview summary { color:#145a7c; font-size:12px; font-weight:800; cursor:pointer; }
+.messagePreview pre { font-family:inherit; font-size:12px; color:#244557; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65; margin:13px 0; }
+.messagePreview small { font-size:10px; color:#7b8691; line-height:1.4; }
