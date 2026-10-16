@@ -38,8 +38,8 @@ const examples = [
     flow: ["Données du marché", "Suivi des événements", "Alertes et préparation", "Validation par le gestionnaire"],
     autonomy: "Le technicien conserve la main sur les contrôles, les calculs métier et les décisions engageantes.",
     status: "Cas d'usage à présenter avec l'équipe",
-    href: null,
-    cta: "Parler de cet outil ↗"
+    href: "/suivi-marches-publics-ia",
+    cta: "Comprendre le suivi des marchés publics ↗"
   }
 ];
 
