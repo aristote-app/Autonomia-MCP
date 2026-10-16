@@ -12,6 +12,7 @@
     "seo:audit": "node scripts/seo-audit.mjs",
     "seo:engine-test": "node scripts/test-organic-decision-engine.mjs",
     "seo:opportunity-test": "node scripts/test-editorial-opportunity-engine.mjs",
+    "build-guides:test": "node scripts/test-build-guides.mjs",
     "ads:problem-export": "node scripts/export-problem-google-ads.mjs"
   },
   "engines": {
