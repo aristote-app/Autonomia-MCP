@@ -46,6 +46,9 @@ jobs:
       - name: Editorial opportunity engine tests
         run: npm run seo:opportunity-test
 
+      - name: Validate commercial BUILD guides
+        run: npm run build-guides:test
+
       - name: Build
         run: npm run build
         env:
