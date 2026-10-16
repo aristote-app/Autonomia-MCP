@@ -170,3 +170,13 @@
 @media(max-width:940px){.heroGrid{grid-template-columns:1fr}.heroStatus{min-height:195px}.heroBig strong{font-size:70px}.systemRibbon{grid-template-columns:1fr 1fr}.ribbonItem:last-child{grid-column:span 2}.ribbonItem .pill{margin-left:auto}.kpiGrid{grid-template-columns:repeat(2,1fr)}.mainGrid{grid-template-columns:1fr}.rightColumn{grid-template-columns:1fr 1fr}.sourcesGrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.layout{padding:16px 12px 28px}.hero{border-radius:20px;padding:24px 22px}.heroText h1{font-size:43px}.heroGrid{gap:23px;margin-top:25px}.heroStatus{padding:18px}.heroStatusBottom{flex-direction:column}.systemRibbon{grid-template-columns:1fr}.ribbonItem:last-child{grid-column:auto}.ribbonItem .pill{margin-left:auto}.kpiGrid{gap:8px}.kpi{min-height:142px;padding:17px}.kpi strong{font-size:36px}.mainGrid{margin-top:33px}.rightColumn{grid-template-columns:1fr}.sectionHeading{align-items:flex-start}.sectionHeading h2{font-size:26px}.countBubble{font-size:10px}.actionToolbar{align-items:stretch;flex-direction:column}.tabs{display:grid;grid-template-columns:repeat(2,1fr)}.tab{justify-content:center}.searchBox{flex:auto;max-width:none}.sourcesGrid{grid-template-columns:1fr}.footerCta{flex-direction:column;align-items:flex-start;padding:25px}.footerCta>div:last-child{width:100%;flex-wrap:wrap}.footerMeta{font-size:9px}.playFoot{gap:12px}.cardPrimary{width:100%;text-align:center}.sourceCard{min-height:unset}.sourcesFooter{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.heroPrimary,.heroSecondary{transition:none}}
+
+.editorialPanel{background:#ffffff;border:1px solid #dfeaf0;border-radius:18px;padding:21px}
+.editorialRow{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eaf0f3}
+.editorialRow>div:nth-child(2){flex:1;display:grid;gap:4px;min-width:0}
+.editorialRow strong{font-size:12px;color:#173a50}
+.editorialRow div span{font-size:10px;line-height:1.5;color:#8a9eaa}
+.editorialRow>a{color:#207394;font-weight:900;font-size:17px}
+.editorialBullet{width:33px;height:33px;border-radius:10px;background:#e2f1f8;color:#246e9d;display:grid;place-items:center;font-size:15px;font-weight:900;flex:none}
+.editorialRow:nth-of-type(3) .editorialBullet{background:#e9f6ee;color:#138267}
+.editorialFoot{margin:13px 0 0;font-size:10px;line-height:1.6;color:#899faa}
