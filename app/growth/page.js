@@ -5,6 +5,7 @@ import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { listWorkspaceSalesContacts } from "../../lib/db/salesContacts.js";
 import { listInboundLeads } from "../../lib/db/inboundLeads.js";
 import { searchJobSignals } from "../../lib/db/jobSignals.js";
+import { loadCollectorHealth } from "../../lib/db/collectorHealth.js";
 import { buildGrowthPlays, growthStats } from "../../lib/intelligence/growthEngine.js";
 import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
 import ControlTower from "./ControlTower.js";
@@ -61,12 +62,13 @@ export default async function GrowthPage() {
   }
 
   const workspaceId = context.membership.workspace_id;
-  const [accountResult, contacts, inbound, jobData, runtimeState] = await Promise.all([
+  const [accountResult, contacts, inbound, jobData, runtimeState, healthRuns] = await Promise.all([
     loadAccountIntelligence({ limit: 500 }).catch(() => null),
     listWorkspaceSalesContacts({ workspaceId, limit: 500 }).catch(() => []),
     listInboundLeads({ workspaceId, limit: 500 }).catch(() => []),
     searchJobSignals({ sources: ["linkedin", "indeed", "france_travail_jobs", "welcome_to_the_jungle", "apec", "hellowork"], franceOnly: false, limit: 500 }).catch(() => ({ items: [] })),
-    runtimeIntegrationStatus().catch(() => null)
+    runtimeIntegrationStatus().catch(() => null),
+    loadCollectorHealth().catch(() => [])
   ]);
 
   const accounts = accountResult?.accounts || [];
@@ -84,6 +86,7 @@ export default async function GrowthPage() {
     signalCount={(jobData.items || []).length}
     sources={sourceActivity(jobData.items || [])}
     connections={ready}
+    healthRuns={healthRuns}
     generatedAt={new Date().toISOString()}
   />;
 }
