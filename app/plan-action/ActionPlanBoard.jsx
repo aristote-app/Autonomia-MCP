@@ -222,6 +222,20 @@ export default function ActionPlanBoard({ phases }) {
       </section>
       {notice && <div role="status" className={styles.flash}>{notice}<button type="button" onClick={()=>setNotice("")} aria-label="Fermer le message">×</button></div>}
 
+      <section className={styles.documents} aria-label="Livrables produits">
+        <div>
+          <p className={styles.eyebrow}>LIVRABLES PRÊTS</p>
+          <h2>Retrouvez ce qui a été réalisé.</h2>
+          <p>Les documents sont liés aux tâches cochées. Les envois et les dépenses restent soumis à validation.</p>
+        </div>
+        <div className={styles.documentGrid}>
+          <a href="https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-growth-kit-2026-10.md" target="_blank" rel="noopener noreferrer"><span>PRESSE · COMMERCIAL · ADS</span><strong>Tribunes, messages, prospection et campagnes</strong><small>Voir le kit opérationnel ↗</small></a>
+          <a href="https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-les-machines-ia-editions-02-05.md" target="_blank" rel="noopener noreferrer"><span>LINKEDIN</span><strong>Quatre éditions « Les Machines IA »</strong><small>Voir les newsletters prêtes ↗</small></a>
+          <a href="https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-build-offres-chiffrage-proposition.md" target="_blank" rel="noopener noreferrer"><span>VENTE BUILD</span><strong>Méthode et hypothèses de chiffrage</strong><small>Voir la proposition interne ↗</small></a>
+          <a href="https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-seo-audit-2026-10.md" target="_blank" rel="noopener noreferrer"><span>SEO · GEO</span><strong>Audit technique et contrôles à finaliser</strong><small>Voir l'audit ↗</small></a>
+        </div>
+      </section>
+
       <section className={styles.next}>
         <div><p className={styles.eyebrow}>À TRAITER EN PRIORITÉ</p><h2>Les prochaines actions réalisables par l'IA</h2></div>
         <div className={styles.nextCards}>{nextTasks.map((task)=>(
