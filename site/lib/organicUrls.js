@@ -41,6 +41,10 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/solutions-ia`, kind: "problem-solutions-hub", priority: 0.92, changeFrequency: "weekly", lastModified: "2026-10-15" },
     { url: `${base}/cout-agent-ia`, kind: "commercial-guide", priority: 0.87, changeFrequency: "monthly", lastModified: "2026-10-15" },
     { url: `${base}/demonstrateurs-ia`, kind: "demonstrations-hub", priority: 0.9, changeFrequency: "monthly", lastModified: "2026-10-15" },
+    { url: `${base}/cout-automatisation-ia`, kind: "build-buyer-guide", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-10-16" },
+    { url: `${base}/agent-ia-ou-automatisation`, kind: "build-buyer-guide", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-10-16" },
+    { url: `${base}/application-metier-ia`, kind: "build-buyer-guide", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-10-16" },
+    { url: `${base}/suivi-marches-publics-ia`, kind: "build-buyer-guide", priority: 0.88, changeFrequency: "monthly", lastModified: "2026-10-16" },
     { url: `${base}/machine-builder`, kind: "machine-builder-hub", priority: 0.9, changeFrequency: "weekly", lastModified: "2026-10-09" },
     { url: `${base}/machine-builder/automatiser-sav-ecommerce`, kind: "machine-builder", priority: 0.88, changeFrequency: "weekly", lastModified: "2026-10-09" },
     { url: `${base}/glossaire-ia`, kind: "defined-term-set", priority: 0.86, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE }
