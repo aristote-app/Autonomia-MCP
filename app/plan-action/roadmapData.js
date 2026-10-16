@@ -42,11 +42,11 @@ export const ROADMAP_PHASES = [
     id:"autorite",name:"Presse, LinkedIn & autorité",start:"2026-10-23",end:"2026-11-25",
     hint:"Des prises de parole utiles, non promotionnelles, adaptées à chaque média.",
     tasks:[
-      {id:"m-01",title:"Préparer deux tribunes originales et sourcées",detail:"IA opérationnelle en entreprise ; IA dans les collectivités avec contrôle des agents.",owner:"IA",priority:"P0",due:"2026-10-26"},
-      {id:"m-02",title:"Préparer les messages média personnalisés",detail:"JDN, Acteurs publics, Siècle Digital et Maddyness ; vérifier modalités et contacts au moment d'envoyer.",owner:"IA",priority:"P1",due:"2026-10-28"},
+      {id:"m-01",title:"Préparer deux tribunes originales et sourcées",detail:"IA opérationnelle en entreprise ; IA dans les collectivités avec contrôle des agents.",owner:"IA",priority:"P0",due:"2026-10-26",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-growth-kit-2026-10.md"},
+      {id:"m-02",title:"Préparer les messages média personnalisés",detail:"JDN, Acteurs publics, Siècle Digital et Maddyness ; vérifier modalités et contacts au moment d'envoyer.",owner:"IA",priority:"P1",due:"2026-10-28",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-growth-kit-2026-10.md"},
       {id:"m-03",title:"Connecter le Gmail choisi pour la prospection",detail:"Autoriser la connexion du bon compte Google ; ne pas envoyer depuis une autre adresse.",owner:"Direction",priority:"P0",due:"2026-10-28"},
       {id:"m-04",title:"Envoyer les propositions éditoriales approuvées",detail:"Envois nominatifs avec le compte autorisé, sans spam ni achat automatique de tribune.",owner:"Partagé",priority:"P1",due:"2026-11-03"},
-      {id:"m-05",title:"Préparer quatre éditions des Machines IA",detail:"Une machine, un cas métier et un kit pratique par édition ; conserver la ligne éditoriale.",owner:"IA",priority:"P1",due:"2026-11-09"},
+      {id:"m-05",title:"Préparer quatre éditions des Machines IA",detail:"Une machine, un cas métier et un kit pratique par édition ; conserver la ligne éditoriale.",owner:"IA",priority:"P1",due:"2026-11-09",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-les-machines-ia-editions-02-05.md"},
       {id:"m-06",title:"Relancer les rédactions contactées",detail:"Relances ciblées et raisonnables selon les règles de chaque rédaction.",owner:"Partagé",priority:"P2",due:"2026-11-20"}
     ]
   },
@@ -56,7 +56,7 @@ export const ROADMAP_PHASES = [
     tasks:[
       {id:"p-01",title:"Construire une liste de 50 comptes finaux qualifiés",detail:"PME, ETI, grandes entreprises et collectivités ; besoins métier documentés, provenance vérifiable.",owner:"IA",priority:"P0",due:"2026-11-09"},
       {id:"p-02",title:"Identifier les décideurs et leurs coordonnées vérifiées",detail:"Direction métiers, DSI, transformation, RH selon l'offre. Respecter les données professionnelles.",owner:"IA",priority:"P1",due:"2026-11-15"},
-      {id:"p-03",title:"Préparer 3 séquences de prospection personnalisées",detail:"BUILD, EXPERTS et collectivités, avec un lien Calendly et un problème métier concret.",owner:"IA",priority:"P1",due:"2026-11-17"},
+      {id:"p-03",title:"Préparer 3 séquences de prospection personnalisées",detail:"BUILD, EXPERTS et collectivités, avec un lien Calendly et un problème métier concret.",owner:"IA",priority:"P1",due:"2026-11-17",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-growth-kit-2026-10.md"},
       {id:"p-04",title:"Mettre en place le suivi des réponses au cockpit",detail:"Prospect, besoin, contact, prochaine action, devis et statut commercial.",owner:"IA",priority:"P1",due:"2026-11-25"},
       {id:"p-05",title:"Lancer les prises de contact validées",detail:"Contacts professionnels sourcés et envois via un canal autorisé ; mesurer les réponses réelles.",owner:"Partagé",priority:"P1",due:"2026-12-01"}
     ]
@@ -65,7 +65,7 @@ export const ROADMAP_PHASES = [
     id:"ads",name:"Google Ads & mesure",start:"2026-11-03",end:"2026-12-15",
     hint:"N'investir qu'une fois le suivi des demandes et la conversion opérationnels.",
     tasks:[
-      {id:"a-01",title:"Préparer les groupes d'annonces BUILD",detail:"Mots-clés transactionnels, négatifs, annonces et deux angles à tester.",owner:"IA",priority:"P1",due:"2026-11-12"},
+      {id:"a-01",title:"Préparer les groupes d'annonces BUILD",detail:"Mots-clés transactionnels, négatifs, annonces et deux angles à tester.",owner:"IA",priority:"P1",due:"2026-11-12",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-growth-kit-2026-10.md"},
       {id:"a-02",title:"Installer et vérifier la mesure de conversion",detail:"Formulaire soumis, rendez-vous obtenu, campagnes UTM ; contrôle du consentement.",owner:"IA",priority:"P0",due:"2026-11-19"},
       {id:"a-03",title:"Valider le budget de lancement Google Ads",detail:"Arbitrer dans l'enveloppe envisagée de 500 à 1 000 € par mois avant toute dépense.",owner:"Direction",priority:"P0",due:"2026-11-20"},
       {id:"a-04",title:"Activer les campagnes approuvées",detail:"Activation après validation des pages, du tracking et du budget.",owner:"Partagé",priority:"P1",due:"2026-11-27"},
