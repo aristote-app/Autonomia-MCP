@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: autonomia-validate
+  group: autonomia-validate-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
