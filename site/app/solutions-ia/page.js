@@ -2,6 +2,7 @@ import Link from "next/link";
 import ProblemLink from "@/components/ProblemLink";
 import { problemClusters, problemSolutions } from "@/content/problem-solutions";
 import styles from "./offres-build.module.css";
+import { buildGuideLinks } from "@/content/buildGuides";
 
 export const metadata = {
   title: "Agence IA sur mesure : automatisation, agents et applications métier | AUTONOMIA BUILD",
@@ -161,6 +162,22 @@ export default function SolutionsIaPage() {
             </div>
           );
         })}
+      </section>
+
+      <section className={styles.faqSection} aria-label="Guides pour choisir une solution IA">
+        <span className={styles.sectionKicker}>COMPRENDRE AVANT DE CHOISIR</span>
+        <h2 className={styles.sectionTitle}>Guides pour cadrer votre projet IA.</h2>
+        <p className={styles.sectionIntro}>Coût, niveau d'autonomie, application sur mesure ou suivi de processus : nos ressources détaillent les critères de décision et les points de contrôle.</p>
+        <div className={styles.methodGrid}>
+          {buildGuideLinks.map(([slug,label])=>(
+            <article className={styles.methodStep} key={slug}>
+              <small>GUIDE PRATIQUE</small>
+              <strong>{label}</strong>
+              <p>Choisissez une approche adaptée au métier, aux données et aux validations nécessaires.</p>
+              <Link href={"/"+slug}>Lire le guide ↗</Link>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className={styles.faqSection}>
