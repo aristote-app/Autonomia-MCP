@@ -82,6 +82,8 @@ jobs:
         run: npm run smoke:accounts
       - name: Smoke test Growth Engine - 40 meetings target
         run: npm run smoke:growth
+      - name: Smoke test collector health and secret minimization
+        run: node scripts/smoke-collector-health.mjs
       - name: Smoke test account watch state
         run: npm run smoke:account-watch
       - name: Smoke test French company registry matching

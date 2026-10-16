@@ -80,7 +80,7 @@ function PlayCard({ play, onCopy, copied }) {
   </article>;
 }
 
-export default function ControlTower({ overview, plays, signalCount, sources, connections, generatedAt }) {
+export default function ControlTower({ overview, plays, signalCount, sources, connections, healthRuns = [], generatedAt }) {
   const [offer, setOffer] = useState("all");
   const [view, setView] = useState("needs");
   const [search, setSearch] = useState("");
@@ -183,6 +183,21 @@ export default function ControlTower({ overview, plays, signalCount, sources, co
             ].map((step, i) => <div className={styles.workflowItem} key={step.n}><span className={cls(styles.workflowNumber, step.ready ? styles.workflowReady : styles.workflowPending)}>{step.ready ? "✓" : step.n}</span><div><strong>{step.label}</strong><span>{step.sub}</span></div><span className={cls(styles.workflowBadge, step.ready ? styles.workflowBadgeOn : styles.workflowBadgeOff)}>{step.ready ? (i === 0 ? "Configuré*" : "Prévu") : "À connecter"}</span></div>)}
           </div>
           <p className={styles.safetyNote}>*La présence du code ou d'une clé ne prouve pas qu'une collecte vient de réussir. Les envois LinkedIn nécessitent toujours une validation et sont soumis aux règles de LinkedIn.</p>
+        </section>
+
+        <section className={styles.healthPanel} aria-label="État des dernières collectes">
+          <div className={styles.sideHeading}><span className={styles.miniIcon}>◷</span><div><p className={styles.eyebrow}>03 · VÉRIFICATION AUTOMATIQUE</p><h2>Derniers passages du radar</h2></div></div>
+          {healthRuns.length ? <div className={styles.healthRows}>
+            {healthRuns.map(run => {
+              const statuses = { success: "Réussi", partial: "Partiel", failed: "Échec", running: "En cours", unknown: "À vérifier" };
+              return <div className={styles.healthRow} key={run.id}>
+                <span className={cls(styles.healthIndicator, styles["health_" + run.status])} aria-hidden="true"/>
+                <div><strong>{run.label}</strong><span>{formatDate(run.completedAt || run.startedAt)}{run.count !== null ? " · " + run.count + " élément(s) stocké(s)" : ""}</span></div>
+                <span className={styles.healthStatus}>{statuses[run.status]}</span>
+              </div>;
+            })}
+          </div> : <div className={styles.healthEmpty}>Aucune exécution vérifiable dans l'historique du serveur.</div>}
+          <p className={styles.editorialFoot}>Statut issu des journaux réels, pas de la seule présence d'une clé.</p>
         </section>
 
         <section className={styles.connectionsPanel}>

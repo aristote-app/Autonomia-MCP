@@ -180,3 +180,17 @@
 .editorialBullet{width:33px;height:33px;border-radius:10px;background:#e2f1f8;color:#246e9d;display:grid;place-items:center;font-size:15px;font-weight:900;flex:none}
 .editorialRow:nth-of-type(3) .editorialBullet{background:#e9f6ee;color:#138267}
 .editorialFoot{margin:13px 0 0;font-size:10px;line-height:1.6;color:#899faa}
+
+.healthPanel{background:#fff;border:1px solid #dce9ed;border-radius:18px;padding:21px}
+.healthRows{display:grid;gap:0}
+.healthRow{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #eaf0f3}
+.healthRow>div{display:grid;gap:4px;flex:1;min-width:0}
+.healthRow strong{font-size:12px;color:#193c51}
+.healthRow div span{font-size:10px;color:#8296a2}
+.healthIndicator{height:10px;width:10px;border-radius:50%;flex:none;box-shadow:0 0 0 4px #eff3f5;background:#a8b6bf}
+.health_success{background:#159773;box-shadow:0 0 0 4px #dbf6e9}
+.health_partial{background:#d89a32;box-shadow:0 0 0 4px #fff2d8}
+.health_failed{background:#d76a5e;box-shadow:0 0 0 4px #ffe9e7}
+.health_running{background:#3589bb;box-shadow:0 0 0 4px #e2f0f8}
+.healthStatus{font-size:10px;font-weight:800;color:#597384}
+.healthEmpty{background:#f6fafb;color:#78909b;padding:17px;border-radius:11px;font-size:11px;line-height:1.6}
