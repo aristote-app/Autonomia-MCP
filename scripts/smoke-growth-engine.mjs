@@ -49,6 +49,18 @@ assert.equal(proactive.action.id,"verify");
 const noEvidence=buildGrowthPlays({accounts:[sample("Entreprise sans signal")],contacts:[],now})[0];
 assert.equal(noEvidence.action.id,"find_decider");
 assert.ok(noEvidence.message.includes("vos responsabilités"));
+const proactiveOnly=buildGrowthPlays({
+  accounts:[],
+  contacts:[{id:"orphan",account_key:"societe-inconnue",account_name:"Société Inconnue",
+    matched_role:"Responsable formation",full_name:"Claire Exemple",
+    linkedin_url:"https://www.linkedin.com/in/claire-exemple",
+    verification_status:"verified",outreach_status:"not_started",do_not_contact:false}],
+  now
+});
+assert.ok(proactiveOnly.some(p=>p.company==="Société Inconnue"&&p.offer==="ACADEMY"));
+assert.ok(proactiveOnly.every(p=>p.evidence===null),"Aucun signal ne doit être inventé");
+const uniqueContacts=new Set(plays.filter(p=>p.contactId).map(p=>p.contactId));
+assert.equal(uniqueContacts.size,plays.filter(p=>p.contactId).length,"Un contact ne doit pas être sollicité deux fois");
 const stats=growthStats({accounts,contacts,inbound:[{id:"lead1",status:"meeting"}]});
 assert.equal(stats.excluded,2);
 assert.equal(stats.pipelineMeetings,1);
