@@ -139,6 +139,12 @@ export default function CoutAgentIaPage() {
 
       <section className={styles.bottom}>
         <div>
+          <p>Pour aller plus loin : <Link href="/cout-automatisation-ia">prix d'une automatisation ↗</Link> · <Link href="/agent-ia-ou-automatisation">agent IA ou workflow ↗</Link> · <Link href="/application-metier-ia">application métier sur mesure ↗</Link></p>
+        </div>
+      </section>
+
+      <section className={styles.bottom}>
+        <div>
           <h2>Votre besoin mérite un chiffrage adapté.</h2>
           <p>AUTONOMIA BUILD : automatisations, agents et applications IA métier, avec accompagnement des équipes.</p>
         </div>
