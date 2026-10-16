@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
             <div className="cockpitBrandActions">
               <span className="cockpitLabel"><span aria-hidden="true" />COCKPIT</span>
               <Link href="/plan-action" className="cockpitPlanNav">✓ Plan d’action</Link>
+              <Link href="/growth" className="cockpitPlanNav">↗ Growth Engine</Link>
               <Link href="/outils-ia" className="cockpitPlanNav">✦ Outils IA</Link>
               <a href="https://build-autonomia.com" className="cockpitPublicLink">Voir le site ↗</a>
             </div>
