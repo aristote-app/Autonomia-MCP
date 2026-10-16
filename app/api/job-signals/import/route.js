@@ -1,7 +1,7 @@
 import { requireInternalToken } from "../../../../lib/security.js";
 import { upsertJobSignals } from "../../../../lib/db/jobSignals.js";
 
-const ALLOWED_SOURCES = new Set(["linkedin", "indeed"]);
+const ALLOWED_SOURCES = new Set(["linkedin", "indeed", "welcome_to_the_jungle", "apec", "hellowork"]);
 
 export async function POST(request) {
   const auth = requireInternalToken(request);
