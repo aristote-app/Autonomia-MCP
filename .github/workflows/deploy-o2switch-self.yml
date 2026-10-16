@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  statuses: write
 
 concurrency:
   group: autonomia-o2switch-deploy-v3
@@ -43,6 +44,21 @@ jobs:
             echo "Skipping stale cockpit deploy target $TARGET_SHA; current main head is $CURRENT_SHA"
             echo "should_deploy=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Publish pending o2switch cockpit status
+        if: steps.target.outputs.should_deploy == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"pending","context":"o2switch/cockpit-production","description":"Déploiement o2switch en cours","target_url":os.environ["RUN_URL"]}))')"
 
       - name: Probe cockpit deployment capability
         if: steps.target.outputs.should_deploy == 'true'
@@ -103,6 +119,7 @@ jobs:
           echo "o2switch self-deploy accepted for $TARGET_SHA."
 
       - name: Verify production and retry once if needed
+        id: verify
         if: steps.probe.outputs.ready == 'true'
         env:
           DEPLOY_URL: https://cockpit.build-autonomia.com/api/internal/self-deploy
@@ -176,6 +193,27 @@ jobs:
 
           echo "::error::o2switch accepted the deploy twice but production never switched to the target version."
           exit 1
+
+      - name: Verify action plan page and report production success
+        if: steps.verify.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          PAGE="$(curl -fsSL --retry 3 --max-time 30 "https://cockpit.build-autonomia.com/plan-action")"
+          if ! printf '%s' "$PAGE" | grep -Fq "AVANCEMENT GLOBAL"; then
+            echo "::error::Cockpit plan-action page is missing its expected progress dashboard."
+            exit 1
+          fi
+          echo "Verified live action plan at /plan-action for $TARGET_SHA"
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"success","context":"o2switch/cockpit-production","description":"Cockpit SHA confirmé et /plan-action vérifiée","target_url":os.environ["RUN_URL"]}))')"
 
       - name: Dump cockpit o2switch worker log on failure
         if: failure()
@@ -436,3 +474,18 @@ jobs:
             echo "::error::Cockpit SEO/GEO connection is not healthy."
             exit 1
           fi
+
+      - name: Report o2switch production verification failure
+        if: failure() && steps.target.outputs.should_deploy == 'true' && steps.verify.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"failure","context":"o2switch/cockpit-production","description":"Production o2switch non vérifiée : consulter GitHub Actions","target_url":os.environ["RUN_URL"]}))')"
