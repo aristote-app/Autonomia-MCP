@@ -81,7 +81,7 @@ export default async function GrowthPage() {
   return <ControlTower
     overview={growthStats({ accounts, contacts, inbound })}
     plays={plays}
-    signals={jobData.items || []}
+    signalCount={(jobData.items || []).length}
     sources={sourceActivity(jobData.items || [])}
     connections={ready}
     generatedAt={new Date().toISOString()}
