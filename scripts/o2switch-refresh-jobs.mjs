@@ -14,7 +14,7 @@ const HOUR = 60 * 60 * 1000;
 const INTERVALS = Object.freeze({
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
-  linkedinIndeed: 12 * HOUR,
+  linkedinIndeed: 24 * HOUR,
   linkedinIndeedBackfill: 168 * HOUR,
   extendedWeb: 48 * HOUR,
   opportunityHunter: 24 * HOUR
@@ -169,7 +169,7 @@ async function main() {
   result.schedule = {
     freeworkHours: 1,
     franceTravailHours: 0.5,
-    linkedinIndeedHours: 12,
+    linkedinIndeedHours: 24,
     linkedinIndeedBackfillHours: 168,
     extendedWebHours: 48,
     opportunityHunterHours: 24,
