@@ -72,6 +72,8 @@ jobs:
         run: npm run smoke:today
       - name: Smoke test LinkedIn Indeed discovery
         run: npm run smoke:job-discovery
+      - name: Smoke test Hunter error redaction
+        run: node scripts/smoke-hunter-resilience.mjs
       - name: Smoke test trusted employer provenance and buyer targeting
         run: node scripts/smoke-verified-employers.mjs
       - name: Smoke test multi-source recruitment discovery and ESN exclusion
