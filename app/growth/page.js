@@ -4,7 +4,8 @@ import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { listWorkspaceSalesContacts } from "../../lib/db/salesContacts.js";
 import { listInboundLeads } from "../../lib/db/inboundLeads.js";
-import { buildGrowthPlays, growthStats, weeklyCapacity } from "../../lib/intelligence/growthEngine.js";
+import { buildGrowthPlays, growthStats } from "../../lib/intelligence/growthEngine.js";
+import FunnelPlanner from "./FunnelPlanner.js";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -63,7 +64,6 @@ export default async function GrowthPage({ searchParams }) {
   const waalaxyReady=Boolean(process.env.WAALAXY_API_KEY);
   const plays=buildGrowthPlays({accounts,contacts,waalaxyReady,limit:400});
   const overview=growthStats({accounts,contacts,inbound});
-  const funnel=weeklyCapacity({target:40,invites:200,accept:.35,replied:.18,booked:.35});
   const shown=plays
     .filter(p=>selectedOffer==="all"||p.offer===selectedOffer)
     .filter(p=>selectedAction==="all"||p.action.id===selectedAction)
@@ -89,13 +89,7 @@ export default async function GrowthPage({ searchParams }) {
       <section className={styles.panel}>
         <p className={styles.eyebrow}>LIMITE DE CAPACITÉ</p>
         <h2>40 RDV/semaine demandent plusieurs canaux</h2>
-        <p className={styles.copy}>Scénario de travail, et non prévision : 200 invitations LinkedIn/semaine × 35 % d'acceptation × 18 % de réponse × 35 % de transformation des réponses en rendez-vous.</p>
-        <div className={styles.estimates}>
-          <div><strong>{funnel.linkedinTheoretical.toLocaleString("fr-FR")}</strong><small>RDV LinkedIn théoriques / semaine</small></div>
-          <div><strong>{funnel.otherChannelsRequired}</strong><small>RDV à obtenir par d'autres canaux</small></div>
-          <div><strong>{funnel.meetingsPerWorkingDay}</strong><small>RDV à tenir / jour sur 5 jours</small></div>
-        </div>
-        <p className={styles.warning}>Le plafond Waalaxy Advanced n'est pas un objectif d'envoi. Respecter les règles LinkedIn et augmenter les volumes seulement après contrôle qualité.</p>
+        <FunnelPlanner />
       </section>
       <section className={styles.panel}>
         <p className={styles.eyebrow}>ÉTAT DES OUTILS</p>
