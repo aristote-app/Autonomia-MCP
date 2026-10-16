@@ -1,6 +1,6 @@
-import { getRuntimeIntegrationValue } from "../../lib/runtime/integrationSettings.js";
 "use server";
 
+import { getRuntimeIntegrationValue } from "../../lib/runtime/integrationSettings.js";
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
