@@ -11,15 +11,6 @@ const OFFERS = [
   { id: "ACADEMY", label: "Academy" }
 ];
 
-const SOURCE_LABELS = {
-  linkedin: "LinkedIn Jobs",
-  indeed: "Indeed",
-  france_travail_jobs: "France Travail",
-  welcome_to_the_jungle: "Welcome to the Jungle",
-  apec: "Apec",
-  hellowork: "HelloWork",
-};
-
 function cls(...names) { return names.filter(Boolean).join(" "); }
 function formatDate(value) {
   if (!value) return "Date non disponible";
@@ -89,7 +80,7 @@ function PlayCard({ play, onCopy, copied }) {
   </article>;
 }
 
-export default function ControlTower({ overview, plays, signals, sources, connections, generatedAt }) {
+export default function ControlTower({ overview, plays, signalCount, sources, connections, generatedAt }) {
   const [offer, setOffer] = useState("all");
   const [view, setView] = useState("needs");
   const [search, setSearch] = useState("");
@@ -107,8 +98,6 @@ export default function ControlTower({ overview, plays, signals, sources, connec
       [p.company, p.contactName, p.contactRole, p.evidence?.title].filter(Boolean).join(" ").toLocaleLowerCase("fr").includes(q)
     )).slice(0, 24);
   }, [plays, decisions, followups, active, offer, view, search]);
-  const sourceCounts = useMemo(() => Object.fromEntries(sources.map(s => [s.id, s])), [sources]);
-  const staleSources = sources.filter(s => s.stage === "connected_code" && s.count === 0).length;
   const readySources = sources.filter(s => s.count > 0).length;
   const needsLabel = decisions.length === 1 ? "1 décision" : decisions.length + " décisions";
 
@@ -151,7 +140,7 @@ export default function ControlTower({ overview, plays, signals, sources, connec
 
     <section className={styles.kpiGrid} aria-label="Indicateurs réels">
       <Kpi icon="◎" value={Math.max(0, overview.accounts - overview.excluded)} label="Comptes candidats" context="Hors intermédiaires repérés"/>
-      <Kpi icon="⌁" value={signals.length} label="Signaux en base" context="Résultats stockés, toutes dates"/>
+      <Kpi icon="⌁" value={signalCount} label="Signaux consultés" context="Échantillon de la base (max 500)"/>
       <Kpi icon="◉" value={overview.verified} label="Contacts vérifiés" context="Dans l'espace commercial"/>
       <Kpi icon="↗" value={overview.pipelineMeetings} label="Au stade RDV" context="Toutes périodes, pas forcément tenus" emphasis/>
     </section>
@@ -216,7 +205,7 @@ export default function ControlTower({ overview, plays, signals, sources, connec
           <div className={styles.sourceHead}><span className={cls(styles.sourceIcon, styles["source_" + s.category])}>{s.initial}</span><Pill tone={s.count > 0 ? "green" : s.stage === "planned" ? "neutral" : "amber"}>{s.count > 0 ? "Données présentes" : s.stage === "planned" ? "À intégrer" : "Aucune donnée"}</Pill></div>
           <strong>{s.label}</strong>
           <p>{s.method}</p>
-          <div className={styles.sourceBottom}><span>{s.count > 0 ? s.count + " annonce(s) en base" : s.stage === "planned" ? "Connecteur prévu" : "Collecte à vérifier"}</span>{s.latest && <small>Vu le <SignalDate value={s.latest}/></small>}</div>
+          <div className={styles.sourceBottom}><span>{s.count > 0 ? s.count + " annonce(s) dans l'échantillon" : s.stage === "planned" ? "Connecteur prévu" : "Collecte à vérifier"}</span>{s.latest && <small>Vu le <SignalDate value={s.latest}/></small>}</div>
         </article>)}
       </div>
       <div className={styles.sourcesFooter}><span>Une annonce publiée sur plusieurs sites doit devenir un seul dossier commercial.</span><button type="button" onClick={() => setSourcesExpanded(s => !s)}>{sourcesExpanded ? "Afficher moins −" : "Voir toutes les sources +"}</button></div>
