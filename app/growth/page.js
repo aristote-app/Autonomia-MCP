@@ -6,6 +6,7 @@ import { listWorkspaceSalesContacts } from "../../lib/db/salesContacts.js";
 import { listInboundLeads } from "../../lib/db/inboundLeads.js";
 import { buildGrowthPlays, growthStats } from "../../lib/intelligence/growthEngine.js";
 import FunnelPlanner from "./FunnelPlanner.js";
+import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -61,7 +62,9 @@ export default async function GrowthPage({ searchParams }) {
     listInboundLeads({workspaceId,limit:500}).catch(()=>[])
   ]);
   const accounts=accountsResult?.accounts||[];
-  const waalaxyReady=Boolean(process.env.WAALAXY_API_KEY);
+  const runtimeState=await runtimeIntegrationStatus().catch(()=>null);
+  const waalaxyReady=Boolean(process.env.WAALAXY_API_KEY||runtimeState?.configured?.WAALAXY_API_KEY);
+  const kasprReady=Boolean(process.env.KASPR_API_KEY||runtimeState?.configured?.KASPR_API_KEY);
   const plays=buildGrowthPlays({accounts,contacts,waalaxyReady,limit:400});
   const overview=growthStats({accounts,contacts,inbound});
   const shown=plays
@@ -95,7 +98,7 @@ export default async function GrowthPage({ searchParams }) {
         <p className={styles.eyebrow}>ÉTAT DES OUTILS</p>
         <h2>Orchestration, pas empilement d'abonnements</h2>
         <div className={styles.integrationRow}><span>Waalaxy API REST</span><b>{waalaxyReady?"Clé configurée":"À connecter après Advanced"}</b></div>
-        <div className={styles.integrationRow}><span>Kaspr</span><b>{process.env.KASPR_API_KEY?"Clé configurée":"Accès API à vérifier"}</b></div>
+        <div className={styles.integrationRow}><span>Kaspr</span><b>{kasprReady?"Clé configurée":"Accès API à vérifier"}</b></div>
         <div className={styles.integrationRow}><span>Comptes 360°</span><b>{accountsResult?"Données chargées":"Chargement indisponible"}</b></div>
         <div className={styles.integrationRow}><span>Automatisation des envois</span><b>Validation humaine requise</b></div>
         <p className={styles.copy}>Les clés sont stockées côté serveur. Cet écran n'effectue aucun import ni aucun envoi de message.</p>
