@@ -28,6 +28,7 @@
     "smoke:job-discovery": "node scripts/smoke-job-discovery.mjs",
     "smoke:territory-signals": "node scripts/smoke-territory-signals.mjs",
     "smoke:accounts": "node scripts/smoke-accounts.mjs",
+    "smoke:growth": "node scripts/smoke-growth-engine.mjs",
     "smoke:sales-os": "node scripts/smoke-sales-os.mjs",
     "smoke:search-budget": "node scripts/smoke-search-budget.mjs",
     "smoke:inbound": "node scripts/smoke-inbound.mjs",
