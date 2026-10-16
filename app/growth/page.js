@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
@@ -9,6 +8,8 @@ import { loadCollectorHealth } from "../../lib/db/collectorHealth.js";
 import { buildGrowthPlays, growthStats } from "../../lib/intelligence/growthEngine.js";
 import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.js";
 import ControlTower from "./ControlTower.js";
+import PublicOverview from "./PublicOverview.js";
+import { publicHiringSignals, PUBLIC_HIRING_SOURCE_IDS } from "../../lib/intelligence/publicGrowth.js";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -52,13 +53,23 @@ function sourceActivity(rows) {
 export default async function GrowthPage() {
   const context = await getCurrentWorkspaceMembership().catch(() => null);
   const authorized = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
+  // Anonymous visitors can see public recruiting signals without a login.
+  // Private account intelligence, CRM contact details, Waalaxy status and activity
+  // are never queried or serialized in this anonymous branch.
   if (!authorized || !hasAutonomiaDatabase()) {
-    return <main style={{ maxWidth: 760, margin: "48px auto", padding: 24, color: "#16384e" }}>
-      <p style={{ fontSize: 12, fontWeight: 800, letterSpacing: ".15em", color: "#167e9b" }}>AUTONOMIA / GROWTH INTELLIGENCE</p>
-      <h1 style={{ fontSize: "clamp(32px,5vw,52px)", letterSpacing: "-.05em" }}>Votre centre d'acquisition sécurisé</h1>
-      <p style={{ lineHeight: 1.7 }}>Connecte-toi à ton espace AUTONOMIA pour voir les opportunités et les contacts de ton organisation. Aucun dossier privé ne s'affiche sans authentification.</p>
-      <Link href="/login" style={{ display: "inline-block", marginTop: 18, background: "#13455f", color: "#fff", padding: "13px 20px", borderRadius: 10, textDecoration: "none", fontWeight: 800 }}>Se connecter →</Link>
-    </main>;
+    const publicResult = hasAutonomiaDatabase()
+      ? await searchJobSignals({
+          sources: PUBLIC_HIRING_SOURCE_IDS,
+          franceOnly: false,
+          limit: 250
+        }).catch(() => ({ items: [] }))
+      : { items: [] };
+    const publicRows = publicResult.items || [];
+    return <PublicOverview
+      signals={publicHiringSignals(publicRows, { limit: 16 })}
+      sources={sourceActivity(publicRows)}
+      updatedAt={new Date().toISOString()}
+    />;
   }
 
   const workspaceId = context.membership.workspace_id;
