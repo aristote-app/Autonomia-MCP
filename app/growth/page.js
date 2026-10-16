@@ -142,6 +142,11 @@ export default async function GrowthPage({ searchParams }) {
           <p><strong>{play.action.label}.</strong> {play.action.reason}</p>
           {play.evidence?<div className={styles.evidence}><span>Signal sourcé · {dataDate(play.evidence.date)}</span><a href={play.evidence.url} target="_blank" rel="noopener noreferrer">{play.evidence.title} ↗</a></div>:
             <div className={styles.evidence}><span>Prospection proactive</span><p>Besoin non démontré — message de découverte uniquement.</p></div>}
+          <details className={styles.messagePreview}>
+            <summary>Voir le message commercial proposé</summary>
+            <pre>{play.message}</pre>
+            <small>Texte à vérifier avant utilisation : aucune action LinkedIn n'est exécutée depuis cette vue.</small>
+          </details>
           <div className={styles.cardLinks}>
             <Link href={play.route}>Ouvrir le compte →</Link>
             {play.linkedIn?<a href={play.linkedIn} target="_blank" rel="noopener noreferrer">Profil LinkedIn ↗</a>:null}
