@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  statuses: write
 
 concurrency:
   group: autonomia-public-o2switch-deploy-v3
@@ -43,6 +44,21 @@ jobs:
             echo "Skipping stale deploy target $TARGET_SHA; current public head is $CURRENT_SHA"
             echo "should_deploy=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Publish pending public-site production status
+        if: steps.target.outputs.should_deploy == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"pending","context":"o2switch/public-production","description":"Publication du site public en cours","target_url":os.environ["RUN_URL"]}))')"
 
       - name: Request GitHub OIDC deployment identity
         if: steps.target.outputs.should_deploy == 'true'
@@ -84,6 +100,7 @@ jobs:
           fi
 
       - name: Verify public production
+        id: verify
         if: steps.target.outputs.should_deploy == 'true'
         env:
           HEALTH_URL: https://build-autonomia.com/api/health
@@ -177,6 +194,44 @@ jobs:
           echo "::error::Public site did not switch to target SHA."
           exit 1
 
+      - name: Verify published IA guides, sitemap and report success
+        id: guides_smoke
+        if: steps.verify.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          BASE="https://build-autonomia.com"
+          for slug in cout-automatisation-ia agent-ia-ou-automatisation application-metier-ia suivi-marches-publics-ia; do
+            PAGE="$(curl -fsSL --retry 3 --max-time 30 "$BASE/$slug")"
+            if [[ "$PAGE" != *"AUTONOMIA BUILD"* ]] || [[ "$PAGE" != *"Questions fréquentes"* ]]; then
+              echo "::error::Published guide /$slug missing expected content."
+              exit 1
+            fi
+            echo "Verified /$slug"
+          done
+          DEMOS="$(curl -fsSL --max-time 30 "$BASE/demonstrateurs-ia")"
+          if [[ "$DEMOS" != *"Démonstrateurs"* ]]; then
+            echo "::error::Demonstrators hub missing on public site."
+            exit 1
+          fi
+          SITEMAP="$(curl -fsSL "$BASE/sitemap.xml")"
+          for slug in cout-automatisation-ia agent-ia-ou-automatisation application-metier-ia suivi-marches-publics-ia; do
+            if [[ "$SITEMAP" != *"/$slug"* ]]; then
+              echo "::error::New guide /$slug absent from sitemap."
+              exit 1
+            fi
+          done
+          echo "Public o2switch SHA and all 4 BUYER guides verified on live host"
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"success","context":"o2switch/public-production","description":"SHA et quatre guides vérifiés en ligne","target_url":os.environ["RUN_URL"]}))')"
+
       - name: Dump cockpit recovery diagnostics on failure
         if: failure()
         run: |
@@ -256,3 +311,17 @@ jobs:
             echo "::error::Search Console server connection is not healthy."
             exit 1
           fi
+      - name: Report public production verification failure
+        if: failure() && steps.target.outputs.should_deploy == 'true' && steps.guides_smoke.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"failure","context":"o2switch/public-production","description":"Site public non vérifié : consulter Actions","target_url":os.environ["RUN_URL"]}))')"
