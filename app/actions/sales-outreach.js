@@ -1,5 +1,6 @@
 "use server";
 
+import { getRuntimeIntegrationValue } from "../../lib/runtime/integrationSettings.js";
 import { revalidatePath } from "next/cache";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import {
@@ -45,7 +46,7 @@ function clean(value, max = 500) {
 export async function sendVerifiedContactToWaalaxy(formData) {
   const context = await requireWriter();
 
-  if (!process.env.WAALAXY_API_KEY) {
+  if (!(await getRuntimeIntegrationValue("WAALAXY_API_KEY"))) {
     throw new Error("Waalaxy is not configured");
   }
 
@@ -53,10 +54,10 @@ export async function sendVerifiedContactToWaalaxy(formData) {
   const accountKey = clean(formData.get("account_key"), 120);
   const prospectListId =
     clean(formData.get("prospect_list_id"), 160) ||
-    clean(process.env.WAALAXY_DEFAULT_LIST_ID, 160);
+    clean(await getRuntimeIntegrationValue("WAALAXY_DEFAULT_LIST_ID"), 160);
   const campaignId =
     clean(formData.get("campaign_id"), 160) ||
-    clean(process.env.WAALAXY_DEFAULT_CAMPAIGN_ID, 160) ||
+    clean(await getRuntimeIntegrationValue("WAALAXY_DEFAULT_CAMPAIGN_ID"), 160) ||
     null;
 
   if (!contactId || !accountKey || !prospectListId) {
@@ -120,7 +121,7 @@ export async function sendVerifiedContactToWaalaxy(formData) {
 export async function enrichVerifiedContactWithKaspr(formData) {
   const context = await requireWriter();
 
-  if (!process.env.KASPR_API_KEY) {
+  if (!(await getRuntimeIntegrationValue("KASPR_API_KEY"))) {
     throw new Error("Kaspr is not configured");
   }
 

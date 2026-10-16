@@ -1,7 +1,8 @@
 import { DEFAULT_JOB_DISCOVERY_QUERIES } from "../lib/collectors/jobDiscovery.js";
 import { WEB_DEMAND_QUERY_SPECS } from "../lib/collectors/webDemandDiscovery.js";
 
-const recentRunsPerDay = 24 / 12;
+// Multi-source discovery runs daily: broader coverage without increasing the paid web-search ceiling.
+const recentRunsPerDay = 24 / 24;
 const backfillRunsPerDay = 24 / 168;
 const extendedRunsPerDay = 24 / 48;
 
