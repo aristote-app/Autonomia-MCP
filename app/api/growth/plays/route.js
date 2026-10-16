@@ -4,6 +4,7 @@ import { loadAccountIntelligence } from "../../../../lib/db/accountIntelligence.
 import { listWorkspaceSalesContacts } from "../../../../lib/db/salesContacts.js";
 import { listInboundLeads } from "../../../../lib/db/inboundLeads.js";
 import { buildGrowthPlays, growthStats, weeklyCapacity } from "../../../../lib/intelligence/growthEngine.js";
+import { runtimeIntegrationStatus } from "../../../../lib/runtime/integrationSettings.js";
 
 export const dynamic = "force-dynamic";
 
@@ -31,9 +32,10 @@ export async function GET(request) {
       listInboundLeads({workspaceId,limit:500})
     ]);
     const accounts=intel.accounts||[];
+    const runtimeState=await runtimeIntegrationStatus().catch(()=>null);
     const plays=buildGrowthPlays({
       accounts,contacts,
-      waalaxyReady:Boolean(process.env.WAALAXY_API_KEY),
+      waalaxyReady:Boolean(process.env.WAALAXY_API_KEY||runtimeState?.configured?.WAALAXY_API_KEY),
       limit:500
     }).filter(item=>!offer||item.offer===offer);
     return Response.json({
