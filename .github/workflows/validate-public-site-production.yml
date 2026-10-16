@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 jobs:
   build-site:
@@ -50,3 +51,32 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://build-autonomia.com
           NEXT_TELEMETRY_DISABLED: "1"
+      - name: Report validated public-site build
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"success","context":"public-site/validated-build","description":"Next build, SEO audits and checks passed","target_url":os.environ["RUN_URL"]}))')"
+
+      - name: Report failed public-site validation
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TARGET_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/$REPO/statuses/$TARGET_SHA" \
+            -d "$(python -c 'import json,os;print(json.dumps({"state":"failure","context":"public-site/validated-build","description":"Public-site validation failed; consult Actions","target_url":os.environ["RUN_URL"]}))')"
