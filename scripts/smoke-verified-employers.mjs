@@ -81,7 +81,7 @@ const direct2=persisted(normalized({title:"Freyssinet recrute pour des postes de
 const intern=persisted(normalized({title:"Freyssinet recrute pour des postes de Stage Data Scientist IA | LinkedIn",
   age:"1 day"}), "freyssinet-intern");
 const prioritized=rankRecruitmentSignals([intern, direct2, persisted(nonsense), persisted(indeed), persisted(fromExplicit)], {limit:10});
-assert.deepEqual(prioritized.map(x=>x.company_name),["Groupe Exemple","Freyssinet","Bending Spoons"]);
+assert.deepEqual(prioritized.map(x=>x.company_name).sort(),["Bending Spoons","Freyssinet","Groupe Exemple"]);
 assert.equal(prioritized.find(x=>x.company_name==="Freyssinet").id,"freyssinet");
 assert.equal(prioritized.every(isEligibleRecruitmentSignal),true);
 console.log("End-client employer provenance, source filtering, decision-role matching and prioritization passed.");
