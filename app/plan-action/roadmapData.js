@@ -19,7 +19,7 @@ export const ROADMAP_PHASES = [
     tasks:[
       {id:"o-01",title:"Enrichir le hub avec captures de démonstrations",detail:"Captures fidèles des démos, légendes « données fictives », lecture simple des étapes et bénéfices.",owner:"IA",priority:"P0",due:"2026-10-24"},
       {id:"o-02",title:"Construire une fiche commerciale de l'outil marchés publics",detail:"Fonctions réelles, suivi administratif et financier, rôles du technicien et validations humaines. Aucun logo client fictif.",owner:"IA",priority:"P0",due:"2026-10-28"},
-      {id:"o-03",title:"Définir les modalités de vente BUILD",detail:"Cadrage, réalisations sur mesure, maintenance, responsabilités et limites ; chiffrage proposé pour validation.",owner:"IA",priority:"P1",due:"2026-10-27"},
+      {id:"o-03",title:"Définir les modalités de vente BUILD",detail:"Cadrage, réalisations sur mesure, maintenance, responsabilités et limites ; chiffrage proposé pour validation.",owner:"IA",priority:"P1",due:"2026-10-27",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/blob/main/docs/autonomia-build-offres-chiffrage-proposition.md"},
       {id:"o-04",title:"Valider la grille tarifaire et les conditions commerciales",detail:"Approuver les offres et tarifs avant publication de prix contractuels.",owner:"Direction",priority:"P0",due:"2026-10-30"},
       {id:"o-05",title:"Fiabiliser le parcours Calendly et les formulaires",detail:"Vérifier les CTA /start, Calendly, consentements et absence de friction sur téléphone.",owner:"IA",priority:"P0",due:"2026-10-25"},
       {id:"o-06",title:"Contrôler les deux landing pages BUILD",detail:"Promesses commerciales, deux angles de conversion et mesures d'attribution.",owner:"IA",priority:"P1",due:"2026-10-29"},
