@@ -36,8 +36,9 @@ for (const scenario of scenarios) {
   const item = normalizeJobSearchResult(scenario);
   assert.equal(item.sourceId, scenario.sourceId);
   assert.ok(item.sourceRecordId);
-  assert.equal(item.rawPayload.discovery_version, "multi_job_sources_v9");
-  assert.equal(item.rawPayload.direct_employer_evidence, false);
+  assert.equal(item.rawPayload.discovery_version, "verified_employer_v10");
+  assert.equal(item.rawPayload.direct_employer_evidence, true);
+  assert.ok(item.rawPayload.company_evidence_source);
   assert.ok(item.roles.length || item.skills.length || item.signalKeys.length);
 }
 
