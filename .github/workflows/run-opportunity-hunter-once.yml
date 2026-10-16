@@ -1,7 +1,10 @@
 name: run-opportunity-hunter-once
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+      - main
     paths:
       - .github/workflows/run-opportunity-hunter-once.yml
 
@@ -47,3 +50,27 @@ jobs:
           RESPONSE="$(curl -fsS --max-time 300             -H "Authorization: Bearer $OIDC_TOKEN"             "https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh?mode=recent")"
           printf '%s\n' "$RESPONSE" | tee /tmp/opportunity-hunter.json
           printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True, d; print("discovered", d["jobSignals"].get("discoveredRows")); print("persisted", d["jobSignals"].get("persistedRows")); print("directEmployerCandidates", d["opportunityHunter"].get("directEmployerCandidates")); print("endClientsVerified", d["opportunityHunter"].get("endClientsVerified")); print("kasprEmailsFound", d["opportunityHunter"].get("kasprEmailsFound")); print("kasprPhonesFound", d["opportunityHunter"].get("kasprPhonesFound"))'
+
+      - name: Confirm live Brave Search (no cached fallback)
+        run: |
+          python - <<'PY'
+          import json
+          with open("/tmp/opportunity-hunter.json", encoding="utf-8") as f:
+              payload = json.load(f)
+          jobs = payload.get("jobSignals") or {}
+          searches = jobs.get("searches") or []
+          succeeded = sum(bool(s.get("ok")) for s in searches)
+          total = len(searches)
+          fallback = bool(jobs.get("fallback"))
+          print(json.dumps({
+              "provider": jobs.get("provider"),
+              "fallback": fallback,
+              "searchesSucceeded": succeeded,
+              "searchesTotal": total,
+              "discovered": jobs.get("discoveredRows"),
+              "persisted": jobs.get("persistedRows"),
+              "reason": jobs.get("fallbackReason") or jobs.get("reason")
+          }, ensure_ascii=False))
+          if fallback or succeeded == 0:
+              raise SystemExit("Brave Search n'a pas renvoyé de résultat via son API. Vérifier les crédits, les quotas et la configuration.")
+          PY
