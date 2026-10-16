@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getCurrentWorkspaceMembership } from "../../lib/auth/access.js";
 import { listWorkspaceSalesContacts } from "../../lib/db/salesContacts.js";
+import { verifyDecisionMaker } from "../actions/sales-contacts.js";
 import {
   updateContactPipelineStage,
   optOutContact
@@ -295,6 +296,27 @@ export default async function ContactsPage({ searchParams }) {
                 <a href={contact.linkedin_url} target="_blank" rel="noreferrer">
                   LinkedIn ↗
                 </a>
+                {canWrite &&
+                  contact.verification_status === "candidate" &&
+                  !contact.do_not_contact && (
+                    <div className="buyerReviewActions" aria-label="Vérification du contact LinkedIn">
+                      <p>Vérifie le profil LinkedIn et son poste actuel, puis confirme ou écarte cette fiche.</p>
+                      <div>
+                        <form action={verifyDecisionMaker}>
+                          <input type="hidden" name="contact_id" value={contact.id} />
+                          <input type="hidden" name="account_key" value={contact.account_key} />
+                          <input type="hidden" name="status" value="verified" />
+                          <button className="buyerReviewApprove" type="submit">✓ Profil confirmé</button>
+                        </form>
+                        <form action={verifyDecisionMaker}>
+                          <input type="hidden" name="contact_id" value={contact.id} />
+                          <input type="hidden" name="account_key" value={contact.account_key} />
+                          <input type="hidden" name="status" value="rejected" />
+                          <button className="buyerReviewReject" type="submit">Écarter</button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
                 {contact.next_action_at && (
                   <span className={new Date(contact.next_action_at).getTime() <= Date.now() ? "contactDue" : ""}>
                     Action : {date(contact.next_action_at)}

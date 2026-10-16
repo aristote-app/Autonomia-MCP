@@ -11,7 +11,7 @@ const backfillRequestsPerRun = DEFAULT_JOB_DISCOVERY_QUERIES.length * 2;
 
 // Opportunity Hunter resolves at most 6 direct-client accounts every 24h and searches one
 // decision-maker role per account.
-const opportunityHunterRequestsPerDay = (24 / 24) * 6;
+const opportunityHunterRequestsPerDay = (24 / 24) * 6 * 2;
 
 const estimatedDailySearchRequests =
   recentRequestsPerRun * recentRunsPerDay +

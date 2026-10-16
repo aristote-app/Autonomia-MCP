@@ -10,7 +10,7 @@ function job(overrides={}) {
     title: "AI Engineer RAG",
     source_url: "https://fr.linkedin.com/jobs/view/ai-engineer-12345",
     published_at: "2026-10-16T08:00:00Z",
-    raw_payload: { direct_employer_evidence: true, intermediary_risk: false },
+    raw_payload: { direct_employer_evidence: true, intermediary_risk: false, company_evidence_source: "title_employer", discovery_version: "verified_employer_v10" },
     signal_keys: ["recruitment_signal"],
     private_contact_email: "secret@example.org",
     ...overrides

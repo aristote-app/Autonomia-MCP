@@ -90,4 +90,6 @@ export async function verifyDecisionMaker(formData) {
   });
 
   revalidatePath("/accounts/" + accountKey);
+  revalidatePath("/contacts");
+  revalidatePath("/growth");
 }
