@@ -8,7 +8,7 @@ export const ROADMAP_PHASES = [
       {id:"s-02",title:"Créer le guide « Combien coûte un agent IA ? »",detail:"Guide de cadrage avec simulation de budget explicitement indicative.",owner:"IA",priority:"P1",due:"2026-10-15",done:true,link:"https://build-autonomia.com/cout-agent-ia"},
       {id:"s-03",title:"Créer le hub des démonstrateurs IA",detail:"Urbanisme et conservatoire interactifs fictifs, plus présentation de l'usage marchés publics.",owner:"IA",priority:"P0",due:"2026-10-15",done:true,link:"https://build-autonomia.com/demonstrateurs-ia"},
       {id:"s-04",title:"Relier la Home, BUILD et les nouvelles pages",detail:"Maillage interne et sitemap mis à jour dans le dépôt.",owner:"IA",priority:"P0",due:"2026-10-15",done:true},
-      {id:"s-05",title:"Confirmer la mise en production sur o2switch",detail:"Comparer le SHA GitHub au /api/health public, tester les trois pages et le sitemap. Le succès Vercel ne suffit pas.",owner:"IA",priority:"P0",due:"2026-10-17",link:"https://github.com/aristote-app/Autonomia-MCP/issues/70"},
+      {id:"s-05",title:"Confirmer la mise en production sur o2switch",detail:"Comparer le SHA GitHub au /api/health public, tester les trois pages et le sitemap. Le succès Vercel ne suffit pas.",owner:"IA",priority:"P0",due:"2026-10-17",link:"https://github.com/aristote-app/Autonomia-MCP/issues/70",done:true,link:"https://github.com/aristote-app/Autonomia-MCP/actions/runs/38890007713"},
       {id:"s-06",title:"Valider l'affichage mobile et desktop",detail:"Vérifier notamment le héros, les cartes, les formulaires et les boutons de prise de rendez-vous.",owner:"IA",priority:"P0",due:"2026-10-20"},
       {id:"s-07",title:"Tester les leads du site jusqu'au cockpit",detail:"Soumettre une demande de test et vérifier sa réception, son origine et son traitement.",owner:"IA",priority:"P0",due:"2026-10-22"}
     ]
@@ -31,11 +31,11 @@ export const ROADMAP_PHASES = [
     hint:"Attirer les visiteurs qui cherchent déjà une solution IA concrète.",
     tasks:[
       {id:"r-01",title:"Auditer le SEO technique et l'indexation",detail:"Robots, sitemap, canonical, JSON-LD, Core Web Vitals, 404, Search Console et pages réellement indexées.",owner:"IA",priority:"P0",due:"2026-10-28"},
-      {id:"r-02",title:"Publier un contenu sur le prix de l'automatisation IA",detail:"Intention achat, facteurs de coût, simulation distinguée d'une offre commerciale.",owner:"IA",priority:"P1",due:"2026-11-02"},
-      {id:"r-03",title:"Publier un comparatif agent IA / workflow / application",detail:"Aider le décideur à choisir la bonne architecture selon son besoin.",owner:"IA",priority:"P1",due:"2026-11-05"},
-      {id:"r-04",title:"Publier le guide d'une application métier IA sur mesure",detail:"Étapes, livrables, sécurité, intégrations et évaluation d'un projet.",owner:"IA",priority:"P1",due:"2026-11-09"},
-      {id:"r-05",title:"Publier un cas d'usage sur les marchés publics",detail:"Traitement administratif et financier, limites métier, rôle de validation et intégrations possibles.",owner:"IA",priority:"P1",due:"2026-11-13"},
-      {id:"r-06",title:"Construire un maillage commercial entre pages et démonstrateurs",detail:"Relier contenus, offres BUILD, ressources et CTA sans dupliquer les pages existantes.",owner:"IA",priority:"P1",due:"2026-11-15"}
+      {id:"r-02",title:"Publier un contenu sur le prix de l'automatisation IA",detail:"Intention achat, facteurs de coût, simulation distinguée d'une offre commerciale.",owner:"IA",priority:"P1",due:"2026-11-02",done:true,link:"https://build-autonomia.com/cout-automatisation-ia"},
+      {id:"r-03",title:"Publier un comparatif agent IA / workflow / application",detail:"Aider le décideur à choisir la bonne architecture selon son besoin.",owner:"IA",priority:"P1",due:"2026-11-05",done:true,link:"https://build-autonomia.com/agent-ia-ou-automatisation"},
+      {id:"r-04",title:"Publier le guide d'une application métier IA sur mesure",detail:"Étapes, livrables, sécurité, intégrations et évaluation d'un projet.",owner:"IA",priority:"P1",due:"2026-11-09",done:true,link:"https://build-autonomia.com/application-metier-ia"},
+      {id:"r-05",title:"Publier un cas d'usage sur les marchés publics",detail:"Traitement administratif et financier, limites métier, rôle de validation et intégrations possibles.",owner:"IA",priority:"P1",due:"2026-11-13",done:true,link:"https://build-autonomia.com/suivi-marches-publics-ia"},
+      {id:"r-06",title:"Construire un maillage commercial entre pages et démonstrateurs",detail:"Relier contenus, offres BUILD, ressources et CTA sans dupliquer les pages existantes.",owner:"IA",priority:"P1",due:"2026-11-15",done:true,link:"https://build-autonomia.com/solutions-ia"}
     ]
   },
   {
