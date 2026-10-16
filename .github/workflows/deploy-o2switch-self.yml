@@ -247,7 +247,7 @@ jobs:
           echo "Public consultant feed is healthy."
 
       - name: Refresh GitHub OIDC identity for Opportunity Hunter
-        if: steps.probe.outputs.ready == 'true'
+        if: always() && steps.probe.outputs.ready == 'true' && steps.verify.outcome == 'success'
         id: opportunity_hunter_oidc
         env:
           AUDIENCE: autonomia-o2switch
@@ -263,7 +263,7 @@ jobs:
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: One-time full LinkedIn Indeed opportunity hunter
-        if: steps.probe.outputs.ready == 'true'
+        if: always() && steps.probe.outputs.ready == 'true' && steps.verify.outcome == 'success'
         env:
           HUNTER_URL: https://cockpit.build-autonomia.com/api/internal/opportunity-hunter-refresh
           OIDC_TOKEN: ${{ steps.opportunity_hunter_oidc.outputs.token }}
