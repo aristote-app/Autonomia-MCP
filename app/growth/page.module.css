@@ -76,3 +76,9 @@
 .messagePreview summary { color:#145a7c; font-size:12px; font-weight:800; cursor:pointer; }
 .messagePreview pre { font-family:inherit; font-size:12px; color:#244557; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65; margin:13px 0; }
 .messagePreview small { font-size:10px; color:#7b8691; line-height:1.4; }
+
+.planner { display:grid; gap:8px; margin-top:15px; }
+.range { display:grid; gap:6px; margin-top:5px; }
+.range span { display:flex; align-items:center; justify-content:space-between; font-size:12px; gap:8px; color:#486579; }
+.range strong { font-size:12px; color:#12587c; }
+.range input { width:100%; accent-color:#156b92; cursor:pointer; }
