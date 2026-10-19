@@ -99,7 +99,7 @@ function PlayCard({ play, onCopy, copied }) {
       <span className={styles.playScore} title="Score heuristique de priorité, pas une probabilité d'achat">{play.score}/100</span>
     </div>
     <div className={styles.playBody}>
-      <div><h3>{play.company}</h3><p className={styles.person}>Besoin repéré · approche commerciale à valider</p></div>
+      <div><h3>{play.company}</h3><p className={styles.person}>{play.clientStatus || "Client final à vérifier"} · {play.evidence ? "Signal public documenté" : "Besoin à qualifier"}</p></div>
       <DecisionMakerForPlay play={play}/>
       <p className={styles.actionReason}><strong>{play.action?.label}.</strong> {play.action?.reason}</p>
       {play.evidence?.url
@@ -110,6 +110,10 @@ function PlayCard({ play, onCopy, copied }) {
           </div>
         : <div className={styles.noEvidence}>Besoin non confirmé · Prospection de découverte uniquement</div>}
     </div>
+    <details className={styles.noEvidence}>
+      <summary>Message préparé · {play.messageStatus || "À relire avant utilisation"}</summary>
+      <p style={{whiteSpace:"pre-wrap",marginTop:"0.75rem"}}>{play.message}</p>
+    </details>
     <div className={styles.playFoot}>
       <Link className={styles.cardPrimary} href={play.route}>Ouvrir le dossier <span aria-hidden="true">↗</span></Link>
       
