@@ -61,7 +61,7 @@ assert.equal(privateCards[0].reviewedDecisionMaker.name,"Marine Roche");
 const accountView = readFileSync(new URL("../app/accounts/page.js",import.meta.url),"utf8");
 const contactView = readFileSync(new URL("../lib/ui/AccountContacts.js",import.meta.url),"utf8");
 assert.match(accountView,/decisionSnapshot=\{decisionSnapshot\}/);
-assert.match(accountView,/getSnapshotCandidate\(decisionSnapshot, account.name\)/);
+assert.match(accountView,/getSnapshotCandidate\(decisionSnapshot, account.name, \{ minScore: 85 \}\)/);
 assert.match(contactView,/personalLinkedInProfileUrl\(candidate\?\.linkedin_url\)/);
 assert.match(contactView,/Profil candidat issu d'une recherche publique/);
 assert.match(contactView,/relevance_score \|\| 0\) >= 85/);
