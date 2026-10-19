@@ -86,6 +86,8 @@ jobs:
         run: npm run smoke:accounts
       - name: Smoke test Growth Engine - 40 meetings target
         run: npm run smoke:growth
+      - name: Smoke test Collective.work exclusion and personal LinkedIn links
+        run: node scripts/smoke-growth-collectivework-links.mjs
       - name: Smoke test inline Growth decision maker panels
         run: node scripts/smoke-growth-buyer-cards.mjs
       - name: Smoke test public Growth access and lead redaction
