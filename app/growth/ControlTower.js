@@ -51,6 +51,43 @@ function Pill({ children, tone = "neutral" }) {
 function SignalDate({ value }) {
   return <time dateTime={value || undefined}>{formatDate(value)}</time>;
 }
+function DecisionMakerForPlay({ play }) {
+  const source = play.reviewedDecisionMaker;
+  const crmProfile = Boolean(play.contactName && play.linkedIn);
+  const namedSource = !crmProfile && source?.kind === "named_public_contact";
+  const identified = crmProfile || namedSource;
+  const name = crmProfile ? play.contactName : namedSource ? source.name : source?.targetRole || "Head of AI / Responsable formation";
+  const role = crmProfile ? play.contactRole : namedSource ? source.role : "Fonction cible, personne à identifier";
+  const linkedin = crmProfile ? play.linkedIn : namedSource ? source.linkedinUrl : source?.searchUrl || null;
+  const label = crmProfile
+    ? (play.contactVerification === "verified" ? "Contact validé" : "Profil à confirmer")
+    : namedSource ? "Profil public recensé" : "Recherche préparée";
+  const color = crmProfile && play.contactVerification === "verified" ? "green" : identified ? "blue" : "amber";
+  const initials = identified ? String(name).split(/\s+/).slice(0,2).map(w => w[0] || "").join("").toUpperCase() : "◎";
+  return <div className={styles.decisionMakerBox}>
+    <div className={styles.dmHeader}>
+      <span>✦ LE BON INTERLOCUTEUR</span>
+      <Pill tone={color}>{label}</Pill>
+    </div>
+    <div className={styles.dmBody}>
+      <span className={identified ? styles.dmAvatar : styles.dmAvatarPending} aria-hidden="true">{initials}</span>
+      <div><strong>{name}</strong><p>{role}</p></div>
+    </div>
+    <p className={styles.dmNote}>{identified
+      ? (play.contactVerification === "verified" && crmProfile
+        ? "Profil confirmé dans le cockpit ; vérifie le contexte de ce besoin avant d'écrire."
+        : "Fonction ou profil repéré ; vérifie son implication dans ce besoin avant de contacter.")
+      : "Le profil nominatif reste à identifier. La recherche LinkedIn est préparée pour cette entreprise."}
+    </p>
+    <div className={styles.dmActions}>
+      {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.dmPrimary}>
+        {identified ? "Voir son LinkedIn ↗" : "Chercher sur LinkedIn ↗"}
+      </a>}
+      {namedSource && source?.sourceUrl && <a href={source.sourceUrl} target="_blank" rel="noopener noreferrer" className={styles.dmSecondary}>Source professionnelle ↗</a>}
+    </div>
+  </div>;
+}
+
 function PlayCard({ play, onCopy, copied }) {
   const category = classifyAction(play.action?.id);
   return <article className={cls(styles.playCard, styles["play_" + category])}>
@@ -62,7 +99,8 @@ function PlayCard({ play, onCopy, copied }) {
       <span className={styles.playScore} title="Score heuristique de priorité, pas une probabilité d'achat">{play.score}/100</span>
     </div>
     <div className={styles.playBody}>
-      <div><h3>{play.company}</h3><p className={styles.person}>{play.contactName || "Interlocuteur à identifier"}{play.contactRole ? " · " + play.contactRole : ""}</p></div>
+      <div><h3>{play.company}</h3><p className={styles.person}>Besoin repéré · approche commerciale à valider</p></div>
+      <DecisionMakerForPlay play={play}/>
       <p className={styles.actionReason}><strong>{play.action?.label}.</strong> {play.action?.reason}</p>
       {play.evidence?.url
         ? <div className={styles.evidence}>
@@ -74,7 +112,7 @@ function PlayCard({ play, onCopy, copied }) {
     </div>
     <div className={styles.playFoot}>
       <Link className={styles.cardPrimary} href={play.route}>Ouvrir le dossier <span aria-hidden="true">↗</span></Link>
-      {play.linkedIn && <a className={styles.textAction} href={play.linkedIn} target="_blank" rel="noopener noreferrer">Profil LinkedIn</a>}
+      
       <button className={styles.textAction} type="button" onClick={() => onCopy(play)} title="Copier le brouillon proposé, sans l'envoyer">{copied === play.id ? "Message copié ✓" : "Copier le message"}</button>
     </div>
   </article>;
