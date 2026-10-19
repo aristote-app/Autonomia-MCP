@@ -16,6 +16,39 @@ const OFFER_STEPS = [
   { label: "BUILD", color: "blue", title: "Projets opérationnels", description: "Surveiller les annonces révélant un besoin d'automatisation." }
 ];
 
+function initials(name) {
+  return String(name || "?").trim().split(/\s+/).slice(0,2).map(s=>s[0]||"").join("").toUpperCase();
+}
+function DecisionMakerInJob({ recommendation }) {
+  if (!recommendation) return null;
+  const identified = recommendation.kind === "named_public_contact";
+  return <div className={identified ? styles.decisionCard : styles.decisionCardPending}>
+    <div className={styles.decisionTop}>
+      <span className={styles.decisionEyebrow}>✦ QUI CONTACTER ?</span>
+      <span className={identified ? styles.decisionReviewed : styles.decisionNotFound}>
+        {identified ? "Profil public recensé" : "Rôle ciblé"}
+      </span>
+    </div>
+    <div className={styles.decisionIdentity}>
+      <span className={identified ? styles.decisionAvatar : styles.decisionAvatarPending} aria-hidden="true">
+        {identified ? initials(recommendation.name) : "◎"}
+      </span>
+      <div>
+        <strong>{identified ? recommendation.name : recommendation.targetRole}</strong>
+        <p>{identified ? recommendation.role : "Le profil nominatif reste à identifier pour cette entreprise."}</p>
+      </div>
+    </div>
+    {identified && <p className={styles.decisionNotice}>Fonction publiée dans une source professionnelle. Son rôle dans ce recrutement reste à confirmer.</p>}
+    <div className={styles.decisionLinks}>
+      <a className={styles.decisionPrimary} target="_blank" rel="noopener noreferrer"
+        href={identified ? recommendation.linkedinUrl : recommendation.searchUrl}>
+        {identified ? "Ouvrir son LinkedIn ↗" : "Chercher ce décideur sur LinkedIn ↗"}
+      </a>
+      {identified && <a className={styles.decisionSecondary} href={recommendation.sourceUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>}
+    </div>
+  </div>;
+}
+
 function dateFR(value) {
   if (!value) return "Date non confirmée";
   const date = new Date(value);
@@ -58,14 +91,15 @@ export default function PublicOverview({ signals=[], sources=[], updatedAt }) {
     <section className={styles.bodyGrid} id="signaux">
       <div className={styles.mainColumn}>
         <div className={styles.sectionHead}>
-          <div><p>01 · OPPORTUNITÉS VISIBLES</p><h2>Les signaux repérés<span>.</span></h2><small>Offres accessibles publiquement. Les ESN identifiées sont exclues ; le client final reste à vérifier avant prospection.</small></div>
-          <span className={styles.infoTag}>Lecture libre</span>
+          <div><p>01 · OPPORTUNITÉS VISIBLES</p><h2>Les signaux repérés<span>.</span></h2><small>Chaque annonce indique maintenant la fonction à contacter, avec un profil LinkedIn direct lorsqu’il a déjà été identifié dans des sources professionnelles. Les ESN identifiées restent exclues.</small></div>
+          <span className={styles.infoTag}>{signals.filter(s=>s.decisionMaker?.kind==="named_public_contact").length} profil(s) recensé(s)</span>
         </div>
         <div className={styles.jobList}>
           {signals.length ? signals.map((s,i)=><article key={s.id+":"+i} className={styles.job}>
             <div className={styles.jobTop}><span className={styles.source}>{SOURCE_NAMES[s.sourceId]||"Source publique"}</span><span className={styles.date}>{dateFR(s.publishedAt)}</span></div>
             <h3>{s.company}</h3>
             <p className={styles.jobTitle}>{s.title}</p>
+            <DecisionMakerInJob recommendation={s.decisionMaker}/>
             <div className={styles.jobFooter}><span className={styles.review}>◷ Employeur à confirmer</span><a href={s.sourceUrl} target="_blank" rel="noopener noreferrer">Voir l'offre originale ↗</a></div>
           </article>):<div className={styles.empty}><span className={styles.emptyIcon} aria-hidden="true">◎</span><h3>Aucune annonce vérifiable à afficher</h3><p>Les sources restent visibles ci-dessous. Le radar conserve les critères d'exclusion des ESN et n'invente aucun signal.</p></div>}
         </div>
