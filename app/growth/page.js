@@ -11,6 +11,7 @@ import ControlTower from "./ControlTower.js";
 import PublicOverview from "./PublicOverview.js";
 import { publicHiringSignals, PUBLIC_HIRING_SOURCE_IDS } from "../../lib/intelligence/publicGrowth.js";
 import { enrichPublicSignalsWithDecisionMakers, enrichPrivateGrowthPlays } from "../../lib/intelligence/growthDecisionTargets.js";
+import { readDecisionMakerSnapshot } from "../../lib/intelligence/decisionMakerSnapshot.js";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -52,7 +53,10 @@ function sourceActivity(rows) {
 }
 
 export default async function GrowthPage() {
-  const context = await getCurrentWorkspaceMembership().catch(() => null);
+  const [context, decisionSnapshot] = await Promise.all([
+    getCurrentWorkspaceMembership().catch(() => null),
+    readDecisionMakerSnapshot().catch(() => ({ version:1, accounts:{} }))
+  ]);
   const authorized = Boolean(context?.claims?.sub && context?.membership?.workspace_id);
   // Anonymous visitors can see public recruiting signals without a login.
   // Private account intelligence, CRM contact details, Waalaxy status and activity
@@ -67,7 +71,7 @@ export default async function GrowthPage() {
       : { items: [] };
     const publicRows = publicResult.items || [];
     return <PublicOverview
-      signals={enrichPublicSignalsWithDecisionMakers(publicHiringSignals(publicRows, { limit: 16 }))}
+      signals={enrichPublicSignalsWithDecisionMakers(publicHiringSignals(publicRows, { limit: 16 }), {snapshot:decisionSnapshot})}
       sources={sourceActivity(publicRows)}
       updatedAt={new Date().toISOString()}
     />;
@@ -94,7 +98,7 @@ export default async function GrowthPage() {
 
   return <ControlTower
     overview={growthStats({ accounts, contacts, inbound })}
-    plays={enrichPrivateGrowthPlays(plays)}
+    plays={enrichPrivateGrowthPlays(plays, {snapshot:decisionSnapshot})}
     signalCount={(jobData.items || []).length}
     sources={sourceActivity(jobData.items || [])}
     connections={ready}
