@@ -10,6 +10,7 @@ import { runtimeIntegrationStatus } from "../../lib/runtime/integrationSettings.
 import ControlTower from "./ControlTower.js";
 import PublicOverview from "./PublicOverview.js";
 import { publicHiringSignals, PUBLIC_HIRING_SOURCE_IDS } from "../../lib/intelligence/publicGrowth.js";
+import { enrichPublicSignalsWithDecisionMakers, enrichPrivateGrowthPlays } from "../../lib/intelligence/growthDecisionTargets.js";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -66,7 +67,7 @@ export default async function GrowthPage() {
       : { items: [] };
     const publicRows = publicResult.items || [];
     return <PublicOverview
-      signals={publicHiringSignals(publicRows, { limit: 16 })}
+      signals={enrichPublicSignalsWithDecisionMakers(publicHiringSignals(publicRows, { limit: 16 }))}
       sources={sourceActivity(publicRows)}
       updatedAt={new Date().toISOString()}
     />;
@@ -93,7 +94,7 @@ export default async function GrowthPage() {
 
   return <ControlTower
     overview={growthStats({ accounts, contacts, inbound })}
-    plays={plays}
+    plays={enrichPrivateGrowthPlays(plays)}
     signalCount={(jobData.items || []).length}
     sources={sourceActivity(jobData.items || [])}
     connections={ready}
