@@ -60,6 +60,6 @@ for(const [label,contents] of [["public Home",homepage],["private Home",cockpit]
   assert.ok(!contents.includes("recommendation.searchUrl")&&!contents.includes("source?.searchUrl"),
     label+" has an unverified search fallback");
 }
-assert.match(homepage,/identified && <div className=\{styles\.decisionLinks\}>/);
-assert.match(cockpit,/const linkedin = crmProfile \? play\.linkedIn : namedSource \? source\.linkedinUrl : null;/);
+assert.match(homepage,/visible && <div className=\{styles\.decisionLinks\}>/);
+assert.match(cockpit,/const linkedin = crmProfile \? play\.linkedIn : identified \? source\.linkedinUrl : null;/);
 console.log("Collective.work exclusion and direct personal LinkedIn links: PASS");

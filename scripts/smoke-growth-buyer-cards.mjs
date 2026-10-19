@@ -60,7 +60,7 @@ const indexPublic = growthPage.indexOf("if (!authorized || !hasAutonomiaDatabase
 const indexPrivate = growthPage.indexOf("const workspaceId");
 assert.ok(indexPublic>0 && indexPublic<indexPrivate);
 assert.match(growthPage,/signals=\{enrichPublicSignalsWithDecisionMakers\(publicHiringSignals/);
-assert.match(growthPage,/plays=\{enrichPrivateGrowthPlays\(plays\)\}/);
+assert.match(growthPage,/plays=\{enrichPrivateGrowthPlays\(plays, \{snapshot:decisionSnapshot\}\)\}/);
 assert.match(publicView,/DecisionMakerInJob recommendation=\{s\.decisionMaker\}/);
 assert.match(publicView,/recommendation\.linkedinUrl/);
 assert.ok(!publicView.includes("recommendation.searchUrl"));
@@ -76,4 +76,12 @@ assert.deepEqual(enrichPrivateGrowthPlays([
   {company:"Collective.work",offer:"EXPERTS"}, {company:"BEFORMA",offer:"ACADEMY"}
 ],{now}).map(p=>p.company),["BEFORMA"]);
 assert.equal(JSON.stringify(noEvidence).includes("search/results/people"),false);
+const snapshot={version:1,accounts:{"entreprise cible":{company:"Entreprise Cible",checkedAt:"2026-10-19T10:00:00Z",searchSucceeded:true,candidates:[{name_guess:"Marie Dupont",headline:"Marie Dupont - Responsable formation chez Entreprise Cible",matched_role:"Responsable formation",linkedin_url:"https://fr.linkedin.com/in/marie-dupont",relevance_score:92}]}}};
+const candidate=recommendDecisionMaker({company:"Entreprise Cible",title:"Formation Copilot"},{now,snapshot,lookup:()=>null});
+assert.equal(candidate.kind,"search_candidate");
+assert.equal(candidate.linkedinUrl,"https://www.linkedin.com/in/marie-dupont");
+assert.match(candidate.status,/confirmer/);
+assert.equal(recommendDecisionMaker({company:"Collective.work"},{now,snapshot,lookup:()=>null}).kind,"excluded_intermediary");
+const invalidSnapshot={version:1,accounts:{"entreprise cible":{...snapshot.accounts["entreprise cible"],candidates:[{name_guess:"Someone",linkedin_url:"https://www.linkedin.com/search/results/people/?keywords=ia",relevance_score:100}]}}};
+assert.equal(recommendDecisionMaker({company:"Entreprise Cible"},{now,snapshot:invalidSnapshot,lookup:()=>null}).kind,"no_identified_profile");
 console.log("Growth buyer panels: personal LinkedIn only; intermediary suppression; safe missing-person state.");

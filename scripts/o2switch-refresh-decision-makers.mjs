@@ -6,7 +6,7 @@ import { getReviewedDecisionMaker } from "../lib/intelligence/reviewedDecisionMa
 import { decisionCompanyKey, readDecisionMakerSnapshot, writeDecisionMakerSnapshot } from "../lib/intelligence/decisionMakerSnapshot.js";
 
 // Runs only on the server cron. Visiting a public page never spends search quota.
-// Ten accounts / twenty queries at most each day, including deployment runs.
+// Thirty accounts / sixty queries at most each day, including deployment runs.
 async function refresh() {
   if (!process.env.BRAVE_SEARCH_API_KEY) return console.log('[decision-makers] skipped: search provider not configured');
   const snapshot = await readDecisionMakerSnapshot();
@@ -24,7 +24,7 @@ async function refresh() {
     return !previous || Date.now() - Date.parse(previous.checkedAt) > (previous.searchSucceeded ? 14 : 1) * 86400000;
   });
   let searched = 0;
-  for (const account of eligible.slice(0, Math.max(0, 10 - (snapshot.accountsSearched || 0)))) {
+  for (const account of eligible.slice(0, Math.max(0, 30 - (snapshot.accountsSearched || 0)))) {
     // Reserve before contacting the provider, so crashes/redeploys do not reset quota.
     snapshot.accountsSearched = (snapshot.accountsSearched || 0) + 1;
     await writeDecisionMakerSnapshot(snapshot);
