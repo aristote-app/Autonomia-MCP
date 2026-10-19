@@ -3,6 +3,7 @@ import AccountContacts from "../../lib/ui/AccountContacts.js";
 import { isExcludedCommercialCompany } from "../../lib/intelligence/commercialLeadPolicy.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
+import { readDecisionMakerSnapshot, getSnapshotCandidate } from "../../lib/intelligence/decisionMakerSnapshot.js";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +21,15 @@ export default async function AccountsPage() {
     ? await loadAccountIntelligence({ limit: 150 }).catch(() => null)
     : null;
 
+  const decisionSnapshot = await readDecisionMakerSnapshot().catch(() => ({version:1,accounts:{}}));
   // This is the direct-client prospecting view; known intermediaries stay out.
   const accounts = (live?.accounts || []).filter(account =>
     !account.intermediary_risk &&
     account.account_type !== "intermediary" &&
     !isExcludedCommercialCompany(account.name)
   );
+
+  const candidateCount = accounts.filter(account => getSnapshotCandidate(decisionSnapshot, account.name)?.relevance_score >= 85).length;
 
   return (
     <main>
@@ -44,7 +48,7 @@ export default async function AccountsPage() {
         </div>
         <div className="accountHeroMetric">
           <strong>{accounts.length}</strong>
-          <span>comptes détectés</span>
+          <span>comptes ciblés · {candidateCount} profils candidats repérés</span>
         </div>
       </header>
 
@@ -122,7 +126,7 @@ export default async function AccountsPage() {
                     {account.timeline[0]?.title || "—"} · {formatDate(account.timeline[0]?.date)}
                   </p>
 
-                  <AccountContacts account={account} />
+                  <AccountContacts account={account} decisionSnapshot={decisionSnapshot} />
 
                   <div className="oppActions">
                     <Link href={`/accounts/${account.slug}`}>Ouvrir le compte 360° →</Link>
