@@ -22,28 +22,31 @@ function initials(name) {
 function DecisionMakerInJob({ recommendation }) {
   if (!recommendation) return null;
   const identified = recommendation.kind === "named_public_contact";
+  const candidate = recommendation.kind === "search_candidate";
+  const visible = identified || candidate;
   return <div className={identified ? styles.decisionCard : styles.decisionCardPending}>
     <div className={styles.decisionTop}>
       <span className={styles.decisionEyebrow}>✦ QUI CONTACTER ?</span>
       <span className={identified ? styles.decisionReviewed : styles.decisionNotFound}>
-        {identified ? "Profil personnel identifié" : "Recherche automatique à poursuivre"}
+        {identified ? "Profil professionnel documenté" : candidate ? "Profil à confirmer" : "Recherche automatique à poursuivre"}
       </span>
     </div>
     <div className={styles.decisionIdentity}>
       <span className={identified ? styles.decisionAvatar : styles.decisionAvatarPending} aria-hidden="true">
-        {identified ? initials(recommendation.name) : "◎"}
+        {visible ? initials(recommendation.name) : "◎"}
       </span>
       <div>
-        <strong>{identified ? recommendation.name : "Décideur à identifier"}</strong>
-        <p>{identified ? recommendation.role : "Fonction cible : " + recommendation.targetRole + ". Aucun profil personnel confirmé."}</p>
+        <strong>{visible ? recommendation.name : "Décideur non identifié"}</strong>
+        <p>{visible ? recommendation.role : "Fonction cible : " + recommendation.targetRole + ". Aucun profil personnel confirmé."}</p>
       </div>
     </div>
     {identified && <p className={styles.decisionNotice}>Fonction publiée dans une source professionnelle. Son rôle dans ce recrutement reste à confirmer.</p>}
-    {identified && <div className={styles.decisionLinks}>
+    {candidate && <p className={styles.decisionNotice}>Résultat de recherche public. Identité, emploi actuel et pouvoir de décision à vérifier avant toute prospection.</p>}
+    {visible && <div className={styles.decisionLinks}>
       <a className={styles.decisionPrimary} target="_blank" rel="noopener noreferrer" href={recommendation.linkedinUrl}>Voir le profil LinkedIn ↗</a>
       <a className={styles.decisionSecondary} href={recommendation.sourceUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>
     </div>}
-    {!identified && <p className={styles.decisionNotice}>Aucun lien générique : cet encart affichera un accès LinkedIn seulement après identification d'une personne.</p>}
+    {!visible && <p className={styles.decisionNotice}>Aucun lien générique : cet encart affichera un accès LinkedIn seulement après identification d'une personne.</p>}
   </div>;
 }
 
