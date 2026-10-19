@@ -26,7 +26,7 @@ function DecisionMakerInJob({ recommendation }) {
     <div className={styles.decisionTop}>
       <span className={styles.decisionEyebrow}>✦ QUI CONTACTER ?</span>
       <span className={identified ? styles.decisionReviewed : styles.decisionNotFound}>
-        {identified ? "Profil public recensé" : "Rôle ciblé"}
+        {identified ? "Profil personnel identifié" : "Recherche automatique à poursuivre"}
       </span>
     </div>
     <div className={styles.decisionIdentity}>
@@ -34,18 +34,16 @@ function DecisionMakerInJob({ recommendation }) {
         {identified ? initials(recommendation.name) : "◎"}
       </span>
       <div>
-        <strong>{identified ? recommendation.name : recommendation.targetRole}</strong>
-        <p>{identified ? recommendation.role : "Le profil nominatif reste à identifier pour cette entreprise."}</p>
+        <strong>{identified ? recommendation.name : "Décideur à identifier"}</strong>
+        <p>{identified ? recommendation.role : "Fonction cible : " + recommendation.targetRole + ". Aucun profil personnel confirmé."}</p>
       </div>
     </div>
     {identified && <p className={styles.decisionNotice}>Fonction publiée dans une source professionnelle. Son rôle dans ce recrutement reste à confirmer.</p>}
-    <div className={styles.decisionLinks}>
-      <a className={styles.decisionPrimary} target="_blank" rel="noopener noreferrer"
-        href={identified ? recommendation.linkedinUrl : recommendation.searchUrl}>
-        {identified ? "Ouvrir son LinkedIn ↗" : "Chercher ce décideur sur LinkedIn ↗"}
-      </a>
-      {identified && <a className={styles.decisionSecondary} href={recommendation.sourceUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>}
-    </div>
+    {identified && <div className={styles.decisionLinks}>
+      <a className={styles.decisionPrimary} target="_blank" rel="noopener noreferrer" href={recommendation.linkedinUrl}>Voir le profil LinkedIn ↗</a>
+      <a className={styles.decisionSecondary} href={recommendation.sourceUrl} target="_blank" rel="noopener noreferrer">Source ↗</a>
+    </div>}
+    {!identified && <p className={styles.decisionNotice}>Aucun lien générique : cet encart affichera un accès LinkedIn seulement après identification d'une personne.</p>}
   </div>;
 }
 
