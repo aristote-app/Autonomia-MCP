@@ -53,10 +53,10 @@ function SignalDate({ value }) {
 }
 function DecisionMakerForPlay({ play }) {
   const source = play.reviewedDecisionMaker;
-  const crmProfile = Boolean(play.contactName && play.linkedIn);
+  const crmProfile = Boolean(play.contactName && play.linkedIn && /^https:\/\/www\.linkedin\.com\/in\/[^/?#]+\/?$/i.test(play.linkedIn));
   const namedSource = !crmProfile && source?.kind === "named_public_contact";
   const identified = crmProfile || namedSource;
-  const name = crmProfile ? play.contactName : namedSource ? source.name : "Décideur à identifier";
+  const name = crmProfile ? play.contactName : namedSource ? source.name : "Décideur non identifié";
   const role = crmProfile ? play.contactRole : namedSource ? source.role : "Fonction cible : " + (source?.targetRole || "Direction IA / formation");
   const linkedin = crmProfile ? play.linkedIn : namedSource ? source.linkedinUrl : null;
   const label = crmProfile
@@ -186,7 +186,7 @@ export default function ControlTower({ overview, plays, signalCount, sources, co
     <section className={styles.mainGrid} id="priorities">
       <div className={styles.leftColumn}>
         <div className={styles.sectionHeading}>
-          <div><p className={styles.eyebrow}>01 · CENTRE DE DÉCISION</p><h2>Ce qui mérite ton attention<span className={styles.headingAccent}>.</span></h2>
+          <div><p className={styles.eyebrow}>01 · CENTRE DE DÉCISION</p><h2>Mes priorités aujourd’hui<span className={styles.headingAccent}>.</span></h2>
           <p>Des propositions classées, avec la preuve du signal et une seule prochaine action.</p></div>
           <span className={styles.countBubble}>{needsLabel}</span>
         </div>
