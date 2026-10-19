@@ -20,6 +20,11 @@ assert.equal(jobs.kind,"named_public_contact");
 assert.equal(jobs.name,"Natalia Bekaley");
 assert.equal(jobs.intent,"EXPERTS");
 
+const equans = recommendDecisionMaker({company:"EQUANS",title:"Automatisation IA agentique",offer:"BUILD"},{now});
+assert.equal(equans.kind,"named_public_contact");
+assert.equal(equans.name,"Philippe Kerignard");
+assert.equal(equans.linkedinUrl,"https://www.linkedin.com/in/kerignard");
+assert.match(equans.status,/confirmer/);
 const intermediary = recommendDecisionMaker({company:"G2F Conseil",title:"AI Engineer"},{now});
 assert.equal(intermediary.kind,"no_identified_profile");
 assert.equal(intermediary.name,undefined);
