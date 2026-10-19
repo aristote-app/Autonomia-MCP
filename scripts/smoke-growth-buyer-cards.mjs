@@ -58,6 +58,13 @@ assert.equal(sourceBacked[0].id,"foo");
 const privateCards = enrichPrivateGrowthPlays([{company:"BEFORMA",offer:"ACADEMY",evidence:{title:"Copilot formation"}}],{now});
 assert.equal(privateCards[0].reviewedDecisionMaker.name,"Marine Roche");
 
+const accountView = readFileSync(new URL("../app/accounts/page.js",import.meta.url),"utf8");
+const contactView = readFileSync(new URL("../lib/ui/AccountContacts.js",import.meta.url),"utf8");
+assert.match(accountView,/decisionSnapshot=\{decisionSnapshot\}/);
+assert.match(accountView,/getSnapshotCandidate\(decisionSnapshot, account.name\)/);
+assert.match(contactView,/personalLinkedInProfileUrl\(candidate\?\.linkedin_url\)/);
+assert.match(contactView,/Profil candidat issu d'une recherche publique/);
+assert.match(contactView,/relevance_score \|\| 0\) >= 85/);
 const growthPage = readFileSync(new URL("../app/growth/page.js",import.meta.url),"utf8");
 const publicView = readFileSync(new URL("../app/growth/PublicOverview.js",import.meta.url),"utf8");
 const privateView = readFileSync(new URL("../app/growth/ControlTower.js",import.meta.url),"utf8");
