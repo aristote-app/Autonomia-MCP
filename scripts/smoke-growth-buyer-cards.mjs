@@ -21,19 +21,19 @@ assert.equal(jobs.name,"Natalia Bekaley");
 assert.equal(jobs.intent,"EXPERTS");
 
 const intermediary = recommendDecisionMaker({company:"G2F Conseil",title:"AI Engineer"},{now});
-assert.equal(intermediary.kind,"role_search");
+assert.equal(intermediary.kind,"no_identified_profile");
 assert.equal(intermediary.name,undefined);
-assert.ok(intermediary.searchUrl.includes("linkedin.com/search/results/people/"));
+assert.equal(intermediary.searchUrl,undefined);
 
 const noEvidence = recommendDecisionMaker({company:"Une PME inconnue",title:"Copilot formation"},{now});
-assert.equal(noEvidence.kind,"role_search");
+assert.equal(noEvidence.kind,"no_identified_profile");
 assert.equal(noEvidence.targetRole,"Responsable formation / L&D");
-assert.ok(decodeURIComponent(noEvidence.searchUrl).includes("Une PME inconnue"));
+assert.equal(noEvidence.searchUrl,undefined);
 assert.equal(intentForSignal({title:"Automatisation des processus RPA"}),"BUILD");
 assert.equal(wantedRoleForIntent("BUILD"),"DSI / Responsable transformation");
 
 const stale = recommendDecisionMaker({company:"BEFORMA",title:"Formation IA"},{now:Date.parse("2026-12-20T12:00:00Z")});
-assert.equal(stale.kind,"role_search","stale professional roles must not be advertised as confirmed contacts");
+assert.equal(stale.kind,"no_identified_profile","stale professional roles must not be advertised as confirmed contacts");
 
 const malicious = recommendDecisionMaker({company:"Entreprise",title:"AI Engineer"},{
   now,
@@ -43,7 +43,7 @@ const malicious = recommendDecisionMaker({company:"Entreprise",title:"AI Enginee
     email:"person@example.org",phone:"0600000000",password:"secret"
   })
 });
-assert.equal(malicious.kind,"role_search");
+assert.equal(malicious.kind,"no_identified_profile");
 assert.ok(!JSON.stringify(malicious).includes("example.org/role"));
 assert.ok(!JSON.stringify(malicious).includes("0600000000"));
 
@@ -63,6 +63,17 @@ assert.match(growthPage,/signals=\{enrichPublicSignalsWithDecisionMakers\(public
 assert.match(growthPage,/plays=\{enrichPrivateGrowthPlays\(plays\)\}/);
 assert.match(publicView,/DecisionMakerInJob recommendation=\{s\.decisionMaker\}/);
 assert.match(publicView,/recommendation\.linkedinUrl/);
+assert.ok(!publicView.includes("recommendation.searchUrl"));
+assert.ok(!privateView.includes("source?.searchUrl"));
 assert.match(privateView,/DecisionMakerForPlay play=\{play\}/);
 
-console.log("Growth Home buyer panels: exact employer aliases, public profiles, intermediary exclusion, role fallback, and access separation passed.");
+assert.equal(recommendDecisionMaker({company:"Collective.work",title:"AI Engineer"},{now}).kind,"excluded_intermediary");
+assert.deepEqual(enrichPublicSignalsWithDecisionMakers([
+  {company:"Collective.work",title:"AI Engineer",sourceUrl:"https://fr.linkedin.com/jobs/view/123"},
+  {company:"Akanea",title:"AI Engineer"}
+],{now}).map(s=>s.company),["Akanea"]);
+assert.deepEqual(enrichPrivateGrowthPlays([
+  {company:"Collective.work",offer:"EXPERTS"}, {company:"BEFORMA",offer:"ACADEMY"}
+],{now}).map(p=>p.company),["BEFORMA"]);
+assert.equal(JSON.stringify(noEvidence).includes("search/results/people"),false);
+console.log("Growth buyer panels: personal LinkedIn only; intermediary suppression; safe missing-person state.");
