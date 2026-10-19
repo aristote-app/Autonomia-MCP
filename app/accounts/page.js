@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AccountContacts from "../../lib/ui/AccountContacts.js";
+import { isExcludedCommercialCompany } from "../../lib/intelligence/commercialLeadPolicy.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 
@@ -19,7 +20,12 @@ export default async function AccountsPage() {
     ? await loadAccountIntelligence({ limit: 150 }).catch(() => null)
     : null;
 
-  const accounts = live?.accounts || [];
+  // This is the direct-client prospecting view; known intermediaries stay out.
+  const accounts = (live?.accounts || []).filter(account =>
+    !account.intermediary_risk &&
+    account.account_type !== "intermediary" &&
+    !isExcludedCommercialCompany(account.name)
+  );
 
   return (
     <main>
