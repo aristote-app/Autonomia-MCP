@@ -33,3 +33,28 @@
 @media(max-width:1030px){.bodyGrid{grid-template-columns:1fr}.aside{grid-template-columns:repeat(2,minmax(0,1fr))}.heroGrid{grid-template-columns:minmax(0,1fr) minmax(190px,.6fr)}}
 @media(max-width:700px){.page{padding:14px 12px 40px}.hero{padding:23px 20px;border-radius:20px}.heroGrid{grid-template-columns:1fr;gap:23px}.hero h1{font-size:clamp(39px,10vw,59px)}.heroBubble{min-height:auto}.heroBubble strong{font-size:63px}.ribbon{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metrics article{padding:14px}.metrics strong{font-size:33px}.aside{grid-template-columns:1fr}.sourceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.sectionHead{align-items:start;flex-direction:column}.footer{flex-direction:column;padding:23px}.footerLinks{width:100%}.bottom{flex-direction:column;gap:5px}}
 @media(max-width:450px){.sourceGrid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}.job{padding:15px}}
+
+
+/* Decision-maker intelligence — compact, readable directly inside each job card. */
+.decisionCard,.decisionCardPending{border-radius:13px;padding:14px 15px;margin:15px 0 17px;display:grid;gap:11px}
+.decisionCard{border:1px solid #b6e2d8;background:linear-gradient(120deg,#effbf7 0%,#f6fdfb 100%)}
+.decisionCardPending{border:1px solid #e4d9f6;background:linear-gradient(120deg,#faf7ff 0%,#f8faff 100%)}
+.decisionTop{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}
+.decisionEyebrow{font-size:10px;font-weight:900;letter-spacing:.1em;color:#236e80}
+.decisionReviewed,.decisionNotFound{font-size:9px;font-weight:850;border-radius:100px;padding:6px 9px}
+.decisionReviewed{background:#d7f5e8;color:#117657}
+.decisionNotFound{background:#ede5fc;color:#7652a6}
+.decisionIdentity{display:flex;align-items:center;gap:11px;min-width:0}
+.decisionAvatar,.decisionAvatarPending{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:13px;font-size:13px;font-weight:900}
+.decisionAvatar{background:#137f70;color:white;box-shadow:0 4px 12px #137f7031}
+.decisionAvatarPending{background:#e6d8fa;color:#7546ac;font-size:24px}
+.decisionIdentity>div{min-width:0;display:grid;gap:5px}
+.decisionIdentity strong{font-size:15px;color:#123652;letter-spacing:-.02em;overflow-wrap:anywhere}
+.decisionIdentity p{font-size:11px;color:#57778a;line-height:1.4;margin:0}
+.decisionNotice{margin:0;color:#52766c;font-size:10px;line-height:1.5}
+.decisionLinks{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.decisionPrimary{display:inline-flex;align-items:center;justify-content:center;min-height:35px;padding:9px 12px;background:#153e5d;color:white!important;border-radius:9px;font-size:11px;font-weight:850;transition:background .15s ease}
+.decisionPrimary:hover{background:#20628a}
+.decisionSecondary{display:inline-flex;min-height:35px;align-items:center;color:#126f82!important;font-size:11px;font-weight:800;padding:8px}
+@media(max-width:450px){.decisionCard,.decisionCardPending{padding:12px}.decisionPrimary{width:100%}.decisionLinks{align-items:stretch;flex-direction:column}.decisionSecondary{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.decisionPrimary{transition:none}}
