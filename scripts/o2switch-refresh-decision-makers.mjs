@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { loadAccountIntelligence } from "../lib/db/accountIntelligence.js";
 import { discoverDecisionMakers } from "../lib/collectors/decisionMakers.js";
 import { getReviewedDecisionMaker } from "../lib/intelligence/reviewedDecisionMakers.js";
+import { isExcludedCommercialCompany } from "../lib/intelligence/commercialLeadPolicy.js";
 import { decisionCompanyKey, readDecisionMakerSnapshot, writeDecisionMakerSnapshot } from "../lib/intelligence/decisionMakerSnapshot.js";
 
 // Runs only on the server cron. Visiting a public page never spends search quota.
@@ -17,7 +18,7 @@ async function refresh() {
   }
   const { accounts } = await loadAccountIntelligence({ limit: 500 });
   const eligible = accounts.filter((account) => {
-    if (account.intermediary_risk || getReviewedDecisionMaker(account.name)) return false;
+    if (account.intermediary_risk || account.account_type === "intermediary" || isExcludedCommercialCompany(account.name) || getReviewedDecisionMaker(account.name)) return false;
     const key = decisionCompanyKey(account.name);
     if (!key || /non identifie|a identifier/.test(key)) return false;
     const previous = snapshot.accounts[key];
