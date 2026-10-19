@@ -21,6 +21,8 @@ const items=[
   job(),
   job({id:"OTHER-UUID",source_id:"indeed",source_url:"https://fr.indeed.com/viewjob?jk=aaa"}),
   job({company_name:"Capgemini",title:"AI Engineer",source_url:"https://fr.linkedin.com/jobs/view/ai-engineer-12"}),
+  job({company_name:"Collective.work",title:"AI Engineer",source_url:"https://fr.linkedin.com/jobs/view/ai-engineer-123"}),
+  job({company_name:"Collective Work",title:"Head of AI",source_url:"https://fr.linkedin.com/jobs/view/head-of-ai-124"}),
   job({company_name:"Cabinet de recrutement",title:"Data Scientist"}),
   job({company_name:"Agence Innovante",title:"LLM Engineer",source_url:"https://evil.example.com/bad"}),
   job({company_name:"Entreprise Sans Preuve",title:"Data scientist",raw_payload:{direct_employer_evidence:false}}),
@@ -33,6 +35,7 @@ assert.equal(result[0].company,"Atelier Industriel");
 assert.equal(result[1].company,"Fabrique Durable");
 assert.deepEqual(Object.keys(result[0]).sort(),["company","employerStatus","id","publishedAt","sourceId","sourceUrl","title"].sort());
 assert.equal(JSON.stringify(result).includes("secret@example.org"),false);
+assert.ok(!result.some(row=>/collective[.\\s-]*work/i.test(row.company)),"Collective.work is never a final client lead");
 const proxy=readFileSync(new URL("../proxy.js",import.meta.url),"utf8");
 assert.match(proxy,/pathname === "\/growth"/);
 assert.doesNotMatch(proxy,/pathname\.startsWith\("\/accounts"\)/);
