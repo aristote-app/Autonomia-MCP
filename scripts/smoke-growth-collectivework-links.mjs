@@ -12,6 +12,11 @@ for(const company of ["Collective.work","Collective Work","COLLECTIVE-WORK","col
 }
 assert.equal(isExcludedCommercialCompany("Collective Studio"),false);
 assert.equal(isExcludedCommercialCompany("Atelier Industriel"),false);
+for(const platform of ["DIRECTEMPLOI","INDEED","TALENTS_HANDICAP"]) assert.equal(isExcludedCommercialCompany(platform),true);
+const accountsPage=readFileSync(new URL("../app/accounts/page.js",import.meta.url),"utf8");
+assert.match(accountsPage,/isExcludedCommercialCompany\(account\.name\)/);
+const cron=readFileSync(new URL("./o2switch-refresh-decision-makers.mjs",import.meta.url),"utf8");
+assert.match(cron,/isExcludedCommercialCompany\(account\.name\)/);
 
 const normalized=normalizeJobSearchResult({
   sourceId:"linkedin",query:'site:linkedin.com/jobs/view "AI Engineer" France',
