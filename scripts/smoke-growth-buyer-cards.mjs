@@ -60,7 +60,7 @@ const indexPublic = growthPage.indexOf("if (!authorized || !hasAutonomiaDatabase
 const indexPrivate = growthPage.indexOf("const workspaceId");
 assert.ok(indexPublic>0 && indexPublic<indexPrivate);
 assert.match(growthPage,/signals=\{enrichPublicSignalsWithDecisionMakers\(publicHiringSignals/);
-assert.match(growthPage,/plays=\{enrichPrivateGrowthPlays\(plays\)\}/);
+assert.match(growthPage,/plays=\{enrichPrivateGrowthPlays\(plays, \{snapshot:decisionSnapshot\}\)\}/);
 assert.match(publicView,/DecisionMakerInJob recommendation=\{s\.decisionMaker\}/);
 assert.match(publicView,/recommendation\.linkedinUrl/);
 assert.ok(!publicView.includes("recommendation.searchUrl"));
