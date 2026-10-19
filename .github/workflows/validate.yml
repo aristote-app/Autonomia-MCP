@@ -88,7 +88,7 @@ jobs:
         run: npm run smoke:growth
       - name: Smoke test Collective.work exclusion and personal LinkedIn links
         run: node scripts/smoke-growth-collectivework-links.mjs
-      - name: Smoke test inline Growth decision maker panels
+      - name: Smoke test searched decision-maker candidates\n        run: node scripts/smoke-growth-candidate-snapshot.mjs\n      - name: Smoke test inline Growth decision maker panels
         run: node scripts/smoke-growth-buyer-cards.mjs
       - name: Smoke test public Growth access and lead redaction
         run: node scripts/smoke-public-growth.mjs
