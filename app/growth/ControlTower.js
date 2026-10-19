@@ -55,13 +55,14 @@ function DecisionMakerForPlay({ play }) {
   const source = play.reviewedDecisionMaker;
   const crmProfile = Boolean(play.contactName && play.linkedIn && /^https:\/\/www\.linkedin\.com\/in\/[^/?#]+\/?$/i.test(play.linkedIn));
   const namedSource = !crmProfile && source?.kind === "named_public_contact";
-  const identified = crmProfile || namedSource;
-  const name = crmProfile ? play.contactName : namedSource ? source.name : "Décideur non identifié";
-  const role = crmProfile ? play.contactRole : namedSource ? source.role : "Fonction cible : " + (source?.targetRole || "Direction IA / formation");
-  const linkedin = crmProfile ? play.linkedIn : namedSource ? source.linkedinUrl : null;
+  const searchCandidate = !crmProfile && !namedSource && source?.kind === "search_candidate";
+  const identified = crmProfile || namedSource || searchCandidate;
+  const name = crmProfile ? play.contactName : identified ? source.name : "Décideur non identifié";
+  const role = crmProfile ? play.contactRole : identified ? source.role : "Fonction cible : " + (source?.targetRole || "Direction IA / formation");
+  const linkedin = crmProfile ? play.linkedIn : identified ? source.linkedinUrl : null;
   const label = crmProfile
     ? (play.contactVerification === "verified" ? "Contact validé" : "Profil à confirmer")
-    : namedSource ? "Profil personnel identifié" : "Aucun contact vérifié";
+    : namedSource ? "Profil professionnel documenté" : searchCandidate ? "Profil à confirmer" : "Aucun contact vérifié";
   const color = crmProfile && play.contactVerification === "verified" ? "green" : identified ? "blue" : "amber";
   const initials = identified ? String(name).split(/\s+/).slice(0,2).map(w => w[0] || "").join("").toUpperCase() : "◎";
   return <div className={styles.decisionMakerBox}>
