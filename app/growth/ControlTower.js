@@ -56,12 +56,12 @@ function DecisionMakerForPlay({ play }) {
   const crmProfile = Boolean(play.contactName && play.linkedIn);
   const namedSource = !crmProfile && source?.kind === "named_public_contact";
   const identified = crmProfile || namedSource;
-  const name = crmProfile ? play.contactName : namedSource ? source.name : source?.targetRole || "Head of AI / Responsable formation";
-  const role = crmProfile ? play.contactRole : namedSource ? source.role : "Fonction cible, personne à identifier";
-  const linkedin = crmProfile ? play.linkedIn : namedSource ? source.linkedinUrl : source?.searchUrl || null;
+  const name = crmProfile ? play.contactName : namedSource ? source.name : "Décideur à identifier";
+  const role = crmProfile ? play.contactRole : namedSource ? source.role : "Fonction cible : " + (source?.targetRole || "Direction IA / formation");
+  const linkedin = crmProfile ? play.linkedIn : namedSource ? source.linkedinUrl : null;
   const label = crmProfile
     ? (play.contactVerification === "verified" ? "Contact validé" : "Profil à confirmer")
-    : namedSource ? "Profil public recensé" : "Recherche préparée";
+    : namedSource ? "Profil personnel identifié" : "Aucun contact vérifié";
   const color = crmProfile && play.contactVerification === "verified" ? "green" : identified ? "blue" : "amber";
   const initials = identified ? String(name).split(/\s+/).slice(0,2).map(w => w[0] || "").join("").toUpperCase() : "◎";
   return <div className={styles.decisionMakerBox}>
@@ -77,11 +77,11 @@ function DecisionMakerForPlay({ play }) {
       ? (play.contactVerification === "verified" && crmProfile
         ? "Profil confirmé dans le cockpit ; vérifie le contexte de ce besoin avant d'écrire."
         : "Fonction ou profil repéré ; vérifie son implication dans ce besoin avant de contacter.")
-      : "Le profil nominatif reste à identifier. La recherche LinkedIn est préparée pour cette entreprise."}
+      : "Aucun profil individuel sourcé : la recherche automatique doit encore identifier le bon interlocuteur."}
     </p>
     <div className={styles.dmActions}>
       {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.dmPrimary}>
-        {identified ? "Voir son LinkedIn ↗" : "Chercher sur LinkedIn ↗"}
+        Voir son LinkedIn ↗
       </a>}
       {namedSource && source?.sourceUrl && <a href={source.sourceUrl} target="_blank" rel="noopener noreferrer" className={styles.dmSecondary}>Source professionnelle ↗</a>}
     </div>
