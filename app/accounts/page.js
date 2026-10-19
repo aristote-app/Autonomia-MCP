@@ -4,6 +4,7 @@ import { isExcludedCommercialCompany } from "../../lib/intelligence/commercialLe
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 import { readDecisionMakerSnapshot, getSnapshotCandidate } from "../../lib/intelligence/decisionMakerSnapshot.js";
+import { getReviewedDecisionMaker, getReviewedOpportunityDecisionMaker } from "../../lib/intelligence/reviewedDecisionMakers.js";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,18 @@ export default async function AccountsPage() {
     !isExcludedCommercialCompany(account.name)
   );
 
-  const candidateCount = accounts.filter(account => getSnapshotCandidate(decisionSnapshot, account.name)?.relevance_score >= 85).length;
+  const reviewedAccount = account => Boolean(
+    getReviewedDecisionMaker(account.name) ||
+    (account.timeline || []).some(event =>
+      getReviewedOpportunityDecisionMaker(event.company_name || account.name, event.id)
+    )
+  );
+  const reviewedCount = accounts.filter(reviewedAccount).length;
+  const candidateCount = accounts.filter(account =>
+    !reviewedAccount(account) &&
+    Boolean(getSnapshotCandidate(decisionSnapshot, account.name, { minScore: 85 }))
+  ).length;
+  const missingCount = accounts.length - reviewedCount - candidateCount;
 
   return (
     <main>
@@ -48,7 +60,7 @@ export default async function AccountsPage() {
         </div>
         <div className="accountHeroMetric">
           <strong>{accounts.length}</strong>
-          <span>comptes ciblés · {candidateCount} profils candidats repérés</span>
+          <span>comptes ciblés · {reviewedCount} contacts documentés · {candidateCount} profils candidats · {missingCount} à identifier</span>
         </div>
       </header>
 

@@ -29,6 +29,16 @@ assert.equal(getSnapshotCandidate(snapshot, "Societe AB", { now }), null);
 assert.equal(getSnapshotCandidate(snapshot, "Societe A", { now: now + 15 * 86400000 }), null);
 snapshot.accounts[key].candidates[0].linkedin_url = "https://evil.example/in/test-person";
 assert.equal(getSnapshotCandidate(snapshot, "Societe A", { now }), null);
+const rankingSnapshot={version:1,accounts:{[key]:{
+  checkedAt:"2026-10-12",candidates:[
+    {name_guess:"Candidate faible",linkedin_url:"https://fr.linkedin.com/in/faible",relevance_score:55},
+    {name_guess:"Candidate fort",linkedin_url:"https://fr.linkedin.com/in/fort",relevance_score:93},
+    {name_guess:"Faux profil",linkedin_url:"https://linkedin.com.evil.example/in/faux",relevance_score:100}
+  ]
+}}};
+assert.equal(getSnapshotCandidate(rankingSnapshot,"Société A",{now,minScore:85}).name_guess,"Candidate fort");
+assert.equal(getSnapshotCandidate(rankingSnapshot,"Société A",{now,minScore:95}),null);
+assert.equal(getSnapshotCandidate(rankingSnapshot,"Société A",{now:Date.parse("2026-10-11")}),null,"future checks must never be treated as historical evidence");
 console.log("Decision-maker matching, contact status, freshness and URL checks passed.");
 
 assert.equal(getReviewedOpportunityDecisionMaker("DIRECTEMPLOI", "65e482a2-7be2-428c-8f21-6c0dab3c85d9", { now }).name, "Gérard Réus");
