@@ -63,6 +63,10 @@ assert.equal(sourceBacked[0].id,"foo");
 const privateCards = enrichPrivateGrowthPlays([{company:"BEFORMA",offer:"ACADEMY",evidence:{title:"Copilot formation"}}],{now});
 assert.equal(privateCards[0].reviewedDecisionMaker.name,"Marine Roche");
 
+const fallbackContact = readFileSync(new URL("../lib/ui/DecisionMaker.js",import.meta.url),"utf8");
+assert.match(fallbackContact,/getSnapshotCandidate\(snapshot, company, \{ minScore: 85 \}\)/);
+assert.match(fallbackContact,/PROFIL CANDIDAT · À VÉRIFIER/);
+assert.match(fallbackContact,/personalLinkedInProfileUrl\(contact.linkedin\)/);
 const accountView = readFileSync(new URL("../app/accounts/page.js",import.meta.url),"utf8");
 const contactView = readFileSync(new URL("../lib/ui/AccountContacts.js",import.meta.url),"utf8");
 assert.match(accountView,/decisionSnapshot=\{decisionSnapshot\}/);
