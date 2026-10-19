@@ -35,7 +35,7 @@ assert.equal(result[0].company,"Atelier Industriel");
 assert.equal(result[1].company,"Fabrique Durable");
 assert.deepEqual(Object.keys(result[0]).sort(),["company","employerStatus","id","publishedAt","sourceId","sourceUrl","title"].sort());
 assert.equal(JSON.stringify(result).includes("secret@example.org"),false);
-assert.ok(!result.some(row=>/collective[.\\s-]*work/i.test(row.company)),"Collective.work is never a final client lead");
+assert.ok(!result.some(row=>/collective[.\s-]*work/i.test(row.company)),"Collective.work is never a final client lead");
 const proxy=readFileSync(new URL("../proxy.js",import.meta.url),"utf8");
 assert.match(proxy,/pathname === "\/growth"/);
 assert.doesNotMatch(proxy,/pathname\.startsWith\("\/accounts"\)/);
