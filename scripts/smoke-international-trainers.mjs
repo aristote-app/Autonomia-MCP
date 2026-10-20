@@ -13,4 +13,5 @@ assert.equal(x.rawPayload.target_country,"CH");
 assert.equal(x.rawPayload.training_delivery,"distanciel_mentionne");
 assert.equal(normalizeWebDemandResult(swiss,{title:"Formateur IA Suisse",description:"Formateur indépendant disponible",url:"https://www.linkedin.com/posts/example_234"}),null);
 assert.equal(normalizeWebDemandResult(swiss,{title:"Recherche formateur IA",description:"Besoin français",url:"https://example.org/jobs/3"}),null);
+assert.equal(WEB_DEMAND_QUERY_SPECS.filter(x=>x.kind==="training_general").length,6);
 console.log("International francophone trainer demand discovery: OK");
