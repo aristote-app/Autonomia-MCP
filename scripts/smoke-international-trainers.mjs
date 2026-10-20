@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import { WEB_DEMAND_QUERY_SPECS, normalizeWebDemandResult } from "../lib/collectors/webDemandDiscovery.js";
+const specs=WEB_DEMAND_QUERY_SPECS.filter(x=>x.kind==="training_international");
+assert.equal(specs.length,6);
+assert.deepEqual([...new Set(specs.map(x=>x.targetCountry))].sort(),["BE","CA","CH"]);
+for(const spec of specs) assert.match(spec.query,/formateur|formatrice/i);
+const swiss=specs.find(x=>x.targetCountry==="CH"&&x.sourceId==="linkedin_training_post");
+const x=normalizeWebDemandResult(swiss,{title:"Recherche formateur français IA en Suisse",description:"Besoin formateur francophone pour mission en distanciel",url:"https://www.linkedin.com/posts/example_123"});
+assert.ok(x);
+assert.ok(x.signalKeys.includes("international_francophone_trainer_demand"));
+assert.ok(x.signalKeys.includes("training_country_ch"));
+assert.equal(x.rawPayload.target_country,"CH");
+assert.equal(x.rawPayload.training_delivery,"distanciel_mentionne");
+assert.equal(normalizeWebDemandResult(swiss,{title:"Formateur IA Suisse",description:"Formateur indépendant disponible",url:"https://www.linkedin.com/posts/example_234"}),null);
+assert.equal(normalizeWebDemandResult(swiss,{title:"Recherche formateur IA",description:"Besoin français",url:"https://example.org/jobs/3"}),null);
+console.log("International francophone trainer demand discovery: OK");
