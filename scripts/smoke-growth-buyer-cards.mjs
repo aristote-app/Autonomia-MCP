@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { buildHistoricalGrowthArchive } from "../lib/intelligence/historicalGrowthArchive.js";
+import { isOutsideFranceTarget } from "../lib/intelligence/franceCommercialScope.js";
 import { readFileSync } from "node:fs";
 import {
   recommendDecisionMaker, intentForSignal, enrichPublicSignalsWithDecisionMakers,
@@ -130,4 +132,19 @@ assert.match(candidate.status,/confirmer/);
 assert.equal(recommendDecisionMaker({company:"Collective.work"},{now,snapshot,lookup:()=>null}).kind,"excluded_intermediary");
 const invalidSnapshot={version:1,accounts:{"entreprise cible":{...snapshot.accounts["entreprise cible"],candidates:[{name_guess:"Someone",linkedin_url:"https://www.linkedin.com/search/results/people/?keywords=ia",relevance_score:100}]}}};
 assert.equal(recommendDecisionMaker({company:"Entreprise Cible"},{now,snapshot:invalidSnapshot,lookup:()=>null}).kind,"no_identified_profile");
+const archive=buildHistoricalGrowthArchive();
+assert.ok(archive.records >= 65,"Preserve previously reviewed ad and company contacts");
+assert.ok(archive.opportunityLinks >= 50,"Keep opportunity-specific evidence IDs");
+assert.ok(archive.uniqueProfiles >= 40,"Retain distinct LinkedIn identities");
+assert.equal(new Set(archive.people.map(p=>p.linkedinUrl).filter(Boolean)).size,archive.uniqueProfiles);
+assert.ok(archive.people.some(p=>p.company === "TEOLIA CONSULTING" && p.opportunityIds.length>0),"Preserve old opportunity mapping");
+assert.ok(archive.people.some(p=>p.scope==="intermediaire"),"Do not erase intermediaries from history");
+for (const company of ["Bending Spoons","WKO Inhouse GmbH der Wirtschaftskammern Österreichs - Bereich WKO-IT","Sikt - Kunnskapssektorens tjenesteleverandør","Iarnród Éireann-Irish Rail","Eurojust","AS Vinmonopolet"]) assert.equal(isOutsideFranceTarget(company),true,company);
+assert.equal(isOutsideFranceTarget("Ville de Lyon"),false);
+assert.equal(recommendDecisionMaker({company:"Bending Spoons"},{now}).kind,"excluded_intermediary");
+assert.deepEqual(enrichPublicSignalsWithDecisionMakers([{company:"Bending Spoons"},{company:"Akanea",title:"AI Engineer"}],{now}).map(x=>x.company),["Akanea"]);
+assert.match(growthPage,/buildHistoricalGrowthArchive/);
+assert.match(publicView,/growth\/historique/);
+assert.match(privateView,/growth\/historique/);
+assert.match(accountView,/isOutsideFranceTarget\(account.name\)/);
 console.log("Growth buyer panels: personal LinkedIn only; intermediary suppression; safe missing-person state.");

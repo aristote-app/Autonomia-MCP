@@ -12,6 +12,7 @@ import PublicOverview from "./PublicOverview.js";
 import { publicHiringSignals, PUBLIC_HIRING_SOURCE_IDS } from "../../lib/intelligence/publicGrowth.js";
 import { enrichPublicSignalsWithDecisionMakers, enrichPrivateGrowthPlays } from "../../lib/intelligence/growthDecisionTargets.js";
 import { readDecisionMakerSnapshot } from "../../lib/intelligence/decisionMakerSnapshot.js";
+import { buildHistoricalGrowthArchive } from "../../lib/intelligence/historicalGrowthArchive.js";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -53,6 +54,7 @@ function sourceActivity(rows) {
 }
 
 export default async function GrowthPage() {
+  const historical = buildHistoricalGrowthArchive();
   const [context, decisionSnapshot] = await Promise.all([
     getCurrentWorkspaceMembership().catch(() => null),
     readDecisionMakerSnapshot().catch(() => ({ version:1, accounts:{} }))
@@ -71,6 +73,7 @@ export default async function GrowthPage() {
       : { items: [] };
     const publicRows = publicResult.items || [];
     return <PublicOverview
+      historical={{records:historical.records,uniqueProfiles:historical.uniqueProfiles,opportunityLinks:historical.opportunityLinks}}
       signals={enrichPublicSignalsWithDecisionMakers(publicHiringSignals(publicRows, { limit: 16 }), {snapshot:decisionSnapshot})}
       sources={sourceActivity(publicRows)}
       updatedAt={new Date().toISOString()}
@@ -97,6 +100,7 @@ export default async function GrowthPage() {
   const plays = buildGrowthPlays({ accounts, contacts, waalaxyReady: ready.waalaxy, limit: 400 });
 
   return <ControlTower
+    historical={{records:historical.records,uniqueProfiles:historical.uniqueProfiles,opportunityLinks:historical.opportunityLinks}}
     overview={growthStats({ accounts, contacts, inbound })}
     plays={enrichPrivateGrowthPlays(plays, {snapshot:decisionSnapshot})}
     signalCount={(jobData.items || []).length}

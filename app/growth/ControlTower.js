@@ -123,7 +123,7 @@ function PlayCard({ play, onCopy, copied }) {
   </article>;
 }
 
-export default function ControlTower({ overview, plays, signalCount, sources, connections, healthRuns = [], generatedAt }) {
+export default function ControlTower({ overview, plays, signalCount, sources, connections, healthRuns = [], generatedAt, historical=null }) {
   const [offer, setOffer] = useState("all");
   const [view, setView] = useState("needs");
   const [search, setSearch] = useState("");
@@ -155,6 +155,11 @@ export default function ControlTower({ overview, plays, signalCount, sources, co
   }
 
   return <main className={styles.layout}>
+    {historical && <section aria-label="Base historique retrouvée" style={{padding:20,background:"#eef4fa",borderRadius:12,margin:"12px 0 20px",color:"#17253a"}}>
+      <strong>Contacts historiques conservés : {historical.records} fiches, {historical.uniqueProfiles} profils LinkedIn distincts et {historical.opportunityLinks} références d'annonces.</strong>
+      <p>Ce patrimoine de prospection reste distinct du pipeline actif. Les sources d'origine et les intermédiaires sont identifiés.</p>
+      <Link href="/growth/historique">Explorer les fiches historiques ↗</Link>
+    </section>}
     <header className={styles.hero}>
       <div className={styles.topline}><span className={styles.toplineDot}/><span>GROWTH INTELLIGENCE</span><span className={styles.toplineSeparator}>/</span><span>COCKPIT AUTONOMIA</span></div>
       <div className={styles.heroGrid}>

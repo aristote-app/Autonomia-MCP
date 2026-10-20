@@ -57,9 +57,14 @@ function dateFR(value) {
   return new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", day:"numeric", month:"short", year:"numeric" }).format(date);
 }
 
-export default function PublicOverview({ signals=[], sources=[], updatedAt }) {
+export default function PublicOverview({ signals=[], sources=[], updatedAt, historical=null }) {
   const withData=sources.filter(s=>s.count>0);
   return <main className={styles.page}>
+    {historical && <section aria-label="Contacts historiques" style={{padding:20,background:"#f1f5f9",borderRadius:12,margin:"12px 0 20px",color:"#17253a"}}>
+      <strong>Base historique conservée : {historical.records} fiches sources, {historical.uniqueProfiles} profils LinkedIn uniques et {historical.opportunityLinks} références d'annonces</strong>
+      <p>Ces contacts ne sont pas nécessairement les décideurs des besoins actuels.</p>
+      <Link href="/growth/historique">Voir les contacts historiques et leurs sources ↗</Link>
+    </section>}
     <header className={styles.hero}>
       <div className={styles.eyebrow}><span className={styles.liveDot}/> AUTONOMIA · GROWTH INTELLIGENCE</div>
       <div className={styles.heroGrid}>
