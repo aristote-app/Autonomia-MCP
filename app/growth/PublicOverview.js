@@ -64,7 +64,7 @@ export default function PublicOverview({ signals=[], sources=[], updatedAt, hist
       <strong>Base historique conservée : {historical.records} fiches sources, {historical.uniqueProfiles} profils LinkedIn uniques et {historical.opportunityLinks} références d'annonces</strong>
       <p>Ces contacts ne sont pas nécessairement les décideurs des besoins actuels.</p>
       <Link href="/growth/historique">Voir les contacts historiques et leurs sources ↗</Link>
-    </section>
+    </section>}
     <header className={styles.hero}>
       <div className={styles.eyebrow}><span className={styles.liveDot}/> AUTONOMIA · GROWTH INTELLIGENCE</div>
       <div className={styles.heroGrid}>
