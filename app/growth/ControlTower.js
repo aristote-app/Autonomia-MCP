@@ -159,7 +159,7 @@ export default function ControlTower({ overview, plays, signalCount, sources, co
       <strong>Contacts historiques conservés : {historical.records} fiches, {historical.uniqueProfiles} profils LinkedIn distincts et {historical.opportunityLinks} références d'annonces.</strong>
       <p>Ce patrimoine de prospection reste distinct du pipeline actif. Les sources d'origine et les intermédiaires sont identifiés.</p>
       <Link href="/growth/historique">Explorer les fiches historiques ↗</Link>
-    </section>
+    </section>}
     <header className={styles.hero}>
       <div className={styles.topline}><span className={styles.toplineDot}/><span>GROWTH INTELLIGENCE</span><span className={styles.toplineSeparator}>/</span><span>COCKPIT AUTONOMIA</span></div>
       <div className={styles.heroGrid}>
