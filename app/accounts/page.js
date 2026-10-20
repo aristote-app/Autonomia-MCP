@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AccountContacts from "../../lib/ui/AccountContacts.js";
 import { isExcludedCommercialCompany } from "../../lib/intelligence/commercialLeadPolicy.js";
+import { isOutsideFranceTarget } from "../../lib/intelligence/franceCommercialScope.js";
 import { loadAccountIntelligence } from "../../lib/db/accountIntelligence.js";
 import { hasAutonomiaDatabase } from "../../lib/db/supabase.js";
 import { readDecisionMakerSnapshot, getSnapshotCandidate } from "../../lib/intelligence/decisionMakerSnapshot.js";
@@ -27,7 +28,8 @@ export default async function AccountsPage() {
   const accounts = (live?.accounts || []).filter(account =>
     !account.intermediary_risk &&
     account.account_type !== "intermediary" &&
-    !isExcludedCommercialCompany(account.name)
+    !isExcludedCommercialCompany(account.name) &&
+    !isOutsideFranceTarget(account.name)
   );
 
   const reviewedAccount = account => Boolean(
