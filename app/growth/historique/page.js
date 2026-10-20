@@ -2,6 +2,8 @@ import Link from "next/link";
 import HistoricalArchive from "./HistoricalArchive.js";
 import {buildHistoricalGrowthArchive} from "../../../lib/intelligence/historicalGrowthArchive.js";
 import {getCurrentWorkspaceMembership} from "../../../lib/auth/access.js";
+import {listWorkspaceSalesContacts} from "../../../lib/db/salesContacts.js";
+import {reconcileHistoricalWithCrm} from "../../../lib/intelligence/reconcileHistoricalContacts.js";
 
 export const dynamic="force-dynamic";
 export const metadata={title:"Historique des contacts · AUTONOMIA Growth",robots:{index:false,follow:false}};
@@ -17,5 +19,8 @@ export default async function HistoricalArchivePage(){
       <Link href="/login?next=/growth/historique">Accéder à mon espace privé ↗</Link>
     </main>;
   }
-  return <HistoricalArchive archive={buildHistoricalGrowthArchive()}/>;
+  const crm=await listWorkspaceSalesContacts({workspaceId:context.membership.workspace_id,limit:500}).catch(()=>null);
+  const archive=buildHistoricalGrowthArchive();
+  const merged=crm ? reconcileHistoricalWithCrm(archive,crm) : archive;
+  return <><section style={{padding:"16px 24px",maxWidth:1140,margin:"0 auto"}}><h2>Rapprochement avec le CRM</h2>{merged.reconciliation ? <p>{merged.reconciliation.matched} profils déjà enregistrés dans le CRM, {merged.reconciliation.unlinked} profils historiques absents, {merged.reconciliation.unknown} identités à vérifier. Aucun import automatique.</p> : <p>Comparaison CRM indisponible.</p>}</section><HistoricalArchive archive={merged}/></>;
 }

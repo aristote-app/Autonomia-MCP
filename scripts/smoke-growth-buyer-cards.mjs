@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { buildHistoricalGrowthArchive } from "../lib/intelligence/historicalGrowthArchive.js";
+import { reconcileHistoricalWithCrm } from "../lib/intelligence/reconcileHistoricalContacts.js";
 import { isOutsideFranceTarget } from "../lib/intelligence/franceCommercialScope.js";
 import { readFileSync } from "node:fs";
 import {
@@ -137,6 +138,18 @@ assert.match(historyPage,/getCurrentWorkspaceMembership/);
 assert.match(historyPage,/!context\?\.claims\?\.sub \|\| !context\?\.membership\?\.workspace_id/);
 assert.ok(historyPage.indexOf("getCurrentWorkspaceMembership") < historyPage.indexOf("buildHistoricalGrowthArchive()"));
 const archive=buildHistoricalGrowthArchive();
+const previous=archive.people.find(p=>p.linkedinUrl);
+assert.ok(previous);
+const comparison=reconcileHistoricalWithCrm(archive,[
+  {id:"crm-1",linkedin_url:previous.linkedinUrl,verification_status:"verified",do_not_contact:true},
+  {id:"crm-2",linkedin_url:"https://www.linkedin.com/in/unlisted-crm-profile",verification_status:"candidate"}
+]);
+assert.equal(comparison.reconciliation.matched,1);
+assert.equal(comparison.reconciliation.crmOnly,1);
+assert.equal(comparison.people.find(p=>p.linkedinUrl===previous.linkedinUrl).doNotContact,true);
+assert.equal(comparison.people.find(p=>p.linkedinUrl===previous.linkedinUrl).actionable,false);
+assert.equal(archive.people.find(p=>p.linkedinUrl===previous.linkedinUrl).crmContactId,undefined);
+
 assert.ok(archive.records >= 65,"Preserve previously reviewed ad and company contacts");
 assert.ok(archive.opportunityLinks >= 50,"Keep opportunity-specific evidence IDs");
 assert.ok(archive.uniqueProfiles >= 40,"Retain distinct LinkedIn identities");
