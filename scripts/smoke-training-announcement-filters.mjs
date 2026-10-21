@@ -32,3 +32,7 @@ assert.equal(fromSignal({...ft,raw_payload:{...ft.raw_payload,type_contrat:"CDI"
 assert.equal(fromSignal({...ft,title:"Business developer IA",raw_payload:{description:"vente de formation freelance"}}),null);
 assert.equal(fromSignal({...ft,source_url:"https://evil.example/annonce"}),null);
 console.log("Training signals: France Travail freelance admitted, salaried and non-trainer roles excluded");
+
+assert.equal(fromSignal({...ft,company_name:"Collective.work"}),null);
+assert.equal(fromSignal({...ft,company_name:"Capgemini"}),null);
+assert.ok(fromSignal({...ft,company_name:"Organisme de formation X"}));
