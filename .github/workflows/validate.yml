@@ -104,6 +104,8 @@ jobs:
         run: npm run smoke:inbound
       - name: Smoke test international francophone trainer demand
         run: node scripts/smoke-international-trainers.mjs
+      - name: Smoke test Academy announcement filters
+        run: node scripts/smoke-training-announcement-filters.mjs
       - name: Smoke test sourced training buyers and proposals
         run: node scripts/smoke-trainer-buyers.mjs
       - name: Smoke test Brave search budget
