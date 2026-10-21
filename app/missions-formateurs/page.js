@@ -2,6 +2,7 @@ import Link from "next/link";
 import {searchJobSignals} from "../../lib/db/jobSignals.js";
 import {hasAutonomiaDatabase} from "../../lib/db/supabase.js";
 import {TRAINER_BUYERS} from "../../lib/training/trainerBuyerIntelligence.js";
+import {EXPANDED_TRAINER_BUYERS} from "../../lib/training/expandedTrainerBuyers.js";
 import BuyerWorkbench from "./BuyerWorkbench.js";
 
 export const dynamic="force-dynamic";
@@ -39,7 +40,7 @@ export default async function Page() {
   sources:["linkedin","indeed"],signalKey:"trainer_mission_demand",franceOnly:false,limit:500
  }).catch(()=>null):null;
  const incoming=(result?.items||[]).map(fromSignal).filter(Boolean);
- const leads=[...incoming,...TRAINER_BUYERS];
+ const leads=[...incoming,...TRAINER_BUYERS,...EXPANDED_TRAINER_BUYERS];
  return <main style={{maxWidth:1220,margin:"0 auto",padding:"32px 22px 90px",fontFamily:"system-ui,sans-serif"}}>
   <p><Link href="/growth">← Retour à Growth Intelligence</Link></p>
   <p style={{letterSpacing:2,color:"#61708c",fontSize:12}}>AUTONOMIA · ACADEMY · DÉVELOPPEMENT COMMERCIAL</p>
@@ -48,7 +49,7 @@ export default async function Page() {
   <div style={{display:"flex",flexWrap:"wrap",gap:12,margin:"24px 0"}}>
    {[
     [incoming.length,"demandes découvertes automatiquement"],
-    [TRAINER_BUYERS.length,"acheteurs ou interlocuteurs documentés à requalifier"],
+    [TRAINER_BUYERS.length+EXPANDED_TRAINER_BUYERS.length,"fiches acheteurs ou interlocuteurs documentées à requalifier"],
     [Object.keys(COUNTRIES).length,"pays couverts"]
    ].map(([v,label])=><div key={label} style={{padding:18,background:"#f0f4fa",borderRadius:12,minWidth:180}}><strong style={{display:"block",fontSize:25}}>{v}</strong><span>{label}</span></div>)}
   </div>
