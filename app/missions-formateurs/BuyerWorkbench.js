@@ -82,6 +82,7 @@ export default function BuyerWorkbench({leads=[]}){
     {active.contactProfile&&/^https:\/\/(?:fr\.|www\.)?linkedin\.com\/in\//i.test(active.contactProfile)&&<p><a href={active.contactProfile} target="_blank" rel="noopener noreferrer">Profil LinkedIn personnel documenté ↗</a></p>}
     {active.businessPhone&&<p><strong>Téléphone professionnel :</strong> <a href={"tel:"+active.businessPhone.replace(/[^+0-9]/g,"")}>{active.businessPhone}</a> · <a href={active.businessPhoneSource} target="_blank" rel="noopener noreferrer">Source ↗</a></p>}
     {active.businessPhoneType&&<p><small>{active.businessPhoneType}</small></p>}
+    {active.businessEmail&&<p><strong>E-mail professionnel publié :</strong> <a href={"mailto:"+active.businessEmail}>{active.businessEmail}</a></p>}
     {!active.businessPhone&&<p>Téléphone professionnel : non trouvé</p>}
     {active.contactSource&&<p><a href={active.contactSource} target="_blank" rel="noopener noreferrer">Preuve de la fonction et de l’organisme ↗</a></p>}
     <p><strong>Besoin :</strong> {active.need||active.title}</p>
