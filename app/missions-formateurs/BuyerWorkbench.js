@@ -1,6 +1,7 @@
 "use client";
 import {useMemo,useState} from "react";
 import {trainerProposalDraft} from "../../lib/training/trainerBuyerIntelligence.js";
+import {TRAINING_FAMILIES,BUYER_TYPES} from "../../lib/training/trainingLeadFilters.js";
 
 const LABELS={date_a_revalider:"Dates à revalider",a_qualifier:"Besoin à qualifier",pourvu:"Mission annoncée pourvue",historique:"Référence historique",nouveau:"Annonce à vérifier"};
 const THEMES={management:"Management / RH",petite_enfance:"Petite enfance",sante_securite:"Sécurité / SST",bureautique:"Bureautique",langues:"Langues",ia_digital:"IA / numérique"};
@@ -10,10 +11,11 @@ export default function BuyerWorkbench({leads=[]}){
  const [selected,setSelected]=useState(leads[0]?.id||"");
  const [pays,setPays]=useState("TOUS");
  const [topic,setTopic]=useState("TOUS");
+ const [buyerFilter,setBuyerFilter]=useState("TOUS");
  const [fields,setFields]=useState({});
  const [copied,setCopied]=useState(false);
- const filtered=useMemo(()=>leads.filter(l=>(pays==="TOUS"||l.country===pays)&&(topic==="TOUS"||l.theme===topic)),[leads,pays,topic]);
- const active=leads.find(l=>l.id===selected)||filtered[0];
+ const filtered=useMemo(()=>leads.filter(l=>(pays==="TOUS"||l.country===pays)&&(topic==="TOUS"||l.theme===topic)&&(buyerFilter==="TOUS"||l.buyerType===buyerFilter)),[leads,pays,topic,buyerFilter]);
+ const active=filtered.find(l=>l.id===selected)||filtered[0];
  const proposal=active?trainerProposalDraft(active,{contact:fields.contact||"",organisation:fields.organisation||"",dates:fields.dates||"",modalite:fields.modalite||"",tarif:fields.tarif||""}):"";
  const brief=active?[
    "AUTONOMIA Academy — fiche de qualification",
@@ -35,12 +37,14 @@ export default function BuyerWorkbench({leads=[]}){
   <div>
    <div style={{display:"flex",gap:10,marginBottom:14,flexWrap:"wrap"}}>
     <label>Pays<select aria-label="Filtrer par pays" value={pays} onChange={e=>setPays(e.target.value)} style={{display:"block",padding:9}}><option value="TOUS">Tous</option>{Object.entries(GEO).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
-    <label>Secteur<select aria-label="Filtrer par secteur" value={topic} onChange={e=>setTopic(e.target.value)} style={{display:"block",padding:9}}><option value="TOUS">Tous</option>{Object.entries(THEMES).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
+    <label>Secteur<select aria-label="Filtrer par secteur" value={topic} onChange={e=>setTopic(e.target.value)} style={{display:"block",padding:9}}><option value="TOUS">Tous</option>{Object.entries(TRAINING_FAMILIES).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
    </div>
-   <p>{filtered.length} fiches de recherche ou de veille · informations à revalider.</p>
+   <label style={{display:"block",marginBottom:12}}>Type d’acheteur <select aria-label="Type d’acheteur" value={buyerFilter} onChange={e=>{setBuyerFilter(e.target.value);setSelected("");setFields({})}} style={{padding:9,marginLeft:8}}><option value="TOUS">Tous les types</option>{Object.entries(BUYER_TYPES).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
+   <p><button type="button" onClick={()=>{setTopic("ia");setBuyerFilter("TOUS");setSelected("");setFields({})}} style={{padding:"10px 14px",fontWeight:700,border:"1px solid #5068bf",borderRadius:10}}>Voir immédiatement les besoins IA</button></p>
+   <p>{filtered.length} annonces sourcées · <strong>{filtered.filter(l=>l.theme==="ia").length} IA</strong> · {filtered.filter(l=>l.buyerType==="direct").length} acheteurs directs confirmés.</p>
    <div style={{display:"grid",gap:10}}>
    {filtered.map(lead=><button type="button" key={lead.id} onClick={()=>{setSelected(lead.id);setFields({});setCopied(false)}} style={{textAlign:"left",padding:16,background:active?.id===lead.id?"#e9efff":"#fff",border:active?.id===lead.id?"2px solid #365cb9":"1px solid #d3dbe8",borderRadius:12,cursor:"pointer"}}>
-    <small>{GEO[lead.country]||"Pays à vérifier"} · {THEMES[lead.theme]||"Formation"} · {LABELS[lead.state]||"À qualifier"}</small>
+    <small>{GEO[lead.country]||"Pays à vérifier"} · {TRAINING_FAMILIES[lead.theme]||"Formation"} · {BUYER_TYPES[lead.buyerType]||"Acheteur à vérifier"} · {LABELS[lead.state]||"À qualifier"}</small>
     <strong style={{display:"block",margin:"7px 0"}}>{lead.buyer||"Organisme à identifier"}</strong>
     <span>{lead.need||lead.title}</span>
    </button>)}
@@ -50,6 +54,7 @@ export default function BuyerWorkbench({leads=[]}){
    {active?<>
     <h2 style={{fontSize:21,margin:"0 0 8px"}}>Qualification et proposition</h2>
     <p><strong>Acheteur :</strong> {active.buyer}</p>
+    <p><strong>Type d’acheteur :</strong> {BUYER_TYPES[active.buyerType]||"Acheteur à vérifier"} (qualification fondée sur l’annonce)</p>
     <p><strong>Validation :</strong> {active.buyerStatus||"À confirmer"}</p>
     <p><strong>Interlocuteur :</strong> {active.contact||"À rechercher"} — {active.contactRole||"Rôle décisionnaire à vérifier"}</p>
     {active.secondaryContact&&<p><strong>Autre contact :</strong> {active.secondaryContact}</p>}
