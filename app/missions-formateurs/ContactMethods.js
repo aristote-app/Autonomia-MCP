@@ -1,0 +1,1 @@
+export default function ContactMethods({lead}) { return <section><p><strong>Numéro professionnel :</strong> {lead.businessPhone || 'Non trouvé'}</p>{lead.businessPhoneSource && <a href={lead.businessPhoneSource} target="_blank" rel="noopener noreferrer">Source du numéro ↗</a>}</section>; }
