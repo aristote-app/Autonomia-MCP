@@ -11,7 +11,7 @@ export const metadata={title:"Acheteurs et missions formateurs · AUTONOMIA Acad
 const COUNTRIES={FR:"France",CH:"Suisse",BE:"Belgique",CA:"Canada"};
 function safeUrl(v) {
  try {const u=new URL(v);return u.protocol==="https:"&&!u.username&&!u.password&&
- (/(^|\.)linkedin\.com$/.test(u.hostname)||/(^|\.)indeed\.com$/.test(u.hostname))?u.toString():null;}
+ (/(^|\.)linkedin\.com$/.test(u.hostname)||/(^|\.)indeed\.com$/.test(u.hostname)||/(^|\.)codeur\.com$/.test(u.hostname))?u.toString():null;}
  catch{return null;}
 }
 function fromSignal(signal) {
@@ -21,7 +21,7 @@ function fromSignal(signal) {
  const sourceTitle=String(signal.title||"Demande de formateur").slice(0,180);
  const company=String(signal.company_name||"").trim();
  const theme=classifyTrainingFamily([sourceTitle,signal.raw_payload?.search_description||""].join(" "),signal.raw_payload?.training_theme);
- const buyerType=classifyTrainingBuyer({buyer:company,description:signal.raw_payload?.search_description||""});
+ const buyerType=signal.raw_payload?.training_buyer_type==="direct"?"direct":classifyTrainingBuyer({buyer:company,description:signal.raw_payload?.search_description||""});
  return {
   id:"signal-"+signal.id,
   buyer:company||"Organisme acheteur non identifié",
@@ -38,13 +38,13 @@ function fromSignal(signal) {
 
 export default async function Page() {
  const result=hasAutonomiaDatabase()?await searchJobSignals({
-  sources:["linkedin","indeed"],signalKey:"trainer_mission_demand",franceOnly:false,limit:500
+  sources:["linkedin","indeed","codeur_training"],signalKey:"trainer_mission_demand",franceOnly:false,limit:500
  }).catch(()=>null):null;
  const incoming=(result?.items||[]).map(fromSignal).filter(Boolean);
  const reviewed=TRAINER_BUYERS.filter(lead=>lead.source).map(lead=>({
    ...lead,
    theme:classifyTrainingFamily(lead.need||"",lead.theme),
-   buyerType:classifyTrainingBuyer({buyer:lead.buyer,description:lead.evidence||""})
+   buyerType:lead.buyerType||classifyTrainingBuyer({buyer:lead.buyer,description:lead.evidence||""})
  }));
  const leads=[...incoming,...reviewed].sort((a,b)=>rankTrainingLead(b)-rankTrainingLead(a));
  return <main style={{maxWidth:1220,margin:"0 auto",padding:"32px 22px 90px",fontFamily:"system-ui,sans-serif"}}>
