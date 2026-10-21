@@ -10,6 +10,11 @@ for(const lead of TRAINER_BUYERS){
  assert.match(trainerProposalDraft(lead),/AUTONOMIA Academy/);
  assert.ok(!/\b1000 ?€|\b500 ?€/.test(trainerProposalDraft(lead)));
 }
+const verified=TRAINER_BUYERS.find(l=>l.id==="leones-sst-2026");
+assert.equal(verified.contact,"Aurélia Pichon");
+assert.match(verified.contactSource,/leones-formation\.fr/);
+const thot=TRAINER_BUYERS.find(l=>l.id==="thot-disciplina-sst");
+assert.match(thot.contactProfile,/linkedin\.com\/in\//);
 const closed=TRAINER_BUYERS.find(l=>l.state==="pourvu");
 const closedDraft=trainerProposalDraft(closed);
 assert.match(closedDraft,/prochains besoins|prochaines missions/i);

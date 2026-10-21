@@ -52,6 +52,9 @@ export default function BuyerWorkbench({leads=[]}){
     <p><strong>Acheteur :</strong> {active.buyer}</p>
     <p><strong>Validation :</strong> {active.buyerStatus||"À confirmer"}</p>
     <p><strong>Interlocuteur :</strong> {active.contact||"À rechercher"} — {active.contactRole||"Rôle décisionnaire à vérifier"}</p>
+    {active.secondaryContact&&<p><strong>Autre contact :</strong> {active.secondaryContact}</p>}
+    {active.contactProfile&&<p><a href={active.contactProfile} target="_blank" rel="noopener noreferrer">Profil LinkedIn personnel documenté ↗</a></p>}
+    {active.contactSource&&<p><a href={active.contactSource} target="_blank" rel="noopener noreferrer">Preuve de la fonction et de l’organisme ↗</a></p>}
     <p><strong>Besoin :</strong> {active.need||active.title}</p>
     <p><strong>Date :</strong> {active.dates||"À vérifier"} · <strong>Format :</strong> {active.mode||"À confirmer"}</p>
     <p><strong>Action conseillée :</strong> {shortlist(active)}</p>
