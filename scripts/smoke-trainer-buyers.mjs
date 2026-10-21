@@ -4,7 +4,7 @@ import {TRAINER_BUYERS,trainerProposalDraft} from "../lib/training/trainerBuyerI
 
 assert.ok(TRAINER_BUYERS.length>=4);
 for(const lead of TRAINER_BUYERS){
- assert.match(lead.source,/^https:\/\/fr\.linkedin\.com\/(?:posts|company|in)\//);
+ assert.match(lead.source,/^https:\/\/(?:(?:fr\.linkedin\.com\/(?:posts|company|in))|(?:www\.codeur\.com\/projects))\//);
  assert.ok(lead.need&&lead.buyerStatus);
  assert.ok(["FR","CH","BE","CA"].includes(lead.country));
  assert.match(trainerProposalDraft(lead),/AUTONOMIA Academy/);
