@@ -47,13 +47,14 @@ export default function BuyerWorkbench({leads=[]}){
    <label style={{display:"block",marginBottom:12}}>État de l’annonce <select aria-label="État de l’annonce" value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setSelected("");setFields({})}} style={{padding:9,marginLeft:8}}><option value="TOUS">Toutes les annonces</option><option value="recent">À vérifier en priorité</option><option value="archive">Anciennes ou pourvues</option></select></label>
    <p><button type="button" onClick={()=>{setTopic("ia");setBuyerFilter("TOUS");setSelected("");setFields({})}} style={{padding:"10px 14px",fontWeight:700,border:"1px solid #5068bf",borderRadius:10}}>Voir immédiatement les besoins IA</button></p>
    <p>{filtered.length} annonces sourcées · <strong>{filtered.filter(l=>l.theme==="ia").length} IA</strong> · {filtered.filter(l=>l.buyerType==="direct").length} acheteurs directs confirmés.</p>
+   {filtered.length===0&&<p>Aucune annonce trouvée avec ces filtres. Essayez « Tous les types » ou une autre famille.</p>}
    <div style={{display:"grid",gap:10}}>
-   {filtered.map(lead=><button type="button" key={lead.id} onClick={()=>{setSelected(lead.id);setFields({});setCopied(false)}} style={{textAlign:"left",padding:16,background:active?.id===lead.id?"#e9efff":"#fff",border:active?.id===lead.id?"2px solid #365cb9":"1px solid #d3dbe8",borderRadius:12,cursor:"pointer"}}>
+   {filtered.map(lead=><div key={lead.id}><button type="button" onClick={()=>{setSelected(lead.id);setFields({});setCopied(false)}} style={{textAlign:"left",padding:16,background:active?.id===lead.id?"#e9efff":"#fff",border:active?.id===lead.id?"2px solid #365cb9":"1px solid #d3dbe8",borderRadius:12,cursor:"pointer"}}>
     <small>{GEO[lead.country]||"Pays à vérifier"} · {TRAINING_FAMILIES[lead.theme]||"Formation"} · {BUYER_TYPES[lead.buyerType]||"Acheteur à vérifier"} · {LABELS[lead.state]||"À qualifier"}</small>
     <strong style={{display:"block",margin:"7px 0"}}>{lead.buyer||"Organisme à identifier"}</strong>
     <span>{lead.need||lead.title}</span>
     <span style={{display:"block",marginTop:8,fontSize:12,color:"#3d5077"}}>Annonce sourcée · {lead.dates||"Date à confirmer"}</span>
-   </button>)}
+   </button><div style={{padding:"5px 12px 12px"}}><a href={lead.source} target="_blank" rel="noopener noreferrer">Voir l’annonce originale ↗</a></div></div>)}
    </div>
   </div>
   <aside style={{border:"1px solid #d3dbe8",borderRadius:14,padding:20,alignSelf:"start"}}>
