@@ -22,3 +22,13 @@ assert.ok(project.signalKeys.includes("trainer_mission_demand"));
 assert.equal(project.rawPayload.training_buyer_type,"direct");
 assert.equal(project.rawPayload.target_country,"FR");
 console.log("Training announcement filters and direct buyer prioritization OK");
+
+const {fromSignal}=await import("../lib/training/trainingSignals.js");
+const ft={id:"test",source_id:"france_travail_jobs",title:"Formateur Copilot freelance",company_name:"Organisme X",source_url:"https://candidat.francetravail.fr/offres/recherche/detail/TEST",raw_payload:{description:"Formation pour nos clients",type_contrat:"LIB"},published_at:"2026-10-14T12:00:00Z"};
+assert.equal(fromSignal(ft).country,"FR");
+assert.equal(fromSignal(ft).theme,"ia");
+assert.equal(fromSignal(ft).buyerType,"inconnu");
+assert.equal(fromSignal({...ft,raw_payload:{...ft.raw_payload,type_contrat:"CDI"}}),null);
+assert.equal(fromSignal({...ft,title:"Business developer IA",raw_payload:{description:"vente de formation freelance"}}),null);
+assert.equal(fromSignal({...ft,source_url:"https://evil.example/annonce"}),null);
+console.log("Training signals: France Travail freelance admitted, salaried and non-trainer roles excluded");
