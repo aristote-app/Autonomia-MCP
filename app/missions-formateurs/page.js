@@ -17,7 +17,7 @@ export default async function Page() {
   sources:["linkedin","indeed","codeur_training","france_travail_jobs"],signalKey:"training_need",franceOnly:false,limit:500
  }).catch(()=>{discoveryError=true;return null;}):null;
  const incoming=(result?.items||[]).map(fromSignal).filter(Boolean);
- const reviewed=TRAINER_BUYERS.filter(lead=>lead.source).map(lead=>({
+ const reviewed=TRAINER_BUYERS.filter(lead=>/\/(?:posts|projects|jobs\/view)\//.test(lead.source||"")).map(lead=>({
    ...lead,
    theme:classifyTrainingFamily(lead.need||"",lead.theme),
    buyerType:lead.buyerType||classifyTrainingBuyer({buyer:lead.buyer,description:lead.evidence||""})
@@ -34,7 +34,7 @@ export default async function Page() {
   <div style={{display:"flex",flexWrap:"wrap",gap:12,margin:"24px 0"}}>
    {[
     [incoming.length,"demandes découvertes automatiquement"],
-    [TRAINER_BUYERS.length,"acheteurs ou interlocuteurs documentés à requalifier"],
+    [reviewed.length,"annonces documentées à requalifier"],
     [Object.keys(COUNTRIES).length,"pays couverts"]
    ].map(([v,label])=><div key={label} style={{padding:18,background:"#f0f4fa",borderRadius:12,minWidth:180}}><strong style={{display:"block",fontSize:25}}>{v}</strong><span>{label}</span></div>)}
   </div>
