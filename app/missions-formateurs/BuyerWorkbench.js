@@ -12,9 +12,10 @@ export default function BuyerWorkbench({leads=[]}){
  const [pays,setPays]=useState("TOUS");
  const [topic,setTopic]=useState("TOUS");
  const [buyerFilter,setBuyerFilter]=useState("TOUS");
+ const [statusFilter,setStatusFilter]=useState("TOUS");
  const [fields,setFields]=useState({});
  const [copied,setCopied]=useState(false);
- const filtered=useMemo(()=>leads.filter(l=>(pays==="TOUS"||l.country===pays)&&(topic==="TOUS"||l.theme===topic)&&(buyerFilter==="TOUS"||l.buyerType===buyerFilter)),[leads,pays,topic,buyerFilter]);
+ const filtered=useMemo(()=>leads.filter(l=>(pays==="TOUS"||l.country===pays)&&(topic==="TOUS"||l.theme===topic)&&(buyerFilter==="TOUS"||l.buyerType===buyerFilter)&&(statusFilter==="TOUS"||(statusFilter==="recent"&&["nouveau","a_qualifier","date_a_revalider"].includes(l.state))||(statusFilter==="archive"&&["pourvu","historique"].includes(l.state)))),[leads,pays,topic,buyerFilter,statusFilter]);
  const active=filtered.find(l=>l.id===selected)||filtered[0];
  const proposal=active?trainerProposalDraft(active,{contact:fields.contact||"",organisation:fields.organisation||"",dates:fields.dates||"",modalite:fields.modalite||"",tarif:fields.tarif||""}):"";
  const brief=active?[
@@ -40,6 +41,7 @@ export default function BuyerWorkbench({leads=[]}){
     <label>Secteur<select aria-label="Filtrer par secteur" value={topic} onChange={e=>setTopic(e.target.value)} style={{display:"block",padding:9}}><option value="TOUS">Tous</option>{Object.entries(TRAINING_FAMILIES).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
    </div>
    <label style={{display:"block",marginBottom:12}}>Type d’acheteur <select aria-label="Type d’acheteur" value={buyerFilter} onChange={e=>{setBuyerFilter(e.target.value);setSelected("");setFields({})}} style={{padding:9,marginLeft:8}}><option value="TOUS">Tous les types</option>{Object.entries(BUYER_TYPES).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label>
+   <label style={{display:"block",marginBottom:12}}>État de l’annonce <select aria-label="État de l’annonce" value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setSelected("");setFields({})}} style={{padding:9,marginLeft:8}}><option value="TOUS">Toutes les annonces</option><option value="recent">À vérifier en priorité</option><option value="archive">Anciennes ou pourvues</option></select></label>
    <p><button type="button" onClick={()=>{setTopic("ia");setBuyerFilter("TOUS");setSelected("");setFields({})}} style={{padding:"10px 14px",fontWeight:700,border:"1px solid #5068bf",borderRadius:10}}>Voir immédiatement les besoins IA</button></p>
    <p>{filtered.length} annonces sourcées · <strong>{filtered.filter(l=>l.theme==="ia").length} IA</strong> · {filtered.filter(l=>l.buyerType==="direct").length} acheteurs directs confirmés.</p>
    <div style={{display:"grid",gap:10}}>
@@ -47,6 +49,7 @@ export default function BuyerWorkbench({leads=[]}){
     <small>{GEO[lead.country]||"Pays à vérifier"} · {TRAINING_FAMILIES[lead.theme]||"Formation"} · {BUYER_TYPES[lead.buyerType]||"Acheteur à vérifier"} · {LABELS[lead.state]||"À qualifier"}</small>
     <strong style={{display:"block",margin:"7px 0"}}>{lead.buyer||"Organisme à identifier"}</strong>
     <span>{lead.need||lead.title}</span>
+    <span style={{display:"block",marginTop:8,fontSize:12,color:"#3d5077"}}>Annonce sourcée · {lead.dates||"Date à confirmer"}</span>
    </button>)}
    </div>
   </div>
@@ -54,6 +57,7 @@ export default function BuyerWorkbench({leads=[]}){
    {active?<>
     <h2 style={{fontSize:21,margin:"0 0 8px"}}>Qualification et proposition</h2>
     <p><strong>Acheteur :</strong> {active.buyer}</p>
+    <p><strong>Famille :</strong> {TRAINING_FAMILIES[active.theme]||"Autres"} · <strong>Statut :</strong> {LABELS[active.state]||"À vérifier"}</p>
     <p><strong>Type d’acheteur :</strong> {BUYER_TYPES[active.buyerType]||"Acheteur à vérifier"} (qualification fondée sur l’annonce)</p>
     <p><strong>Validation :</strong> {active.buyerStatus||"À confirmer"}</p>
     <p><strong>Interlocuteur :</strong> {active.contact||"À rechercher"} — {active.contactRole||"Rôle décisionnaire à vérifier"}</p>
