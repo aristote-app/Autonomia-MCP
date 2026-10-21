@@ -8,5 +8,5 @@ assert.equal(classifyTrainingBuyer({buyer:"Entreprise Alpha",description:"Former
 assert.equal(classifyTrainingBuyer({buyer:"Organisme de formation XYZ",description:"Nous recherchons des formateurs"}),"of");
 assert.equal(classifyTrainingBuyer({buyer:"Entreprise Alpha",description:"Recherche formateur"}),"inconnu");
 assert.ok(rankTrainingLead({theme:"ia",buyerType:"direct",state:"nouveau"})>rankTrainingLead({theme:"securite",buyerType:"of",state:"historique"}));
-assert.ok(WEB_DEMAND_QUERY_SPECS.filter(x=>x.kind==="training_general"&&x.query.includes("nos collaborateurs")).length>0);
+assert.ok(WEB_DEMAND_QUERY_SPECS.filter(x=>x.kind==="training_general"&&x.query.includes("recherche formateur IA")).length>0);
 console.log("Training announcement filters and direct buyer prioritization OK");
