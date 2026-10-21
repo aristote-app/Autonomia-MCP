@@ -3,6 +3,7 @@ import {searchJobSignals} from "../../lib/db/jobSignals.js";
 import {hasAutonomiaDatabase} from "../../lib/db/supabase.js";
 import {TRAINER_BUYERS} from "../../lib/training/trainerBuyerIntelligence.js";
 import BuyerWorkbench from "./BuyerWorkbench.js";
+import {classifyTrainingFamily,classifyTrainingBuyer,rankTrainingLead} from "../../lib/training/trainingLeadFilters.js";
 
 export const dynamic="force-dynamic";
 export const metadata={title:"Acheteurs et missions formateurs · AUTONOMIA Academy",robots:{index:false,follow:false}};
@@ -19,14 +20,15 @@ function fromSignal(signal) {
  if(!COUNTRIES[country]||!source)return null;
  const sourceTitle=String(signal.title||"Demande de formateur").slice(0,180);
  const company=String(signal.company_name||"").trim();
- const theme=signal.raw_payload?.training_theme||"ia_digital";
+ const theme=classifyTrainingFamily([sourceTitle,signal.raw_payload?.search_description||""].join(" "),signal.raw_payload?.training_theme);
+ const buyerType=classifyTrainingBuyer({buyer:company,description:signal.raw_payload?.search_description||""});
  return {
   id:"signal-"+signal.id,
   buyer:company||"Organisme acheteur non identifié",
   buyerStatus:company?"Organisation citée par la source, statut d’acheteur à vérifier":"Auteur, client final et entreprise contractante à identifier",
   contact:null,
   contactRole:"Responsable pédagogique, recrutement de formateurs ou direction formation à rechercher et vérifier",
-  country,theme,
+  country,theme,buyerType,
   mode:signal.raw_payload?.training_delivery==="distanciel_mentionne"?"distanciel mentionné":signal.raw_payload?.training_delivery==="presentiel_mentionne"?"présentiel mentionné":"à confirmer",
   need:sourceTitle,dates:"Dates à confirmer",location:signal.location||COUNTRIES[country],
   state:"nouveau",source,
@@ -39,7 +41,12 @@ export default async function Page() {
   sources:["linkedin","indeed"],signalKey:"trainer_mission_demand",franceOnly:false,limit:500
  }).catch(()=>null):null;
  const incoming=(result?.items||[]).map(fromSignal).filter(Boolean);
- const leads=[...incoming,...TRAINER_BUYERS];
+ const reviewed=TRAINER_BUYERS.filter(lead=>lead.source).map(lead=>({
+   ...lead,
+   theme:classifyTrainingFamily(lead.need||"",lead.theme),
+   buyerType:classifyTrainingBuyer({buyer:lead.buyer,description:lead.evidence||""})
+ }));
+ const leads=[...incoming,...reviewed].sort((a,b)=>rankTrainingLead(b)-rankTrainingLead(a));
  return <main style={{maxWidth:1220,margin:"0 auto",padding:"32px 22px 90px",fontFamily:"system-ui,sans-serif"}}>
   <p><Link href="/growth">← Retour à Growth Intelligence</Link></p>
   <p style={{letterSpacing:2,color:"#61708c",fontSize:12}}>AUTONOMIA · ACADEMY · DÉVELOPPEMENT COMMERCIAL</p>
