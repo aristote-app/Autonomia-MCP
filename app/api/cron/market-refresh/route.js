@@ -21,6 +21,31 @@ export async function GET(request) {
   const territoryOnly = mode === "territories";
   const territoryProgramsOnly = mode === "territory-programs";
 
+  if (mode === "academy-training") {
+    try {
+      const refresh = await runAutomatedExtendedDemandRefresh({
+        triggerMode: "authenticated_training_bootstrap",
+        includeWeb: true,
+        includeFranceTravail: false,
+        webKinds: ["training_general", "training_international"]
+      });
+      const sources = refresh.web?.searches || [];
+      const errors = refresh.persistenceErrors || [];
+      return Response.json({
+        ok: Boolean(refresh.web?.available) && errors.length === 0,
+        mode,
+        completedAt: new Date().toISOString(),
+        discoveredRows: refresh.web?.discoveredRows || 0,
+        persistedRows: refresh.jobSignals?.persistedRows || 0,
+        searchCount: sources.length,
+        searches: sources.map(item=>({kind:item.kind,ok:item.ok,rawResults:item.rawResults||0,results:item.results||0})),
+        persistenceErrors: errors.length
+      },{status:refresh.web?.available && errors.length===0 ? 200 : 502});
+    } catch (error) {
+      return Response.json({ok:false,mode,error:error instanceof Error?error.message:String(error)},{status:502});
+    }
+  }
+
   if (territoryProgramsOnly) {
     try {
       const extended = await runAutomatedExtendedDemandRefresh({
