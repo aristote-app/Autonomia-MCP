@@ -37,16 +37,20 @@ function fromSignal(signal) {
 }
 
 export default async function Page() {
+ let discoveryError=false;
  const result=hasAutonomiaDatabase()?await searchJobSignals({
   sources:["linkedin","indeed","codeur_training"],signalKey:"trainer_mission_demand",franceOnly:false,limit:500
- }).catch(()=>null):null;
+ }).catch(()=>{discoveryError=true;return null;}):null;
  const incoming=(result?.items||[]).map(fromSignal).filter(Boolean);
  const reviewed=TRAINER_BUYERS.filter(lead=>lead.source).map(lead=>({
    ...lead,
    theme:classifyTrainingFamily(lead.need||"",lead.theme),
    buyerType:lead.buyerType||classifyTrainingBuyer({buyer:lead.buyer,description:lead.evidence||""})
  }));
- const leads=[...incoming,...reviewed].sort((a,b)=>rankTrainingLead(b)-rankTrainingLead(a));
+ const canonical=url=>{try{const u=new URL(url);return u.hostname.replace(/^(www|fr)\./,"")+u.pathname.replace(/\/$/,"");}catch{return url;}};
+ const bySource=new Map();
+ for(const lead of [...incoming,...reviewed])bySource.set(canonical(lead.source),lead);
+ const leads=[...bySource.values()].sort((a,b)=>rankTrainingLead(b)-rankTrainingLead(a));
  return <main style={{maxWidth:1220,margin:"0 auto",padding:"32px 22px 90px",fontFamily:"system-ui,sans-serif"}}>
   <p><Link href="/growth">← Retour à Growth Intelligence</Link></p>
   <p style={{letterSpacing:2,color:"#61708c",fontSize:12}}>AUTONOMIA · ACADEMY · DÉVELOPPEMENT COMMERCIAL</p>
@@ -60,6 +64,7 @@ export default async function Page() {
    ].map(([v,label])=><div key={label} style={{padding:18,background:"#f0f4fa",borderRadius:12,minWidth:180}}><strong style={{display:"block",fontSize:25}}>{v}</strong><span>{label}</span></div>)}
   </div>
   <p style={{fontSize:13,color:"#526179"}}>Les exemples issus de publications publiques peuvent être passés ou pourvus. Une entreprise citée ou un auteur de publication n’est pas automatiquement le décideur contractuel.</p>
+  {discoveryError&&<p role="alert">Collecteur : lecture des annonces indisponible. Seules les annonces documentées ci-dessous sont affichées.</p>}
   <BuyerWorkbench leads={leads}/>
  </main>;
 }
