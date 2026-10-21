@@ -3,6 +3,7 @@ import {searchJobSignals} from "../../lib/db/jobSignals.js";
 import {hasAutonomiaDatabase} from "../../lib/db/supabase.js";
 import {TRAINER_BUYERS} from "../../lib/training/trainerBuyerIntelligence.js";
 import BuyerWorkbench from "./BuyerWorkbench.js";
+import ContactMethods from "./ContactMethods.js";
 
 export const dynamic="force-dynamic";
 export const metadata={title:"Acheteurs et missions formateurs · AUTONOMIA Academy",robots:{index:false,follow:false}};
@@ -54,5 +55,6 @@ export default async function Page() {
   </div>
   <p style={{fontSize:13,color:"#526179"}}>Les exemples issus de publications publiques peuvent être passés ou pourvus. Une entreprise citée ou un auteur de publication n’est pas automatiquement le décideur contractuel.</p>
   <BuyerWorkbench leads={leads}/>
+  <section><h2>Coordonnées professionnelles vérifiées</h2>{TRAINER_BUYERS.map(l=><article key={l.id}><h3>{l.buyer}</h3>{l.contactProfile&&<a href={l.contactProfile} target="_blank" rel="noopener noreferrer">LinkedIn de {l.contact} ↗</a>}<ContactMethods lead={l}/></article>)}</section>
  </main>;
 }
