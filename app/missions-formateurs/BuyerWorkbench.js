@@ -29,6 +29,9 @@ export default function BuyerWorkbench({leads=[]}){
    "Modalité : "+(fields.modalite||active.mode||"À confirmer"),
    "Interlocuteur : "+(fields.contact||active.contact||"À identifier"),
    "Mandat du contact : "+(active.contactRole||"À vérifier"),
+   "LinkedIn : "+(active.contactProfile||"Non trouvé"),
+   "Téléphone entreprise : "+(active.businessPhone||"Non trouvé"),
+   "Source téléphone : "+(active.businessPhoneSource||"Non publiée"),
    "Budget : "+(fields.tarif||"À confirmer"),
    "Prochaine action : "+shortlist(active),
    "Source : "+active.source
@@ -63,6 +66,8 @@ export default function BuyerWorkbench({leads=[]}){
     <p><strong>Interlocuteur :</strong> {active.contact||"À rechercher"} — {active.contactRole||"Rôle décisionnaire à vérifier"}</p>
     {active.secondaryContact&&<p><strong>Autre contact :</strong> {active.secondaryContact}</p>}
     {active.contactProfile&&<p><a href={active.contactProfile} target="_blank" rel="noopener noreferrer">Profil LinkedIn personnel documenté ↗</a></p>}
+    {active.businessPhone&&<p><strong>Téléphone professionnel :</strong> <a href={"tel:"+active.businessPhone.replace(/[^+0-9]/g,"")}>{active.businessPhone}</a> · <a href={active.businessPhoneSource} target="_blank" rel="noopener noreferrer">Source ↗</a></p>}
+    {!active.businessPhone&&<p>Téléphone professionnel : non trouvé</p>}
     {active.contactSource&&<p><a href={active.contactSource} target="_blank" rel="noopener noreferrer">Preuve de la fonction et de l’organisme ↗</a></p>}
     <p><strong>Besoin :</strong> {active.need||active.title}</p>
     <p><strong>Date :</strong> {active.dates||"À vérifier"} · <strong>Format :</strong> {active.mode||"À confirmer"}</p>
