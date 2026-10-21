@@ -10,7 +10,7 @@ export const metadata={title:"Acheteurs et missions formateurs · AUTONOMIA Acad
 const COUNTRIES={FR:"France",CH:"Suisse",BE:"Belgique",CA:"Canada"};
 function safeUrl(v) {
  try {const u=new URL(v);return u.protocol==="https:"&&!u.username&&!u.password&&
- (/(^|\\.)linkedin\\.com$/.test(u.hostname)||/(^|\\.)indeed\\.com$/.test(u.hostname))?u.toString():null;}
+ (/(^|\.)linkedin\.com$/.test(u.hostname)||/(^|\.)indeed\.com$/.test(u.hostname))?u.toString():null;}
  catch{return null;}
 }
 function fromSignal(signal) {
