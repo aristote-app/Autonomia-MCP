@@ -62,7 +62,7 @@ export default function BuyerWorkbench({leads=[]}){
    <p>{filtered.length} annonces sourcées · <strong>{filtered.filter(l=>l.theme==="ia").length} IA</strong> · {filtered.filter(l=>l.buyerType==="direct").length} acheteurs directs confirmés.</p>
    {filtered.length===0&&<p>Aucune annonce trouvée avec ces filtres. Essayez « Tous les types » ou une autre famille.</p>}
    <div style={{display:"grid",gap:10}}>
-   {filtered.map(lead=><div key={lead.id}><button type="button" onClick={()=>{setSelected(lead.id);setCopied(false);setCopied(false)}} style={{textAlign:"left",padding:16,background:active?.id===lead.id?"#e9efff":"#fff",border:active?.id===lead.id?"2px solid #365cb9":"1px solid #d3dbe8",borderRadius:12,cursor:"pointer"}}>
+   {filtered.map(lead=><div key={lead.id}><button type="button" onClick={()=>{setSelected(lead.id);setCopied(false)}} style={{textAlign:"left",padding:16,background:active?.id===lead.id?"#e9efff":"#fff",border:active?.id===lead.id?"2px solid #365cb9":"1px solid #d3dbe8",borderRadius:12,cursor:"pointer"}}>
     <small>{GEO[lead.country]||"Pays à vérifier"} · {TRAINING_FAMILIES[lead.theme]||"Formation"} · {BUYER_TYPES[lead.buyerType]||"Acheteur à vérifier"} · {LABELS[lead.state]||"À qualifier"}</small>
     <strong style={{display:"block",margin:"7px 0"}}>{lead.buyer||"Organisme à identifier"}</strong>
     <span>{lead.need||lead.title}</span>
@@ -82,6 +82,7 @@ export default function BuyerWorkbench({leads=[]}){
     {active.contactProfile&&/^https:\/\/(?:fr\.|www\.)?linkedin\.com\/in\//i.test(active.contactProfile)&&<p><a href={active.contactProfile} target="_blank" rel="noopener noreferrer">Profil LinkedIn personnel documenté ↗</a></p>}
     {active.businessPhone&&<p><strong>Téléphone professionnel :</strong> <a href={"tel:"+active.businessPhone.replace(/[^+0-9]/g,"")}>{active.businessPhone}</a> · <a href={active.businessPhoneSource} target="_blank" rel="noopener noreferrer">Source ↗</a></p>}
     {active.businessPhoneType&&<p><small>{active.businessPhoneType}</small></p>}
+    {active.businessEmail&&<p><strong>E-mail professionnel publié :</strong> <a href={"mailto:"+active.businessEmail}>{active.businessEmail}</a></p>}
     {!active.businessPhone&&<p>Téléphone professionnel : non trouvé</p>}
     {active.contactSource&&<p><a href={active.contactSource} target="_blank" rel="noopener noreferrer">Preuve de la fonction et de l’organisme ↗</a></p>}
     <p><strong>Besoin :</strong> {active.need||active.title}</p>
