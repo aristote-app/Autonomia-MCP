@@ -71,3 +71,25 @@ SQL privileges are unchanged. The PATCH origin check and strict two-column
 allowlist remain enforced. Anyone able to open the cockpit URL can read the
 module (including notes) and edit status/notes. Internal deployment hooks and
 credential/workspace administration keep their separate authorization checks.
+
+## Everyday prospecting workflow
+
+The home navigation opens the complete directory directly. Start with the
+“fiches à contacter avec email” shortcut, choose a department/category, then use
+advanced filters for competences, type, status and sorting. Current filters are
+encoded in the page URL so the research can be bookmarked or shared.
+
+The compact list shows direct contacts and two domains; remaining competences
+are in the detail panel. Check up to 200 records across pages to export just
+those records. Changing the filters clears the selection. The export menu also
+provides the entire filtered cohort and an institutional contact CSV. President
+names and institution coordinates are clearly distinguished; the export does
+not invent operational decision makers or LinkedIn profile URLs.
+
+A detail panel provides call/email/site links, a question to identify the right
+operational contact, status and notes, suggested next action, and previous/next
+record buttons. Unsaved notes are guarded on close/navigation. Editable first
+contact templates cover training and administrative automation; copying or
+opening a prepared mail does not send a message automatically.
+
+No database schema or existing records are changed by this usability update.
