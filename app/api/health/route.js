@@ -1,3 +1,4 @@
+import { authConfigured } from "../../../lib/auth/server.js";
 import { BUILD_SHA } from "../../../lib/runtime/buildStamp.generated.js";
 import { listQueuedInboundLeads } from "../../../lib/inbound/spool.js";
 import { getAutonomiaWorkspace, listInboundLeads } from "../../../lib/db/inboundLeads.js";
@@ -37,10 +38,7 @@ export async function GET() {
       (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       process.env.SUPABASE_SECRET_KEY
     ),
-    authConfigured: Boolean(
-      (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-      process.env.SUPABASE_PUBLISHABLE_KEY
-    ),
+    authConfigured: authConfigured(),
     jobDiscoveryConfigured: Boolean(process.env.BRAVE_SEARCH_API_KEY),
     franceTravailConfigured: Boolean(
       process.env.FRANCE_TRAVAIL_CLIENT_ID &&
