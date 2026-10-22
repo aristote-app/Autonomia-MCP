@@ -4,7 +4,7 @@ import { STATUSES, safeUrl } from '../../lib/collectivites/contract.js';
 import { splitContact, presidentName, filtersToParams, prepareMessage, nextAction } from '../../lib/collectivites/usability.js';
 import styles from './collectivites.module.css';
 const number = value => new Intl.NumberFormat('fr-FR').format(value || 0);
-const PIPELINE = [['','Toutes les fiches'],['à contacter','À contacter'],['à relancer','À relancer'],['rendez-vous','Rendez-vous'],['proposition envoyée','Propositions']];
+const PIPELINE = [['','Tous les statuts'],['à contacter','À contacter'],['à relancer','À relancer'],['rendez-vous','Rendez-vous'],['proposition envoyée','Propositions']];
 
 function ContactLinks({ row, compact = false }) {
   const phones = splitContact(row.telephone), emails = splitContact(row.email);
@@ -100,7 +100,10 @@ export default function CollectivitesDashboard({ initialFilters = {} }) {
   }
   async function copy(text, success = 'Copié.') {
     try { await navigator.clipboard.writeText(text); setNotice(success); }
-    catch { messageInput.current?.focus(); messageInput.current?.select(); setNotice('Copie indisponible : sélectionnez et copiez le texte.'); }
+    catch {
+      if (messageInput.current && text === message) { messageInput.current.focus(); messageInput.current.select(); setNotice('Texte sélectionné : copiez-le depuis la zone de message.'); }
+      else setNotice(`Copie indisponible. Lien de cette recherche : ${text}`);
+    }
   }
   function exportHref(mode, selection = false) {
     const params = filtersToParams(filters); params.set('format','csv');
