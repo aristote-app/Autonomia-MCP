@@ -5,9 +5,15 @@ The archive itself was validated; BANATIC provenance and current presidents were
 
 ## Delivery state
 
-Code prepared against existing main. Production DB inspection was denied for project
-`haazpzbwcryaksgtormn`. No SQL was executed, no import performed, no existing table changed.
-The connected Supabase account lists only the separate Aristote project; do not use it.
+The AUTONOMIA database (`haazpzbwcryaksgtormn`) has been inspected and the new module
+objects installed. Imported and verified: 9,277 structures and 51,040 competences;
+the existing 1,217 territories were preserved. RLS, column grants, authenticated
+read/filter access and a rolled-back notes update were verified remotely.
+
+The first o2switch deployment exposed the new route but lacked the public Auth key
+in the active process. Auth now resolves the public key for this exact project in
+`lib/auth/server.js`, independently of the configured startup file. Explicit
+configuration takes precedence; no fallback is applied to other projects.
 
 ## Database first
 
