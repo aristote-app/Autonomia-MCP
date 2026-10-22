@@ -1,0 +1,35 @@
+{
+  "structures": 9277,
+  "competences": 51040,
+  "siren_uniques": 9277,
+  "orphelines": 0,
+  "categories": {
+    "Autre EPCI / pôle": 191,
+    "CC / CA": 1217,
+    "Syndicat": 7869
+  },
+  "avec_telephone": 7011,
+  "avec_email": 5024,
+  "domaines": [
+    "Assainissement / eaux pluviales",
+    "Déchets",
+    "Développement économique / tourisme",
+    "Eau potable",
+    "Forêt / espaces naturels / environnement",
+    "Funéraire",
+    "Gens du voyage",
+    "Logement / habitat",
+    "Numérique / SIG",
+    "Petite enfance",
+    "Rivières / GEMAPI / inondations",
+    "Scolaire / périscolaire",
+    "Services publics / autres",
+    "Social / santé",
+    "Sport / culture",
+    "Sécurité / incendie",
+    "Transports / mobilité / voirie",
+    "Urbanisme / aménagement / SCoT",
+    "Énergie / climat"
+  ],
+  "doublons_competences": 0
+}
