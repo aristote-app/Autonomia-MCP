@@ -1,4 +1,5 @@
 import { collectivitesClient, parseFilters, search } from '../../../lib/collectivites/server.js';
+import { splitContact } from '../../../lib/collectivites/usability.js';
 import { csvCell } from '../../../lib/collectivites/contract.js';
 export const dynamic = 'force-dynamic';
 export async function GET(request) {
@@ -18,7 +19,13 @@ export async function GET(request) {
         if (data.length < 500) break;
       }
       const columns = ['siren','nom','code_type','type','categorie','code_departement','departement','domaines','president_civilite','president_prenom','president_nom','telephone','email','site_web','fiche_banatic','statut_prospection','notes'];
-      const lines = [columns.map(csvCell).join(','), ...rows.map(row => columns.map(c => csvCell(row[c])).join(','))];
+      const contactMode = params.get('mode') === 'contacts';
+      const headers = contactMode ? ['First name','Last name','Intitulé du poste','Numéro de téléphone','Company name','Email','Site web','SIREN','Source BANATIC'] : columns;
+      const values = row => contactMode ? [row.president_prenom, row.president_nom,
+        row.president_nom ? (row.president_civilite === 'Mme' ? 'Présidente' : 'Président') : 'Présidence à qualifier',
+        splitContact(row.telephone)[0] || '', row.nom, splitContact(row.email)[0] || '', row.site_web, row.siren, row.fiche_banatic]
+        : columns.map(c => row[c]);
+      const lines = [headers.map(csvCell).join(','), ...rows.map(row => values(row).map(csvCell).join(','))];
       return new Response('\uFEFF' + lines.join('\r\n'), { headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="autonomia-collectivites.csv"', 'Cache-Control': 'no-store' }});
     }
     const from = (filters.page - 1) * 50;

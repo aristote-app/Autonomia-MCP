@@ -78,6 +78,8 @@ jobs:
         run: node scripts/smoke-verified-employers.mjs
       - name: Smoke test multi-source recruitment discovery and ESN exclusion
         run: node scripts/smoke-extended-job-sources.mjs
+      - name: Smoke test collectivites prospecting workflow
+        run: node scripts/smoke-collectivites-usage.mjs
       - name: Smoke test territory signal classifier
         run: npm run smoke:territory-signals
       - name: Smoke test territory program signals
