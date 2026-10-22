@@ -96,6 +96,11 @@ export default async function TerritoriesPage({ searchParams }) {
         <Link className="territoryBack" href="/">← Market Intelligence</Link>
       </section>
 
+      <nav className="territoryFilters" aria-label="Vues territoires">
+        <Link href="/territoires" className="active" aria-current="page">Priorités et signaux des territoires</Link>
+        <Link href="/collectivites">Toutes les collectivités · BANATIC</Link>
+      </nav>
+
       <section className="territoryMetrics">
         <article><strong>{number(summary.total)}</strong><span>territoires actifs</span></article>
         <article><strong>{number(summary.communitiesOfCommunes)}</strong><span>communautés de communes</span></article>
