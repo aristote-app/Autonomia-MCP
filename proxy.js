@@ -2,11 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 function enabled() {
-  return Boolean(
-    (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    process.env.SUPABASE_PUBLISHABLE_KEY &&
-    process.env.AUTONOMIA_AUTH_REQUIRED === "true"
-  );
+  // Direct cockpit access requested by its owner. Internal API authorization
+  // and credential/workspace administration keep their own checks.
+  return false;
 }
 
 export async function proxy(request) {

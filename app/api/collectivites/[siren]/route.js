@@ -3,7 +3,7 @@ import { validatePatch } from '../../../../lib/collectivites/contract.js';
 export const dynamic = 'force-dynamic';
 export async function GET(request, { params }) {
   const client = await collectivitesClient();
-  if (!client) return Response.json({ error: 'Authentification requise' }, { status: 401 });
+  if (!client) return Response.json({ error: 'Base Collectivités indisponible' }, { status: 503 });
   const { siren } = await params;
   if (!/^\d{9}$/.test(siren)) return Response.json({ error: 'SIREN invalide' }, { status: 400 });
   const { data, error } = await client.from('collectivites').select('*,collectivites_competences(domaine,competence)').eq('siren', siren).maybeSingle();
@@ -16,7 +16,7 @@ export async function PATCH(request, { params }) {
   if (['localhost', '127.0.0.1'].includes(url.hostname)) allowedOrigins.add(url.origin);
   if (!allowedOrigins.has(request.headers.get('origin'))) return Response.json({ error: 'Origine refusée' }, { status: 403 });
   const client = await collectivitesClient();
-  if (!client) return Response.json({ error: 'Authentification requise' }, { status: 401 });
+  if (!client) return Response.json({ error: 'Base Collectivités indisponible' }, { status: 503 });
   const { siren } = await params;
   if (!/^\d{9}$/.test(siren)) return Response.json({ error: 'SIREN invalide' }, { status: 400 });
   let patch;

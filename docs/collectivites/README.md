@@ -61,3 +61,13 @@ Required acceptance checks with a real authenticated session:
 - status and notes round trip, unknown SIREN 404, forbidden fields rejected;
 - anon denied, direct DB identity-column updates/insert/delete denied;
 - original /territoires and territory details still render.
+
+## Direct access requested by owner
+
+The owner subsequently requested removal of mandatory cockpit login. The page,
+read/export/detail APIs and status/notes API now use direct access through the
+server. The database service key remains server-only; database RLS and anonymous
+SQL privileges are unchanged. The PATCH origin check and strict two-column
+allowlist remain enforced. Anyone able to open the cockpit URL can read the
+module (including notes) and edit status/notes. Internal deployment hooks and
+credential/workspace administration keep their separate authorization checks.

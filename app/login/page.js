@@ -29,7 +29,11 @@ async function login(formData) {
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
   const error = params?.error || null;
-  const nextPath = params?.next || "/";
+  const nextPath = String(params?.next || "/");
+  // Old cockpit links should open the requested page directly as well.
+  if (nextPath === "/" || nextPath === "/collectivites" || nextPath === "/territoires") {
+    redirect(nextPath);
+  }
 
   // Integrations can be configured through the temporary secure access flow
   // while full cockpit authentication is not enabled.

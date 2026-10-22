@@ -3,7 +3,7 @@ import { csvCell } from '../../../lib/collectivites/contract.js';
 export const dynamic = 'force-dynamic';
 export async function GET(request) {
   const client = await collectivitesClient();
-  if (!client) return Response.json({ error: 'Authentification requise' }, { status: 401 });
+  if (!client) return Response.json({ error: 'Base Collectivités indisponible' }, { status: 503 });
   const params = new URL(request.url).searchParams;
   let filters;
   try { filters = parseFilters(params); } catch (e) { return Response.json({ error: e.message }, { status: 400 }); }
