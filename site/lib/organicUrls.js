@@ -3,9 +3,11 @@ import {
   executionPillars,
   trainingPillars
 } from "@/content/editorial-backlog";
+import { territoryPillars } from "@/content/territory-editorial";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "@/content/published-articles";
 
 const ORGANIC_RELEASE_DATE = "2026-09-20";
@@ -20,7 +22,8 @@ export function getIndexableUrlRecords(base) {
     { url: `${base}/methodologie/learning-transfer`, kind: "methodology", priority: 0.88, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/methodologie/politique-editoriale`, kind: "editorial-policy", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
     { url: `${base}/a-propos`, kind: "entity", priority: 0.82, changeFrequency: "monthly", lastModified: ORGANIC_RELEASE_DATE },
-    { url: `${base}/territoires`, kind: "territories-offer", priority: 0.9, changeFrequency: "monthly", lastModified: "2026-09-22" },
+    { url: `${base}/territoires`, kind: "territories-offer", priority: 0.9, changeFrequency: "monthly", lastModified: "2026-09-23" },
+    { url: `${base}/territoires/guides`, kind: "territory-guides-hub", priority: 0.88, changeFrequency: "weekly", lastModified: "2026-09-23" },
     { url: `${base}/territoires/ia-agents-collectivite`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/territoires/academy-ia-collectivites`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
     { url: `${base}/territoires/accelerateur-ia-tpe-pme`, kind: "territories-guide", priority: 0.86, changeFrequency: "monthly", lastModified: "2026-09-22" },
@@ -53,6 +56,14 @@ export function getIndexableUrlRecords(base) {
     lastModified: ORGANIC_RELEASE_DATE
   }));
 
+  const territoryPillarPages = territoryPillars.map((pillar) => ({
+    url: `${base}/territoires/guides/${pillar.slug}`,
+    kind: "territory-pillar",
+    priority: 0.84,
+    changeFrequency: "weekly",
+    lastModified: "2026-09-23"
+  }));
+
   const executionArticles = publishedExecutionArticles.map((article) => ({
     url: `${base}/cas-usage-ia/${article.slug}`,
     kind: "execution-article",
@@ -69,13 +80,23 @@ export function getIndexableUrlRecords(base) {
     lastModified: article.modifiedAt || article.publishedAt
   }));
 
+  const territoryArticles = publishedTerritoryArticles.map((article) => ({
+    url: `${base}/territoires/guides/${article.slug}`,
+    kind: "territory-article",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: article.modifiedAt || article.publishedAt
+  }));
+
   return [
     ...staticPages,
     ...commercialPages,
     ...executionPillarPages,
     ...trainingPillarPages,
+    ...territoryPillarPages,
     ...executionArticles,
-    ...trainingArticles
+    ...trainingArticles,
+    ...territoryArticles
   ];
 }
 

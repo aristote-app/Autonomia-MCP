@@ -5,6 +5,9 @@ import { getRelatedGlossaryTermsForText } from "@/content/ai-glossary";
 
 export default function EditorialArticle({ article }) {
   const isTraining = article.type === "training";
+  const isTerritory = article.type === "territory";
+  const hubHref = isTraining ? "/formation-ia/cas-usage" : isTerritory ? "/territoires/guides" : "/cas-usage-ia";
+  const hubLabel = isTraining ? "Formation IA" : isTerritory ? "Territoires" : "Cas d’usage IA";
   const graph = getEditorialGraph(article);
   const glossaryTerms = getRelatedGlossaryTermsForText(
     [
@@ -31,9 +34,7 @@ export default function EditorialArticle({ article }) {
       <nav className="articleBreadcrumb" aria-label="Fil d’Ariane">
         <Link href="/">Autonomia</Link>
         <span>→</span>
-        <Link href={isTraining ? "/formation-ia/cas-usage" : "/cas-usage-ia"}>
-          {isTraining ? "Formation IA" : "Cas d’usage IA"}
-        </Link>
+        <Link href={hubHref}>{hubLabel}</Link>
         {graph.pillar && (
           <>
             <span>→</span>
@@ -42,9 +43,9 @@ export default function EditorialArticle({ article }) {
         )}
       </nav>
 
-      <header className={isTraining ? "articleHero training" : "articleHero execution"}>
+      <header className={isTraining ? "articleHero training" : isTerritory ? "articleHero territory" : "articleHero execution"}>
         <div className="articleHeroMeta">
-          <span>{isTraining ? "SCÉNARIO DE FORMATION" : "SCÉNARIO IA"}</span>
+          <span>{isTraining ? "SCÉNARIO DE FORMATION" : isTerritory ? "GUIDE IA TERRITORIALE" : "SCÉNARIO IA"}</span>
           <span>{article.readingTime}</span>
           <span>Publié le {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "long", year: "numeric" }).format(new Date(article.publishedAt))}</span>
           {article.modifiedAt && article.modifiedAt !== article.publishedAt && (
@@ -177,10 +178,10 @@ export default function EditorialArticle({ article }) {
 
           <section className="articleCta">
             <p className="eyebrow">AUTONOMIA</p>
-            <h2>{isTraining ? "Vous voulez transformer ce scénario en formation pour vos équipes ?" : "Vous voulez transformer ce scénario en système réel ?"}</h2>
-            <p>{isTraining ? "Autonomia Academy part des usages, des outils et du niveau de vos équipes." : "Autonomia Experts peut vous aider à traduire le besoin en compétences et en architecture d’exécution."}</p>
-            <Link className="primaryButton" href={isTraining ? "/formation-ia-entreprise" : "/expert-ia"}>
-              {isTraining ? "Construire le parcours" : "Cadrer le besoin"}
+            <h2>{isTraining ? "Vous voulez transformer ce scénario en formation pour vos équipes ?" : isTerritory ? "Vous voulez transformer ce guide en feuille de route pour votre territoire ?" : "Vous voulez transformer ce scénario en système réel ?"}</h2>
+            <p>{isTraining ? "Autonomia Academy part des usages, des outils et du niveau de vos équipes." : isTerritory ? "Autonomia peut partir des missions des agents, des besoins des entreprises locales et des contraintes de l’EPCI pour prioriser une première vague de cas d’usage." : "Autonomia Experts peut vous aider à traduire le besoin en compétences et en architecture d’exécution."}</p>
+            <Link className="primaryButton" href={isTraining ? "/formation-ia-entreprise" : isTerritory ? "/territoires" : "/expert-ia"}>
+              {isTraining ? "Construire le parcours" : isTerritory ? "Cadrer la feuille de route" : "Cadrer le besoin"}
             </Link>
           </section>
         </article>

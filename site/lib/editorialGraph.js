@@ -2,9 +2,11 @@ import {
   executionPillars,
   trainingPillars
 } from "@/content/editorial-backlog";
+import { territoryPillars } from "@/content/territory-editorial";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "@/content/published-articles";
 
 const STOPWORDS = new Set([
@@ -36,20 +38,25 @@ function similarity(a, b) {
 }
 
 function articleHref(article) {
-  return article.type === "training"
-    ? `/formation-ia/cas-usage/${article.slug}`
-    : `/cas-usage-ia/${article.slug}`;
+  if (article.type === "training") return `/formation-ia/cas-usage/${article.slug}`;
+  if (article.type === "territory") return `/territoires/guides/${article.slug}`;
+  return `/cas-usage-ia/${article.slug}`;
 }
 
 function pillarCollection(article) {
-  return article.type === "training" ? trainingPillars : executionPillars;
+  if (article.type === "training") return trainingPillars;
+  if (article.type === "territory") return territoryPillars;
+  return executionPillars;
 }
 
 function articleCollection(article) {
-  return article.type === "training" ? publishedTrainingArticles : publishedExecutionArticles;
+  if (article.type === "training") return publishedTrainingArticles;
+  if (article.type === "territory") return publishedTerritoryArticles;
+  return publishedExecutionArticles;
 }
 
 function oppositeCollection(article) {
+  if (article.type === "territory") return [];
   return article.type === "training" ? publishedExecutionArticles : publishedTrainingArticles;
 }
 
@@ -82,7 +89,9 @@ export function getEditorialGraph(article) {
         label: pillar.title,
         href: article.type === "training"
           ? `/formation-ia/cas-usage/${pillar.slug}`
-          : `/cas-usage-ia/${pillar.slug}`
+          : article.type === "territory"
+            ? `/territoires/guides/${pillar.slug}`
+            : `/cas-usage-ia/${pillar.slug}`
       }))
     : [];
 
@@ -93,13 +102,15 @@ export function getEditorialGraph(article) {
           label: currentPillar.title,
           href: article.type === "training"
             ? `/formation-ia/cas-usage/${currentPillar.slug}`
-            : `/cas-usage-ia/${currentPillar.slug}`
+            : article.type === "territory"
+              ? `/territoires/guides/${currentPillar.slug}`
+              : `/cas-usage-ia/${currentPillar.slug}`
         }
       : null,
     related: siblings,
     mirror: mirrorCandidate && mirrorCandidate.score > 0
       ? {
-          kicker: article.type === "training" ? "VOIR LE SYSTÈME" : "VOIR LA COMPÉTENCE",
+          kicker: article.type === "training" ? "VOIR LE SYSTÈME" : article.type === "territory" ? "GUIDE LIÉ" : "VOIR LA COMPÉTENCE",
           label: mirrorCandidate.candidate.title,
           href: articleHref(mirrorCandidate.candidate)
         }

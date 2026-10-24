@@ -21,32 +21,35 @@ function signalTags(cluster) {
 
 export default function EditorialPillar({ pillar, family, publishedArticles }) {
   const training = family === "training";
+  const territory = family === "territory";
   const insight = getPillarInsight(family, pillar.cluster);
   const publishedBySlug = new Map(publishedArticles.map((article) => [article.slug, article]));
-  const basePath = training ? "/formation-ia/cas-usage" : "/cas-usage-ia";
+  const basePath = training ? "/formation-ia/cas-usage" : territory ? "/territoires/guides" : "/cas-usage-ia";
   const publishedCount = pillar.topics.filter((topic) => publishedBySlug.has(topic.slug)).length;
 
   return (
-    <main className={training ? "contentHub trainingHub pillarPage" : "contentHub pillarPage"}>
+    <main className={training ? "contentHub trainingHub pillarPage" : territory ? "contentHub territoryHub pillarPage" : "contentHub pillarPage"}>
       <nav className="articleBreadcrumb" aria-label="Fil d’Ariane">
         <Link href="/">Autonomia</Link>
         <span>→</span>
-        <Link href={basePath}>{training ? "Formation IA" : "Cas d’usage IA"}</Link>
+        <Link href={basePath}>{training ? "Formation IA" : territory ? "Territoires" : "Cas d’usage IA"}</Link>
         <span>→</span>
         <span>{pillar.title}</span>
       </nav>
       <section className="contentHubHero">
-        <p className="eyebrow">{training ? "AUTONOMIA ACADEMY — PILIER" : "AUTONOMIA — PILIER D’EXÉCUTION"}</p>
+        <p className="eyebrow">{training ? "AUTONOMIA ACADEMY — PILIER" : territory ? "AUTONOMIA — TERRITOIRES" : "AUTONOMIA — PILIER D’EXÉCUTION"}</p>
         <h1>{pillar.title}</h1>
         <p>
           {training
             ? `Ce pilier regroupe 10 situations de travail autour de « ${pillar.cluster} ». L’objectif n’est pas d’apprendre un outil pour lui-même, mais de rendre les équipes capables de reproduire des méthodes utiles, vérifiables et adaptées à leur contexte.`
-            : `Ce pilier regroupe 10 scénarios autour de « ${pillar.cluster} ». Chaque scénario part d’un travail réel et montre comment combiner règles, automatisation, IA et contrôle humain sans transformer le sujet en démonstration abstraite.`}
+            : territory
+              ? pillar.summary
+              : `Ce pilier regroupe 10 scénarios autour de « ${pillar.cluster} ». Chaque scénario part d’un travail réel et montre comment combiner règles, automatisation, IA et contrôle humain sans transformer le sujet en démonstration abstraite.`}
         </p>
         <div className="articleEditorialMeta">
           <span>Publié par <Link href="/a-propos">Autonomia</Link></span>
           <span>Mis à jour le 20/09/2026</span>
-          <span>{publishedCount}/10 guides détaillés publiés</span>
+          <span>{publishedCount}/{pillar.topics.length} guides détaillés publiés</span>
           <Link href="/methodologie/politique-editoriale">Méthode éditoriale</Link>
         </div>
       </section>
@@ -54,7 +57,7 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
       <section className="contentHubIntro">
         <p className="sectionIndex">RÉPONSE DIRECTE</p>
         <div>
-          <h2>{training ? "Que faut-il réellement apprendre dans ce domaine ?" : "Que peut réellement automatiser ou augmenter l’IA ici ?"}</h2>
+          <h2>{training ? "Que faut-il réellement apprendre dans ce domaine ?" : territory ? "Que faut-il réellement décider à l’échelle du territoire ?" : "Que peut réellement automatiser ou augmenter l’IA ici ?"}</h2>
           <p>{insight.summary}</p>
           <div className="pillarDecisionBox">
             <span>3 DÉCISIONS À PRENDRE</span>
@@ -68,7 +71,7 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
       <section className="pillarScenarioGrid">
         <p className="sectionIndex">10 SCÉNARIOS</p>
         <div>
-          <h2>{training ? "Choisir une compétence à transférer." : "Choisir un système à construire ou améliorer."}</h2>
+          <h2>{training ? "Choisir une compétence à transférer." : territory ? "Choisir un sujet territorial à approfondir." : "Choisir un système à construire ou améliorer."}</h2>
           <div className="pillarTopicList">
             {pillar.topics.map((topic, index) => {
               const published = publishedBySlug.get(topic.slug);
@@ -92,7 +95,7 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
       <section className="pillarMethod">
         <p className="sectionIndex">COMMENT CHOISIR</p>
         <div>
-          <h2>{training ? "Partir du changement attendu, pas du catalogue." : "Partir du goulot d’étranglement, pas de l’outil."}</h2>
+          <h2>{training ? "Partir du changement attendu, pas du catalogue." : territory ? "Partir des missions, des agents et des entreprises du territoire." : "Partir du goulot d’étranglement, pas de l’outil."}</h2>
           <ol>
             <li><span>01</span><div><strong>Nommer la tâche</strong><p>Décrire ce qu’une personne fait aujourd’hui et ce qui prend du temps, crée des erreurs ou bloque une décision.</p></div></li>
             <li><span>02</span><div><strong>Isoler la valeur</strong><p>Préciser ce qui doit devenir plus rapide, plus fiable, plus accessible ou plus facile à répéter.</p></div></li>
@@ -107,20 +110,22 @@ export default function EditorialPillar({ pillar, family, publishedArticles }) {
       <section className="pillarBridge">
         <p className="sectionIndex">PASSER À L’ACTION</p>
         <div>
-          <h2>{training ? "Transformer ce pilier en parcours de montée en compétences." : "Transformer ce pilier en besoin d’exécution concret."}</h2>
+          <h2>{training ? "Transformer ce pilier en parcours de montée en compétences." : territory ? "Transformer ce pilier en programme territorial concret." : "Transformer ce pilier en besoin d’exécution concret."}</h2>
           <p>
             {training
               ? "Autonomia Academy peut traduire les scénarios utiles en objectifs pédagogiques, ateliers, niveaux et modalités adaptés aux publics concernés."
-              : "Autonomia Experts peut traduire le scénario prioritaire en compétences, architecture, niveau d’autonomie et profil à mobiliser."}
+              : territory
+                ? "Autonomia peut relier diagnostic des services, acculturation des agents, cas d’usage et accompagnement des TPE-PME du territoire dans une feuille de route commune."
+                : "Autonomia Experts peut traduire le scénario prioritaire en compétences, architecture, niveau d’autonomie et profil à mobiliser."}
           </p>
           <div className="closingActions">
-            <Link className="primaryButton" href={training ? "/formation-ia-entreprise" : "/expert-ia"}>
-              {training ? "Construire le parcours" : "Cadrer le besoin"}
+            <Link className="primaryButton" href={training ? "/formation-ia-entreprise" : territory ? "/territoires" : "/expert-ia"}>
+              {training ? "Construire le parcours" : territory ? "Cadrer le programme territorial" : "Cadrer le besoin"}
             </Link>
-            <Link className="secondaryButton" href={training ? "/methodologie/learning-transfer" : "/methodologie/execution-matrix"}>
+            <Link className="secondaryButton" href={training ? "/methodologie/learning-transfer" : territory ? "/territoires" : "/methodologie/execution-matrix"}>
               Voir la matrice Autonomia
             </Link>
-            <Link className="secondaryButton" href={training ? "/formation-ia/cas-usage" : "/cas-usage-ia"}>
+            <Link className="secondaryButton" href={training ? "/formation-ia/cas-usage" : territory ? "/territoires/guides" : "/cas-usage-ia"}>
               Voir tous les piliers
             </Link>
           </div>

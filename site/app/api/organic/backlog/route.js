@@ -6,7 +6,8 @@ import {
 import { territoryBacklog } from "@/content/territory-editorial";
 import {
   publishedExecutionArticles,
-  publishedTrainingArticles
+  publishedTrainingArticles,
+  publishedTerritoryArticles
 } from "@/content/published-articles";
 
 function authorized(request) {
@@ -43,7 +44,7 @@ export async function GET(request) {
   const items = [
     ...rows("execution", executionBacklog, publishedExecutionArticles),
     ...rows("training", trainingBacklog, publishedTrainingArticles),
-    ...rows("territory", territoryBacklog, [])
+    ...rows("territory", territoryBacklog, publishedTerritoryArticles)
   ];
 
   return NextResponse.json({
