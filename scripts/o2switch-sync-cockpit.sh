@@ -234,15 +234,17 @@ SEO_GEO_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/
 INBOUND_DRAIN_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-drain-inbound.mjs >> /home/dide4169/autonomia-cockpit-app/inbound-drain.log 2>&1'
 JOBS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-jobs.mjs >> /home/dide4169/autonomia-cockpit-app/job-refresh.log 2>&1'
 DECISION_MAKERS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-refresh-decision-makers.mjs >> /home/dide4169/autonomia-cockpit-app/decision-makers-refresh.log 2>&1'
+EMAIL_CAMPAIGNS_CMD='cd /home/dide4169/autonomia-cockpit-app && /home/dide4169/nodevenv/autonomia-cockpit-app/22/bin/node --env-file=.env.production.local scripts/o2switch-dispatch-email.mjs >> /home/dide4169/autonomia-cockpit-app/.runtime/email-dispatch.log 2>&1'
 if command -v crontab >/dev/null 2>&1; then
   TMP_CRON="$(mktemp)"
   {
-    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' | grep -v 'o2switch-drain-inbound.mjs' | grep -v 'o2switch-refresh-decision-makers.mjs' || true
+    crontab -l 2>/dev/null | grep -v 'o2switch-refresh-talent.mjs' | grep -v 'o2switch-refresh-seo-geo.mjs' | grep -v 'o2switch-refresh-jobs.mjs' | grep -v 'o2switch-drain-inbound.mjs' | grep -v 'o2switch-refresh-decision-makers.mjs' | grep -v 'o2switch-dispatch-email.mjs' || true
     echo "37 5 * * * $DECISION_MAKERS_CMD"
     echo "17 4 * * * $TALENT_CMD"
     echo "23 */6 * * * $SEO_GEO_CMD"
     echo "*/5 * * * * $INBOUND_DRAIN_CMD"
     echo "*/15 * * * * $JOBS_CMD"
+    echo "*/5 * * * * $EMAIL_CAMPAIGNS_CMD"
   } > "$TMP_CRON"
   crontab "$TMP_CRON"
   rm -f "$TMP_CRON"
@@ -250,6 +252,7 @@ if command -v crontab >/dev/null 2>&1; then
   echo "SEO/GEO Intelligence cron installed: every 6 hours at minute 23."
   echo "Inbound spool drain cron installed: every 5 minutes."
   echo "Market/job refresh cron installed: every 15 minutes; source-specific throttling remains enforced by the refresh script."
+  echo "Email campaign dispatch installed: every 5 minutes; disabled until sender test and explicit batch approval."
 else
   echo "crontab unavailable; Talent and SEO/GEO refreshes remain manually executable."
 fi
