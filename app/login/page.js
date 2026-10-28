@@ -1,3 +1,4 @@
+import {parseEmailProof} from "../../lib/auth/emailProof.js";
 import {safeInternalPath} from "../../lib/auth/redirect.js";
 import { redirect } from "next/navigation";
 import { authConfigured, createAuthServerClient } from "../../lib/auth/server.js";
@@ -45,18 +46,7 @@ async function verifyEmailToken(formData){
  const received=String(formData.get('email_token')||'').trim();
  const supabase=await createAuthServerClient();
  let verification;
- if(/^\d{6,8}$/.test(received)){
-  verification={email,token:received,type:'email'};
- }else{
-  try{
-   const link=new URL(received);
-   if(link.protocol!=='https:'||!['haazpzbwcryaksgtormn.supabase.co','cockpit.build-autonomia.com'].includes(link.hostname)||link.username||link.password)throw new Error();
-   const tokenHash=link.searchParams.get('token_hash')||link.searchParams.get('token');
-   const type=link.searchParams.get('type');
-   if(!tokenHash||tokenHash.length>2000||!['email','magiclink'].includes(type))throw new Error();
-   verification={token_hash:tokenHash,type};
-  }catch{redirect('/login?error=confirmation_failed&next='+encodeURIComponent(next));}
- }
+ try{verification=parseEmailProof(received,email);}catch{redirect('/login?error=confirmation_failed&next='+encodeURIComponent(next));}
  const {error}=await supabase.auth.verifyOtp(verification);
  if(error)redirect('/login?error=confirmation_failed&next='+encodeURIComponent(next));
  redirect(next);
