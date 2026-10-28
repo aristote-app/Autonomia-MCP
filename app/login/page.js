@@ -1,3 +1,4 @@
+import {safeInternalPath} from "../../lib/auth/redirect.js";
 import { redirect } from "next/navigation";
 import { authConfigured, createAuthServerClient } from "../../lib/auth/server.js";
 
@@ -22,14 +23,25 @@ async function login(formData) {
     redirect(`/login?error=invalid_credentials&next=${encodeURIComponent(nextPath)}`);
   }
 
-  const safeNext = nextPath.startsWith("/") && !nextPath.startsWith("//") ? nextPath : "/";
+  const safeNext = safeInternalPath(nextPath,"/");
   redirect(safeNext);
+}
+
+async function sendMagicLink(formData){
+ "use server";
+ const next=safeInternalPath(formData.get('next'));
+ const email=String(formData.get('email')||'').trim();
+ if(!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)||email.length>254)redirect('/login?error=invalid_email&next='+encodeURIComponent(next));
+ const supabase=await createAuthServerClient();
+ const {error}=await supabase.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:'https://cockpit.build-autonomia.com/auth/callback?next='+encodeURIComponent(next)}});
+ if(error)redirect('/login?error=email_unavailable&next='+encodeURIComponent(next));
+ redirect('/login?sent=1&next='+encodeURIComponent(next));
 }
 
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
   const error = params?.error || null;
-  const nextPath = String(params?.next || "/");
+  const nextPath = safeInternalPath(params?.next,"/");
   // Old cockpit links should open the requested page directly as well.
   if (nextPath === "/" || nextPath === "/collectivites" || nextPath === "/territoires") {
     redirect(nextPath);
@@ -60,6 +72,16 @@ export default async function LoginPage({ searchParams }) {
           <div className="loginError">Email ou mot de passe incorrect.</div>
         )}
 
+        {params?.sent==='1'&&<p role="status">Lien demandé. Consulte ta boîte mail et ouvre le lien dans ce même navigateur. Seuls les comptes déjà autorisés peuvent se connecter.</p>}
+        {error==='email_unavailable'&&<p role="alert">Le lien n’a pas pu être envoyé. Réessaie dans quelques minutes ou utilise ton mot de passe.</p>}
+        {error==='confirmation_failed'&&<p role="alert">Ce lien a expiré ou n’a pas pu être confirmé. Demande un nouveau lien depuis ce navigateur.</p>}
+        <h2>Connexion par lien email</h2>
+        <form action={sendMagicLink} className="loginForm">
+         <input type="hidden" name="next" value={nextPath}/>
+         <label>Email du compte<input name="email" type="email" autoComplete="email" required/></label>
+         <button type="submit">Recevoir mon lien de connexion</button>
+        </form>
+        <h2>Connexion par mot de passe</h2>
         <form action={login} className="loginForm">
           <input type="hidden" name="next" value={nextPath} />
           <label>
