@@ -24,8 +24,10 @@ assert.match(trainerProposalDraft(open,{dates:"12 janvier 2027",contact:"Camille
 assert.match(trainerProposalDraft(open,{dates:"12 janvier 2027"}),/12 janvier 2027/);
 const page=readFileSync(new URL("../app/missions-formateurs/page.js",import.meta.url),"utf8");
 const ui=readFileSync(new URL("../app/missions-formateurs/BuyerWorkbench.js",import.meta.url),"utf8");
-assert.match(page,/TRAINER_BUYERS/);
-assert.match(page,/searchJobSignals/);
+const loader=readFileSync(new URL("../lib/training/loadTrainingLeads.js",import.meta.url),"utf8");
+assert.match(loader,/TRAINER_BUYERS/);
+assert.match(page,/loadTrainingLeads/);
+assert.match(loader,/searchJobSignals/);
 assert.match(page,/BuyerWorkbench/);
 assert.match(ui,/Copier le message/);
 assert.match(ui,/Copier la fiche acheteur/);
