@@ -49,12 +49,13 @@
   "dependencies": {
     "@modelcontextprotocol/client": "2.0.0",
     "@modelcontextprotocol/server": "2.0.0",
+    "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.116.0",
+    "cheerio": "1.2.0",
     "next": "16.3.5",
+    "nodemailer": "10.2.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "zod": "4.6.5",
-    "cheerio": "1.2.0",
-    "@supabase/ssr": "0.12.7"
+    "zod": "4.6.5"
   }
 }

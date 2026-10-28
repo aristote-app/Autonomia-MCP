@@ -110,6 +110,8 @@ jobs:
         run: node scripts/smoke-training-announcement-filters.mjs
       - name: Smoke test shared training CRM workflow
         run: node scripts/smoke-training-workflow.mjs
+      - name: Smoke test email campaign queue and delivery outcomes
+        run: node scripts/smoke-email-campaigns.mjs
       - name: Smoke test sourced training buyers and proposals
         run: node scripts/smoke-trainer-buyers.mjs
       - name: Smoke test Brave search budget
