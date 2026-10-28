@@ -10,6 +10,8 @@ TARGET_SHA="${AUTONOMIA_DEPLOY_SHA:-}"
 WORKER_LOG="$APP_ROOT/.runtime/self-deploy-worker.log"
 LOCK_DIR="$APP_ROOT/.runtime/self-deploy.lock"
 STAGE_ROOT=""
+DEPENDENCY_ROOT=""
+DEPENDENCIES_PROMOTED=0
 
 mkdir -p "$APP_ROOT/.runtime"
 
@@ -78,6 +80,9 @@ cleanup_deploy() {
   if [ -n "$STAGE_ROOT" ] && [ -d "$STAGE_ROOT" ]; then
     rm -rf "$STAGE_ROOT"
   fi
+  if [ -n "$DEPENDENCY_ROOT" ] && [ "$DEPENDENCIES_PROMOTED" = "0" ]; then
+    rm -rf "$DEPENDENCY_ROOT"
+  fi
 }
 trap cleanup_deploy EXIT
 trap on_deploy_error ERR
@@ -145,16 +150,24 @@ rm -rf "$STAGE_ROOT"
 mkdir -p "$STAGE_ROOT"
 git archive "$REMOTE_SHA" | tar -x -C "$STAGE_ROOT"
 
-# Reuse the dependency tree only as an input to the isolated build. If the
-# target commit needs incompatible dependencies, the candidate build fails
-# without touching the live application.
-if [ -x "$APP_ROOT/node_modules/.bin/next" ]; then
+# Changed manifests require an isolated dependency tree. Keep the current
+# Passenger application's dependencies intact until the candidate has built.
+DEPENDENCY_ROOT=""
+if [ -x "$APP_ROOT/node_modules/.bin/next" ] && cmp -s "$APP_ROOT/package.json" "$STAGE_ROOT/package.json" && { { [ ! -f "$APP_ROOT/package-lock.json" ] && [ ! -f "$STAGE_ROOT/package-lock.json" ]; } || cmp -s "$APP_ROOT/package-lock.json" "$STAGE_ROOT/package-lock.json"; }; then
   ln -s "$APP_ROOT/node_modules" "$STAGE_ROOT/node_modules"
 else
-  echo "node_modules incomplete; installing dependencies before candidate build."
-  cd "$APP_ROOT"
-  npm install --no-audit --no-fund --package-lock=false
-  ln -s "$APP_ROOT/node_modules" "$STAGE_ROOT/node_modules"
+  CURRENT_STEP="candidate-dependencies"
+  DEPENDENCY_ROOT="$APP_ROOT/.runtime/dependencies-$REMOTE_SHA-$$"
+  mkdir -p "$DEPENDENCY_ROOT"
+  cp "$STAGE_ROOT/package.json" "$DEPENDENCY_ROOT/package.json"
+  cd "$DEPENDENCY_ROOT"
+  if [ -f "$STAGE_ROOT/package-lock.json" ]; then
+    cp "$STAGE_ROOT/package-lock.json" package-lock.json
+    npm ci --ignore-scripts --no-audit --no-fund
+  else
+    npm install --ignore-scripts --no-audit --no-fund --package-lock=false
+  fi
+  ln -s "$DEPENDENCY_ROOT/node_modules" "$STAGE_ROOT/node_modules"
 fi
 
 if [ -f "$APP_ROOT/.env.production.local" ]; then
@@ -177,6 +190,19 @@ fi
 
 echo "Candidate build succeeded; switching live checkout and assets."
 cd "$APP_ROOT"
+if [ -n "$DEPENDENCY_ROOT" ]; then
+  CURRENT_STEP="dependency-switch"
+  if [ -L "$APP_ROOT/node_modules" ]; then
+    ln -s "$DEPENDENCY_ROOT/node_modules" "$APP_ROOT/.runtime/node_modules-next-$$"
+    mv -Tf "$APP_ROOT/.runtime/node_modules-next-$$" "$APP_ROOT/node_modules"
+  elif [ -d "$APP_ROOT/node_modules" ]; then
+    mv "$APP_ROOT/node_modules" "$APP_ROOT/.runtime/node_modules-previous-$$"
+    ln -s "$DEPENDENCY_ROOT/node_modules" "$APP_ROOT/node_modules"
+  else
+    ln -s "$DEPENDENCY_ROOT/node_modules" "$APP_ROOT/node_modules"
+  fi
+  DEPENDENCIES_PROMOTED=1
+fi
 CURRENT_STEP="git-sync"
 write_debug "syncing" "$LOCAL_SHA -> $REMOTE_SHA"
 git reset --hard "$REMOTE_SHA"
