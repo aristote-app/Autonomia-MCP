@@ -44,21 +44,26 @@ write_debug() {
 # A retry must never start a second Next build in the same application tree.
 # mkdir is atomic and works on o2switch without relying on flock.
 if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-  LOCK_STARTED="$(cat "$LOCK_DIR/started_at" 2>/dev/null || echo 0)"
-  NOW="$(date +%s)"
-  LOCK_AGE=$((NOW - LOCK_STARTED))
-  if [ "$LOCK_STARTED" -gt 0 ] && [ "$LOCK_AGE" -gt 900 ]; then
-    echo "Removing stale deploy lock age=${LOCK_AGE}s."
-    rm -rf "$LOCK_DIR"
-    mkdir "$LOCK_DIR"
-  else
-    echo "Another cockpit deploy worker is already active; exiting without starting a concurrent build."
+  LOCK_PID="$(cat "$LOCK_DIR/pid" 2>/dev/null || true)"
+  if [[ "$LOCK_PID" =~ ^[0-9]+$ ]] && [ "$LOCK_PID" -gt 1 ] && kill -0 "$LOCK_PID" 2>/dev/null; then
+    echo "Another cockpit deploy owner is alive (pid=$LOCK_PID); preserving its lock."
     exit 0
   fi
+  if ! command -v pgrep >/dev/null 2>&1; then
+    echo "Cannot verify deploy ownership; preserving the existing lock." >&2
+    exit 1
+  fi
+  for OTHER_PID in $(pgrep -u "$(id -u)" -f '[o]2switch-sync-cockpit.sh|[n]ext build|[n]pm run build' || true); do
+    if [ "$OTHER_PID" != "$$" ] && [ "$OTHER_PID" != "$PPID" ]; then
+      echo "Another cockpit build is active (pid=$OTHER_PID); preserving its lock."
+      exit 0
+    fi
+  done
+  echo "Removing orphaned deploy lock after checking active owners."
+  rm -f "$LOCK_DIR/started_at" "$LOCK_DIR/pid"
+  rmdir "$LOCK_DIR"
+  mkdir "$LOCK_DIR"
 fi
-
-date +%s > "$LOCK_DIR/started_at"
-printf '%s\n' "$" > "$LOCK_DIR/pid"
 
 CURRENT_STEP="worker-started"
 on_deploy_error() {
@@ -76,6 +81,10 @@ cleanup_deploy() {
 }
 trap cleanup_deploy EXIT
 trap on_deploy_error ERR
+
+# Register cleanup before writing metadata, including on resource/write failure.
+printf '%(%s)T\n' -1 > "$LOCK_DIR/started_at"
+printf '%s\n' "$$" > "$LOCK_DIR/pid"
 
 # o2switch does not expose /dev/fd reliably under Passenger. Avoid Bash
 # process substitution here; it previously killed the deploy before git fetch.
