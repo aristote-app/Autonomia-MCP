@@ -29,6 +29,8 @@ jobs:
       - name: Install
         run: npm install --ignore-scripts
       - name: Build
+        env:
+          TURBOPACK: auto
         run: npm run build
       - name: Smoke test BOAMP and TED
         run: npm run smoke:public
