@@ -21,3 +21,8 @@ const {safeInternalPath}=await import('../lib/auth/redirect.js');
 assert.equal(safeInternalPath('//evil.example'),'/missions-formateurs');
 assert.equal(safeInternalPath('/\\evil.example'),'/missions-formateurs');
 assert.equal(safeInternalPath('/missions-formateurs'),'/missions-formateurs');
+
+const {parseEmailProof}=await import('../lib/auth/emailProof.js');
+assert.deepEqual(parseEmailProof('123456','test@example.com'),{email:'test@example.com',token:'123456',type:'email'});
+assert.deepEqual(parseEmailProof('https://haazpzbwcryaksgtormn.supabase.co/auth/v1/verify?token=fake-test-token&type=magiclink','test@example.com'),{token_hash:'fake-test-token',type:'magiclink'});
+for(const url of ['https://evil.example/?token=fake&type=email','http://cockpit.build-autonomia.com/?token=fake&type=email','https://user@cockpit.build-autonomia.com/?token=fake&type=email','https://cockpit.build-autonomia.com/?token=fake&type=recovery','https://cockpit.build-autonomia.com/?type=email'])assert.throws(()=>parseEmailProof(url,'test@example.com'));

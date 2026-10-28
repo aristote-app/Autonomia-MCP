@@ -1,3 +1,4 @@
+import {parseEmailProof} from "../../lib/auth/emailProof.js";
 import {safeInternalPath} from "../../lib/auth/redirect.js";
 import { redirect } from "next/navigation";
 import { authConfigured, createAuthServerClient } from "../../lib/auth/server.js";
@@ -36,6 +37,19 @@ async function sendMagicLink(formData){
  const {error}=await supabase.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:'https://cockpit.build-autonomia.com/auth/callback?next='+encodeURIComponent(next)}});
  if(error)redirect('/login?error=email_unavailable&next='+encodeURIComponent(next));
  redirect('/login?sent=1&next='+encodeURIComponent(next));
+}
+
+async function verifyEmailToken(formData){
+ "use server";
+ const next=safeInternalPath(formData.get('next'));
+ const email=String(formData.get('email')||'').trim();
+ const received=String(formData.get('email_token')||'').trim();
+ const supabase=await createAuthServerClient();
+ let verification;
+ try{verification=parseEmailProof(received,email);}catch{redirect('/login?error=confirmation_failed&next='+encodeURIComponent(next));}
+ const {error}=await supabase.auth.verifyOtp(verification);
+ if(error)redirect('/login?error=confirmation_failed&next='+encodeURIComponent(next));
+ redirect(next);
 }
 
 export default async function LoginPage({ searchParams }) {
@@ -81,6 +95,16 @@ export default async function LoginPage({ searchParams }) {
          <label>Email du compte<input name="email" type="email" autoComplete="email" required/></label>
          <button type="submit">Recevoir mon lien de connexion</button>
         </form>
+        <details>
+         <summary>J’ai reçu un lien ou un code de connexion</summary>
+         <p>Si tu utilises un autre navigateur, colle ici le lien original reçu par email, ou le code si le message en contient un.</p>
+         <form action={verifyEmailToken} className="loginForm">
+          <input type="hidden" name="next" value={nextPath}/>
+          <label>Email du compte<input name="email" type="email" autoComplete="email" required/></label>
+          <label>Lien ou code reçu par email<input name="email_token" type="password" autoComplete="one-time-code" required/></label>
+          <button type="submit">Valider mon accès par email</button>
+         </form>
+        </details>
         <h2>Connexion par mot de passe</h2>
         <form action={login} className="loginForm">
           <input type="hidden" name="next" value={nextPath} />
