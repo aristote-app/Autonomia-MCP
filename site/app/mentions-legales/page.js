@@ -31,7 +31,7 @@ export default function LegalNoticePage() {
         <p>Nom du site : AUTONOMIA — Adresse : build-autonomia.com — Contact : <a href="mailto:deborah@build-autonomia.com">deborah@build-autonomia.com</a>.</p>
 
         <h2>3. Direction de la publication</h2>
-        <p>Pour toute demande relative à la publication du site : <a href="mailto:deborah@build-autonomia.com">deborah@build-autonomia.com</a>.</p>
+        <p>Directeur de la publication : Déborah Dian Goldcher. Pour toute demande relative à la publication du site : <a href="mailto:deborah@build-autonomia.com">deborah@build-autonomia.com</a>.</p>
 
         <h2>4. Hébergement</h2>
         <p>Le site est hébergé par o2switch, SAS au capital de 100 000 €, SIRET 510 909 807 00032, RCS Clermont-Ferrand, Chemin des Pardiaux, 63000 Clermont-Ferrand — téléphone : 04 44 44 60 40.</p>

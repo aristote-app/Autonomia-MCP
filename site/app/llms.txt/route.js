@@ -8,7 +8,7 @@ import {
 } from "@/content/published-articles";
 
 export async function GET() {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://autonomia.fr").replace(/\/$/, "");
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://build-autonomia.com").replace(/\/$/, "");
 
   const lines = [
     "# Autonomia",

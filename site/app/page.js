@@ -204,8 +204,7 @@ export default function Home() {
           <div className="homeRoleIntroV20">
             <h2>Vous savez déjà quel profil vous cherchez ?</h2>
             <p>
-              Toutes les portes d’entrée métiers restent accessibles : responsabilités, livrables, compétences,
-              métiers voisins et profils consultants disponibles.
+              Explorez les fiches métiers IA, les missions, les compétences et les profils disponibles.
             </p>
           </div>
         </div>
@@ -226,8 +225,7 @@ export default function Home() {
           <div className="homeAcademyIntroV21">
             <h2>Vous savez déjà ce que vos équipes doivent apprendre ?</h2>
             <p>
-              Toutes les Formations IA restent reliées depuis la Home pour conserver le maillage interne,
-              tout en donnant une vraie identité visuelle à AUTONOMIA ACADEMY.
+              Découvrez nos programmes de formation IA pour développer les compétences de vos équipes, en présentiel ou à distance.
             </p>
           </div>
         </div>
