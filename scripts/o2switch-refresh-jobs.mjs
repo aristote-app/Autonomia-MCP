@@ -6,12 +6,15 @@ import {
   runAutomatedExtendedDemandRefresh
 } from "../lib/market/automatedRefresh.js";
 import { refreshAllAccountWatches } from "../lib/db/accountWatches.js";
+import { searchTheirStack } from "../lib/collectors/theirStack.js";
+import { upsertJobSignals } from "../lib/db/jobSignals.js";
 import { runOpportunityHunter } from "../lib/market/opportunityHunter.js";
 
 const STATE_FILE = resolve(process.cwd(), ".runtime", "job-refresh-state.json");
 const HOUR = 60 * 60 * 1000;
 
 const INTERVALS = Object.freeze({
+  theirstack: 24 * HOUR,
   freework: 1 * HOUR,
   franceTravail: 0.5 * HOUR,
   linkedinIndeed: 24 * HOUR,
@@ -44,6 +47,22 @@ async function main() {
   const result = { startedAt };
   const state = await readState();
   const force = process.env.AUTONOMIA_FORCE_FULL_REFRESH === "true";
+
+  // TheirStack is optional: no credential means no API call and no credits used.
+  // The daily cap is five jobs (maximum ~155 results/month).
+  if (process.env.THEIRSTACK_API_KEY && due(state, "theirstack", INTERVALS.theirstack, false)) {
+    try {
+      const preview = await searchTheirStack({ limit: 5, postedAtMaxAgeDays: 7 });
+      const saved = await upsertJobSignals(preview.items);
+      if (!saved.persisted || saved.errors?.length) throw new Error("TheirStack persistence incomplete");
+      result.theirstack = { available: true, fetched: preview.fetched, excludedIntermediaries: preview.excludedIntermediaries, saved: saved.count };
+      state.theirstack = new Date().toISOString();
+    } catch (error) {
+      result.theirstack = { available: false, error: error instanceof Error ? error.message : String(error) };
+    }
+  } else {
+    result.theirstack = { skipped: true, reason: process.env.THEIRSTACK_API_KEY ? "daily_throttle" : "api_key_missing" };
+  }
 
   if (due(state, "freework", INTERVALS.freework, force)) {
     try {

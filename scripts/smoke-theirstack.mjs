@@ -1,0 +1,36 @@
+import assert from "node:assert/strict";
+import { isEsnEmployer, isExcludedIntermediary, normalizeTheirStackJob, searchTheirStack } from "../lib/collectors/theirStack.js";
+
+const fixture = { id: 456, job_title: "AI Engineer", company: "Acme Industrie", description: "RAG et agents IA", url: "https://www.linkedin.com/jobs/view/4481484586/", company_object: { name: "Acme Industrie", is_recruiting_agency: false }, date_posted: "2026-10-29", country_code: "FR" };
+const normalized = normalizeTheirStackJob(fixture);
+assert.equal(normalized.sourceId, "theirstack");
+assert.equal(normalized.rawPayload.linkedin_job_id, "4481484586");
+assert.equal(normalized.rawPayload.buyer_classification, "unverified_direct_buyer");
+assert.equal(normalizeTheirStackJob({ ...fixture, company_object: { is_recruiting_agency: true } }).rawPayload.buyer_classification, "intermediary_excluded");
+assert.equal(isEsnEmployer({ company: "Capgemini", company_object: {} }), true);
+assert.equal(isEsnEmployer({ company: "Acme Industrie", company_object: { industry: "IT services and IT consulting" } }), true);
+assert.equal(isEsnEmployer({ company: "Acme Industrie", company_object: {} }), false);
+assert.equal(isEsnEmployer({ company: "Agence Recrutement", company_object: { is_recruiting_agency: true } }), false);
+assert.equal(isExcludedIntermediary({ company: "Free-Work" }), true);
+assert.equal(isExcludedIntermediary({ company: "Cabinet de recrutement Dupont" }), true);
+assert.equal(isExcludedIntermediary({ company: "Acme Industrie", company_object: { is_recruiting_agency: true } }), true);
+assert.equal(isExcludedIntermediary({ company: "Acme Industrie", description: "Pour le compte de notre client" }), true);
+assert.equal(isExcludedIntermediary({ company: "Acme Industrie", company_object: { industry: "Industrie automobile" } }), false);
+let calls = 0;
+const fakeFetch = async (_url, init) => {
+  calls++;
+  assert.equal(init.headers.Authorization, "Bearer mock-secret");
+  const payload = JSON.parse(init.body);
+  assert.equal(payload.limit, 5);
+  assert.deepEqual(payload.job_country_code_or, ["FR"]);
+  assert.equal(payload.posted_at_max_age_days, 7);
+  return { ok: true, json: async () => ({ data: [fixture, { ...fixture, id: 457, company: "Capgemini" }, { ...fixture, id: 458, company: "Agence Recrutement", company_object: { is_recruiting_agency: true } }], metadata: {} }) };
+};
+const result = await searchTheirStack({ apiKey: "mock-secret", limit: 90, fetchImpl: fakeFetch });
+assert.equal(result.items.length, 1);
+assert.equal(result.excludedEsn, 1);
+assert.equal(result.excludedIntermediaries, 2);
+assert.equal(calls, 1);
+await assert.rejects(() => searchTheirStack({apiKey: "", fetchImpl: fakeFetch}), /missing/);
+assert.equal(calls, 1);
+console.log("TheirStack mock tests OK; no API credits consumed");
